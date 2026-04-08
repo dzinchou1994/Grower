@@ -1,0 +1,194 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+enum DiaryEnvironment {
+  INDOOR
+  OUTDOOR
+  GREENHOUSE
+}
+
+enum DiaryStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ReportTargetType {
+  DIARY
+  DIARY_WEEK
+  THREAD
+  COMMENT
+  USER
+}
+
+enum ReportStatus {
+  OPEN
+  REVIEWED
+  RESOLVED
+  DISMISSED
+}
+
+model User {
+  id            String          @id @default(cuid())
+  email         String          @unique
+  username      String          @unique
+  passwordHash  String?
+  image         String?
+  bio           String?
+  role          UserRole        @default(USER)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  diaries       Diary[]
+  forumThreads  ForumThread[]
+  forumComments ForumComment[]
+  reports       Report[]        @relation("ReportAuthor")
+  reviewed      Report[]        @relation("ReportReviewer")
+  following     Follow[]        @relation("Following")
+  followers     Follow[]        @relation("Followers")
+  likes         Like[]
+}
+
+model Diary {
+  id            String           @id @default(cuid())
+  slug          String           @unique
+  title         String
+  strain        String
+  environment   DiaryEnvironment
+  description   String?
+  coverImageUrl String?
+  status        DiaryStatus      @default(PUBLISHED)
+  isFeatured    Boolean          @default(false)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  authorId      String
+  author        User             @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  weeks         DiaryWeek[]
+
+  @@index([authorId, createdAt])
+}
+
+model DiaryWeek {
+  id          String           @id @default(cuid())
+  diaryId     String
+  weekNumber  Int
+  title       String?
+  description String
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  diary       Diary            @relation(fields: [diaryId], references: [id], onDelete: Cascade)
+  images      DiaryWeekImage[]
+  likes       Like[]
+  reports     Report[]
+
+  @@unique([diaryId, weekNumber])
+  @@index([diaryId, createdAt])
+}
+
+model DiaryWeekImage {
+  id          String    @id @default(cuid())
+  diaryWeekId String
+  imageUrl    String
+  sortOrder   Int       @default(0)
+  diaryWeek   DiaryWeek @relation(fields: [diaryWeekId], references: [id], onDelete: Cascade)
+}
+
+model ForumTopic {
+  id          String        @id @default(cuid())
+  slug        String        @unique
+  title       String
+  description String?
+  sortOrder   Int           @default(0)
+  createdAt   DateTime      @default(now())
+  threads     ForumThread[]
+}
+
+model ForumThread {
+  id         String         @id @default(cuid())
+  slug       String         @unique
+  topicId    String
+  authorId   String
+  title      String
+  body       String
+  isPinned   Boolean        @default(false)
+  isLocked   Boolean        @default(false)
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  topic      ForumTopic     @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  author     User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments   ForumComment[]
+  likes      Like[]
+  reports    Report[]
+
+  @@index([topicId, createdAt])
+}
+
+model ForumComment {
+  id        String      @id @default(cuid())
+  threadId   String
+  authorId   String
+  body       String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  thread     ForumThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  author     User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likes      Like[]
+  reports    Report[]
+
+  @@index([threadId, createdAt])
+}
+
+model Follow {
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+  follower    User     @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User     @relation("Followers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@id([followerId, followingId])
+}
+
+model Like {
+  id         String        @id @default(cuid())
+  userId     String
+  diaryWeekId String?
+  threadId   String?
+  commentId  String?
+  createdAt  DateTime      @default(now())
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  diaryWeek  DiaryWeek?    @relation(fields: [diaryWeekId], references: [id], onDelete: Cascade)
+  thread     ForumThread?  @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  comment    ForumComment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+}
+
+model Report {
+  id          String           @id @default(cuid())
+  reporterId  String
+  reviewerId  String?
+  targetType  ReportTargetType
+  targetId    String
+  reason      String
+  status      ReportStatus     @default(OPEN)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  reporter    User             @relation("ReportAuthor", fields: [reporterId], references: [id], onDelete: Cascade)
+  reviewer    User?            @relation("ReportReviewer", fields: [reviewerId], references: [id], onDelete: SetNull)
+  diaryWeekId String?
+  threadId    String?
+  commentId   String?
+  diaryWeek   DiaryWeek?       @relation(fields: [diaryWeekId], references: [id], onDelete: Cascade)
+  thread      ForumThread?     @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  comment     ForumComment?    @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@index([status, createdAt])
+}
