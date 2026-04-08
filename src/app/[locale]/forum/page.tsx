@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getServerSessionUser } from "@/lib/auth-session";
 import { ForumThreadComposer } from "@/components/forum-thread-composer";
 import {
   getAlternates,
@@ -45,7 +46,10 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
 
   const typedLocale = locale as Locale;
   const { dict } = getLocalizedContent(typedLocale);
-  const forumTopicList = listForumTopics(q);
+  const [forumTopicList, sessionUser] = await Promise.all([
+    listForumTopics(q),
+    getServerSessionUser(),
+  ]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -85,6 +89,8 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
 
       <ForumThreadComposer
         topics={forumTopicList.map((topic) => ({ slug: topic.slug, title: topic.title }))}
+        isAuthenticated={Boolean(sessionUser)}
+        loginHref={getLocalizedPath(typedLocale, "/auth/login")}
       />
 
       <div className="grid gap-4 sm:gap-5">

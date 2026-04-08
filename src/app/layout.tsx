@@ -16,6 +16,11 @@ export const metadata: Metadata = {
   title: "Grower",
   description:
     "Grower.ge - mobile-first cannabis community with Georgian, English, and Russian indexable pages.",
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
 };
 
 export default function RootLayout({

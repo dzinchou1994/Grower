@@ -12,7 +12,15 @@ const forumSlugs = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = ["", "/diaries", "/diaries/new", "/forum", "/admin"];
+  const staticRoutes = [
+    "",
+    "/auth/login",
+    "/auth/register",
+    "/diaries",
+    "/diaries/new",
+    "/forum",
+    "/admin",
+  ];
 
   const localizedStatic = locales.flatMap((locale) =>
     staticRoutes.map((path) => ({

@@ -1,9 +1,9 @@
 import { addForumComment } from "@/lib/forum-data";
+import { getServerSessionUser } from "@/lib/auth-session";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
 const addCommentSchema = z.object({
-  author: z.string().min(2).max(40),
   body: z.string().min(2).max(1500),
 });
 
@@ -12,6 +12,11 @@ type RouteProps = {
 };
 
 export async function POST(request: Request, { params }: RouteProps) {
+  const sessionUser = await getServerSessionUser();
+  if (!sessionUser) {
+    return NextResponse.json({ error: "Authentication required." }, { status: 401 });
+  }
+
   const { slug } = await params;
   const payload = await request.json().catch(() => null);
   const parsed = addCommentSchema.safeParse(payload);
@@ -23,9 +28,9 @@ export async function POST(request: Request, { params }: RouteProps) {
     );
   }
 
-  const created = addForumComment({
+  const created = await addForumComment({
     threadSlug: slug,
-    author: parsed.data.author,
+    author: sessionUser.username,
     body: parsed.data.body,
   });
 

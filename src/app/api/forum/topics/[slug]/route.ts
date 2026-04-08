@@ -7,7 +7,7 @@ type RouteProps = {
 
 export async function GET(_: Request, { params }: RouteProps) {
   const { slug } = await params;
-  const topic = getForumTopicBySlug(slug);
+  const topic = await getForumTopicBySlug(slug);
 
   if (!topic) {
     return NextResponse.json({ error: "Topic not found" }, { status: 404 });

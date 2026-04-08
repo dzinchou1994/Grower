@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getServerSessionUser } from "@/lib/auth-session";
 import { ForumCommentForm } from "@/components/forum-comment-form";
 import {
   getAlternates,
@@ -44,7 +45,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
   }
 
-  const topic = getForumTopicBySlug(slug);
+  const topic = await getForumTopicBySlug(slug);
 
   if (!topic) {
     return {};
@@ -66,7 +67,10 @@ export default async function ForumTopicPage({ params }: PageProps) {
 
   const typedLocale = locale as Locale;
   const { dict } = getLocalizedContent(typedLocale);
-  const topic = getForumTopicBySlug(slug);
+  const [topic, sessionUser] = await Promise.all([
+    getForumTopicBySlug(slug),
+    getServerSessionUser(),
+  ]);
 
   if (!topic) {
     notFound();
@@ -166,7 +170,11 @@ export default async function ForumTopicPage({ params }: PageProps) {
                 </div>
               ) : null}
 
-              <ForumCommentForm threadSlug={thread.slug} />
+              <ForumCommentForm
+                threadSlug={thread.slug}
+                isAuthenticated={Boolean(sessionUser)}
+                loginHref={getLocalizedPath(typedLocale, "/auth/login")}
+              />
             </article>
           ))}
         </div>

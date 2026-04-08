@@ -7,15 +7,16 @@ declare global {
 
 const connectionString = process.env.DATABASE_URL;
 
-export const db =
-  global.prisma ??
-  new PrismaClient({
-    adapter: connectionString
-      ? new PrismaPg({ connectionString })
-      : undefined,
-    log: process.env.NODE_ENV === "development" ? ["warn", "error"] : ["error"],
-  });
+const prismaInstance = connectionString
+  ? global.prisma ??
+    new PrismaClient({
+      adapter: new PrismaPg({ connectionString }),
+      log: process.env.NODE_ENV === "development" ? ["warn", "error"] : ["error"],
+    })
+  : undefined;
 
-if (process.env.NODE_ENV !== "production") {
-  global.prisma = db;
+export const db = prismaInstance as PrismaClient;
+
+if (process.env.NODE_ENV !== "production" && prismaInstance) {
+  global.prisma = prismaInstance;
 }

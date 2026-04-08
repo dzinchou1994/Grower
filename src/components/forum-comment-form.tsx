@@ -1,9 +1,18 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
-export function ForumCommentForm({ threadSlug }: { threadSlug: string }) {
+export function ForumCommentForm({
+  threadSlug,
+  isAuthenticated,
+  loginHref,
+}: {
+  threadSlug: string;
+  isAuthenticated: boolean;
+  loginHref: string;
+}) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -14,7 +23,6 @@ export function ForumCommentForm({ threadSlug }: { threadSlug: string }) {
 
     const formData = new FormData(event.currentTarget);
     const payload = {
-      author: String(formData.get("author") ?? ""),
       body: String(formData.get("body") ?? ""),
     };
 
@@ -44,18 +52,22 @@ export function ForumCommentForm({ threadSlug }: { threadSlug: string }) {
 
   return (
     <form onSubmit={onSubmit} className="mt-4 grid gap-2.5">
-      <div className="grid gap-2 sm:grid-cols-[180px_1fr]">
-        <input
-          name="author"
-          placeholder="Your name"
-          className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2 sm:text-sm"
-          required
-        />
+      {!isAuthenticated ? (
+        <p className="text-xs text-slate-300">
+          Login to comment.{" "}
+          <Link href={loginHref} className="text-lime-300 hover:text-lime-200">
+            Open login
+          </Link>
+        </p>
+      ) : null}
+
+      <div className="grid gap-2">
         <input
           name="body"
           placeholder="Add comment..."
           className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2 sm:text-sm"
           required
+          disabled={!isAuthenticated}
         />
       </div>
 
@@ -63,7 +75,7 @@ export function ForumCommentForm({ threadSlug }: { threadSlug: string }) {
 
       <button
         type="submit"
-        disabled={isSubmitting}
+        disabled={isSubmitting || !isAuthenticated}
         className="inline-flex w-fit rounded-full border border-lime-400/40 px-3 py-1.5 text-xs font-medium text-lime-300 transition hover:bg-lime-400/10 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {isSubmitting ? "Posting..." : "Add comment"}

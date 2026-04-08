@@ -7,6 +7,7 @@ import {
   isValidLocale,
   type Locale,
 } from "@/lib/i18n";
+import { getForumStats, listForumTopics } from "@/lib/forum-data";
 import { CannabisLeaf, CannabisLeafOutline } from "@/components/icons";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -41,7 +42,11 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
   }
 
   const typedLocale = locale as Locale;
-  const { forumTopicList, stats, dict } = getLocalizedContent(typedLocale);
+  const { dict } = getLocalizedContent(typedLocale);
+  const [forumTopicList, stats] = await Promise.all([
+    listForumTopics(),
+    getForumStats(),
+  ]);
 
   const allThreads = forumTopicList
     .flatMap((topic) =>

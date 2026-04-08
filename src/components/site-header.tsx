@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import type { SessionUser } from "@/lib/auth-session";
 import {
   getDictionary,
   getLocalizedPath,
@@ -11,10 +12,18 @@ import {
   type Locale,
 } from "@/lib/i18n";
 
-export function SiteHeader({ locale }: { locale: Locale }) {
+export function SiteHeader({
+  locale,
+  initialUser,
+}: {
+  locale: Locale;
+  initialUser: SessionUser | null;
+}) {
   const pathname = usePathname();
+  const router = useRouter();
   const dict = getDictionary(locale);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const navigation = [
     { href: "", label: dict.nav.home },
@@ -22,6 +31,17 @@ export function SiteHeader({ locale }: { locale: Locale }) {
     { href: "/diaries", label: dict.nav.diaries },
     { href: "/admin", label: dict.nav.admin },
   ];
+
+  async function handleLogout() {
+    setIsLoggingOut(true);
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      router.refresh();
+    } finally {
+      setIsLoggingOut(false);
+      setMobileMenuOpen(false);
+    }
+  }
 
   return (
     <header className="sticky top-0 z-30 border-b border-white/10 bg-[#08111f]/90 backdrop-blur-lg">
@@ -42,7 +62,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
           </div>
           <div className="hidden min-[400px]:block">
             <p className="text-sm font-semibold tracking-wide text-white">
-              Grower
+              GROWER.GE
             </p>
             <p className="text-[11px] text-slate-400">Georgia Cannabis Club</p>
           </div>
@@ -77,6 +97,35 @@ export function SiteHeader({ locale }: { locale: Locale }) {
               </Link>
             ))}
           </div>
+
+          {initialUser ? (
+            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-200">
+              <span>@{initialUser.username}</span>
+              <button
+                type="button"
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+                className="rounded-full border border-white/15 px-2 py-1 text-[11px] text-slate-300 transition hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isLoggingOut ? "..." : "Logout"}
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1 text-xs">
+              <Link
+                href={getLocalizedPath(locale, "/auth/login")}
+                className="rounded-full border border-white/10 px-3 py-1.5 text-slate-300 transition hover:bg-white/10 hover:text-white"
+              >
+                Login
+              </Link>
+              <Link
+                href={getLocalizedPath(locale, "/auth/register")}
+                className="rounded-full bg-lime-400 px-3 py-1.5 font-semibold text-slate-950 transition hover:bg-lime-300"
+              >
+                Register
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Mobile menu button */}
@@ -96,6 +145,24 @@ export function SiteHeader({ locale }: { locale: Locale }) {
               </Link>
             ))}
           </div>
+
+          {initialUser ? (
+            <button
+              type="button"
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+              className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-slate-200 disabled:opacity-60"
+            >
+              {isLoggingOut ? "..." : "Logout"}
+            </button>
+          ) : (
+            <Link
+              href={getLocalizedPath(locale, "/auth/login")}
+              className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-slate-200"
+            >
+              Login
+            </Link>
+          )}
 
           <button
             type="button"
@@ -150,6 +217,15 @@ export function SiteHeader({ locale }: { locale: Locale }) {
                 {item.label}
               </Link>
             ))}
+            {!initialUser ? (
+              <Link
+                href={getLocalizedPath(locale, "/auth/register")}
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-xl bg-lime-400 px-4 py-3 text-base font-semibold text-slate-950 transition hover:bg-lime-300"
+              >
+                Register
+              </Link>
+            ) : null}
           </nav>
         </div>
       )}

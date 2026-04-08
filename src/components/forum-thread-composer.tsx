@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useMemo, useState } from "react";
 
@@ -8,7 +9,15 @@ type TopicOption = {
   title: string;
 };
 
-export function ForumThreadComposer({ topics }: { topics: TopicOption[] }) {
+export function ForumThreadComposer({
+  topics,
+  isAuthenticated,
+  loginHref,
+}: {
+  topics: TopicOption[];
+  isAuthenticated: boolean;
+  loginHref: string;
+}) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,7 +35,6 @@ export function ForumThreadComposer({ topics }: { topics: TopicOption[] }) {
       topicSlug: String(formData.get("topicSlug") ?? ""),
       title: String(formData.get("title") ?? ""),
       body: String(formData.get("body") ?? ""),
-      author: String(formData.get("author") ?? ""),
     };
 
     setIsSubmitting(true);
@@ -57,6 +65,25 @@ export function ForumThreadComposer({ topics }: { topics: TopicOption[] }) {
     return null;
   }
 
+  if (!isAuthenticated) {
+    return (
+      <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-6">
+        <h2 className="text-base font-semibold text-white sm:text-lg">Start New Thread</h2>
+        <p className="mt-2 text-sm text-slate-300">
+          You need an account to post a thread.
+        </p>
+        <div className="mt-4 flex gap-2">
+          <Link
+            href={loginHref}
+            className="inline-flex rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-lime-300"
+          >
+            Login
+          </Link>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-6">
       <h2 className="text-base font-semibold text-white sm:text-lg">Start New Thread</h2>
@@ -65,7 +92,7 @@ export function ForumThreadComposer({ topics }: { topics: TopicOption[] }) {
       </p>
 
       <form onSubmit={onSubmit} className="mt-4 grid gap-3">
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-3">
           <select
             name="topicSlug"
             defaultValue={defaultTopic}
@@ -78,12 +105,6 @@ export function ForumThreadComposer({ topics }: { topics: TopicOption[] }) {
               </option>
             ))}
           </select>
-          <input
-            name="author"
-            placeholder="Your name"
-            className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2"
-            required
-          />
         </div>
         <input
           name="title"
