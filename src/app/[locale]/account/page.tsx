@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { AccountAvatarPicker } from "@/components/account-avatar-picker";
+import { AccountLevelCard } from "@/components/account-level-card";
 import { getServerSessionUser } from "@/lib/auth-session";
 import { db } from "@/lib/db";
+import type { UserActivityStats } from "@/lib/leveling";
 import {
   getAlternates,
   getLocalizedPath,
@@ -69,7 +71,7 @@ export default async function AccountPage({ params }: PageProps) {
     relatedUsers[0]?.username ??
     sessionUser.username;
 
-  const [myThreads, myCommentedThreads, myDiaries] = await Promise.all([
+  const [myThreads, myCommentedThreads, myDiaries, totalComments, totalLikesReceived, totalDiaryWeeks] = await Promise.all([
     db.forumThread.findMany({
       where: { authorId: { in: userIds } },
       orderBy: { createdAt: "desc" },
@@ -100,19 +102,33 @@ export default async function AccountPage({ params }: PageProps) {
       take: 10,
       include: { _count: { select: { weeks: true } } },
     }),
+    db.forumComment.count({ where: { authorId: { in: userIds } } }),
+    db.like.count({
+      where: {
+        OR: [
+          { thread: { authorId: { in: userIds } } },
+          { comment: { authorId: { in: userIds } } },
+        ],
+      },
+    }),
+    db.diaryWeek.count({ where: { diary: { authorId: { in: userIds } } } }),
   ]);
+
+  const activityStats: UserActivityStats = {
+    threadsCreated: myThreads.length,
+    commentsPosted: totalComments,
+    likesReceived: totalLikesReceived,
+    diariesCreated: myDiaries.length,
+    diaryWeeksPosted: totalDiaryWeeks,
+  };
 
   return (
     <div className="flex flex-col gap-5 sm:gap-6">
-      <section className="rounded-2xl border border-white/10 bg-white/6 p-5 sm:rounded-[2rem] sm:p-8">
-        <p className="text-xs text-lime-300 sm:text-sm">Account</p>
-        <h1 className="mt-1.5 text-xl font-semibold text-white sm:mt-2 sm:text-3xl">
-          @{resolvedUsername}
-        </h1>
-        <p className="mt-2 text-sm text-slate-300">
-          Role: {sessionUser.role} · Manage your activity and content here.
-        </p>
-      </section>
+      <AccountLevelCard
+        username={resolvedUsername}
+        userImage={matchedById?.image ?? sessionUser.image}
+        stats={activityStats}
+      />
 
       <AccountAvatarPicker currentImage={matchedById?.image ?? sessionUser.image} />
 
