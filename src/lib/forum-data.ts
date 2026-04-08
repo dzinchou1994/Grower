@@ -650,7 +650,9 @@ async function getTopUsersFromDatabase(limit: number): Promise<LeaderboardUser[]
 
       return {
         username: user.username,
-        image: user.image ?? getDeterministicAvatarImage(user.username),
+        image:
+          user.image ??
+          getDeterministicAvatarImage(`${user.username}:${user.id}`),
         ...activity,
         xp,
         levelTitle: level.title,

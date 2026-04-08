@@ -111,49 +111,6 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
         </div>
       </section>
 
-      {/* Top users leaderboard */}
-      <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-6">
-        <div className="flex items-start justify-between gap-3 sm:items-center">
-          <div>
-            <p className="text-xs text-slate-400 sm:text-sm">{dict.home.topUsers}</p>
-            <h2 className="mt-1 text-lg font-semibold text-white sm:text-2xl">
-              {dict.home.topUsersTitle}
-            </h2>
-          </div>
-        </div>
-
-        <div className="mt-5 grid gap-2.5 sm:mt-6 sm:grid-cols-2 sm:gap-3 lg:grid-cols-3">
-          {topUsers.map((user, index) => (
-            <div
-              key={user.username}
-              className="rounded-2xl border border-white/10 bg-white/5 p-3.5 sm:rounded-3xl sm:p-4"
-            >
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex min-w-0 items-center gap-2.5">
-                  <UserAvatar username={user.username} image={user.image} size="md" />
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-white sm:text-base">
-                      #{index + 1} @{user.username}
-                    </p>
-                    <p className="text-[11px] text-lime-300 sm:text-xs">
-                      {user.levelEmoji} {dict.home.levelLabel}: {user.levelTitle}
-                    </p>
-                  </div>
-                </div>
-                <span className="shrink-0 rounded-full border border-white/15 px-2 py-1 text-[11px] text-slate-200">
-                  {user.xp} {dict.home.xpLabel}
-                </span>
-              </div>
-              <div className="mt-3 flex flex-wrap gap-1.5 text-[10px] text-slate-300 sm:text-xs">
-                <span className="rounded-full bg-slate-900/70 px-2 py-1">💬 {user.threadsCreated}</span>
-                <span className="rounded-full bg-slate-900/70 px-2 py-1">🗨️ {user.commentsPosted}</span>
-                <span className="rounded-full bg-slate-900/70 px-2 py-1">❤️ {user.likesReceived}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* Forum categories + Latest threads */}
       <section className="flex flex-col gap-5 lg:grid lg:grid-cols-[1fr_1fr] lg:gap-6">
         {/* Forum categories */}
@@ -273,6 +230,46 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
             <CannabisLeafOutline className="h-4 w-4" />
             {dict.home.startDiary}
           </Link>
+        </div>
+      </section>
+
+      {/* Top users leaderboard */}
+      <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-6">
+        <div>
+          <p className="text-xs text-slate-400 sm:text-sm">{dict.home.topUsers}</p>
+          <h2 className="mt-1 text-lg font-semibold text-white sm:text-2xl">
+            {dict.home.topUsersTitle}
+          </h2>
+        </div>
+
+        <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/40 sm:mt-5 sm:rounded-3xl">
+          <ol className="divide-y divide-white/10">
+            {topUsers.map((user, index) => (
+              <li
+                key={user.username}
+                className="flex items-center gap-2.5 px-3 py-3 sm:gap-3 sm:px-4 sm:py-3.5"
+              >
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-lime-400/15 text-xs font-semibold text-lime-200 sm:h-8 sm:w-8 sm:text-sm">
+                  #{index + 1}
+                </span>
+
+                <UserAvatar username={user.username} image={user.image} size="sm" />
+
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium text-white sm:text-base">
+                    @{user.username}
+                  </p>
+                  <p className="truncate text-[10px] text-slate-400 sm:text-xs">
+                    {user.levelEmoji} {user.levelTitle} · 💬 {user.threadsCreated} · 🗨️ {user.commentsPosted} · ❤️ {user.likesReceived}
+                  </p>
+                </div>
+
+                <span className="shrink-0 rounded-full border border-white/15 bg-white/5 px-2 py-1 text-[10px] font-medium text-slate-200 sm:text-xs">
+                  {user.xp} {dict.home.xpLabel}
+                </span>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
     </div>
