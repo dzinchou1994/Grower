@@ -274,6 +274,54 @@ export const forumTopics: ForumTopic[] = [
       },
     ],
   },
+  {
+    slug: "buy-sell",
+    title: "ყიდვა / გაყიდვა",
+    description: "ადგილობრივი buy & sell პოსტები: აქსესუარები, აღჭურვილობა, თესლები და სხვა განცხადებები.",
+    icon: "🛒",
+    threads: [
+      {
+        slug: "led-light-market-tbilisi",
+        title: "LED ნათურის გაყიდვა (Tbilisi)",
+        author: "market420",
+        replies: 8,
+        likes: 6,
+        lastActivity: "2 სთ წინ",
+      },
+      {
+        slug: "looking-for-grow-tent-80x80",
+        title: "ვეძებ 80x80 grow tent-ს",
+        author: "greenbuyer",
+        replies: 5,
+        likes: 4,
+        lastActivity: "4 სთ წინ",
+      },
+    ],
+  },
+  {
+    slug: "free-talk",
+    title: "Free Talk 420",
+    description: "თავისუფალი ჩატი, ისტორიები, ხუმრობები და ყოველდღიური 420 საუბრები საზოგადოების წევრებს შორის.",
+    icon: "😶‍🌫️",
+    threads: [
+      {
+        slug: "stoned-night-stories",
+        title: "Stoned night stories — გავაზიაროთ ისტორიები",
+        author: "nightowl420",
+        replies: 19,
+        likes: 25,
+        lastActivity: "1 სთ წინ",
+      },
+      {
+        slug: "best-420-playlist",
+        title: "თქვენი საუკეთესო 420 playlist 🎧",
+        author: "vibegrow",
+        replies: 11,
+        likes: 13,
+        lastActivity: "3 სთ წინ",
+      },
+    ],
+  },
 ];
 
 export const moderationQueue = [
@@ -294,7 +342,7 @@ export const moderationQueue = [
 ];
 
 export const platformStats = {
-  forumTopics: 6,
+  forumTopics: 8,
   forumThreads: 156,
   forumReplies: 1842,
   activeUsers: 234,

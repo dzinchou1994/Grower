@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getServerSessionUser } from "@/lib/auth-session";
 import { ForumCommentForm } from "@/components/forum-comment-form";
+import { ForumThreadComposer } from "@/components/forum-thread-composer";
 import {
   getAlternates,
   getLocalizedContent,
@@ -29,6 +30,8 @@ export function generateStaticParams() {
     "equipment-setup",
     "outdoor-growing",
     "legal-discussion",
+    "buy-sell",
+    "free-talk",
   ];
 
   return locales.flatMap((locale) =>
@@ -77,6 +80,13 @@ export default async function ForumTopicPage({ params }: PageProps) {
     notFound();
   }
 
+  const openDiscussionLabel =
+    typedLocale === "ka"
+      ? "დისკუსიის გახსნა"
+      : typedLocale === "ru"
+        ? "Открыть обсуждение"
+        : "Open discussion";
+
   return (
     <div className="flex flex-col gap-5 sm:gap-6">
       <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/6 p-5 sm:rounded-[2rem] sm:p-8">
@@ -104,6 +114,14 @@ export default async function ForumTopicPage({ params }: PageProps) {
               </p>
             </div>
           </div>
+          <div className="mt-4">
+            <a
+              href="#new-thread"
+              className="inline-flex items-center justify-center rounded-full bg-lime-400 px-4 py-2 text-xs font-semibold text-slate-950 transition hover:bg-lime-300 sm:text-sm"
+            >
+              {openDiscussionLabel}
+            </a>
+          </div>
         </div>
       </section>
 
@@ -118,6 +136,14 @@ export default async function ForumTopicPage({ params }: PageProps) {
           <span className="shrink-0 rounded-full bg-white/6 px-3 py-1.5 text-[10px] text-slate-300 sm:px-4 sm:py-2 sm:text-xs">
             {topic.threads.length} {dict.forum.total}
           </span>
+        </div>
+
+        <div id="new-thread" className="mt-5 sm:mt-6">
+          <ForumThreadComposer
+            topics={[{ slug: topic.slug, title: topic.title }]}
+            isAuthenticated={Boolean(sessionUser)}
+            loginHref={getLocalizedPath(typedLocale, "/auth/login")}
+          />
         </div>
 
         <div className="mt-5 space-y-3 sm:mt-6 sm:space-y-4">

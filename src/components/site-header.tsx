@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { UserAvatar } from "@/components/user-avatar";
 import type { SessionUser } from "@/lib/auth-session";
 import {
-  defaultLocale,
   getDictionary,
   getLocalizedPath,
   locales,
@@ -30,13 +29,12 @@ export function SiteHeader({
   const navigation = [
     { href: "", label: dict.nav.home, icon: "home" as const },
     { href: "/forum", label: dict.nav.forum, icon: "forum" as const },
+    {
+      href: "/cannapedia",
+      label: dict.nav.cannapedia,
+      icon: "cannapedia" as const,
+    },
     { href: "/diaries", label: dict.nav.diaries, icon: "diaries" as const },
-    ...(initialUser
-      ? [{ href: "/account", label: dict.nav.account, icon: "account" as const }]
-      : []),
-    ...(initialUser?.role === "ADMIN"
-      ? [{ href: "/admin", label: dict.nav.admin, icon: "admin" as const }]
-      : []),
   ];
 
   async function handleLogout() {
@@ -357,7 +355,7 @@ export function SiteHeader({
 function NavIcon({
   icon,
 }: {
-  icon: "home" | "forum" | "diaries" | "account" | "admin";
+  icon: "home" | "forum" | "cannapedia" | "diaries" | "account" | "admin";
 }) {
   const common = "h-[1.05em] w-[1.05em]";
 
@@ -382,6 +380,15 @@ function NavIcon({
     return (
       <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 4.5h9A1.5 1.5 0 0 1 18 6v13.5l-3-1.5-3 1.5-3-1.5-3 1.5V6A1.5 1.5 0 0 1 7.5 4.5Z" />
+      </svg>
+    );
+  }
+
+  if (icon === "cannapedia") {
+    return (
+      <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 5.25h9a2.25 2.25 0 0 1 2.25 2.25v11.25l-3.75-1.875L10.5 18.75l-3.75-1.875-3.75 1.875V7.5a2.25 2.25 0 0 1 2.25-2.25h1.5Z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 9.75h4.5M9.75 13.5h4.5" />
       </svg>
     );
   }
@@ -411,10 +418,6 @@ function replaceLocaleInPath(pathname: string, locale: Locale) {
   }
 
   if (locales.includes(segments[0] as Locale)) {
-    if (locale === defaultLocale) {
-      const rest = segments.slice(1).join("/");
-      return rest ? `/${rest}` : "/";
-    }
     segments[0] = locale;
     return `/${segments.join("/")}`;
   }

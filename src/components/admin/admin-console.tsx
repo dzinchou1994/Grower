@@ -6,7 +6,13 @@ type AdminConsoleProps = {
   role: "ADMIN" | "MODERATOR";
 };
 
-type TabId = "moderation" | "content" | "users" | "analytics" | "audit";
+type TabId =
+  | "moderation"
+  | "content"
+  | "cannapedia"
+  | "users"
+  | "analytics"
+  | "audit";
 
 export function AdminConsole({ role }: AdminConsoleProps) {
   const tabs = useMemo(
@@ -14,6 +20,7 @@ export function AdminConsole({ role }: AdminConsoleProps) {
       [
         { id: "moderation", label: "Moderation" },
         { id: "content", label: "Content" },
+        ...(role === "ADMIN" ? [{ id: "cannapedia", label: "Cannapedia" }] : []),
         ...(role === "ADMIN" ? [{ id: "users", label: "Users" }] : []),
         ...(role === "ADMIN" ? [{ id: "analytics", label: "Analytics" }] : []),
         ...(role === "ADMIN" ? [{ id: "audit", label: "Audit" }] : []),
@@ -44,6 +51,7 @@ export function AdminConsole({ role }: AdminConsoleProps) {
 
       {activeTab === "moderation" ? <ModerationPanel isAdmin={role === "ADMIN"} /> : null}
       {activeTab === "content" ? <ContentPanel isAdmin={role === "ADMIN"} /> : null}
+      {activeTab === "cannapedia" && role === "ADMIN" ? <CannapediaPanel /> : null}
       {activeTab === "users" && role === "ADMIN" ? <UsersPanel /> : null}
       {activeTab === "analytics" && role === "ADMIN" ? <AnalyticsPanel /> : null}
       {activeTab === "audit" && role === "ADMIN" ? <AuditPanel /> : null}
@@ -567,6 +575,338 @@ function AuditPanel() {
               Actor: @{log.actor?.username ?? "system"} · {new Date(log.createdAt).toLocaleString()}
             </p>
             {log.reason ? <p className="mt-2 text-xs text-slate-300">Reason: {log.reason}</p> : null}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CannapediaPanel() {
+  const [categories, setCategories] = useState<any[]>([]);
+  const [articles, setArticles] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const [newCategory, setNewCategory] = useState({
+    slug: "",
+    icon: "🌿",
+    nameKa: "",
+    nameEn: "",
+    nameRu: "",
+    sortOrder: "0",
+    reason: "",
+  });
+  const [newArticle, setNewArticle] = useState({
+    slug: "",
+    categoryId: "",
+    readMinutes: "6",
+    titleKa: "",
+    titleEn: "",
+    titleRu: "",
+    excerptKa: "",
+    excerptEn: "",
+    excerptRu: "",
+    contentKa: "",
+    contentEn: "",
+    contentRu: "",
+    isPublished: true,
+    reason: "",
+  });
+
+  async function loadData() {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch("/api/admin/cannapedia");
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) {
+        setError(payload?.error ?? "Could not load Cannapedia data.");
+        return;
+      }
+      setCategories(payload.categories ?? []);
+      setArticles(payload.articles ?? []);
+      if (!newArticle.categoryId && payload.categories?.[0]?.id) {
+        setNewArticle((prev) => ({ ...prev, categoryId: payload.categories[0].id }));
+      }
+    } catch {
+      setError("Network error.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function createCategory() {
+    const response = await fetch("/api/admin/cannapedia", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        entity: "category",
+        slug: newCategory.slug,
+        icon: newCategory.icon,
+        sortOrder: Number(newCategory.sortOrder || "0"),
+        name: {
+          ka: newCategory.nameKa,
+          en: newCategory.nameEn,
+          ru: newCategory.nameRu,
+        },
+        reason: newCategory.reason || "Created Cannapedia category",
+      }),
+    });
+
+    if (!response.ok) {
+      const payload = await response.json().catch(() => null);
+      setError(payload?.error ?? "Could not create category.");
+      return;
+    }
+
+    setNewCategory({
+      slug: "",
+      icon: "🌿",
+      nameKa: "",
+      nameEn: "",
+      nameRu: "",
+      sortOrder: "0",
+      reason: "",
+    });
+    await loadData();
+  }
+
+  async function updateCategory(category: any) {
+    const nameKa = window.prompt("KA name", category.nameKa) ?? category.nameKa;
+    const nameEn = window.prompt("EN name", category.nameEn) ?? category.nameEn;
+    const nameRu = window.prompt("RU name", category.nameRu) ?? category.nameRu;
+    const icon = window.prompt("Icon", category.icon) ?? category.icon;
+    const slug = window.prompt("Slug", category.slug) ?? category.slug;
+    const sortOrder = window.prompt("Sort order", String(category.sortOrder ?? 0));
+    const reason = window.prompt("Reason for edit (audit)") ?? "";
+    if (!reason.trim()) return;
+
+    const response = await fetch("/api/admin/cannapedia", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        entity: "category",
+        id: category.id,
+        slug,
+        icon,
+        sortOrder: Number(sortOrder || "0"),
+        name: { ka: nameKa, en: nameEn, ru: nameRu },
+        reason,
+      }),
+    });
+    if (!response.ok) {
+      const payload = await response.json().catch(() => null);
+      setError(payload?.error ?? "Could not update category.");
+      return;
+    }
+    await loadData();
+  }
+
+  async function createArticle() {
+    const response = await fetch("/api/admin/cannapedia", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        entity: "article",
+        slug: newArticle.slug,
+        categoryId: newArticle.categoryId,
+        readMinutes: Number(newArticle.readMinutes || "6"),
+        title: {
+          ka: newArticle.titleKa,
+          en: newArticle.titleEn,
+          ru: newArticle.titleRu,
+        },
+        excerpt: {
+          ka: newArticle.excerptKa,
+          en: newArticle.excerptEn,
+          ru: newArticle.excerptRu,
+        },
+        content: {
+          ka: newArticle.contentKa,
+          en: newArticle.contentEn,
+          ru: newArticle.contentRu,
+        },
+        isPublished: newArticle.isPublished,
+        reason: newArticle.reason || "Created Cannapedia article",
+      }),
+    });
+    if (!response.ok) {
+      const payload = await response.json().catch(() => null);
+      setError(payload?.error ?? "Could not create article.");
+      return;
+    }
+
+    setNewArticle({
+      slug: "",
+      categoryId: categories[0]?.id ?? "",
+      readMinutes: "6",
+      titleKa: "",
+      titleEn: "",
+      titleRu: "",
+      excerptKa: "",
+      excerptEn: "",
+      excerptRu: "",
+      contentKa: "",
+      contentEn: "",
+      contentRu: "",
+      isPublished: true,
+      reason: "",
+    });
+    await loadData();
+  }
+
+  async function updateArticle(article: any) {
+    const titleKa = window.prompt("KA title", article.titleKa) ?? article.titleKa;
+    const titleEn = window.prompt("EN title", article.titleEn) ?? article.titleEn;
+    const titleRu = window.prompt("RU title", article.titleRu) ?? article.titleRu;
+    const excerptKa = window.prompt("KA excerpt", article.excerptKa) ?? article.excerptKa;
+    const excerptEn = window.prompt("EN excerpt", article.excerptEn) ?? article.excerptEn;
+    const excerptRu = window.prompt("RU excerpt", article.excerptRu) ?? article.excerptRu;
+    const contentKa = window.prompt("KA content (paragraphs by line)", article.contentKa) ?? article.contentKa;
+    const contentEn = window.prompt("EN content (paragraphs by line)", article.contentEn) ?? article.contentEn;
+    const contentRu = window.prompt("RU content (paragraphs by line)", article.contentRu) ?? article.contentRu;
+    const categoryId =
+      window.prompt("Category ID", article.categoryId) ?? article.categoryId;
+    const isPublishedRaw =
+      window.prompt("Published? (true/false)", String(article.isPublished)) ??
+      String(article.isPublished);
+    const slug = window.prompt("Slug", article.slug) ?? article.slug;
+    const readMinutes = window.prompt("Read minutes", String(article.readMinutes ?? 6));
+    const reason = window.prompt("Reason for edit (audit)") ?? "";
+    if (!reason.trim()) return;
+
+    const response = await fetch("/api/admin/cannapedia", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        entity: "article",
+        id: article.id,
+        slug,
+        categoryId,
+        readMinutes: Number(readMinutes || "6"),
+        title: {
+          ka: titleKa,
+          en: titleEn,
+          ru: titleRu,
+        },
+        excerpt: {
+          ka: excerptKa,
+          en: excerptEn,
+          ru: excerptRu,
+        },
+        content: {
+          ka: contentKa,
+          en: contentEn,
+          ru: contentRu,
+        },
+        isPublished: isPublishedRaw.trim().toLowerCase() === "true",
+        reason,
+      }),
+    });
+    if (!response.ok) {
+      const payload = await response.json().catch(() => null);
+      setError(payload?.error ?? "Could not update article.");
+      return;
+    }
+    await loadData();
+  }
+
+  return (
+    <div className="mt-6">
+      <button
+        type="button"
+        onClick={loadData}
+        className="rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-slate-950"
+      >
+        {loading ? "Loading..." : "Load Cannapedia"}
+      </button>
+      {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
+
+      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <p className="text-sm font-semibold text-white">Add category</p>
+          <div className="mt-3 grid gap-2">
+            <input value={newCategory.slug} onChange={(e) => setNewCategory((p) => ({ ...p, slug: e.target.value }))} placeholder="slug" className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white" />
+            <input value={newCategory.icon} onChange={(e) => setNewCategory((p) => ({ ...p, icon: e.target.value }))} placeholder="icon" className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white" />
+            <input value={newCategory.nameKa} onChange={(e) => setNewCategory((p) => ({ ...p, nameKa: e.target.value }))} placeholder="name ka" className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white" />
+            <input value={newCategory.nameEn} onChange={(e) => setNewCategory((p) => ({ ...p, nameEn: e.target.value }))} placeholder="name en" className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white" />
+            <input value={newCategory.nameRu} onChange={(e) => setNewCategory((p) => ({ ...p, nameRu: e.target.value }))} placeholder="name ru" className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white" />
+            <input value={newCategory.sortOrder} onChange={(e) => setNewCategory((p) => ({ ...p, sortOrder: e.target.value }))} placeholder="sort order" className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white" />
+            <input value={newCategory.reason} onChange={(e) => setNewCategory((p) => ({ ...p, reason: e.target.value }))} placeholder="audit reason" className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white" />
+            <button type="button" onClick={createCategory} className="rounded-full border border-lime-400/30 bg-lime-400/10 px-3 py-2 text-xs text-lime-200">Create category</button>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <p className="text-sm font-semibold text-white">Add article</p>
+          <div className="mt-3 grid gap-2">
+            <input value={newArticle.slug} onChange={(e) => setNewArticle((p) => ({ ...p, slug: e.target.value }))} placeholder="slug" className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white" />
+            <select value={newArticle.categoryId} onChange={(e) => setNewArticle((p) => ({ ...p, categoryId: e.target.value }))} className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white">
+              <option value="">Select category</option>
+              {categories.map((entry) => (
+                <option key={entry.id} value={entry.id}>
+                  {entry.icon} {entry.nameKa}
+                </option>
+              ))}
+            </select>
+            <input value={newArticle.readMinutes} onChange={(e) => setNewArticle((p) => ({ ...p, readMinutes: e.target.value }))} placeholder="read minutes" className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white" />
+            <input value={newArticle.titleKa} onChange={(e) => setNewArticle((p) => ({ ...p, titleKa: e.target.value }))} placeholder="title ka" className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white" />
+            <input value={newArticle.titleEn} onChange={(e) => setNewArticle((p) => ({ ...p, titleEn: e.target.value }))} placeholder="title en" className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white" />
+            <input value={newArticle.titleRu} onChange={(e) => setNewArticle((p) => ({ ...p, titleRu: e.target.value }))} placeholder="title ru" className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white" />
+            <textarea value={newArticle.excerptKa} onChange={(e) => setNewArticle((p) => ({ ...p, excerptKa: e.target.value }))} placeholder="excerpt ka" className="min-h-[56px] rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white" />
+            <textarea value={newArticle.excerptEn} onChange={(e) => setNewArticle((p) => ({ ...p, excerptEn: e.target.value }))} placeholder="excerpt en" className="min-h-[56px] rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white" />
+            <textarea value={newArticle.excerptRu} onChange={(e) => setNewArticle((p) => ({ ...p, excerptRu: e.target.value }))} placeholder="excerpt ru" className="min-h-[56px] rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white" />
+            <textarea value={newArticle.contentKa} onChange={(e) => setNewArticle((p) => ({ ...p, contentKa: e.target.value }))} placeholder="content ka (paragraphs by line)" className="min-h-[90px] rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white" />
+            <textarea value={newArticle.contentEn} onChange={(e) => setNewArticle((p) => ({ ...p, contentEn: e.target.value }))} placeholder="content en (paragraphs by line)" className="min-h-[90px] rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white" />
+            <textarea value={newArticle.contentRu} onChange={(e) => setNewArticle((p) => ({ ...p, contentRu: e.target.value }))} placeholder="content ru (paragraphs by line)" className="min-h-[90px] rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white" />
+            <input value={newArticle.reason} onChange={(e) => setNewArticle((p) => ({ ...p, reason: e.target.value }))} placeholder="audit reason" className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white" />
+            <label className="inline-flex items-center gap-2 text-xs text-slate-300">
+              <input type="checkbox" checked={newArticle.isPublished} onChange={(e) => setNewArticle((p) => ({ ...p, isPublished: e.target.checked }))} />
+              Published
+            </label>
+            <button type="button" onClick={createArticle} className="rounded-full border border-lime-400/30 bg-lime-400/10 px-3 py-2 text-xs text-lime-200">Create article</button>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 grid gap-3">
+        {categories.map((category) => (
+          <div key={category.id} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-white">
+                {category.icon} {category.nameKa} ({category.slug})
+              </p>
+              <button
+                type="button"
+                onClick={() => updateCategory(category)}
+                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-100"
+              >
+                Edit category
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-4 grid gap-3">
+        {articles.map((article) => (
+          <div key={article.id} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-sm font-medium text-white">{article.titleKa}</p>
+                <p className="text-xs text-slate-400">
+                  {article.slug} · {article.category?.nameKa ?? "No category"} · {article.readMinutes} min
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => updateArticle(article)}
+                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-100"
+              >
+                Edit article
+              </button>
+            </div>
           </div>
         ))}
       </div>

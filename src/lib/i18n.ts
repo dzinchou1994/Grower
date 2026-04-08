@@ -23,6 +23,7 @@ const translations = {
     nav: {
       home: "მთავარი",
       forum: "ფორუმი",
+      cannapedia: "კანაპედია",
       diaries: "დღიურები",
       account: "ანგარიში",
       admin: "ადმინი",
@@ -30,10 +31,15 @@ const translations = {
     home: {
       badge: "ქართული კანაფის საზოგადოება",
       title: "შეუერთდი ფორუმს, გაიგე მეტი, გაუზიარე გამოცდილება.",
+      privacyHeadline: "ანონიმურობა დაცულია ჩვენს პლატფორმაზე.",
       description:
         "Grower არის ქართული კანაფის საზოგადოების პლატფორმა სადაც შეგიძლია დასვა კითხვები, მიიღო პასუხები, ისაუბრო კანონმდებლობაზე, მოყვანაზე და სხვა თემებზე.",
       primaryCta: "ფორუმის გახსნა",
       secondaryCta: "დღიურების ნახვა",
+      topUsers: "Top 10 მომხმარებელი",
+      topUsersTitle: "აქტიური წევრების რეიტინგი",
+      xpLabel: "XP",
+      levelLabel: "დონე",
       forumHighlight: "აქტიური დისკუსიები",
       forumHighlightTitle: "შეუერთდი საუბარს",
       latestThreads: "ბოლო თემები",
@@ -146,6 +152,7 @@ const translations = {
     nav: {
       home: "Home",
       forum: "Forum",
+      cannapedia: "Cannapedia",
       diaries: "Diaries",
       account: "Account",
       admin: "Admin",
@@ -153,10 +160,15 @@ const translations = {
     home: {
       badge: "Georgian Cannabis Community",
       title: "Join the forum, learn more, share your experience.",
+      privacyHeadline: "Your anonymity is protected on our platform.",
       description:
         "Grower is a Georgian cannabis community platform where you can ask questions, get answers, discuss legislation, growing and other topics.",
       primaryCta: "Open Forum",
       secondaryCta: "View Diaries",
+      topUsers: "Top 10 users",
+      topUsersTitle: "Activity leaderboard",
+      xpLabel: "XP",
+      levelLabel: "Level",
       forumHighlight: "Active Discussions",
       forumHighlightTitle: "Join the conversation",
       latestThreads: "Latest threads",
@@ -269,6 +281,7 @@ const translations = {
     nav: {
       home: "Главная",
       forum: "Форум",
+      cannapedia: "Каннапедия",
       diaries: "Дневники",
       account: "Аккаунт",
       admin: "Админ",
@@ -276,10 +289,15 @@ const translations = {
     home: {
       badge: "Грузинское каннабис-сообщество",
       title: "Присоединяйся к форуму, узнай больше, поделись опытом.",
+      privacyHeadline: "Ваша анонимность защищена на нашей платформе.",
       description:
         "Grower — платформа грузинского каннабис-сообщества, где можно задавать вопросы, получать ответы, обсуждать законодательство, выращивание и другие темы.",
       primaryCta: "Открыть форум",
       secondaryCta: "Смотреть дневники",
+      topUsers: "Топ 10 пользователей",
+      topUsersTitle: "Рейтинг активности",
+      xpLabel: "XP",
+      levelLabel: "Уровень",
       forumHighlight: "Активные дискуссии",
       forumHighlightTitle: "Присоединяйся к разговору",
       latestThreads: "Последние темы",
@@ -399,11 +417,7 @@ export function getLocaleName(locale: Locale) {
 }
 
 export function getLocalizedPath(locale: Locale, path = "") {
-  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-  if (locale === defaultLocale) {
-    return normalizedPath === "/" ? "/" : normalizedPath;
-  }
-  return `/${locale}${normalizedPath === "/" ? "" : normalizedPath}`;
+  return `/${locale}${path}`;
 }
 
 export function getAlternates(path = ""): Metadata["alternates"] {

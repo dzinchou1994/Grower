@@ -7,8 +7,9 @@ import {
   isValidLocale,
   type Locale,
 } from "@/lib/i18n";
-import { getForumStats, listForumTopics } from "@/lib/forum-data";
+import { getForumStats, getTopUsers, listForumTopics } from "@/lib/forum-data";
 import { CannabisLeaf, CannabisLeafOutline } from "@/components/icons";
+import { UserAvatar } from "@/components/user-avatar";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -43,9 +44,10 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
 
   const typedLocale = locale as Locale;
   const { dict } = getLocalizedContent(typedLocale);
-  const [forumTopicList, stats] = await Promise.all([
+  const [forumTopicList, stats, topUsers] = await Promise.all([
     listForumTopics(),
     getForumStats(),
+    getTopUsers(10),
   ]);
 
   const allThreads = forumTopicList
@@ -77,6 +79,9 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
           <h1 className="max-w-2xl text-2xl font-semibold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
             {dict.home.title}
           </h1>
+          <p className="mt-3 inline-flex max-w-fit items-center rounded-full border border-lime-400/25 bg-lime-400/10 px-3 py-1 text-xs font-medium text-lime-200 sm:text-sm">
+            🔒 {dict.home.privacyHeadline}
+          </p>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-200/80 sm:mt-4 sm:text-base sm:leading-7">
             {dict.home.description}
           </p>
@@ -103,6 +108,49 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
             <StatCard label={dict.home.stats.forumReplies} value={stats.forumReplies} />
             <StatCard label={dict.home.stats.activeUsers} value={stats.activeUsers} />
           </div>
+        </div>
+      </section>
+
+      {/* Top users leaderboard */}
+      <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-6">
+        <div className="flex items-start justify-between gap-3 sm:items-center">
+          <div>
+            <p className="text-xs text-slate-400 sm:text-sm">{dict.home.topUsers}</p>
+            <h2 className="mt-1 text-lg font-semibold text-white sm:text-2xl">
+              {dict.home.topUsersTitle}
+            </h2>
+          </div>
+        </div>
+
+        <div className="mt-5 grid gap-2.5 sm:mt-6 sm:grid-cols-2 sm:gap-3 lg:grid-cols-3">
+          {topUsers.map((user, index) => (
+            <div
+              key={user.username}
+              className="rounded-2xl border border-white/10 bg-white/5 p-3.5 sm:rounded-3xl sm:p-4"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex min-w-0 items-center gap-2.5">
+                  <UserAvatar username={user.username} image={user.image} size="md" />
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-white sm:text-base">
+                      #{index + 1} @{user.username}
+                    </p>
+                    <p className="text-[11px] text-lime-300 sm:text-xs">
+                      {user.levelEmoji} {dict.home.levelLabel}: {user.levelTitle}
+                    </p>
+                  </div>
+                </div>
+                <span className="shrink-0 rounded-full border border-white/15 px-2 py-1 text-[11px] text-slate-200">
+                  {user.xp} {dict.home.xpLabel}
+                </span>
+              </div>
+              <div className="mt-3 flex flex-wrap gap-1.5 text-[10px] text-slate-300 sm:text-xs">
+                <span className="rounded-full bg-slate-900/70 px-2 py-1">💬 {user.threadsCreated}</span>
+                <span className="rounded-full bg-slate-900/70 px-2 py-1">🗨️ {user.commentsPosted}</span>
+                <span className="rounded-full bg-slate-900/70 px-2 py-1">❤️ {user.likesReceived}</span>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 

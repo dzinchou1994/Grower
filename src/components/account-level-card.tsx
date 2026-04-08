@@ -148,36 +148,34 @@ export function AccountLevelCard({
         </div>
       </div>
 
-      <div
-        className={`fixed inset-0 z-50 bg-slate-950/75 transition-opacity duration-300 ${
-          avatarModalOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
-        }`}
-        onClick={() => setAvatarModalOpen(false)}
-        aria-hidden={!avatarModalOpen}
-      />
-      <div
-        className={`fixed inset-x-0 bottom-0 z-[60] max-h-[88vh] overflow-y-auto rounded-t-3xl border border-white/10 bg-[#0b1425] p-4 shadow-2xl shadow-black/60 transition-transform duration-300 sm:inset-x-auto sm:left-1/2 sm:top-1/2 sm:w-[min(640px,92vw)] sm:max-h-[86vh] sm:-translate-x-1/2 sm:rounded-3xl sm:p-6 ${
-          avatarModalOpen
-            ? "translate-y-0 sm:-translate-y-1/2"
-            : "translate-y-full sm:-translate-x-1/2 sm:translate-y-8"
-        }`}
-        role="dialog"
-        aria-modal="true"
-        aria-hidden={!avatarModalOpen}
-      >
-        <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-base font-semibold text-white sm:text-lg">Choose profile avatar</h3>
-          <button
-            type="button"
+      {avatarModalOpen ? (
+        <>
+          <div
+            className="fixed inset-0 z-50 bg-slate-950/75 transition-opacity duration-300"
             onClick={() => setAvatarModalOpen(false)}
-            className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition hover:bg-white/10"
-            aria-label="Close avatar picker"
+            aria-hidden={!avatarModalOpen}
+          />
+          <div
+            className="fixed inset-x-0 bottom-0 z-[60] max-h-[88vh] overflow-y-auto rounded-t-3xl border border-white/10 bg-[#0b1425] p-4 shadow-2xl shadow-black/60 transition-transform duration-300 sm:inset-x-auto sm:left-1/2 sm:top-1/2 sm:w-[min(640px,92vw)] sm:max-h-[86vh] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-3xl sm:p-6"
+            role="dialog"
+            aria-modal="true"
+            aria-hidden={!avatarModalOpen}
           >
-            ✕
-          </button>
-        </div>
-        <AccountAvatarPicker currentImage={userImage} compact />
-      </div>
+            <div className="mb-3 flex items-center justify-between">
+              <h3 className="text-base font-semibold text-white sm:text-lg">Choose profile avatar</h3>
+              <button
+                type="button"
+                onClick={() => setAvatarModalOpen(false)}
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition hover:bg-white/10"
+                aria-label="Close avatar picker"
+              >
+                ✕
+              </button>
+            </div>
+            <AccountAvatarPicker currentImage={userImage} compact />
+          </div>
+        </>
+      ) : null}
     </section>
   );
 }

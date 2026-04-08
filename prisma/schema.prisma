@@ -145,6 +145,43 @@ model ForumTopic {
   threads     ForumThread[]
 }
 
+model CannapediaCategory {
+  id        String             @id @default(cuid())
+  slug      String             @unique
+  nameKa    String
+  nameEn    String
+  nameRu    String
+  icon      String             @default("🌿")
+  sortOrder Int                @default(0)
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+  articles  CannapediaArticle[]
+
+  @@index([sortOrder])
+}
+
+model CannapediaArticle {
+  id          String             @id @default(cuid())
+  slug        String             @unique
+  categoryId  String
+  readMinutes Int                @default(5)
+  titleKa     String
+  titleEn     String
+  titleRu     String
+  excerptKa   String
+  excerptEn   String
+  excerptRu   String
+  contentKa   String
+  contentEn   String
+  contentRu   String
+  isPublished Boolean            @default(true)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  category    CannapediaCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@index([categoryId, createdAt])
+}
+
 model ForumThread {
   id         String         @id @default(cuid())
   slug       String         @unique

@@ -1,7 +1,9 @@
 import { formatDistanceToNow } from "date-fns";
 import { db } from "@/lib/db";
 import { getDeterministicAvatarImage } from "@/lib/avatar-options";
+import { calculateXp, getLevelForXp } from "@/lib/leveling";
 import {
+  diaries,
   forumTopics,
   platformStats,
   type ForumTopic,
@@ -33,11 +35,25 @@ export type ForumStats = {
   activeUsers: number;
 };
 
+export type LeaderboardUser = {
+  username: string;
+  image?: string;
+  threadsCreated: number;
+  commentsPosted: number;
+  likesReceived: number;
+  diariesCreated: number;
+  diaryWeeksPosted: number;
+  xp: number;
+  levelTitle: string;
+  levelEmoji: string;
+};
+
 type ForumState = {
   topics: ForumTopicRecord[];
 };
 
 const hasDatabase = Boolean(process.env.DATABASE_URL);
+const topicIconBySlug = new Map(forumTopics.map((topic) => [topic.slug, topic.icon]));
 
 declare global {
   var __forumState: ForumState | undefined;
@@ -98,15 +114,16 @@ async function ensureForumSeedData() {
 
   if (!global.__forumSeedPromise) {
     global.__forumSeedPromise = (async () => {
-      const topicCount = await db.forumTopic.count();
-      if (topicCount > 0) {
-        return;
-      }
-
       for (let i = 0; i < forumTopics.length; i += 1) {
         const sourceTopic = forumTopics[i];
-        const topic = await db.forumTopic.create({
-          data: {
+        const topic = await db.forumTopic.upsert({
+          where: { slug: sourceTopic.slug },
+          update: {
+            title: sourceTopic.title,
+            description: sourceTopic.description,
+            sortOrder: i,
+          },
+          create: {
             slug: sourceTopic.slug,
             title: sourceTopic.title,
             description: sourceTopic.description,
@@ -116,8 +133,15 @@ async function ensureForumSeedData() {
 
         for (const sourceThread of sourceTopic.threads) {
           const user = await upsertForumUser(sourceThread.author);
-          await db.forumThread.create({
-            data: {
+          await db.forumThread.upsert({
+            where: { slug: sourceThread.slug },
+            update: {
+              topicId: topic.id,
+              authorId: user.id,
+              title: sourceThread.title,
+              isPinned: sourceThread.isPinned ?? false,
+            },
+            create: {
               slug: sourceThread.slug,
               topicId: topic.id,
               authorId: user.id,
@@ -206,7 +230,7 @@ async function listForumTopicsFromDatabase(query?: string) {
     slug: topic.slug,
     title: topic.title,
     description: topic.description ?? "",
-    icon: "💬",
+    icon: topicIconBySlug.get(topic.slug) ?? "💬",
     threads: topic.threads.map(mapThreadRecord),
   }));
 
@@ -257,7 +281,7 @@ async function getForumTopicBySlugFromDatabase(slug: string) {
     slug: topic.slug,
     title: topic.title,
     description: topic.description ?? "",
-    icon: "💬",
+    icon: topicIconBySlug.get(topic.slug) ?? "💬",
     threads: topic.threads.map(mapThreadRecord),
   } satisfies ForumTopicRecord;
 }
@@ -564,4 +588,147 @@ export async function getForumStats(): Promise<ForumStats> {
   }
 
   return getForumStatsFromMemory();
+}
+
+async function getTopUsersFromDatabase(limit: number): Promise<LeaderboardUser[]> {
+  await ensureForumSeedData();
+
+  const users = await db.user.findMany({
+    where: {
+      OR: [
+        { forumThreads: { some: { isHidden: false } } },
+        { forumComments: { some: { isHidden: false } } },
+        { diaries: { some: { isHidden: false } } },
+      ],
+    },
+    select: {
+      id: true,
+      username: true,
+      image: true,
+      _count: {
+        select: {
+          forumThreads: { where: { isHidden: false } },
+          forumComments: { where: { isHidden: false } },
+          diaries: { where: { isHidden: false } },
+        },
+      },
+    },
+    take: 120,
+  });
+
+  const ranked = await Promise.all(
+    users.map(async (user) => {
+      const [threadLikes, commentLikes, diaryWeeks] = await Promise.all([
+        db.forumThread.findMany({
+          where: { authorId: user.id, isHidden: false },
+          select: { _count: { select: { likes: true } } },
+        }),
+        db.forumComment.findMany({
+          where: { authorId: user.id, isHidden: false },
+          select: { _count: { select: { likes: true } } },
+        }),
+        db.diaryWeek.findMany({
+          where: { isHidden: false, diary: { authorId: user.id, isHidden: false } },
+          select: { _count: { select: { likes: true } } },
+        }),
+      ]);
+
+      const likesReceived =
+        threadLikes.reduce((sum, row) => sum + row._count.likes, 0) +
+        commentLikes.reduce((sum, row) => sum + row._count.likes, 0) +
+        diaryWeeks.reduce((sum, row) => sum + row._count.likes, 0);
+
+      const activity = {
+        threadsCreated: user._count.forumThreads,
+        commentsPosted: user._count.forumComments,
+        likesReceived,
+        diariesCreated: user._count.diaries,
+        diaryWeeksPosted: diaryWeeks.length,
+      };
+      const xp = calculateXp(activity);
+      const level = getLevelForXp(xp);
+
+      return {
+        username: user.username,
+        image: user.image ?? getDeterministicAvatarImage(user.username),
+        ...activity,
+        xp,
+        levelTitle: level.title,
+        levelEmoji: level.emoji,
+      } satisfies LeaderboardUser;
+    }),
+  );
+
+  return ranked
+    .sort((a, b) => {
+      if (b.xp !== a.xp) return b.xp - a.xp;
+      if (b.threadsCreated !== a.threadsCreated) return b.threadsCreated - a.threadsCreated;
+      if (b.commentsPosted !== a.commentsPosted) return b.commentsPosted - a.commentsPosted;
+      return b.likesReceived - a.likesReceived;
+    })
+    .slice(0, limit);
+}
+
+function getTopUsersFromMemory(limit: number): LeaderboardUser[] {
+  const byUsername = new Map<string, Omit<LeaderboardUser, "xp" | "levelTitle" | "levelEmoji">>();
+
+  for (const topic of forumTopics) {
+    for (const thread of topic.threads) {
+      const existing = byUsername.get(thread.author) ?? {
+        username: thread.author,
+        image: getDeterministicAvatarImage(thread.author),
+        threadsCreated: 0,
+        commentsPosted: 0,
+        likesReceived: 0,
+        diariesCreated: 0,
+        diaryWeeksPosted: 0,
+      };
+      existing.threadsCreated += 1;
+      existing.likesReceived += thread.likes;
+      byUsername.set(thread.author, existing);
+    }
+  }
+
+  for (const diary of diaries) {
+    const author = diary.author.username;
+    const existing = byUsername.get(author) ?? {
+      username: author,
+      image: getDeterministicAvatarImage(author),
+      threadsCreated: 0,
+      commentsPosted: 0,
+      likesReceived: 0,
+      diariesCreated: 0,
+      diaryWeeksPosted: 0,
+    };
+    existing.diariesCreated += 1;
+    existing.diaryWeeksPosted += diary.weeks.length;
+    existing.likesReceived += diary.weeks.reduce((sum, week) => sum + week.likes, 0);
+    byUsername.set(author, existing);
+  }
+
+  return Array.from(byUsername.values())
+    .map((entry) => {
+      const xp = calculateXp(entry);
+      const level = getLevelForXp(xp);
+      return {
+        ...entry,
+        xp,
+        levelTitle: level.title,
+        levelEmoji: level.emoji,
+      } satisfies LeaderboardUser;
+    })
+    .sort((a, b) => {
+      if (b.xp !== a.xp) return b.xp - a.xp;
+      if (b.threadsCreated !== a.threadsCreated) return b.threadsCreated - a.threadsCreated;
+      return b.likesReceived - a.likesReceived;
+    })
+    .slice(0, limit);
+}
+
+export async function getTopUsers(limit = 10): Promise<LeaderboardUser[]> {
+  if (hasDatabase) {
+    return getTopUsersFromDatabase(limit);
+  }
+
+  return getTopUsersFromMemory(limit);
 }

@@ -20,6 +20,7 @@ describe("admin policy matrix", () => {
     expect(getAccessTabs("ADMIN")).toEqual([
       "moderation",
       "content",
+      "cannapedia",
       "users",
       "analytics",
       "audit",
