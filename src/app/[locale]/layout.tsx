@@ -64,6 +64,18 @@ export default async function LocaleLayout({
       <footer className="mx-auto w-full max-w-7xl px-4 pb-6 text-center sm:px-6 lg:px-8">
         <div className="py-2 text-xs text-slate-400">
           <div id="top-ge-counter-container" data-site-id="118645" />
+          <p className="mt-2 text-[10px] text-slate-600/80">
+            External link:
+            {" "}
+            <a
+              href="https://kama.bz"
+              target="_blank"
+              rel="sponsored nofollow noopener noreferrer"
+              className="text-slate-500 transition hover:text-slate-300"
+            >
+              kama.bz
+            </a>
+          </p>
         </div>
       </footer>
       <Script

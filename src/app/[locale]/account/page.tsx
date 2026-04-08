@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { AccountAvatarPicker } from "@/components/account-avatar-picker";
 import { AccountLevelCard } from "@/components/account-level-card";
+import { AccountSecuritySettings } from "@/components/account-security-settings";
 import { getServerSessionUser } from "@/lib/auth-session";
 import { db } from "@/lib/db";
 import type { UserActivityStats } from "@/lib/leveling";
@@ -129,8 +129,7 @@ export default async function AccountPage({ params }: PageProps) {
         userImage={matchedById?.image ?? sessionUser.image}
         stats={activityStats}
       />
-
-      <AccountAvatarPicker currentImage={matchedById?.image ?? sessionUser.image} />
+      <AccountSecuritySettings currentEmail={matchedById?.email ?? ""} />
 
       <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-8">
         <h2 className="text-lg font-semibold text-white sm:text-2xl">Recent Threads You Posted</h2>

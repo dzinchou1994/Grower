@@ -1,9 +1,13 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import {
   type UserActivityStats,
   calculateXp,
   getLevelProgress,
   computeBadges,
 } from "@/lib/leveling";
+import { AccountAvatarPicker } from "@/components/account-avatar-picker";
 import { UserAvatar } from "@/components/user-avatar";
 
 export function AccountLevelCard({
@@ -15,12 +19,20 @@ export function AccountLevelCard({
   userImage?: string | null;
   stats: UserActivityStats;
 }) {
+  const [avatarModalOpen, setAvatarModalOpen] = useState(false);
   const xp = calculateXp(stats);
   const { current, next, progressPercent, xpInLevel, xpNeeded } =
     getLevelProgress(xp);
   const badges = computeBadges(stats);
   const earnedBadges = badges.filter((b) => b.earned);
   const lockedBadges = badges.filter((b) => !b.earned);
+
+  useEffect(() => {
+    document.body.style.overflow = avatarModalOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [avatarModalOpen]);
 
   return (
     <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-950/80 via-[#0a1629]/90 to-slate-950/80 p-5 shadow-2xl shadow-lime-950/10 sm:rounded-[2rem] sm:p-8">
@@ -30,11 +42,21 @@ export function AccountLevelCard({
       <div className="relative flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-8">
         {/* Left: avatar + level title */}
         <div className="flex items-center gap-4 sm:flex-col sm:items-center sm:gap-3">
-          <UserAvatar username={username} image={userImage} size="lg" />
+          <button
+            type="button"
+            onClick={() => setAvatarModalOpen(true)}
+            className="group rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70"
+            aria-label="Open avatar picker"
+          >
+            <div className="rounded-full ring-2 ring-transparent transition group-hover:ring-lime-300/40">
+              <UserAvatar username={username} image={userImage} size="lg" />
+            </div>
+          </button>
           <div className="sm:text-center">
             <p className="text-sm font-semibold text-white sm:text-base">
               @{username}
             </p>
+            <p className="mt-0.5 text-[10px] text-slate-400">Tap avatar to edit</p>
             <p className="mt-0.5 flex items-center gap-1.5 text-xs text-lime-300 sm:justify-center sm:text-sm">
               <span>{current.emoji}</span>
               <span>{current.title}</span>
@@ -124,6 +146,37 @@ export function AccountLevelCard({
             </span>
           ))}
         </div>
+      </div>
+
+      <div
+        className={`fixed inset-0 z-50 bg-slate-950/75 transition-opacity duration-300 ${
+          avatarModalOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        onClick={() => setAvatarModalOpen(false)}
+        aria-hidden={!avatarModalOpen}
+      />
+      <div
+        className={`fixed inset-x-0 bottom-0 z-[60] max-h-[88vh] overflow-y-auto rounded-t-3xl border border-white/10 bg-[#0b1425] p-4 shadow-2xl shadow-black/60 transition-transform duration-300 sm:inset-x-auto sm:left-1/2 sm:top-1/2 sm:w-[min(640px,92vw)] sm:max-h-[86vh] sm:-translate-x-1/2 sm:rounded-3xl sm:p-6 ${
+          avatarModalOpen
+            ? "translate-y-0 sm:-translate-y-1/2"
+            : "translate-y-full sm:-translate-x-1/2 sm:translate-y-8"
+        }`}
+        role="dialog"
+        aria-modal="true"
+        aria-hidden={!avatarModalOpen}
+      >
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="text-base font-semibold text-white sm:text-lg">Choose profile avatar</h3>
+          <button
+            type="button"
+            onClick={() => setAvatarModalOpen(false)}
+            className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition hover:bg-white/10"
+            aria-label="Close avatar picker"
+          >
+            ✕
+          </button>
+        </div>
+        <AccountAvatarPicker currentImage={userImage} compact />
       </div>
     </section>
   );

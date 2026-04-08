@@ -6,8 +6,10 @@ import { avatarOptions, getAvatarIdFromImage } from "@/lib/avatar-options";
 
 export function AccountAvatarPicker({
   currentImage,
+  compact = false,
 }: {
   currentImage?: string | null;
+  compact?: boolean;
 }) {
   const router = useRouter();
   const [selectedAvatar, setSelectedAvatar] = useState(getAvatarIdFromImage(currentImage));
@@ -41,12 +43,21 @@ export function AccountAvatarPicker({
     }
   }
 
-  return (
-    <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-8">
-      <h2 className="text-lg font-semibold text-white sm:text-2xl">Profile Avatar</h2>
-      <p className="mt-1 text-xs text-slate-400 sm:text-sm">
-        Pick a 420 style icon for header and forum posts.
-      </p>
+  const content = (
+    <>
+      {!compact ? (
+        <>
+          <h2 className="text-lg font-semibold text-white sm:text-2xl">Profile Avatar</h2>
+          <p className="mt-1 text-xs text-slate-400 sm:text-sm">
+            Pick a 420 style icon for header and forum posts.
+          </p>
+        </>
+      ) : (
+        <p className="text-xs text-slate-400 sm:text-sm">
+          Pick a profile icon for header and forum posts.
+        </p>
+      )}
+
       <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
         {avatarOptions.map((option) => (
           <button
@@ -80,6 +91,16 @@ export function AccountAvatarPicker({
         {message ? <p className="text-xs text-lime-300">{message}</p> : null}
         {error ? <p className="text-xs text-red-300">{error}</p> : null}
       </div>
+    </>
+  );
+
+  if (compact) {
+    return <div>{content}</div>;
+  }
+
+  return (
+    <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-8">
+      {content}
     </section>
   );
 }
