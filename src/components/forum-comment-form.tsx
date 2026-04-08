@@ -16,10 +16,12 @@ export function ForumCommentForm({
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+    setSuccess(null);
 
     const formData = new FormData(event.currentTarget);
     const payload = {
@@ -42,7 +44,9 @@ export function ForumCommentForm({
       }
 
       event.currentTarget.reset();
+      setSuccess("Comment posted.");
       router.refresh();
+      setTimeout(() => setSuccess(null), 2000);
     } catch {
       setError("Request failed. Try again.");
     } finally {
@@ -51,7 +55,15 @@ export function ForumCommentForm({
   }
 
   return (
-    <form onSubmit={onSubmit} className="mt-4 grid gap-2.5">
+    <form
+      onSubmit={onSubmit}
+      onChange={() => {
+        if (error) {
+          setError(null);
+        }
+      }}
+      className="mt-4 grid gap-2.5"
+    >
       {!isAuthenticated ? (
         <p className="text-xs text-slate-300">
           Login to comment.{" "}
@@ -72,6 +84,7 @@ export function ForumCommentForm({
       </div>
 
       {error ? <p className="text-xs text-red-300">{error}</p> : null}
+      {success ? <p className="text-xs text-lime-300">{success}</p> : null}
 
       <button
         type="submit"

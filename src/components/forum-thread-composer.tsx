@@ -54,6 +54,7 @@ export function ForumThreadComposer({
       setSuccess("Thread created successfully.");
       event.currentTarget.reset();
       router.refresh();
+      setTimeout(() => setSuccess(null), 2500);
     } catch {
       setError("Request failed. Try again.");
     } finally {
@@ -91,7 +92,15 @@ export function ForumThreadComposer({
         Create a discussion and get answers from the community.
       </p>
 
-      <form onSubmit={onSubmit} className="mt-4 grid gap-3">
+      <form
+        onSubmit={onSubmit}
+        onChange={() => {
+          if (error) {
+            setError(null);
+          }
+        }}
+        className="mt-4 grid gap-3"
+      >
         <div className="grid gap-3">
           <select
             name="topicSlug"

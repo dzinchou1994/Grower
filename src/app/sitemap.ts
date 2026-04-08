@@ -16,10 +16,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "",
     "/auth/login",
     "/auth/register",
+    "/account",
     "/diaries",
     "/diaries/new",
     "/forum",
-    "/admin",
   ];
 
   const localizedStatic = locales.flatMap((locale) =>

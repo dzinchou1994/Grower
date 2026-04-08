@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getServerSessionUser } from "@/lib/auth-session";
 import { getAlternates, getLocalizedContent, isValidLocale } from "@/lib/i18n";
 
 type PageProps = {
@@ -26,6 +27,11 @@ export default async function AdminPage({ params }: PageProps) {
   const { locale } = await params;
 
   if (!isValidLocale(locale)) {
+    notFound();
+  }
+
+  const sessionUser = await getServerSessionUser();
+  if (!sessionUser || sessionUser.role !== "ADMIN") {
     notFound();
   }
 

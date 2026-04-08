@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { isAdminEmail } from "@/lib/admin-access";
 import {
   createSessionToken,
   getSessionCookieName,
@@ -31,6 +32,7 @@ export async function POST(request: Request) {
   }
 
   const { email, username, password } = parsed.data;
+  const role = isAdminEmail(email) ? "ADMIN" : "USER";
 
   const existing = await db.user.findFirst({
     where: {
@@ -52,7 +54,7 @@ export async function POST(request: Request) {
       email,
       username,
       passwordHash,
-      role: "USER",
+      role,
     },
     select: {
       id: true,

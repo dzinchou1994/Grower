@@ -29,7 +29,10 @@ export function SiteHeader({
     { href: "", label: dict.nav.home },
     { href: "/forum", label: dict.nav.forum },
     { href: "/diaries", label: dict.nav.diaries },
-    { href: "/admin", label: dict.nav.admin },
+    ...(initialUser ? [{ href: "/account", label: dict.nav.account }] : []),
+    ...(initialUser?.role === "ADMIN"
+      ? [{ href: "/admin", label: dict.nav.admin }]
+      : []),
   ];
 
   async function handleLogout() {

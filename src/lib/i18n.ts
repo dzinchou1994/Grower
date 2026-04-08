@@ -24,6 +24,7 @@ const translations = {
       home: "მთავარი",
       forum: "ფორუმი",
       diaries: "დღიურები",
+      account: "ანგარიში",
       admin: "ადმინი",
     },
     home: {
@@ -146,6 +147,7 @@ const translations = {
       home: "Home",
       forum: "Forum",
       diaries: "Diaries",
+      account: "Account",
       admin: "Admin",
     },
     home: {
@@ -268,6 +270,7 @@ const translations = {
       home: "Главная",
       forum: "Форум",
       diaries: "Дневники",
+      account: "Аккаунт",
       admin: "Админ",
     },
     home: {

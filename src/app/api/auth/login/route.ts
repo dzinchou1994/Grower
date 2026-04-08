@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { isAdminEmail } from "@/lib/admin-access";
 import {
   createSessionToken,
   getSessionCookieName,
@@ -40,14 +41,23 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
   }
 
+  let role = user.role;
+  if (role !== "ADMIN" && isAdminEmail(parsed.data.email)) {
+    await db.user.update({
+      where: { id: user.id },
+      data: { role: "ADMIN" },
+    });
+    role = "ADMIN";
+  }
+
   const token = createSessionToken({
     userId: user.id,
     username: user.username,
-    role: user.role,
+    role,
   });
 
   const response = NextResponse.json({
-    user: { id: user.id, username: user.username, role: user.role },
+    user: { id: user.id, username: user.username, role },
   });
 
   response.cookies.set({

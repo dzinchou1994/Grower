@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { notFound } from "next/navigation";
 import { HtmlLang } from "@/components/html-lang";
 import { SiteHeader } from "@/components/site-header";
@@ -60,6 +61,15 @@ export default async function LocaleLayout({
       <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 py-6 sm:px-6 lg:px-8">
         {children}
       </main>
+      <footer className="mx-auto w-full max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
+        <div className="rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-xs text-slate-400">
+          <div id="top-ge-counter-container" data-site-id="118645" />
+        </div>
+      </footer>
+      <Script
+        src="https://counter.top.ge/counter.js"
+        strategy="afterInteractive"
+      />
     </div>
   );
 }
