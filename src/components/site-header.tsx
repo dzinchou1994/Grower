@@ -63,7 +63,7 @@ export function SiteHeader({
         >
           <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-2xl border border-lime-400/20 bg-gradient-to-br from-slate-900 to-slate-800 shadow-lg shadow-lime-950/30 transition group-hover:border-lime-300/40">
             <Image
-              src="/brand/logo-80.png"
+              src="/brand/logo-20260408.png"
               alt="Grower logo"
               width={28}
               height={28}
