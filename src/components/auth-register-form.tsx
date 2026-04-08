@@ -2,11 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { avatarOptions, DEFAULT_AVATAR_ID } from "@/lib/avatar-options";
 
 export function AuthRegisterForm({ redirectTo }: { redirectTo: string }) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState(DEFAULT_AVATAR_ID);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -18,6 +20,7 @@ export function AuthRegisterForm({ redirectTo }: { redirectTo: string }) {
       email: String(formData.get("email") ?? ""),
       username: String(formData.get("username") ?? ""),
       password: String(formData.get("password") ?? ""),
+      avatarId: selectedAvatar,
     };
 
     try {
@@ -65,6 +68,26 @@ export function AuthRegisterForm({ redirectTo }: { redirectTo: string }) {
         className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2"
         required
       />
+      <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-3">
+        <p className="text-xs text-slate-300">Choose your profile icon</p>
+        <div className="mt-2 grid grid-cols-3 gap-2">
+          {avatarOptions.map((option) => (
+            <button
+              key={option.id}
+              type="button"
+              onClick={() => setSelectedAvatar(option.id)}
+              className={`rounded-xl border p-2 text-left transition ${
+                selectedAvatar === option.id
+                  ? "border-lime-400/70 bg-lime-400/10"
+                  : "border-white/10 bg-slate-900 hover:border-white/20"
+              }`}
+            >
+              <p className="text-lg">{option.emoji}</p>
+              <p className="mt-1 text-[11px] text-slate-300">{option.label}</p>
+            </button>
+          ))}
+        </div>
+      </div>
       {error ? <p className="text-xs text-red-300">{error}</p> : null}
       <button
         type="submit"

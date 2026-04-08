@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { isValidAvatarId, toAvatarImage } from "@/lib/avatar-options";
 import { isAdminEmail } from "@/lib/admin-access";
 import {
   createSessionToken,
@@ -18,6 +19,7 @@ const registerSchema = z.object({
     .max(24)
     .regex(/^[a-zA-Z0-9_]+$/),
   password: z.string().min(8).max(128),
+  avatarId: z.string().optional(),
 });
 
 export async function POST(request: Request) {
@@ -31,8 +33,9 @@ export async function POST(request: Request) {
     );
   }
 
-  const { email, username, password } = parsed.data;
+  const { email, username, password, avatarId } = parsed.data;
   const role = isAdminEmail(email) ? "ADMIN" : "USER";
+  const image = toAvatarImage(isValidAvatarId(avatarId) ? avatarId : undefined);
 
   const existing = await db.user.findFirst({
     where: {
@@ -55,11 +58,13 @@ export async function POST(request: Request) {
       username,
       passwordHash,
       role,
+      image,
     },
     select: {
       id: true,
       username: true,
       role: true,
+      image: true,
     },
   });
 
@@ -67,10 +72,11 @@ export async function POST(request: Request) {
     userId: user.id,
     username: user.username,
     role: user.role,
+    image: user.image ?? undefined,
   });
 
   const response = NextResponse.json({
-    user: { id: user.id, username: user.username, role: user.role },
+    user: { id: user.id, username: user.username, role: user.role, image: user.image },
   });
 
   response.cookies.set({

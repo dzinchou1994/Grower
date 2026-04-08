@@ -5,6 +5,7 @@ export type SessionUser = {
   userId: string;
   username: string;
   role: "USER" | "MODERATOR" | "ADMIN";
+  image?: string;
   exp: number;
 };
 
@@ -31,6 +32,7 @@ export function createSessionToken(input: {
   userId: string;
   username: string;
   role: "USER" | "MODERATOR" | "ADMIN";
+  image?: string;
 }) {
   const exp = Math.floor(Date.now() / 1000) + SESSION_TTL_SECONDS;
   const payload = toBase64Url(JSON.stringify({ ...input, exp }));

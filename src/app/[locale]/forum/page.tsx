@@ -12,6 +12,7 @@ import {
 } from "@/lib/i18n";
 import { listForumTopics } from "@/lib/forum-data";
 import { CannabisLeaf } from "@/components/icons";
+import { UserAvatar } from "@/components/user-avatar";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -131,7 +132,14 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
                   key={thread.slug}
                   className="flex items-center justify-between gap-3 rounded-2xl border border-white/8 bg-white/4 px-4 py-3 text-sm text-slate-300 sm:rounded-3xl"
                 >
-                  <span className="line-clamp-1 font-medium text-white">{thread.title}</span>
+                  <span className="flex min-w-0 items-center gap-2">
+                    <UserAvatar
+                      username={thread.author}
+                      image={thread.authorImage}
+                      size="sm"
+                    />
+                    <span className="line-clamp-1 font-medium text-white">{thread.title}</span>
+                  </span>
                   <span className="shrink-0 text-xs">
                     {thread.replies} {dict.forum.replies}
                   </span>

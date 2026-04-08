@@ -13,6 +13,7 @@ import {
 } from "@/lib/i18n";
 import { getForumTopicBySlug } from "@/lib/forum-data";
 import { CannabisLeaf } from "@/components/icons";
+import { UserAvatar } from "@/components/user-avatar";
 
 type PageProps = {
   params: Promise<{ locale: string; slug: string }>;
@@ -135,9 +136,16 @@ export default async function ForumTopicPage({ params }: PageProps) {
                       {thread.title}
                     </h3>
                   </div>
-                  <p className="mt-1.5 text-[10px] text-slate-400 sm:mt-2 sm:text-sm">
-                    {dict.forum.startedBy} @{thread.author}
-                  </p>
+                  <div className="mt-1.5 flex items-center gap-2 text-[10px] text-slate-400 sm:mt-2 sm:text-sm">
+                    <UserAvatar
+                      username={thread.author}
+                      image={thread.authorImage}
+                      size="sm"
+                    />
+                    <p>
+                      {dict.forum.startedBy} @{thread.author}
+                    </p>
+                  </div>
                 </div>
                 <span className="shrink-0 rounded-full bg-lime-400/10 px-2.5 py-1 text-[10px] text-lime-300 sm:px-3 sm:text-xs">
                   {thread.lastActivity}
@@ -163,7 +171,14 @@ export default async function ForumTopicPage({ params }: PageProps) {
                 <div className="mt-3 space-y-2 border-t border-white/10 pt-3">
                   {thread.comments.slice(0, 3).map((comment) => (
                     <div key={comment.id} className="rounded-xl bg-slate-900/60 px-3 py-2">
-                      <p className="text-[10px] text-slate-500 sm:text-xs">@{comment.author}</p>
+                      <div className="flex items-center gap-2">
+                        <UserAvatar
+                          username={comment.author}
+                          image={comment.authorImage}
+                          size="sm"
+                        />
+                        <p className="text-[10px] text-slate-500 sm:text-xs">@{comment.author}</p>
+                      </div>
                       <p className="mt-1 text-xs text-slate-300 sm:text-sm">{comment.body}</p>
                     </div>
                   ))}

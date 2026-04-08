@@ -28,6 +28,7 @@ export async function POST(request: Request) {
       id: true,
       username: true,
       role: true,
+      image: true,
       passwordHash: true,
     },
   });
@@ -54,10 +55,11 @@ export async function POST(request: Request) {
     userId: user.id,
     username: user.username,
     role,
+    image: user.image ?? undefined,
   });
 
   const response = NextResponse.json({
-    user: { id: user.id, username: user.username, role },
+    user: { id: user.id, username: user.username, role, image: user.image },
   });
 
   response.cookies.set({

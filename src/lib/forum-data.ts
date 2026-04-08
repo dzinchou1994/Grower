@@ -1,5 +1,6 @@
 import { formatDistanceToNow } from "date-fns";
 import { db } from "@/lib/db";
+import { getDeterministicAvatarImage } from "@/lib/avatar-options";
 import {
   forumTopics,
   platformStats,
@@ -10,11 +11,13 @@ import {
 export type ForumComment = {
   id: string;
   author: string;
+  authorImage?: string;
   body: string;
   createdAt: string;
 };
 
 export type ForumThreadRecord = ForumThread & {
+  authorImage?: string;
   body?: string;
   comments: ForumComment[];
 };
@@ -139,6 +142,9 @@ function mapThreadRecord(thread: any): ForumThreadRecord {
     slug: thread.slug,
     title: thread.title,
     author: thread.author?.username ?? "user",
+    authorImage:
+      thread.author?.image ??
+      getDeterministicAvatarImage(thread.author?.username ?? "user"),
     replies: thread._count?.comments ?? 0,
     likes: thread._count?.likes ?? 0,
     lastActivity: toRelative(lastActivity),
@@ -148,6 +154,9 @@ function mapThreadRecord(thread: any): ForumThreadRecord {
       thread.comments?.map((comment: any) => ({
         id: comment.id,
         author: comment.author?.username ?? "user",
+        authorImage:
+          comment.author?.image ??
+          getDeterministicAvatarImage(comment.author?.username ?? "user"),
         body: comment.body,
         createdAt: comment.createdAt.toISOString(),
       })) ?? [],
@@ -179,11 +188,11 @@ async function listForumTopicsFromDatabase(query?: string) {
       threads: {
         orderBy: [{ isPinned: "desc" }, { updatedAt: "desc" }],
         include: {
-          author: { select: { username: true } },
+          author: { select: { username: true, image: true } },
           comments: {
             orderBy: { createdAt: "desc" },
             take: 3,
-            include: { author: { select: { username: true } } },
+            include: { author: { select: { username: true, image: true } } },
           },
           _count: { select: { comments: true, likes: true } },
         },
@@ -224,11 +233,11 @@ async function getForumTopicBySlugFromDatabase(slug: string) {
       threads: {
         orderBy: [{ isPinned: "desc" }, { updatedAt: "desc" }],
         include: {
-          author: { select: { username: true } },
+          author: { select: { username: true, image: true } },
           comments: {
             orderBy: { createdAt: "desc" },
             take: 10,
-            include: { author: { select: { username: true } } },
+            include: { author: { select: { username: true, image: true } } },
           },
           _count: { select: { comments: true, likes: true } },
         },
@@ -250,6 +259,14 @@ async function getForumTopicBySlugFromDatabase(slug: string) {
 }
 
 async function upsertForumUser(author: string) {
+  const existing = await db.user.findFirst({
+    where: { username: { equals: author.trim(), mode: "insensitive" } },
+    select: { id: true },
+  });
+  if (existing) {
+    return db.user.findUniqueOrThrow({ where: { id: existing.id } });
+  }
+
   const normalized = normalizeUsername(author);
   const username = normalized || `user_${Math.random().toString(36).slice(2, 8)}`;
   const email = `${username}@grower.ge`;
@@ -261,6 +278,7 @@ async function upsertForumUser(author: string) {
       username,
       email,
       role: "USER",
+      image: getDeterministicAvatarImage(username),
     },
   });
 }
@@ -296,11 +314,11 @@ async function createThreadInDatabase(input: {
       body: input.body.trim(),
     },
     include: {
-      author: { select: { username: true } },
+      author: { select: { username: true, image: true } },
       comments: {
         orderBy: { createdAt: "desc" },
         take: 3,
-        include: { author: { select: { username: true } } },
+        include: { author: { select: { username: true, image: true } } },
       },
       _count: { select: { comments: true, likes: true } },
     },
@@ -333,7 +351,7 @@ async function addCommentInDatabase(input: {
       authorId: user.id,
       body: input.body.trim(),
     },
-    include: { author: { select: { username: true } } },
+    include: { author: { select: { username: true, image: true } } },
   });
 
   return {
@@ -342,6 +360,7 @@ async function addCommentInDatabase(input: {
     comment: {
       id: comment.id,
       author: comment.author.username,
+      authorImage: comment.author.image ?? getDeterministicAvatarImage(comment.author.username),
       body: comment.body,
       createdAt: comment.createdAt.toISOString(),
     } satisfies ForumComment,
@@ -392,6 +411,7 @@ function createThreadInMemory(input: {
     slug: slugify(input.title),
     title: input.title.trim(),
     author: input.author.trim(),
+    authorImage: getDeterministicAvatarImage(input.author.trim()),
     replies: 0,
     likes: 0,
     lastActivity: "just now",
@@ -420,6 +440,7 @@ function addCommentInMemory(input: {
     const comment: ForumComment = {
       id: crypto.randomUUID(),
       author: input.author.trim(),
+      authorImage: getDeterministicAvatarImage(input.author.trim()),
       body: input.body.trim(),
       createdAt: new Date().toISOString(),
     };

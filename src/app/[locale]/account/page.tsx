@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { AccountAvatarPicker } from "@/components/account-avatar-picker";
 import { getServerSessionUser } from "@/lib/auth-session";
 import { db } from "@/lib/db";
 import {
@@ -42,27 +43,35 @@ export default async function AccountPage({ params }: PageProps) {
 
   const matchedById = await db.user.findUnique({
     where: { id: sessionUser.userId },
-    select: { id: true, username: true },
+    select: { id: true, username: true, email: true, image: true },
   });
 
-  const matchedByUsername = matchedById
-    ? matchedById
-    : await db.user.findUnique({
-        where: { username: sessionUser.username },
-        select: { id: true, username: true },
-      });
+  const relatedUsers = await db.user.findMany({
+    where: {
+      OR: [
+        { id: sessionUser.userId },
+        { username: { equals: sessionUser.username, mode: "insensitive" } },
+      ],
+    },
+    select: { id: true, username: true, email: true },
+  });
 
-  const resolvedUserId = matchedByUsername?.id ?? sessionUser.userId;
-  const resolvedUsername = matchedByUsername?.username ?? sessionUser.username;
+  const userIds = Array.from(
+    new Set([
+      sessionUser.userId,
+      ...(matchedById ? [matchedById.id] : []),
+      ...relatedUsers.map((entry) => entry.id),
+    ]),
+  );
+
+  const resolvedUsername =
+    matchedById?.username ??
+    relatedUsers[0]?.username ??
+    sessionUser.username;
 
   const [myThreads, myCommentedThreads, myDiaries] = await Promise.all([
     db.forumThread.findMany({
-      where: {
-        OR: [
-          { authorId: resolvedUserId },
-          { author: { username: resolvedUsername } },
-        ],
-      },
+      where: { authorId: { in: userIds } },
       orderBy: { createdAt: "desc" },
       take: 10,
       include: {
@@ -71,12 +80,7 @@ export default async function AccountPage({ params }: PageProps) {
       },
     }),
     db.forumComment.findMany({
-      where: {
-        OR: [
-          { authorId: resolvedUserId },
-          { author: { username: resolvedUsername } },
-        ],
-      },
+      where: { authorId: { in: userIds } },
       orderBy: { createdAt: "desc" },
       take: 20,
       include: {
@@ -91,12 +95,7 @@ export default async function AccountPage({ params }: PageProps) {
       distinct: ["threadId"],
     }),
     db.diary.findMany({
-      where: {
-        OR: [
-          { authorId: resolvedUserId },
-          { author: { username: resolvedUsername } },
-        ],
-      },
+      where: { authorId: { in: userIds } },
       orderBy: { createdAt: "desc" },
       take: 10,
       include: { _count: { select: { weeks: true } } },
@@ -114,6 +113,8 @@ export default async function AccountPage({ params }: PageProps) {
           Role: {sessionUser.role} · Manage your activity and content here.
         </p>
       </section>
+
+      <AccountAvatarPicker currentImage={matchedById?.image ?? sessionUser.image} />
 
       <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-8">
         <h2 className="text-lg font-semibold text-white sm:text-2xl">Recent Threads You Posted</h2>
