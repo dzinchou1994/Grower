@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
-  getAlternates,
   getLocalizedContent,
   getLocalizedPath,
   isValidLocale,
   type Locale,
 } from "@/lib/i18n";
 import { CannabisLeaf, CannabisLeafOutline } from "@/components/icons";
+import { getPageMetadataWithSeo } from "@/lib/seo-settings";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -23,11 +23,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const { dict } = getLocalizedContent(locale);
 
-  return {
+  return getPageMetadataWithSeo({
+    page: "DIARIES",
+    locale,
+    path: "/diaries",
     title: `Grower | ${dict.nav.diaries}`,
     description: dict.diaries.description,
-    alternates: getAlternates("/diaries"),
-  };
+  });
 }
 
 export default async function DiariesPage({ params }: PageProps) {

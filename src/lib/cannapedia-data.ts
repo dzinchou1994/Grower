@@ -3,7 +3,12 @@ import { db } from "@/lib/db";
 
 export type CannapediaArticle = {
   slug: string;
-  category: "basics" | "nutrition" | "harvest";
+  category:
+    | "basics"
+    | "nutrition"
+    | "seedling"
+    | "harvest"
+    | "post-harvest";
   readMinutes: number;
   title: Record<Locale, string>;
   excerpt: Record<Locale, string>;
@@ -11,7 +16,7 @@ export type CannapediaArticle = {
 };
 
 type CannapediaCategorySeed = {
-  slug: "basics" | "nutrition" | "harvest";
+  slug: "basics" | "nutrition" | "seedling" | "harvest" | "post-harvest";
   icon: string;
   name: Record<Locale, string>;
 };
@@ -39,12 +44,30 @@ export const cannapediaCategories: CannapediaCategorySeed[] = [
     },
   },
   {
+    slug: "seedling",
+    icon: "🌾",
+    name: {
+      ka: "თესლი და სტარტი",
+      en: "Seedling Start",
+      ru: "Семена и старт",
+    },
+  },
+  {
     slug: "harvest",
     icon: "✂️",
     name: {
       ka: "ჰარვესტი",
       en: "Harvest",
       ru: "Харвест",
+    },
+  },
+  {
+    slug: "post-harvest",
+    icon: "🫙",
+    name: {
+      ka: "ჰარვესტის შემდეგ",
+      en: "Post-Harvest",
+      ru: "После харвеста",
     },
   },
 ];
@@ -115,6 +138,38 @@ export const cannapediaArticles: CannapediaArticle[] = [
     },
   },
   {
+    slug: "seed-storage-and-germination",
+    category: "seedling",
+    readMinutes: 7,
+    title: {
+      ka: "თესლის შენახვა და გაღვივების სწორი სტარტი",
+      en: "Seed Storage and Clean Germination Start",
+      ru: "Хранение семян и чистый старт проращивания",
+    },
+    excerpt: {
+      ka: "როგორ შევინახოთ თესლი სწორ ტემპერატურასა და ტენიანობაში და როგორ დავიწყოთ გაღვივება უსაფრთხოდ.",
+      en: "How to store seeds correctly and begin germination without stress or mold.",
+      ru: "Как правильно хранить семена и запускать проращивание без стресса и плесени.",
+    },
+    content: {
+      ka: [
+        "თესლი შეინახე ბნელ, მშრალ და გრილ ადგილას. იდეალურია ჰერმეტული კონტეინერი და სტაბილური ტემპერატურა.",
+        "გაღვივებისას გამოიყენე სუფთა წყალი და მინიმალური შეხება ხელით, რომ ინფექციის რისკი დაბალი იყოს.",
+        "როგორც კი ფესვი გამოჩნდება, გადაიტანე მსუბუქ სუბსტრატში და პირველ დღეებში არ გადამეტო არც წყალი და არც სინათლე.",
+      ],
+      en: [
+        "Store seeds in a dark, dry, cool place using an airtight container and stable temperature.",
+        "For germination, use clean water and minimal handling to reduce contamination risk.",
+        "Once the taproot appears, transplant into a light medium and avoid overwatering or over-lighting in early days.",
+      ],
+      ru: [
+        "Храните семена в темном, сухом и прохладном месте, лучше в герметичном контейнере.",
+        "При проращивании используйте чистую воду и минимум контакта руками, чтобы снизить риск заражения.",
+        "После появления корешка пересаживайте в легкий субстрат и не перегружайте молодое растение ни поливом, ни светом.",
+      ],
+    },
+  },
+  {
     slug: "flowering-to-harvest-guide",
     category: "harvest",
     readMinutes: 9,
@@ -143,6 +198,38 @@ export const cannapediaArticles: CannapediaArticle[] = [
         "На позднем цвете ориентируйтесь на цвет трихом: от прозрачных к мутным и янтарным.",
         "После харвеста медленная сушка при 18-21C и умеренной влажности лучше сохраняет качество.",
         "Кюринг минимум 2-4 недели заметно улучшает аромат и мягкость.",
+      ],
+    },
+  },
+  {
+    slug: "keep-buds-fresh-and-zero-waste",
+    category: "post-harvest",
+    readMinutes: 8,
+    title: {
+      ka: "ჰარვესტის შემდეგ: როგორ შევინახოთ ბადსი და არაფერი დავკარგოთ",
+      en: "Post-Harvest: Keep Buds Fresh and Waste Nothing",
+      ru: "После харвеста: сохранить шишки свежими и ничего не потерять",
+    },
+    excerpt: {
+      ka: "შენახვა, ტენიანობის კონტროლი, trim-ის გამოყენება და zero-waste მიდგომა.",
+      en: "Storage, humidity control, trim usage, and practical zero-waste workflow.",
+      ru: "Хранение, контроль влажности, использование трима и практичный zero-waste подход.",
+    },
+    content: {
+      ka: [
+        "გამშრალი მასალა შეინახე მინის ქილებში, მზისგან დაცულად, ზომიერ ტემპერატურაზე. ეს არომატს და პოტენციალს უკეთ ინარჩუნებს.",
+        "ტენიანობის დიაპაზონის კონტროლი მნიშვნელოვანია: ძალიან მშრალი ბადსი კარგავს არომატს, ზედმეტ ტენიანობაზე კი ობის რისკი იზრდება.",
+        "ტრიმი და პატარა ნარჩენები არ გადაყარო: შესაძლებელია ინფუზია, ექსტრაქტი ან სხვა უსაფრთხო გამოყენება, რომ არაფერი დაიკარგოს.",
+      ],
+      en: [
+        "Store dried flowers in glass jars away from light at stable room temperature for better preservation.",
+        "Humidity balance matters: too dry degrades aroma, too wet increases mold risk.",
+        "Do not throw away trim and small leftovers; they can be used for infusions or other safe secondary uses.",
+      ],
+      ru: [
+        "Храните высушенные шишки в стеклянных банках без света и при стабильной температуре.",
+        "Контроль влажности критичен: пересушивание убивает аромат, а избыточная влажность повышает риск плесени.",
+        "Не выбрасывайте трим и мелкие остатки: их можно использовать для инфузий и других безопасных вторичных применений.",
       ],
     },
   },

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { notFound } from "next/navigation";
 import { HtmlLang } from "@/components/html-lang";
+import { NavigationFeedback } from "@/components/navigation-feedback";
 import { SiteHeader } from "@/components/site-header";
 import { getServerSessionUser } from "@/lib/auth-session";
 import {
@@ -54,9 +55,10 @@ export default async function LocaleLayout({
   const sessionUser = await getServerSessionUser();
 
   return (
-    <div className="relative flex min-h-full flex-col">
+    <div className="relative flex min-h-dvh flex-col">
       <HtmlLang locale={locale as Locale} />
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(132,204,22,0.2),_transparent_35%),linear-gradient(180deg,_#08111f,_#030712_55%,_#020617)]" />
+      <NavigationFeedback />
       <SiteHeader locale={locale as Locale} initialUser={sessionUser} />
       <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 py-6 sm:px-6 lg:px-8">
         {children}

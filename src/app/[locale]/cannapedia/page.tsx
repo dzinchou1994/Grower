@@ -7,14 +7,15 @@ import {
   listCannapediaArticles,
 } from "@/lib/cannapedia-data";
 import {
-  getAlternates,
   getLocalizedPath,
   isValidLocale,
   type Locale,
 } from "@/lib/i18n";
+import { getPageMetadataWithSeo } from "@/lib/seo-settings";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ category?: string }>;
 };
 
 function cannapediaCopy(locale: Locale) {
@@ -58,15 +59,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const copy = cannapediaCopy(locale);
-  return {
+  return getPageMetadataWithSeo({
+    page: "CANNAPEDIA",
+    locale,
+    path: "/cannapedia",
     title: `Grower | Cannapedia`,
     description: copy.description,
-    alternates: getAlternates("/cannapedia"),
-  };
+  });
 }
 
-export default async function CannapediaPage({ params }: PageProps) {
+export default async function CannapediaPage({ params, searchParams }: PageProps) {
   const { locale } = await params;
+  const { category } = await searchParams;
 
   if (!isValidLocale(locale)) {
     notFound();
@@ -78,6 +82,10 @@ export default async function CannapediaPage({ params }: PageProps) {
     getCannapediaCategories(typedLocale),
     listCannapediaArticles(false),
   ]);
+  const activeCategorySlug = category?.trim().toLowerCase() || "";
+  const visibleArticles = activeCategorySlug
+    ? articles.filter((article) => article.category.slug === activeCategorySlug)
+    : articles;
 
   return (
     <div className="flex flex-col gap-5 pb-8 sm:gap-8">
@@ -97,20 +105,36 @@ export default async function CannapediaPage({ params }: PageProps) {
         </div>
       </section>
 
-      <section className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
+      <section className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-5 sm:gap-4">
+        <Link
+          href={getLocalizedPath(typedLocale, "/cannapedia")}
+          className={`rounded-2xl border p-4 text-slate-200 transition sm:rounded-3xl sm:p-5 ${
+            !activeCategorySlug
+              ? "border-lime-400/40 bg-lime-400/10 text-lime-200"
+              : "border-white/10 bg-slate-950/60 hover:border-lime-400/30"
+          }`}
+        >
+          <p className="text-xl">📚</p>
+          <p className="mt-1 text-sm font-medium sm:text-base">ყველა</p>
+        </Link>
         {categories.map((category) => (
-          <div
+          <Link
             key={category.slug}
-            className="rounded-2xl border border-white/10 bg-slate-950/60 p-4 text-slate-200 sm:rounded-3xl sm:p-5"
+            href={getLocalizedPath(typedLocale, `/cannapedia?category=${category.slug}`)}
+            className={`rounded-2xl border p-4 text-slate-200 transition sm:rounded-3xl sm:p-5 ${
+              activeCategorySlug === category.slug
+                ? "border-lime-400/40 bg-lime-400/10 text-lime-200"
+                : "border-white/10 bg-slate-950/60 hover:border-lime-400/30"
+            }`}
           >
             <p className="text-xl">{category.icon}</p>
             <p className="mt-1 text-sm font-medium sm:text-base">{category.name}</p>
-          </div>
+          </Link>
         ))}
       </section>
 
       <section className="grid gap-3 sm:gap-4">
-        {articles.map((article) => (
+        {visibleArticles.map((article) => (
           <Link
             key={article.slug}
             href={getLocalizedPath(typedLocale, `/cannapedia/${article.slug}`)}
@@ -130,6 +154,11 @@ export default async function CannapediaPage({ params }: PageProps) {
             <p className="mt-3 text-xs font-medium text-lime-300 sm:text-sm">{copy.read} →</p>
           </Link>
         ))}
+        {visibleArticles.length === 0 ? (
+          <div className="rounded-2xl border border-white/10 bg-slate-950/65 p-5 text-sm text-slate-300 sm:rounded-3xl sm:p-6">
+            ამ კატეგორიაში სტატია ჯერ არ არის.
+          </div>
+        ) : null}
       </section>
     </div>
   );

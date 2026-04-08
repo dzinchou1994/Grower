@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type AdminConsoleProps = {
   role: "ADMIN" | "MODERATOR";
@@ -10,6 +10,7 @@ type TabId =
   | "moderation"
   | "content"
   | "cannapedia"
+  | "seo"
   | "users"
   | "analytics"
   | "audit";
@@ -21,6 +22,7 @@ export function AdminConsole({ role }: AdminConsoleProps) {
         { id: "moderation", label: "Moderation" },
         { id: "content", label: "Content" },
         ...(role === "ADMIN" ? [{ id: "cannapedia", label: "Cannapedia" }] : []),
+        ...(role === "ADMIN" ? [{ id: "seo", label: "SEO" }] : []),
         ...(role === "ADMIN" ? [{ id: "users", label: "Users" }] : []),
         ...(role === "ADMIN" ? [{ id: "analytics", label: "Analytics" }] : []),
         ...(role === "ADMIN" ? [{ id: "audit", label: "Audit" }] : []),
@@ -52,6 +54,7 @@ export function AdminConsole({ role }: AdminConsoleProps) {
       {activeTab === "moderation" ? <ModerationPanel isAdmin={role === "ADMIN"} /> : null}
       {activeTab === "content" ? <ContentPanel isAdmin={role === "ADMIN"} /> : null}
       {activeTab === "cannapedia" && role === "ADMIN" ? <CannapediaPanel /> : null}
+      {activeTab === "seo" && role === "ADMIN" ? <SeoPanel /> : null}
       {activeTab === "users" && role === "ADMIN" ? <UsersPanel /> : null}
       {activeTab === "analytics" && role === "ADMIN" ? <AnalyticsPanel /> : null}
       {activeTab === "audit" && role === "ADMIN" ? <AuditPanel /> : null}
@@ -907,6 +910,192 @@ function CannapediaPanel() {
                 Edit article
               </button>
             </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SeoPanel() {
+  const [items, setItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState<"HOME" | "FORUM" | "DIARIES" | "CANNAPEDIA">("HOME");
+  const [locale, setLocale] = useState<"ka" | "en" | "ru">("ka");
+  const [metaTitle, setMetaTitle] = useState("");
+  const [metaDescription, setMetaDescription] = useState("");
+  const [ogTitle, setOgTitle] = useState("");
+  const [ogDescription, setOgDescription] = useState("");
+  const [keywords, setKeywords] = useState("");
+  const [noIndex, setNoIndex] = useState(false);
+  const [reason, setReason] = useState("");
+  const key = `${page}:${locale}`;
+
+  useEffect(() => {
+    const selected = items.find((entry: any) => `${entry.page}:${entry.locale}` === key);
+    setMetaTitle(selected?.metaTitle ?? "");
+    setMetaDescription(selected?.metaDescription ?? "");
+    setOgTitle(selected?.ogTitle ?? "");
+    setOgDescription(selected?.ogDescription ?? "");
+    setKeywords(selected?.keywords ?? "");
+    setNoIndex(Boolean(selected?.noIndex));
+  }, [items, key]);
+
+  async function loadItems() {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch("/api/admin/seo");
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) {
+        setError(payload?.error ?? "Could not load SEO settings.");
+        return;
+      }
+      const nextItems = payload.items ?? [];
+      setItems(nextItems);
+      const selected = nextItems.find((entry: any) => `${entry.page}:${entry.locale}` === key);
+      setMetaTitle(selected?.metaTitle ?? "");
+      setMetaDescription(selected?.metaDescription ?? "");
+      setOgTitle(selected?.ogTitle ?? "");
+      setOgDescription(selected?.ogDescription ?? "");
+      setKeywords(selected?.keywords ?? "");
+      setNoIndex(Boolean(selected?.noIndex));
+    } catch {
+      setError("Network error.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function save() {
+    if (!reason.trim()) {
+      setError("Reason is required for audit.");
+      return;
+    }
+    setError(null);
+
+    const response = await fetch("/api/admin/seo", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        page,
+        locale,
+        metaTitle,
+        metaDescription,
+        ogTitle,
+        ogDescription,
+        keywords,
+        noIndex,
+        reason,
+      }),
+    });
+
+    const payload = await response.json().catch(() => null);
+    if (!response.ok) {
+      setError(payload?.error ?? "Could not save SEO settings.");
+      return;
+    }
+    setReason("");
+    await loadItems();
+  }
+
+  return (
+    <div className="mt-6">
+      <div className="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={loadItems}
+          className="rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-slate-950"
+        >
+          {loading ? "Loading..." : "Load SEO Settings"}
+        </button>
+        <select
+          value={page}
+          onChange={(event) => setPage(event.target.value as typeof page)}
+          className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
+        >
+          <option value="HOME">HOME</option>
+          <option value="FORUM">FORUM</option>
+          <option value="DIARIES">DIARIES</option>
+          <option value="CANNAPEDIA">CANNAPEDIA</option>
+        </select>
+        <select
+          value={locale}
+          onChange={(event) => setLocale(event.target.value as typeof locale)}
+          className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
+        >
+          <option value="ka">KA</option>
+          <option value="en">EN</option>
+          <option value="ru">RU</option>
+        </select>
+      </div>
+
+      {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
+
+      <div className="mt-4 grid gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
+        <input
+          value={metaTitle}
+          onChange={(event) => setMetaTitle(event.target.value)}
+          placeholder="Meta title"
+          className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
+        />
+        <textarea
+          value={metaDescription}
+          onChange={(event) => setMetaDescription(event.target.value)}
+          placeholder="Meta description"
+          rows={3}
+          className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
+        />
+        <input
+          value={ogTitle}
+          onChange={(event) => setOgTitle(event.target.value)}
+          placeholder="OG title (optional)"
+          className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
+        />
+        <textarea
+          value={ogDescription}
+          onChange={(event) => setOgDescription(event.target.value)}
+          placeholder="OG description (optional)"
+          rows={2}
+          className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
+        />
+        <input
+          value={keywords}
+          onChange={(event) => setKeywords(event.target.value)}
+          placeholder="Keywords (comma separated)"
+          className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
+        />
+        <label className="inline-flex items-center gap-2 text-xs text-slate-300">
+          <input
+            type="checkbox"
+            checked={noIndex}
+            onChange={(event) => setNoIndex(event.target.checked)}
+          />
+          Noindex this page
+        </label>
+        <input
+          value={reason}
+          onChange={(event) => setReason(event.target.value)}
+          placeholder="Audit reason (required)"
+          className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
+        />
+        <button
+          type="button"
+          onClick={save}
+          className="w-fit rounded-full border border-lime-400/30 bg-lime-400/10 px-4 py-2 text-sm font-medium text-lime-200"
+        >
+          Save SEO settings
+        </button>
+      </div>
+
+      <div className="mt-4 grid gap-3">
+        {items.map((item) => (
+          <div key={`${item.page}:${item.locale}`} className="rounded-2xl border border-white/10 bg-white/5 p-3">
+            <p className="text-sm text-white">
+              {item.page} · {item.locale.toUpperCase()}
+            </p>
+            <p className="mt-1 text-xs text-slate-400">{item.metaTitle}</p>
           </div>
         ))}
       </div>

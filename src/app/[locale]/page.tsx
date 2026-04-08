@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  getAlternates,
   getLocalizedContent,
   getLocalizedPath,
   isValidLocale,
@@ -12,6 +11,7 @@ import { CannabisLeaf, CannabisLeafOutline } from "@/components/icons";
 import { UserAvatar } from "@/components/user-avatar";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getPageMetadataWithSeo } from "@/lib/seo-settings";
 
 type LocalizedPageProps = {
   params: Promise<{ locale: string }>;
@@ -28,11 +28,13 @@ export async function generateMetadata({
 
   const { dict } = getLocalizedContent(locale);
 
-  return {
+  return getPageMetadataWithSeo({
+    page: "HOME",
+    locale,
+    path: "",
     title: `Grower | ${dict.nav.home}`,
     description: dict.metadataDescription,
-    alternates: getAlternates(""),
-  };
+  });
 }
 
 export default async function LocalizedHomePage({ params }: LocalizedPageProps) {
@@ -242,12 +244,12 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
           </h2>
         </div>
 
-        <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/40 sm:mt-5 sm:rounded-3xl">
-          <ol className="divide-y divide-white/10">
+        <div className="mt-4 sm:mt-5">
+          <ol className="grid gap-2.5 sm:gap-3 md:grid-cols-2">
             {topUsers.map((user, index) => (
               <li
                 key={user.username}
-                className="flex items-center gap-2.5 px-3 py-3 sm:gap-3 sm:px-4 sm:py-3.5"
+                className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-slate-900/40 px-3 py-3 sm:gap-3 sm:rounded-3xl sm:px-4 sm:py-3.5"
               >
                 <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-lime-400/15 text-xs font-semibold text-lime-200 sm:h-8 sm:w-8 sm:text-sm">
                   #{index + 1}

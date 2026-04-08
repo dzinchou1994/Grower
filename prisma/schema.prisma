@@ -65,6 +65,13 @@ enum AuditActionType {
   REPORT_REVIEW
 }
 
+enum SeoPage {
+  HOME
+  FORUM
+  DIARIES
+  CANNAPEDIA
+}
+
 model User {
   id            String          @id @default(cuid())
   email         String          @unique
@@ -281,4 +288,22 @@ model AuditLog {
   @@index([actorId, createdAt])
   @@index([targetType, targetId, createdAt])
   @@index([action, createdAt])
+}
+
+model SeoSetting {
+  id              String   @id @default(cuid())
+  page            SeoPage
+  locale          String
+  metaTitle       String
+  metaDescription String
+  ogTitle         String?
+  ogDescription   String?
+  keywords        String?
+  noIndex         Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([page, locale])
+  @@index([page])
+  @@index([locale])
 }

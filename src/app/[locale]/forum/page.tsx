@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { getServerSessionUser } from "@/lib/auth-session";
 import { ForumThreadComposer } from "@/components/forum-thread-composer";
 import {
-  getAlternates,
   getLocalizedContent,
   getLocalizedPath,
   isValidLocale,
@@ -13,6 +12,7 @@ import {
 import { listForumTopics } from "@/lib/forum-data";
 import { CannabisLeaf } from "@/components/icons";
 import { UserAvatar } from "@/components/user-avatar";
+import { getPageMetadataWithSeo } from "@/lib/seo-settings";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -30,11 +30,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const { dict } = getLocalizedContent(locale);
 
-  return {
+  return getPageMetadataWithSeo({
+    page: "FORUM",
+    locale,
+    path: "/forum",
     title: `Grower | ${dict.nav.forum}`,
     description: dict.forum.description,
-    alternates: getAlternates("/forum"),
-  };
+  });
 }
 
 export default async function ForumPage({ params, searchParams }: PageProps) {
