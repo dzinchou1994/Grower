@@ -170,9 +170,10 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
 
           <div className="mt-5 space-y-3 sm:mt-6 sm:space-y-4">
             {allThreads.map((thread) => (
-              <div
+              <Link
                 key={thread.slug}
-                className="rounded-2xl border border-white/8 bg-slate-950/60 p-4 sm:rounded-3xl sm:p-5"
+                href={getLocalizedPath(typedLocale, `/forum/${thread.topicSlug}`)}
+                className="block rounded-2xl border border-white/8 bg-slate-950/60 p-4 transition hover:border-lime-400/30 hover:bg-slate-900/70 sm:rounded-3xl sm:p-5"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
@@ -195,7 +196,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
                     )}
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

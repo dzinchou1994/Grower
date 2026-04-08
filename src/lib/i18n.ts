@@ -399,7 +399,11 @@ export function getLocaleName(locale: Locale) {
 }
 
 export function getLocalizedPath(locale: Locale, path = "") {
-  return `/${locale}${path}`;
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  if (locale === defaultLocale) {
+    return normalizedPath === "/" ? "/" : normalizedPath;
+  }
+  return `/${locale}${normalizedPath === "/" ? "" : normalizedPath}`;
 }
 
 export function getAlternates(path = ""): Metadata["alternates"] {

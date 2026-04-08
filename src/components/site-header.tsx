@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { UserAvatar } from "@/components/user-avatar";
 import type { SessionUser } from "@/lib/auth-session";
 import {
+  defaultLocale,
   getDictionary,
   getLocalizedPath,
   locales,
@@ -27,14 +28,16 @@ export function SiteHeader({
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const navigation = [
-    { href: "", label: dict.nav.home, icon: "⌂" },
-    { href: "/forum", label: dict.nav.forum, icon: "◍" },
-    { href: "/diaries", label: dict.nav.diaries, icon: "◐" },
-    ...(initialUser ? [{ href: "/account", label: dict.nav.account }] : []),
-    ...(initialUser?.role === "ADMIN"
-      ? [{ href: "/admin", label: dict.nav.admin }]
+    { href: "", label: dict.nav.home, icon: "home" as const },
+    { href: "/forum", label: dict.nav.forum, icon: "forum" as const },
+    { href: "/diaries", label: dict.nav.diaries, icon: "diaries" as const },
+    ...(initialUser
+      ? [{ href: "/account", label: dict.nav.account, icon: "account" as const }]
       : []),
-  ].map((item) => ({ ...item, icon: "icon" in item ? item.icon : "◇" }));
+    ...(initialUser?.role === "ADMIN"
+      ? [{ href: "/admin", label: dict.nav.admin, icon: "admin" as const }]
+      : []),
+  ];
 
   async function handleLogout() {
     setIsLoggingOut(true);
@@ -92,18 +95,20 @@ export function SiteHeader({
                     : "hover:bg-white/10 hover:text-white"
                 }`}
               >
-                <span className="text-[11px]">{item.icon}</span>
+                <span className="text-[11px]">
+                  <NavIcon icon={item.icon} />
+                </span>
                 {item.label}
               </Link>
             ))}
           </nav>
 
-          <div className="flex items-center gap-0.5 rounded-full border border-white/10 bg-white/5 p-1 text-xs text-slate-300">
+          <div className="flex items-center gap-0.5 rounded-full border border-white/10 bg-white/5 p-0.5 text-[10px] text-slate-300">
             {locales.map((entry) => (
               <Link
                 key={entry}
                 href={replaceLocaleInPath(pathname, entry)}
-                className={`rounded-full px-2.5 py-1.5 font-medium transition hover:bg-white/10 hover:text-white ${
+                className={`rounded-full px-2 py-1 font-medium transition hover:bg-white/10 hover:text-white ${
                   entry === locale
                     ? "bg-lime-400 text-slate-950"
                     : ""
@@ -116,12 +121,17 @@ export function SiteHeader({
 
           {initialUser ? (
             <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-200">
-              <UserAvatar
-                username={initialUser.username}
-                image={initialUser.image}
-                size="sm"
-              />
-              <span>@{initialUser.username}</span>
+              <Link
+                href={getLocalizedPath(locale, "/account")}
+                className="inline-flex items-center gap-2 rounded-xl px-1 py-0.5 transition hover:bg-white/10"
+              >
+                <UserAvatar
+                  username={initialUser.username}
+                  image={initialUser.image}
+                  size="sm"
+                />
+                <span>@{initialUser.username}</span>
+              </Link>
               <button
                 type="button"
                 onClick={handleLogout}
@@ -150,11 +160,11 @@ export function SiteHeader({
         </div>
 
         {/* Mobile menu button */}
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="relative z-20 flex items-center gap-2 md:hidden">
           {initialUser ? (
             <Link
               href={getLocalizedPath(locale, "/account")}
-              className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[11px] text-slate-100"
+              className="relative z-20 inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[11px] text-slate-100"
             >
               <UserAvatar
                 username={initialUser.username}
@@ -224,7 +234,9 @@ export function SiteHeader({
       />
       <aside
         className={`fixed right-0 top-0 z-50 h-dvh w-[86%] max-w-sm border-l border-white/10 bg-gradient-to-b from-[#0a1629]/98 to-[#08111f]/98 p-4 shadow-2xl shadow-black/60 backdrop-blur-xl transition-transform duration-300 md:hidden ${
-          mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+          mobileMenuOpen
+            ? "pointer-events-auto translate-x-0"
+            : "pointer-events-none translate-x-full"
         }`}
         aria-hidden={!mobileMenuOpen}
       >
@@ -279,7 +291,9 @@ export function SiteHeader({
               }`}
             >
               <span className="inline-flex items-center gap-2">
-                <span className="text-sm">{item.icon}</span>
+                <span className="text-sm">
+                  <NavIcon icon={item.icon} />
+                </span>
                 {item.label}
               </span>
             </Link>
@@ -340,6 +354,55 @@ export function SiteHeader({
   );
 }
 
+function NavIcon({
+  icon,
+}: {
+  icon: "home" | "forum" | "diaries" | "account" | "admin";
+}) {
+  const common = "h-[1.05em] w-[1.05em]";
+
+  if (icon === "home") {
+    return (
+      <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 10.5L12 3l9 7.5" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 9.75V21h10.5V9.75" />
+      </svg>
+    );
+  }
+
+  if (icon === "forum") {
+    return (
+      <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4 6.75A2.75 2.75 0 0 1 6.75 4h10.5A2.75 2.75 0 0 1 20 6.75v6.5A2.75 2.75 0 0 1 17.25 16H10l-4.25 3v-3H6.75A2.75 2.75 0 0 1 4 13.25v-6.5Z" />
+      </svg>
+    );
+  }
+
+  if (icon === "diaries") {
+    return (
+      <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 4.5h9A1.5 1.5 0 0 1 18 6v13.5l-3-1.5-3 1.5-3-1.5-3 1.5V6A1.5 1.5 0 0 1 7.5 4.5Z" />
+      </svg>
+    );
+  }
+
+  if (icon === "account") {
+    return (
+      <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <circle cx="12" cy="8" r="3.25" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M5 19a7 7 0 0 1 14 0" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v18M3 12h18" />
+      <circle cx="12" cy="12" r="8" />
+    </svg>
+  );
+}
+
 function replaceLocaleInPath(pathname: string, locale: Locale) {
   const segments = pathname.split("/").filter(Boolean);
 
@@ -348,6 +411,10 @@ function replaceLocaleInPath(pathname: string, locale: Locale) {
   }
 
   if (locales.includes(segments[0] as Locale)) {
+    if (locale === defaultLocale) {
+      const rest = segments.slice(1).join("/");
+      return rest ? `/${rest}` : "/";
+    }
     segments[0] = locale;
     return `/${segments.join("/")}`;
   }

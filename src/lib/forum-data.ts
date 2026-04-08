@@ -186,10 +186,12 @@ async function listForumTopicsFromDatabase(query?: string) {
     orderBy: { sortOrder: "asc" },
     include: {
       threads: {
+        where: { isHidden: false },
         orderBy: [{ isPinned: "desc" }, { updatedAt: "desc" }],
         include: {
           author: { select: { username: true, image: true } },
           comments: {
+            where: { isHidden: false },
             orderBy: { createdAt: "desc" },
             take: 3,
             include: { author: { select: { username: true, image: true } } },
@@ -231,10 +233,12 @@ async function getForumTopicBySlugFromDatabase(slug: string) {
     where: { slug },
     include: {
       threads: {
+        where: { isHidden: false },
         orderBy: [{ isPinned: "desc" }, { updatedAt: "desc" }],
         include: {
           author: { select: { username: true, image: true } },
           comments: {
+            where: { isHidden: false },
             orderBy: { createdAt: "desc" },
             take: 10,
             include: { author: { select: { username: true, image: true } } },
@@ -316,6 +320,7 @@ async function createThreadInDatabase(input: {
     include: {
       author: { select: { username: true, image: true } },
       comments: {
+        where: { isHidden: false },
         orderBy: { createdAt: "desc" },
         take: 3,
         include: { author: { select: { username: true, image: true } } },
