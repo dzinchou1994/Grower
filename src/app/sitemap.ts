@@ -1,17 +1,37 @@
 import type { MetadataRoute } from "next";
 import { locales, siteUrl } from "@/lib/i18n";
+import { db } from "@/lib/db";
+import { diaries as mockDiaries, forumTopics as mockForumTopics } from "@/lib/mock-data";
 
-const diarySlugs = ["gorilla-glue-indoor"];
-const forumSlugs = [
-  "beginner-questions",
-  "grow-help",
-  "strains-genetics",
-  "equipment-setup",
-  "outdoor-growing",
-  "legal-discussion",
-];
+async function getDynamicSlugs() {
+  if (!process.env.DATABASE_URL) {
+    return {
+      diarySlugs: mockDiaries.map((entry) => entry.slug),
+      forumSlugs: mockForumTopics.map((entry) => entry.slug),
+    };
+  }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+  try {
+    const [diaryRows, topicRows] = await Promise.all([
+      db.diary.findMany({ select: { slug: true }, orderBy: { createdAt: "desc" } }),
+      db.forumTopic.findMany({ select: { slug: true }, orderBy: { sortOrder: "asc" } }),
+    ]);
+
+    return {
+      diarySlugs: diaryRows.map((entry) => entry.slug),
+      forumSlugs: topicRows.map((entry) => entry.slug),
+    };
+  } catch {
+    return {
+      diarySlugs: mockDiaries.map((entry) => entry.slug),
+      forumSlugs: mockForumTopics.map((entry) => entry.slug),
+    };
+  }
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const { diarySlugs, forumSlugs } = await getDynamicSlugs();
+
   const staticRoutes = [
     "",
     "/auth/login",
