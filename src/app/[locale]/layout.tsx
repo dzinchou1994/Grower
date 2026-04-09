@@ -57,7 +57,7 @@ export default async function LocaleLayout({
   const sessionUser = await getServerSessionUser();
 
   return (
-    <div className="relative flex min-h-dvh w-full min-w-0 flex-col overflow-x-hidden">
+    <div className="relative flex min-h-dvh w-full min-w-0 flex-col">
       <HtmlLang locale={locale as Locale} />
       {/* Background layers clipped so off-screen blobs never widen the document (mobile horizontal overflow) */}
       <div
@@ -73,21 +73,24 @@ export default async function LocaleLayout({
       <AgeGate />
       <NavigationFeedback />
       <SiteHeader locale={locale as Locale} initialUser={sessionUser} />
-      <main className="mx-auto flex w-full max-w-7xl flex-col px-4 py-6 sm:px-6 lg:px-8">
-        {children}
-      </main>
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-center py-3 sm:py-4">
-          <div className="h-px w-full max-w-[140px] bg-gradient-to-r from-transparent via-white/12 to-lime-400/20" />
-          <div className="mx-3 inline-flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-white/35 shadow-[0_0_12px_rgba(255,255,255,0.35)]" />
-            <span className="animate-breathe h-2 w-2 rounded-full bg-lime-300/80 shadow-[0_0_14px_rgba(132,204,22,0.55)]" />
-            <span className="h-1.5 w-1.5 rounded-full bg-white/35 shadow-[0_0_12px_rgba(255,255,255,0.35)]" />
+      {/* overflow-x only below header — any overflow:hidden/clip on ancestors breaks position:sticky on the header */}
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden">
+        <main className="mx-auto flex w-full max-w-7xl flex-col px-4 py-6 sm:px-6 lg:px-8">
+          {children}
+        </main>
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center py-3 sm:py-4">
+            <div className="h-px w-full max-w-[140px] bg-gradient-to-r from-transparent via-white/12 to-lime-400/20" />
+            <div className="mx-3 inline-flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-white/35 shadow-[0_0_12px_rgba(255,255,255,0.35)]" />
+              <span className="animate-breathe h-2 w-2 rounded-full bg-lime-300/80 shadow-[0_0_14px_rgba(132,204,22,0.55)]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-white/35 shadow-[0_0_12px_rgba(255,255,255,0.35)]" />
+            </div>
+            <div className="h-px w-full max-w-[140px] bg-gradient-to-l from-transparent via-white/12 to-lime-400/20" />
           </div>
-          <div className="h-px w-full max-w-[140px] bg-gradient-to-l from-transparent via-white/12 to-lime-400/20" />
         </div>
+        <SiteFooter />
       </div>
-      <SiteFooter />
       <Script
         src="https://counter.top.ge/counter.js"
         strategy="afterInteractive"
