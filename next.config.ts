@@ -7,6 +7,11 @@ const withBundleAnalyzer = bundleAnalyzer({
 
 const nextConfig: NextConfig = {
   async headers() {
+    if (process.env.NODE_ENV !== "production") {
+      // Avoid stale client bundles during local development hydration.
+      return [];
+    }
+
     return [
       {
         source: "/_next/static/:path*",
