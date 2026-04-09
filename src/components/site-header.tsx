@@ -183,14 +183,17 @@ export function SiteHeader({
             sizes="36px"
             className={`object-contain saturate-150 drop-shadow-[0_0_10px_rgba(132,204,22,0.45)] transition-all duration-300 group-hover:drop-shadow-[0_0_14px_rgba(163,230,53,0.6)] ${scrolled ? "h-7 w-7" : "h-9 w-9"}`}
           />
-          <div className="hidden min-[400px]:flex min-[400px]:flex-col min-[400px]:justify-center">
-            <div className="flex items-center">
-              <p className={`font-['Trebuchet_MS'] font-bold tracking-[0.15em] text-white transition-all duration-300 group-hover:text-lime-200 ${scrolled ? "text-[13px]" : "text-[15px]"}`}>
-                GROWER.GE
-              </p>
-            </div>
-            <p className={`max-w-[132px] leading-tight tracking-wide text-slate-500 transition-all duration-300 group-hover:text-slate-300 ${scrolled ? "h-0 overflow-hidden opacity-0" : "text-[6.5px] opacity-100"}`}>
-              {brandSubtitle}
+          <div className="hidden min-[400px]:flex min-[400px]:items-center">
+            <p className={`font-['Trebuchet_MS'] text-[10px] font-semibold uppercase leading-tight tracking-[0.06em] text-slate-200 transition-all duration-300 group-hover:text-lime-200 ${scrolled ? "text-[9px]" : "text-[10px]"}`}>
+              {brandSubtitle === "ქართული კანაფის საზოგადოება" ? (
+                <>
+                  ქართული კანაფის
+                  <br />
+                  საზოგადოება
+                </>
+              ) : (
+                brandSubtitle
+              )}
             </p>
           </div>
         </Link>

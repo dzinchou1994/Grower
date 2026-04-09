@@ -73,7 +73,7 @@ export default async function FeedbackPage({ params }: Props) {
         >
           ← {copy.back}
         </Link>
-        <p className="inline-flex rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-xs font-medium text-lime-300">
+        <p className="flex w-fit rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-xs font-medium text-lime-300">
           {copy.badge}
         </p>
         <h1 className="mt-2 text-2xl font-semibold text-white sm:text-3xl">{copy.title}</h1>

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CannabisLeaf } from "@/components/icons";
 import {
   getCannapediaArticleBySlug,
   listCannapediaArticleSlugs,
@@ -86,11 +85,6 @@ export default async function CannapediaArticlePage({ params }: PageProps) {
         >
           ← {copy.back}
         </Link>
-
-        <div className="mt-4 flex items-center gap-2 text-xs text-lime-300 sm:text-sm">
-          <CannabisLeaf className="h-4 w-4" />
-          Cannapedia
-        </div>
 
         <h1 className="mt-2 text-2xl font-semibold text-white sm:text-4xl">
           {article.title[typedLocale]}

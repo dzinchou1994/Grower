@@ -38,6 +38,10 @@ export function AuthRegisterForm({
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState(DEFAULT_AVATAR_ID);
+  const [visibleAvatarCount, setVisibleAvatarCount] = useState(3);
+
+  const shownAvatarOptions = avatarOptions.slice(0, visibleAvatarCount);
+  const hasMoreAvatars = visibleAvatarCount < avatarOptions.length;
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -97,27 +101,27 @@ export function AuthRegisterForm({
         className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2"
         required
       />
-      <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-3">
+      <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-2.5">
         <p className="text-xs text-slate-300">{copy.chooseProfileIcon}</p>
-        <div className="mt-2 grid grid-cols-3 gap-2">
-          {avatarOptions.map((option) => (
+        <div className="mt-2 grid grid-cols-3 gap-1.5">
+          {shownAvatarOptions.map((option) => (
             <button
               key={option.id}
               type="button"
               onClick={() => setSelectedAvatar(option.id)}
-              className={`rounded-xl border p-2 text-left transition ${
+              className={`rounded-xl border p-1.5 text-left transition ${
                 selectedAvatar === option.id
                   ? "border-lime-400/70 bg-lime-400/10"
                   : "border-white/10 bg-slate-900 hover:border-white/20"
               }`}
             >
-              <div className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-white/15 bg-slate-900/70 text-base">
+              <div className="relative flex h-7 w-7 items-center justify-center overflow-hidden rounded-full border border-white/15 bg-slate-900/70 text-sm">
                 {option.imagePath ? (
                   <Image
                     src={option.imagePath}
                     alt=""
                     fill
-                    sizes="32px"
+                    sizes="28px"
                     className="h-full w-full object-cover"
                     draggable={false}
                   />
@@ -125,10 +129,23 @@ export function AuthRegisterForm({
                   <span>{option.emoji ?? "🧔"}</span>
                 )}
               </div>
-              <p className="mt-1 text-[11px] text-slate-300">{option.label}</p>
+              <p className="mt-1 line-clamp-1 text-[10px] text-slate-300">{option.label}</p>
             </button>
           ))}
         </div>
+        {hasMoreAvatars ? (
+          <button
+            type="button"
+            onClick={() =>
+              setVisibleAvatarCount((current) =>
+                Math.min(current + 6, avatarOptions.length),
+              )
+            }
+            className="mt-2 text-xs font-medium text-lime-300 transition hover:text-lime-200"
+          >
+            See more
+          </button>
+        ) : null}
       </div>
       {error ? <p className="text-xs text-red-300">{error}</p> : null}
       <button
