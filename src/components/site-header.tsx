@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { UserAvatar } from "@/components/user-avatar";
 import type { SessionUser } from "@/lib/auth-session";
 import {
@@ -12,6 +12,23 @@ import {
   locales,
   type Locale,
 } from "@/lib/i18n";
+
+function subscribeHeaderScroll(onChange: () => void) {
+  if (typeof window === "undefined") {
+    return () => {};
+  }
+  const onScroll = () => onChange();
+  window.addEventListener("scroll", onScroll, { passive: true });
+  return () => window.removeEventListener("scroll", onScroll);
+}
+
+function headerScrollCompactSnapshot() {
+  return typeof window !== "undefined" && window.scrollY > 48;
+}
+
+function headerScrollCompactServerSnapshot() {
+  return false;
+}
 
 export function SiteHeader({
   locale,
@@ -27,7 +44,11 @@ export function SiteHeader({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const [scrolled, setScrolled] = useState(false);
+  const scrolled = useSyncExternalStore(
+    subscribeHeaderScroll,
+    headerScrollCompactSnapshot,
+    headerScrollCompactServerSnapshot,
+  );
 
   const navigation = [
     { href: "", label: dict.nav.home, icon: "home" as const },
@@ -103,13 +124,6 @@ export function SiteHeader({
   }, [mobileMenuOpen]);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 48);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
     const stored = localStorage.getItem("grower_theme");
     const preferred =
       stored === "light" || stored === "dark"
@@ -135,7 +149,10 @@ export function SiteHeader({
   }
 
   return (
-    <header className={`sticky top-0 z-30 border-b border-white/8 backdrop-blur-2xl transition-all duration-300 ${scrolled ? "bg-[#08111f]/55" : "bg-[#08111f]/75"}`}>
+    <header
+      suppressHydrationWarning
+      className={`sticky top-0 z-30 border-b border-white/8 backdrop-blur-2xl transition-all duration-300 ${scrolled ? "bg-[#08111f]/55" : "bg-[#08111f]/75"}`}
+    >
       <div className={`mx-auto flex max-w-7xl items-center justify-between px-4 transition-all duration-300 sm:px-6 lg:px-8 ${scrolled ? "py-1" : "py-2.5"}`}>
         {/* Logo */}
         <Link

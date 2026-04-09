@@ -78,6 +78,15 @@ type ForumState = {
 
 const hasDatabase = Boolean(process.env.DATABASE_URL);
 const topicIconBySlug = new Map(forumTopics.map((topic) => [topic.slug, topic.icon]));
+
+/** Keeps titles/descriptions in sync with seed data when global in-memory forum state is stale (e.g. long-lived dev server). */
+function applyCanonicalTopicMeta(topic: ForumTopicRecord): ForumTopicRecord {
+  const source = forumTopics.find((entry) => entry.slug === topic.slug);
+  if (!source) {
+    return topic;
+  }
+  return { ...topic, title: source.title, description: source.description };
+}
 const defaultThreadIcon = "💬";
 const threadIconPrefix = ":::icon=";
 
@@ -306,7 +315,7 @@ async function translateForumTopicRecord(
   ]);
 
   const localizedTitle =
-    locale === "ka" && topic.slug === "free-talk" ? "ბირჟა 420" : titleRes.text;
+    locale === "ka" && topic.slug === "free-talk" ? "დაბოლილები 420" : titleRes.text;
 
   return {
     ...topic,
@@ -361,13 +370,15 @@ async function listForumTopicsFromDatabase(query?: string, locale?: Locale, curr
     },
   });
 
-  const mapped: ForumTopicRecord[] = topics.map((topic) => ({
-    slug: topic.slug,
-    title: topic.title,
-    description: topic.description ?? "",
-    icon: topicIconBySlug.get(topic.slug) ?? "💬",
-    threads: topic.threads.map((t) => mapThreadRecord(t, currentUserId, locale)),
-  }));
+  const mapped: ForumTopicRecord[] = topics.map((topic) =>
+    applyCanonicalTopicMeta({
+      slug: topic.slug,
+      title: topic.title,
+      description: topic.description ?? "",
+      icon: topicIconBySlug.get(topic.slug) ?? "💬",
+      threads: topic.threads.map((t) => mapThreadRecord(t, currentUserId, locale)),
+    }),
+  );
 
   const translatedMapped = await Promise.all(
     mapped.map((topic) => translateForumTopicRecord(topic, locale)),
@@ -420,13 +431,13 @@ async function getForumTopicBySlugFromDatabase(slug: string, locale?: Locale, cu
     return null;
   }
 
-  const mappedTopic = {
+  const mappedTopic = applyCanonicalTopicMeta({
     slug: topic.slug,
     title: topic.title,
     description: topic.description ?? "",
     icon: topicIconBySlug.get(topic.slug) ?? "💬",
     threads: topic.threads.map((t) => mapThreadRecord(t, currentUserId, locale)),
-  } satisfies ForumTopicRecord;
+  } satisfies ForumTopicRecord);
 
   return translateForumTopicRecord(mappedTopic, locale);
 }
@@ -547,14 +558,15 @@ async function addCommentInDatabase(input: {
 
 function listForumTopicsFromMemory(query?: string): ForumTopicRecord[] {
   const state = getState();
+  const topics = state.topics.map(applyCanonicalTopicMeta);
 
   if (!query?.trim()) {
-    return state.topics;
+    return topics;
   }
 
   const q = query.trim().toLowerCase();
 
-  return state.topics
+  return topics
     .map((topic) => {
       const topicMatch =
         topic.title.toLowerCase().includes(q) ||
@@ -570,7 +582,8 @@ function listForumTopicsFromMemory(query?: string): ForumTopicRecord[] {
 }
 
 function getForumTopicBySlugFromMemory(slug: string) {
-  return getState().topics.find((topic) => topic.slug === slug) ?? null;
+  const topic = getState().topics.find((entry) => entry.slug === slug) ?? null;
+  return topic ? applyCanonicalTopicMeta(topic) : null;
 }
 
 function createThreadInMemory(input: {
