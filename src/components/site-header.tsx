@@ -189,7 +189,7 @@ export function SiteHeader({
             >
               <span className="block">
                 <span>GROW</span>
-                <span className="relative top-[0.6px] ml-[0.5px] text-[0.98em] tracking-[0.01em]">ᲔᲠᲘ</span>
+                <span className="relative top-[0.6px] ml-[0.5px] text-[1.08em] tracking-[0.01em]">ᲔᲠᲘ</span>
               </span>
             </p>
           </div>
