@@ -107,7 +107,6 @@ export function SiteHeader({
             dark: "Dark",
             comingSoon: "Coming soon",
           };
-  const brandSubtitle = dict.home.badge;
 
   async function handleLogout() {
     setIsLoggingOut(true);
@@ -185,16 +184,13 @@ export function SiteHeader({
             className={`object-contain saturate-150 drop-shadow-[0_0_10px_rgba(132,204,22,0.45)] transition-all duration-300 group-hover:drop-shadow-[0_0_14px_rgba(163,230,53,0.6)] ${scrolled ? "h-7 w-7" : "h-9 w-9"}`}
           />
           <div className="hidden min-[400px]:flex min-[400px]:items-center">
-            <p className={`font-['Trebuchet_MS'] text-[10px] font-semibold uppercase leading-tight tracking-[0.06em] text-slate-200 transition-all duration-300 group-hover:text-lime-200 ${scrolled ? "text-[9px]" : "text-[10px]"}`}>
-              {brandSubtitle === "ქართული კანაფის საზოგადოება" ? (
-                <>
-                  ქართული კანაფის
-                  <br />
-                  საზოგადოება
-                </>
-              ) : (
-                brandSubtitle
-              )}
+            <p
+              className={`font-['Trebuchet_MS'] text-left text-[10px] font-semibold uppercase leading-[1.05] tracking-[0.06em] text-slate-200 transition-all duration-300 group-hover:text-lime-200 ${scrolled ? "text-[9px]" : "text-[10px]"}`}
+            >
+              <span className="block">
+                <span>GROW</span>
+                <span className="relative top-[0.6px] ml-[0.5px] text-[0.98em] tracking-[0.01em]">ერი</span>
+              </span>
             </p>
           </div>
         </Link>
