@@ -24,6 +24,10 @@ export function ForumThreadComposer({
   locale: Locale;
   collapsible?: boolean;
 }) {
+  const primaryButtonClass =
+    "inline-flex items-center justify-center whitespace-nowrap rounded-full bg-lime-400 px-4 py-2 text-xs font-semibold text-slate-950 transition hover:bg-lime-300 sm:text-sm";
+  const subtleButtonClass =
+    "inline-flex items-center justify-center whitespace-nowrap rounded-full border border-white/15 px-4 py-2 text-xs text-slate-300 transition hover:bg-white/10 sm:text-sm";
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -138,7 +142,7 @@ export function ForumThreadComposer({
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="inline-flex items-center justify-center whitespace-nowrap rounded-full bg-lime-400 px-2.5 py-1 text-[10px] font-semibold text-slate-950 transition hover:bg-lime-300"
+          className={primaryButtonClass}
         >
           {t.startThread}
         </button>
@@ -154,7 +158,7 @@ export function ForumThreadComposer({
         <button
           type="button"
           onClick={() => setIsOpen(false)}
-          className="mt-2 inline-flex rounded-full border border-white/15 px-2.5 py-1 text-[11px] text-slate-300 transition hover:bg-white/10"
+          className={`mt-2 ${subtleButtonClass}`}
         >
           {t.close}
         </button>
@@ -165,7 +169,7 @@ export function ForumThreadComposer({
         <div className="mt-4 flex gap-2">
           <Link
             href={loginHref}
-            className="inline-flex rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-lime-300"
+            className={primaryButtonClass}
           >
             {t.login}
           </Link>
@@ -181,7 +185,7 @@ export function ForumThreadComposer({
         <button
           type="button"
           onClick={() => setIsOpen(false)}
-          className="mt-2 inline-flex rounded-full border border-white/15 px-2.5 py-1 text-[11px] text-slate-300 transition hover:bg-white/10"
+          className={`mt-2 ${subtleButtonClass}`}
         >
           {t.close}
         </button>
@@ -259,7 +263,7 @@ export function ForumThreadComposer({
         <button
           type="submit"
           disabled={isSubmitting}
-          className="inline-flex w-fit items-center justify-center whitespace-nowrap rounded-full bg-lime-400 px-2.5 py-1 text-[10px] font-semibold text-slate-950 transition hover:bg-lime-300 disabled:cursor-not-allowed disabled:opacity-60"
+          className={`${primaryButtonClass} w-fit disabled:cursor-not-allowed disabled:opacity-60`}
         >
           {isSubmitting ? t.posting : t.postThread}
         </button>

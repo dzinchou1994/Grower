@@ -36,11 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticRoutes = [
     "",
-    "/auth/login",
-    "/auth/register",
-    "/account",
     "/diaries",
-    "/diaries/new",
     "/forum",
     "/cannapedia",
     "/manifesto",
@@ -66,29 +62,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   );
 
   const localizedDiaries = locales.flatMap((locale) =>
-    diarySlugs.flatMap((slug) => [
-      {
-        url: `${siteUrl}/${locale}/diaries/${slug}`,
-        lastModified: new Date(),
-        alternates: {
-          languages: Object.fromEntries(
-            locales.map((entry) => [entry, `${siteUrl}/${entry}/diaries/${slug}`]),
-          ),
-        },
+    diarySlugs.map((slug) => ({
+      url: `${siteUrl}/${locale}/diaries/${slug}`,
+      lastModified: new Date(),
+      alternates: {
+        languages: Object.fromEntries(
+          locales.map((entry) => [entry, `${siteUrl}/${entry}/diaries/${slug}`]),
+        ),
       },
-      {
-        url: `${siteUrl}/${locale}/diaries/${slug}/weeks/new`,
-        lastModified: new Date(),
-        alternates: {
-          languages: Object.fromEntries(
-            locales.map((entry) => [
-              entry,
-              `${siteUrl}/${entry}/diaries/${slug}/weeks/new`,
-            ]),
-          ),
-        },
-      },
-    ]),
+    })),
   );
 
   const localizedForum = locales.flatMap((locale) =>

@@ -31,11 +31,14 @@ a {
   text-decoration: none;
 }
 
-button,
 input,
 textarea,
 select {
   font: inherit;
+}
+
+button {
+  font-family: inherit;
 }
 
 ::selection {

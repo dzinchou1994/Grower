@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 
 export function ForumCommentForm({
   threadSlug,
@@ -19,6 +19,7 @@ export function ForumCommentForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const bodyRef = useRef<HTMLTextAreaElement | null>(null);
   const t =
     locale === "ka"
       ? {
@@ -80,6 +81,9 @@ export function ForumCommentForm({
       }
 
       form.reset();
+      if (bodyRef.current) {
+        bodyRef.current.style.height = "auto";
+      }
       setSuccess(t.posted);
       try {
         router.refresh();
@@ -92,6 +96,11 @@ export function ForumCommentForm({
     } finally {
       setIsSubmitting(false);
     }
+  }
+
+  function autoResizeTextarea(textarea: HTMLTextAreaElement) {
+    textarea.style.height = "auto";
+    textarea.style.height = `${textarea.scrollHeight}px`;
   }
 
   return (
@@ -114,10 +123,13 @@ export function ForumCommentForm({
       ) : null}
 
       <div className="grid gap-2">
-        <input
+        <textarea
+          ref={bodyRef}
           name="body"
           placeholder={t.placeholder}
-          className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2 sm:text-sm"
+          rows={2}
+          onInput={(event) => autoResizeTextarea(event.currentTarget)}
+          className="min-h-[40px] resize-none overflow-hidden rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2 sm:text-sm"
           required
           disabled={!isAuthenticated}
         />

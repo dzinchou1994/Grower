@@ -11,12 +11,14 @@ export function ForumItemActions({
   deleteEndpoint,
   reportTargetType,
   reportTargetId,
+  className,
 }: {
   locale: Locale;
   canDelete: boolean;
   deleteEndpoint?: string;
   reportTargetType?: "THREAD" | "COMMENT";
   reportTargetId?: string;
+  className?: string;
 }) {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
@@ -32,10 +34,10 @@ export function ForumItemActions({
           deleting: "იშლება...",
           deleteConfirm: "ნამდვილად გინდა წაშლა?",
           deleteFailed: "წაშლა ვერ მოხერხდა.",
-          report: "მოხსენება",
-          reportPrompt: "რა პრობლემაა ამ კონტენტში?",
+          report: "დარეპორტება",
           reportFailed: "მოხსენება ვერ გაიგზავნა.",
           reported: "მოხსენება გაიგზავნა.",
+          defaultReportReason: "მომხმარებლის რეპორტი",
           actions: "ქმედებები",
         }
       : locale === "ru"
@@ -48,6 +50,7 @@ export function ForumItemActions({
             reportPrompt: "Что не так с этим контентом?",
             reportFailed: "Не удалось отправить жалобу.",
             reported: "Жалоба отправлена.",
+            defaultReportReason: "Пользовательская жалоба",
             actions: "Действия",
           }
         : {
@@ -59,6 +62,7 @@ export function ForumItemActions({
             reportPrompt: "What is wrong with this content?",
             reportFailed: "Could not submit report.",
             reported: "Report submitted.",
+            defaultReportReason: "User report",
             actions: "Actions",
           };
 
@@ -116,11 +120,6 @@ export function ForumItemActions({
     setSuccess(null);
     setIsMenuOpen(false);
 
-    const reason = window.prompt(t.reportPrompt)?.trim();
-    if (!reason) {
-      return;
-    }
-
     setIsReporting(true);
     try {
       const response = await fetch("/api/reports", {
@@ -129,7 +128,7 @@ export function ForumItemActions({
         body: JSON.stringify({
           targetType: reportTargetType,
           targetId: reportTargetId,
-          reason,
+          reason: t.defaultReportReason,
         }),
       });
 
@@ -155,7 +154,7 @@ export function ForumItemActions({
   }
 
   return (
-    <div ref={rootRef} className="mt-1.5">
+    <div ref={rootRef} className={className ?? "mt-1.5 flex justify-end"}>
       <div className="relative inline-flex">
         <button
           type="button"
@@ -171,7 +170,7 @@ export function ForumItemActions({
         </button>
 
         {isMenuOpen ? (
-          <div className="absolute left-0 top-7 z-20 min-w-[120px] overflow-hidden rounded-xl border border-white/10 bg-slate-950/95 p-1.5 shadow-lg shadow-black/40 backdrop-blur">
+          <div className="absolute right-0 top-7 z-20 min-w-[120px] overflow-hidden rounded-xl border border-white/10 bg-slate-950/95 p-1.5 shadow-lg shadow-black/40 backdrop-blur">
             {showReport ? (
               <button
                 type="button"
