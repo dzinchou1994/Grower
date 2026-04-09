@@ -1,5 +1,11 @@
-import { formatDistanceToNow } from "date-fns";
-import { enUS, ka, ru } from "date-fns/locale";
+import {
+  differenceInDays,
+  differenceInHours,
+  differenceInMinutes,
+  differenceInMonths,
+  differenceInSeconds,
+  differenceInYears,
+} from "date-fns";
 import { db } from "@/lib/db";
 import { getDeterministicAvatarImage } from "@/lib/avatar-options";
 import { calculateXp, getLevelForXp } from "@/lib/leveling";
@@ -156,10 +162,73 @@ function decodeThreadBody(body: string | null | undefined) {
   return { body: cleanedBody, threadIcon: normalizeThreadIcon(icon) };
 }
 
-function toRelative(dateLike: Date | string, locale?: Locale) {
+/** Short relative time for forum thread rows (tight UI). */
+function toRelativeCompact(dateLike: Date | string, locale: Locale = "en") {
   const date = typeof dateLike === "string" ? new Date(dateLike) : dateLike;
-  const dateFnsLocale = locale === "ka" ? ka : locale === "ru" ? ru : enUS;
-  return formatDistanceToNow(date, { addSuffix: true, locale: dateFnsLocale });
+  const now = new Date();
+  if (date.getTime() > now.getTime()) {
+    return locale === "ka" ? "ახლა" : locale === "ru" ? "сейчас" : "now";
+  }
+
+  const years = differenceInYears(now, date);
+  if (years >= 1) {
+    return locale === "ka"
+      ? `${years} წლ წინ`
+      : locale === "ru"
+        ? `${years} г назад`
+        : `${years}y ago`;
+  }
+
+  const months = differenceInMonths(now, date);
+  if (months >= 1) {
+    return locale === "ka"
+      ? `${months} თვ წინ`
+      : locale === "ru"
+        ? `${months} мес назад`
+        : `${months}mo ago`;
+  }
+
+  const days = differenceInDays(now, date);
+  if (days >= 7) {
+    const w = Math.floor(days / 7);
+    return locale === "ka"
+      ? `${w} კვ წინ`
+      : locale === "ru"
+        ? `${w} нед назад`
+        : `${w}w ago`;
+  }
+  if (days >= 1) {
+    return locale === "ka"
+      ? `${days} დღ წინ`
+      : locale === "ru"
+        ? `${days} д назад`
+        : `${days}d ago`;
+  }
+
+  const hours = differenceInHours(now, date);
+  if (hours >= 1) {
+    return locale === "ka"
+      ? `${hours} სთ წინ`
+      : locale === "ru"
+        ? `${hours} ч назад`
+        : `${hours}h ago`;
+  }
+
+  const minutes = differenceInMinutes(now, date);
+  if (minutes >= 1) {
+    return locale === "ka"
+      ? `${minutes} წთ წინ`
+      : locale === "ru"
+        ? `${minutes} мин назад`
+        : `${minutes}m ago`;
+  }
+
+  const seconds = differenceInSeconds(now, date);
+  if (seconds >= 45) {
+    return locale === "ka" ? "1 წთ წინ" : locale === "ru" ? "1 мин назад" : "1m ago";
+  }
+
+  return locale === "ka" ? "ახლა" : locale === "ru" ? "сейчас" : "now";
 }
 
 function normalizeUsername(name: string) {
@@ -244,7 +313,7 @@ function mapThreadRecord(thread: any, currentUserId?: string, locale?: Locale): 
       getDeterministicAvatarImage(thread.author?.username ?? "user"),
     replies: thread._count?.comments ?? 0,
     likes: thread._count?.likes ?? 0,
-    lastActivity: toRelative(lastActivity, locale),
+    lastActivity: toRelativeCompact(lastActivity, locale ?? "en"),
     isPinned: Boolean(thread.isPinned),
     threadIcon: parsedBody.threadIcon,
     body: parsedBody.body,
@@ -607,7 +676,7 @@ function createThreadInMemory(input: {
     threadIcon: normalizeThreadIcon(input.threadIcon),
     replies: 0,
     likes: 0,
-    lastActivity: "just now",
+    lastActivity: toRelativeCompact(new Date(), "en"),
     isPinned: false,
     body: input.body.trim(),
     upvotes: 0,
@@ -646,7 +715,7 @@ function addCommentInMemory(input: {
 
     thread.comments.unshift(comment);
     thread.replies += 1;
-    thread.lastActivity = "just now";
+    thread.lastActivity = toRelativeCompact(new Date(), "en");
 
     return { topicSlug: topic.slug, threadSlug: thread.slug, comment };
   }
@@ -1014,7 +1083,7 @@ function deleteForumCommentInMemory(
 
       thread.comments.splice(commentIndex, 1);
       thread.replies = Math.max(0, thread.replies - 1);
-      thread.lastActivity = "just now";
+      thread.lastActivity = toRelativeCompact(new Date(), "en");
       return { ok: true };
     }
   }

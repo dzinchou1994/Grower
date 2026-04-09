@@ -67,10 +67,7 @@ export function ForumThreadListItemHeader({
           />
         </div>
       </div>
-      <div className="flex shrink-0 items-center gap-2 self-start pt-0.5">
-        <span className="shrink-0 rounded-full bg-lime-400/10 px-2.5 py-1 text-[10px] text-lime-300 sm:px-3 sm:text-xs">
-          {thread.lastActivity}
-        </span>
+      <div className="flex shrink-0 flex-col items-end gap-1 self-start">
         <ForumItemActions
           locale={locale}
           canDelete={canModerateThread}
@@ -80,8 +77,11 @@ export function ForumThreadListItemHeader({
           reportTargetId={thread.id ?? thread.slug}
           permalinkHref={titleHref}
           permalinkLabel={permalinkLabel}
-          className="relative shrink-0 flex justify-end"
+          className="relative flex shrink-0 justify-end"
         />
+        <span className="shrink-0 whitespace-nowrap rounded-full bg-lime-400/10 px-1.5 py-px text-[9px] leading-tight text-lime-300 tabular-nums sm:px-2 sm:py-0.5 sm:text-[10px]">
+          {thread.lastActivity}
+        </span>
       </div>
     </div>
   );
