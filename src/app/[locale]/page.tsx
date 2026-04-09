@@ -6,7 +6,7 @@ import {
   isValidLocale,
   type Locale,
 } from "@/lib/i18n";
-import { getForumStats, getTopUsers, listForumTopics } from "@/lib/forum-data";
+import { getTopUsers, listForumTopics } from "@/lib/forum-data";
 import { CannabisLeaf, CannabisLeafOutline } from "@/components/icons";
 import { UserAvatar } from "@/components/user-avatar";
 import { getUsernameAccentClassByXp } from "@/lib/leveling";
@@ -47,9 +47,8 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
 
   const typedLocale = locale as Locale;
   const { dict } = getLocalizedContent(typedLocale);
-  const [forumTopicList, stats, topUsers] = await Promise.all([
+  const [forumTopicList, topUsers] = await Promise.all([
     listForumTopics(undefined, typedLocale),
-    getForumStats(),
     getTopUsers(10),
   ]);
 
@@ -127,14 +126,6 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
             >
               {dict.home.tertiaryCta}
             </Link>
-          </div>
-
-          {/* Stats */}
-          <div className="mt-6 grid grid-cols-4 gap-2 sm:mt-8 sm:gap-4">
-            <StatCard label={dict.home.stats.forumTopics} value={stats.forumTopics} />
-            <StatCard label={dict.home.stats.forumThreads} value={stats.forumThreads} />
-            <StatCard label={dict.home.stats.forumReplies} value={stats.forumReplies} />
-            <StatCard label={dict.home.stats.activeUsers} value={stats.activeUsers} />
           </div>
         </div>
       </section>
@@ -336,19 +327,6 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
           </ol>
         </div>
       </section>
-    </div>
-  );
-}
-
-function StatCard({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-2.5 text-center backdrop-blur-sm sm:rounded-3xl sm:p-5 sm:text-left">
-      <p className="animate-shimmer bg-gradient-to-r from-white via-lime-200 to-white bg-clip-text text-base font-semibold text-transparent sm:text-3xl">
-        {value}
-      </p>
-      <p className="mt-1 text-[9px] leading-tight text-slate-300 sm:mt-2 sm:text-sm sm:leading-normal">
-        {label}
-      </p>
     </div>
   );
 }
