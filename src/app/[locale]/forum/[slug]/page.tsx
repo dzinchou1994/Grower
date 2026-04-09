@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getServerSessionUser } from "@/lib/auth-session";
 import { ForumCommentForm } from "@/components/forum-comment-form";
-import { ForumThreadComposer } from "@/components/forum-thread-composer";
+import { ForumThreadComposer, ForumTopicComposeTrigger } from "@/components/forum-thread-composer";
 import {
   getAlternates,
   getLocalizedContent,
@@ -84,12 +84,12 @@ export default async function ForumTopicPage({ params }: PageProps) {
     notFound();
   }
 
-  const openDiscussionLabel =
+  const newThreadCta =
     typedLocale === "ka"
-      ? "დისკუსიის გახსნა"
+      ? "ახალი თემის დაწყება"
       : typedLocale === "ru"
-        ? "Открыть обсуждение"
-        : "Open discussion";
+        ? "Создать новую тему"
+        : "Start new thread";
 
   return (
     <div className="flex flex-col gap-5 sm:gap-6">
@@ -124,12 +124,10 @@ export default async function ForumTopicPage({ params }: PageProps) {
             </div>
           </div>
           <div className="mt-4">
-            <a
-              href="#new-thread"
+            <ForumTopicComposeTrigger
+              label={newThreadCta}
               className="inline-flex items-center justify-center rounded-full bg-lime-400 px-4 py-2 text-xs font-semibold text-slate-950 transition hover:bg-lime-300 sm:text-sm"
-            >
-              {openDiscussionLabel}
-            </a>
+            />
           </div>
         </div>
       </section>
@@ -153,7 +151,7 @@ export default async function ForumTopicPage({ params }: PageProps) {
             isAuthenticated={Boolean(sessionUser)}
             loginHref={getLocalizedPath(typedLocale, "/auth/login")}
             locale={typedLocale}
-            collapsible
+            startHidden
           />
         </div>
 

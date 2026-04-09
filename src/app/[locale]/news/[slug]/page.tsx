@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAlternates, getLocalizedPath, isValidLocale, type Locale } from "@/lib/i18n";
@@ -58,11 +59,29 @@ export default async function NewsArticlePage({ params }: PageProps) {
           ← {backLabel}
         </Link>
 
-        <img
-          src={article.imageUrl ?? "/images/hero-cannabis.avif"}
-          alt={article.title[typedLocale]}
-          className="mt-4 h-56 w-full rounded-2xl object-cover sm:h-72"
-        />
+        {(article.imageUrl ?? "/images/hero-cannabis.avif").startsWith("/") ? (
+          <Image
+            src={article.imageUrl ?? "/images/hero-cannabis.avif"}
+            alt={article.title[typedLocale]}
+            width={1200}
+            height={720}
+            sizes="(max-width: 768px) 100vw, 896px"
+            quality={74}
+            className="mt-4 h-56 w-full rounded-2xl object-cover sm:h-72"
+          />
+        ) : (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={article.imageUrl ?? "/images/hero-cannabis.avif"}
+            alt={article.title[typedLocale]}
+            width={1200}
+            height={720}
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
+            className="mt-4 h-56 w-full rounded-2xl object-cover sm:h-72"
+          />
+        )}
 
         <div className="mt-4 flex items-center gap-2">
           <span className="rounded-full border border-lime-400/30 bg-lime-400/10 px-2 py-0.5 text-[10px] text-lime-300">

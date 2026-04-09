@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { NewsSubmissionForm } from "@/components/news-submission-form";
@@ -118,11 +119,29 @@ export default async function NewsPage({ params, searchParams }: PageProps) {
               className="rounded-2xl border border-white/10 bg-white/4 p-4 transition hover:border-lime-400/30 hover:bg-white/8 sm:rounded-3xl sm:p-5"
             >
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
-                <img
-                  src={article.imageUrl ?? "/images/hero-cannabis.avif"}
-                  alt={article.title[typedLocale]}
-                  className="h-28 w-full rounded-xl object-cover sm:h-24 sm:w-40 sm:rounded-2xl"
-                />
+                {(article.imageUrl ?? "/images/hero-cannabis.avif").startsWith("/") ? (
+                  <Image
+                    src={article.imageUrl ?? "/images/hero-cannabis.avif"}
+                    alt={article.title[typedLocale]}
+                    width={160}
+                    height={96}
+                    sizes="(max-width: 640px) 100vw, 160px"
+                    quality={72}
+                    className="h-28 w-full rounded-xl object-cover sm:h-24 sm:w-40 sm:rounded-2xl"
+                  />
+                ) : (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={article.imageUrl ?? "/images/hero-cannabis.avif"}
+                    alt={article.title[typedLocale]}
+                    width={160}
+                    height={96}
+                    loading="lazy"
+                    decoding="async"
+                    fetchPriority="low"
+                    className="h-28 w-full rounded-xl object-cover sm:h-24 sm:w-40 sm:rounded-2xl"
+                  />
+                )}
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <span className="rounded-full border border-lime-400/30 bg-lime-400/10 px-2 py-0.5 text-[10px] text-lime-300">

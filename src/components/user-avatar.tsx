@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getAvatarOptionByImage } from "@/lib/avatar-options";
 
 type Size = "sm" | "md" | "lg";
@@ -10,6 +11,12 @@ function sizeClass(size: Size) {
     return "h-12 w-12 text-3xl";
   }
   return "h-9 w-9 text-2xl";
+}
+
+function sizePx(size: Size) {
+  if (size === "sm") return 28;
+  if (size === "lg") return 48;
+  return 36;
 }
 
 export function UserAvatar({
@@ -31,9 +38,11 @@ export function UserAvatar({
       aria-label={`${username} avatar`}
     >
       {option.imagePath ? (
-        <img
+        <Image
           src={option.imagePath}
           alt=""
+          fill
+          sizes={`${sizePx(size)}px`}
           className="h-full w-full object-cover"
           draggable={false}
         />

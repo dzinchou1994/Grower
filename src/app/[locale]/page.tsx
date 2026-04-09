@@ -67,6 +67,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
           alt="Cannabis plant"
           fill
           priority
+          quality={72}
           className="object-cover"
           sizes="(max-width: 1280px) 100vw, 1280px"
         />
@@ -131,7 +132,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
       </section>
 
       {/* Manifesto / law awareness banner */}
-      <section className="relative overflow-hidden rounded-2xl border border-lime-400/15 bg-gradient-to-br from-lime-950/40 via-slate-950/60 to-slate-950/80 sm:rounded-[2rem]">
+      <section className="defer-render relative overflow-hidden rounded-2xl border border-lime-400/15 bg-gradient-to-br from-lime-950/40 via-slate-950/60 to-slate-950/80 sm:rounded-[2rem]">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(132,204,22,0.06),transparent_60%)]" />
         <Link
           href={getLocalizedPath(typedLocale, "/manifesto")}
@@ -162,7 +163,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
       </section>
 
       {/* Forum categories + Latest threads */}
-      <section className="flex flex-col gap-5 lg:grid lg:grid-cols-[1fr_1fr] lg:gap-6">
+      <section className="defer-render flex flex-col gap-5 lg:grid lg:grid-cols-[1fr_1fr] lg:gap-6">
         {/* Forum categories */}
         <div className="rounded-2xl border border-white/10 bg-slate-950/55 p-5 sm:rounded-[2rem] sm:p-6">
           <div className="flex items-start justify-between gap-3 sm:items-center">
@@ -258,7 +259,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
       </section>
 
       {/* Diary promo (smaller section) */}
-      <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-r from-lime-950/30 to-slate-950/50 p-5 sm:rounded-[2rem] sm:p-8">
+      <section className="defer-render relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-r from-lime-950/30 to-slate-950/50 p-5 sm:rounded-[2rem] sm:p-8">
         <CannabisLeaf className="animate-float pointer-events-none absolute -right-6 top-1/2 h-32 w-32 -translate-y-1/2 rotate-[20deg] text-lime-400/[0.06] sm:h-44 sm:w-44" />
         <div className="relative flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-2xl">
@@ -284,7 +285,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
       </section>
 
       {/* Top users leaderboard */}
-      <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-6">
+      <section className="defer-render rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-6">
         <div>
           <p className="text-xs text-slate-400 sm:text-sm">{dict.home.topUsers}</p>
           <h2 className="mt-1 text-lg font-semibold text-white sm:text-2xl">

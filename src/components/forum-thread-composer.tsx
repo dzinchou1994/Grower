@@ -2,7 +2,27 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useMemo, useRef, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+
+export const OPEN_THREAD_COMPOSER_EVENT = "grower:open-thread-composer";
+
+/** Primary CTA in topic hero — opens hidden {@link ForumThreadComposer} and scrolls to #new-thread */
+export function ForumTopicComposeTrigger({ label, className }: { label: string; className: string }) {
+  return (
+    <button
+      type="button"
+      className={className}
+      onClick={() => {
+        document.dispatchEvent(new CustomEvent(OPEN_THREAD_COMPOSER_EVENT));
+        requestAnimationFrame(() =>
+          document.getElementById("new-thread")?.scrollIntoView({ behavior: "smooth", block: "start" }),
+        );
+      }}
+    >
+      {label}
+    </button>
+  );
+}
 
 type TopicOption = {
   slug: string;
@@ -17,12 +37,15 @@ export function ForumThreadComposer({
   loginHref,
   locale,
   collapsible = false,
+  /** When true, renders nothing until {@link ForumTopicComposeTrigger} or #new-thread hash opens it */
+  startHidden = false,
 }: {
   topics: TopicOption[];
   isAuthenticated: boolean;
   loginHref: string;
   locale: Locale;
   collapsible?: boolean;
+  startHidden?: boolean;
 }) {
   const primaryButtonClass =
     "inline-flex items-center justify-center whitespace-nowrap rounded-full bg-lime-400 px-4 py-2 text-xs font-semibold text-slate-950 transition hover:bg-lime-300 sm:text-sm";
@@ -32,8 +55,24 @@ export function ForumThreadComposer({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [isOpen, setIsOpen] = useState(!collapsible);
+  const [isOpen, setIsOpen] = useState(!collapsible && !startHidden);
   const bodyRef = useRef<HTMLTextAreaElement | null>(null);
+
+  useEffect(() => {
+    if (!startHidden) return;
+    function open() {
+      setIsOpen(true);
+    }
+    document.addEventListener(OPEN_THREAD_COMPOSER_EVENT, open);
+    return () => document.removeEventListener(OPEN_THREAD_COMPOSER_EVENT, open);
+  }, [startHidden]);
+
+  useEffect(() => {
+    if (!startHidden || typeof window === "undefined") return;
+    if (window.location.hash === "#new-thread") {
+      setIsOpen(true);
+    }
+  }, [startHidden]);
   const threadIcons = ["💬", "🔥", "🌿", "💡", "🧪", "❓", "🛒", "😮‍💨"];
   const t =
     locale === "ka"
@@ -136,6 +175,10 @@ export function ForumThreadComposer({
     return null;
   }
 
+  if (startHidden && !isOpen) {
+    return null;
+  }
+
   if (collapsible && !isOpen) {
     return (
       <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-6">
@@ -150,11 +193,13 @@ export function ForumThreadComposer({
     );
   }
 
+  const showClose = collapsible || startHidden;
+
   if (!isAuthenticated) {
     return (
       <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-6">
         <h2 className="text-base font-semibold text-white sm:text-lg">{t.startThread}</h2>
-      {collapsible ? (
+      {showClose ? (
         <button
           type="button"
           onClick={() => setIsOpen(false)}
@@ -181,7 +226,7 @@ export function ForumThreadComposer({
   return (
     <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-6">
       <h2 className="text-base font-semibold text-white sm:text-lg">{t.startThread}</h2>
-      {collapsible ? (
+      {showClose ? (
         <button
           type="button"
           onClick={() => setIsOpen(false)}

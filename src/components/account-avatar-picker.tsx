@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { avatarOptions, getAvatarIdFromImage } from "@/lib/avatar-options";
@@ -74,11 +75,13 @@ export function AccountAvatarPicker({
                 : "border-white/10 bg-white/5 hover:border-white/20"
             }`}
           >
-            <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-white/15 bg-slate-900/70 text-lg">
+            <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-white/15 bg-slate-900/70 text-lg">
               {option.imagePath ? (
-                <img
+                <Image
                   src={option.imagePath}
                   alt=""
+                  fill
+                  sizes="40px"
                   className="h-full w-full object-cover"
                   draggable={false}
                 />

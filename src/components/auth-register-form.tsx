@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { avatarOptions, DEFAULT_AVATAR_ID } from "@/lib/avatar-options";
@@ -82,11 +83,13 @@ export function AuthRegisterForm({ redirectTo }: { redirectTo: string }) {
                   : "border-white/10 bg-slate-900 hover:border-white/20"
               }`}
             >
-              <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-white/15 bg-slate-900/70 text-base">
+              <div className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-white/15 bg-slate-900/70 text-base">
                 {option.imagePath ? (
-                  <img
+                  <Image
                     src={option.imagePath}
                     alt=""
+                    fill
+                    sizes="32px"
                     className="h-full w-full object-cover"
                     draggable={false}
                   />

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { UserAvatar } from "@/components/user-avatar";
 import type { SessionUser } from "@/lib/auth-session";
@@ -13,23 +13,6 @@ import {
   locales,
   type Locale,
 } from "@/lib/i18n";
-
-function subscribeHeaderScroll(onChange: () => void) {
-  if (typeof window === "undefined") {
-    return () => {};
-  }
-  const onScroll = () => onChange();
-  window.addEventListener("scroll", onScroll, { passive: true });
-  return () => window.removeEventListener("scroll", onScroll);
-}
-
-function headerScrollCompactSnapshot() {
-  return typeof window !== "undefined" && window.scrollY > 48;
-}
-
-function headerScrollCompactServerSnapshot() {
-  return false;
-}
 
 export function SiteHeader({
   locale,
@@ -46,11 +29,7 @@ export function SiteHeader({
   const [portalReady, setPortalReady] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const scrolled = useSyncExternalStore(
-    subscribeHeaderScroll,
-    headerScrollCompactSnapshot,
-    headerScrollCompactServerSnapshot,
-  );
+  const scrolled = false;
 
   const navigation = [
     { href: "", label: dict.nav.home, icon: "home" as const },
@@ -177,7 +156,7 @@ export function SiteHeader({
   return (
     <header
       suppressHydrationWarning
-      className={`sticky top-0 z-30 border-b border-white/8 backdrop-blur-2xl transition-all duration-300 ${scrolled ? "bg-[#08111f]/55" : "bg-[#08111f]/75"}`}
+      className={`z-30 border-b border-white/8 backdrop-blur-md transition-all duration-300 ${scrolled ? "bg-[#08111f]/55" : "bg-[#08111f]/75"}`}
     >
       <div className={`mx-auto flex max-w-7xl items-center justify-between px-4 transition-all duration-300 sm:px-6 lg:px-8 ${scrolled ? "py-1" : "py-2.5"}`}>
         {/* Logo */}
@@ -193,8 +172,8 @@ export function SiteHeader({
               alt="Grower logo"
               width={24}
               height={24}
+              sizes="24px"
               className={`object-contain transition-all duration-300 ${scrolled ? "h-[18px] w-[18px]" : "h-6 w-6"}`}
-              priority
             />
           </div>
           <div className="hidden min-[400px]:flex min-[400px]:flex-col min-[400px]:justify-center">
@@ -396,7 +375,7 @@ export function SiteHeader({
               aria-hidden
             />
             <aside
-              className="fixed right-0 top-0 z-[75] flex h-dvh w-[86%] max-w-sm flex-col overflow-y-auto overscroll-contain border-l border-white/10 bg-gradient-to-b from-[#0a1629]/98 to-[#08111f]/98 p-4 shadow-2xl shadow-black/60 backdrop-blur-xl"
+              className="fixed right-0 top-0 z-[75] flex h-dvh w-[86%] max-w-sm flex-col overflow-y-auto overscroll-contain border-l border-white/10 bg-gradient-to-b from-[#0a1629]/98 to-[#08111f]/98 p-4 shadow-2xl shadow-black/60 backdrop-blur-md"
               role="dialog"
               aria-modal="true"
               aria-label={ui.navigation}
