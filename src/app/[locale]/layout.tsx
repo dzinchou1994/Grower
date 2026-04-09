@@ -59,10 +59,14 @@ export default async function LocaleLayout({
   return (
     <div className="relative flex min-h-dvh flex-col">
       <HtmlLang locale={locale as Locale} />
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(132,204,22,0.2),_transparent_35%),linear-gradient(180deg,_#08111f,_#030712_55%,_#020617)]" />
-      {/* ambient haze blobs */}
-      <div className="animate-haze pointer-events-none absolute -left-32 top-[18%] -z-10 h-[420px] w-[420px] rounded-full bg-lime-500/[0.035] blur-[100px]" />
-      <div className="animate-haze pointer-events-none absolute -right-24 top-[55%] -z-10 h-[360px] w-[360px] rounded-full bg-emerald-400/[0.025] blur-[90px] [animation-delay:4s]" />
+      {/* Night haze: violet / magenta / teal — reads cleaner on mobile than flat lime wash */}
+      <div
+        className="absolute inset-0 -z-10 [background:radial-gradient(ellipse_100%_70%_at_50%_-12%,rgba(109,40,217,0.11),transparent_52%),radial-gradient(ellipse_75%_55%_at_105%_22%,rgba(192,38,211,0.06),transparent_48%),radial-gradient(ellipse_55%_50%_at_-8%_58%,rgba(45,212,191,0.045),transparent_50%),radial-gradient(ellipse_85%_38%_at_50%_102%,rgba(251,191,36,0.035),transparent_58%),linear-gradient(180deg,#030b14_0%,#08111f_44%,#020617_100%)]"
+        aria-hidden
+      />
+      {/* slow drifting blobs — purple haze, not lawn green */}
+      <div className="animate-haze pointer-events-none absolute -left-32 top-[18%] -z-10 h-[420px] w-[420px] rounded-full bg-violet-600/[0.045] blur-[100px]" />
+      <div className="animate-haze pointer-events-none absolute -right-24 top-[55%] -z-10 h-[360px] w-[360px] rounded-full bg-fuchsia-600/[0.032] blur-[90px] [animation-delay:4s]" />
       <AgeGate />
       <NavigationFeedback />
       <SiteHeader locale={locale as Locale} initialUser={sessionUser} />

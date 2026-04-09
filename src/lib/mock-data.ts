@@ -324,7 +324,7 @@ export const forumTopics: ForumTopic[] = [
   },
   {
     slug: "free-talk",
-    title: "ბირჟა 420",
+    title: "დაბოლილები 420",
     description: "თავისუფალი ჩატი, ისტორიები, ხუმრობები და ყოველდღიური 420 საუბრები საზოგადოების წევრებს შორის.",
     icon: "😶‍🌫️",
     threads: [
