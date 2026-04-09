@@ -19,7 +19,7 @@ function getCopy(locale: Locale) {
       login: "შესვლა",
       form: {
         emailPlaceholder: "ელ-ფოსტა",
-        usernamePlaceholder: "მომხმარებლის სახელი (ასოები, რიცხვები, ქვედატირე)",
+        usernamePlaceholder: "მომხმარებლის სახელი",
         passwordPlaceholder: "პაროლი (მინ. 8 სიმბოლო)",
         chooseProfileIcon: "აირჩიე პროფილის აიქონი",
         registrationFailed: "რეგისტრაცია ვერ მოხერხდა.",

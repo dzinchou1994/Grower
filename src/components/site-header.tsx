@@ -66,6 +66,7 @@ export function SiteHeader({
           theme: "თემა",
           light: "ღია",
           dark: "მუქი",
+          comingSoon: "მალე",
         }
       : locale === "ru"
         ? {
@@ -80,6 +81,7 @@ export function SiteHeader({
             theme: "Тема",
             light: "Светлая",
             dark: "Темная",
+            comingSoon: "Скоро",
           }
         : {
             navigation: "Navigation",
@@ -93,8 +95,10 @@ export function SiteHeader({
             theme: "Theme",
             light: "Light",
             dark: "Dark",
+            comingSoon: "Coming soon",
           };
   const brandSubtitle = dict.home.badge;
+  const themeSwitchDisabled = true;
 
   async function handleLogout() {
     setIsLoggingOut(true);
@@ -243,31 +247,34 @@ export function SiteHeader({
           <div className="flex items-center gap-px rounded-full border border-white/8 bg-white/[0.03] p-0.5 text-[10px] font-medium text-slate-500">
             <button
               type="button"
-              onClick={() => setTheme("dark")}
+              disabled={themeSwitchDisabled}
               className={`rounded-full px-2 py-1 transition ${
                 theme === "dark"
                   ? "bg-slate-900 text-slate-100 ring-1 ring-lime-400/35 shadow-sm shadow-lime-400/20"
                   : "text-slate-400 hover:bg-white/8 hover:text-white"
-              }`}
-              aria-label={ui.dark}
-              title={ui.dark}
+              } ${themeSwitchDisabled ? "cursor-not-allowed opacity-60 hover:bg-transparent hover:text-slate-400" : ""}`}
+              aria-label={`${ui.dark} — ${ui.comingSoon}`}
+              title={`${ui.dark} — ${ui.comingSoon}`}
             >
               🌙
             </button>
             <button
               type="button"
-              onClick={() => setTheme("light")}
+              disabled={themeSwitchDisabled}
               className={`rounded-full px-2 py-1 transition ${
                 theme === "light"
                   ? "bg-slate-900 text-slate-100 ring-1 ring-lime-400/35 shadow-sm shadow-lime-400/20"
                   : "text-slate-400 hover:bg-white/8 hover:text-white"
-              }`}
-              aria-label={ui.light}
-              title={ui.light}
+              } ${themeSwitchDisabled ? "cursor-not-allowed opacity-60 hover:bg-transparent hover:text-slate-400" : ""}`}
+              aria-label={`${ui.light} — ${ui.comingSoon}`}
+              title={`${ui.light} — ${ui.comingSoon}`}
             >
               ☀️
             </button>
           </div>
+          {themeSwitchDisabled ? (
+            <span className="text-[10px] text-slate-500">{ui.comingSoon}</span>
+          ) : null}
 
           <div className="h-5 w-px bg-white/8" />
 
@@ -481,27 +488,34 @@ export function SiteHeader({
                     <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-slate-900/50 p-1 text-xs text-slate-300">
                       <button
                         type="button"
-                        onClick={() => setTheme("dark")}
+                        disabled={themeSwitchDisabled}
                         className={`flex-1 rounded-full px-2 py-1.5 font-medium transition ${
                           theme === "dark"
                             ? "bg-slate-900 text-slate-100 ring-1 ring-lime-400/35"
                             : "hover:bg-white/10 hover:text-white"
-                        }`}
+                        } ${themeSwitchDisabled ? "cursor-not-allowed opacity-60 hover:bg-transparent hover:text-slate-300" : ""}`}
+                        aria-label={`${ui.dark} — ${ui.comingSoon}`}
+                        title={`${ui.dark} — ${ui.comingSoon}`}
                       >
                         🌙
                       </button>
                       <button
                         type="button"
-                        onClick={() => setTheme("light")}
+                        disabled={themeSwitchDisabled}
                         className={`flex-1 rounded-full px-2 py-1.5 font-medium transition ${
                           theme === "light"
                             ? "bg-slate-900 text-slate-100 ring-1 ring-lime-400/35"
                             : "hover:bg-white/10 hover:text-white"
-                        }`}
+                        } ${themeSwitchDisabled ? "cursor-not-allowed opacity-60 hover:bg-transparent hover:text-slate-300" : ""}`}
+                        aria-label={`${ui.light} — ${ui.comingSoon}`}
+                        title={`${ui.light} — ${ui.comingSoon}`}
                       >
                         ☀️
                       </button>
                     </div>
+                    {themeSwitchDisabled ? (
+                      <p className="mt-1 text-[10px] text-slate-500">{ui.comingSoon}</p>
+                    ) : null}
                   </div>
                 </div>
               </div>

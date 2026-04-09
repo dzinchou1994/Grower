@@ -116,12 +116,6 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
               {dict.home.primaryCta}
             </Link>
             <Link
-              href={getLocalizedPath(typedLocale, "/diaries")}
-              className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[12px] font-medium text-slate-200 transition hover:bg-white/[0.08] sm:px-4 sm:py-2 sm:text-sm"
-            >
-              {dict.home.secondaryCta}
-            </Link>
-            <Link
               href={getLocalizedPath(typedLocale, "/cannapedia")}
               className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[12px] font-medium text-slate-200 transition hover:border-lime-400/20 hover:bg-white/[0.08] hover:text-lime-200 sm:px-4 sm:py-2 sm:text-sm"
             >
