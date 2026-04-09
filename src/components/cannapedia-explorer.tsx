@@ -16,7 +16,6 @@ type ArticleItem = {
   category: { slug: string };
   title: Record<Locale, string>;
   excerpt: Record<Locale, string>;
-  content: Record<Locale, string[]>;
 };
 
 type Copy = {
@@ -72,9 +71,8 @@ function scoreArticle(input: {
 
   const title = normalize(input.article.title[input.locale]);
   const excerpt = normalize(input.article.excerpt[input.locale]);
-  const content = normalize(input.article.content[input.locale].join(" "));
   const categoryName = normalize(input.categoryName);
-  const text = `${title} ${excerpt} ${content} ${categoryName}`;
+  const text = `${title} ${excerpt} ${categoryName}`;
 
   let score = 0;
   const tokens = query.split(/\s+/).filter(Boolean);
@@ -88,7 +86,6 @@ function scoreArticle(input: {
   for (const token of tokens) {
     if (title.includes(token)) score += 12;
     if (excerpt.includes(token)) score += 7;
-    if (content.includes(token)) score += 4;
     if (categoryName.includes(token)) score += 6;
   }
 

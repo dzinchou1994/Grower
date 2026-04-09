@@ -112,8 +112,14 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
           {/* CTAs */}
           <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             <Link
-              href={getLocalizedPath(typedLocale, "/forum")}
+              href={getLocalizedPath(typedLocale, "/account")}
               className="inline-flex items-center justify-center rounded-lg bg-lime-400 px-3.5 py-1.5 text-[12px] font-semibold text-slate-950 transition hover:bg-lime-300 sm:px-4 sm:py-2 sm:text-sm"
+            >
+              {dict.home.joinCta}
+            </Link>
+            <Link
+              href={getLocalizedPath(typedLocale, "/forum")}
+              className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[12px] font-medium text-slate-200 transition hover:border-lime-400/20 hover:bg-white/[0.08] hover:text-lime-200 sm:px-4 sm:py-2 sm:text-sm"
             >
               {dict.home.primaryCta}
             </Link>
@@ -139,6 +145,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
             <div className="w-full max-w-xl lg:max-w-2xl">
               <div className="flex items-start">
                 <h2 className="inline-flex items-center gap-2 text-[15px] font-semibold leading-snug text-white sm:text-lg">
+                  {dict.home.manifesto.headline}
                   <svg
                     className="h-[1.05em] w-[1.05em] shrink-0 text-lime-200"
                     viewBox="0 0 24 24"
@@ -156,7 +163,6 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
                     />
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 20h6" />
                   </svg>
-                  {dict.home.manifesto.headline}
                 </h2>
               </div>
               <p className="mt-1.5 line-clamp-2 text-[11px] leading-relaxed text-slate-400 sm:text-[13px] sm:leading-6">

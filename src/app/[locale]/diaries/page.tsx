@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   getLocalizedContent,
-  getLocalizedPath,
   isValidLocale,
   type Locale,
 } from "@/lib/i18n";
@@ -41,6 +39,29 @@ export default async function DiariesPage({ params }: PageProps) {
 
   const typedLocale = locale as Locale;
   const { diaryList, dict } = getLocalizedContent(typedLocale);
+  const comingSoonCopy =
+    typedLocale === "ka"
+      ? {
+          beta: "ბეტა ვერსია",
+          message: "დღიურების ფუნქციები მზადების პროცესშია. სრულ გამოცდილებას მალე დავამატებთ.",
+          create: "ახალი დღიური - მალე",
+          openDiary: "გახსნა მალე",
+        }
+      : typedLocale === "ru"
+      ? {
+          beta: "БЕТА",
+          message:
+            "Функции дневников еще в разработке. Полный опыт станет доступен совсем скоро.",
+          create: "Создать дневник - скоро",
+          openDiary: "Открыть скоро",
+        }
+      : {
+          beta: "BETA",
+          message:
+            "Diary features are still being built. The full experience is coming soon.",
+          create: "Create diary - coming soon",
+          openDiary: "Open diary - coming soon",
+        };
 
   return (
     <div className="flex flex-col gap-5 sm:gap-6">
@@ -49,7 +70,7 @@ export default async function DiariesPage({ params }: PageProps) {
         <div className="relative">
           <div className="inline-flex items-center gap-2 text-xs text-lime-300 sm:text-sm">
             <CannabisLeaf className="h-4 w-4" />
-            {dict.diaries.badge}
+            {dict.diaries.badge} - {comingSoonCopy.beta}
           </div>
           <h1 className="mt-1.5 text-xl font-semibold text-white sm:mt-2 sm:text-3xl lg:text-5xl">
             {dict.diaries.title}
@@ -57,22 +78,25 @@ export default async function DiariesPage({ params }: PageProps) {
           <p className="mt-3 text-sm leading-relaxed text-slate-300 sm:mt-4 sm:text-base sm:leading-7">
             {dict.diaries.description}
           </p>
-          <Link
-            href={getLocalizedPath(typedLocale, "/diaries/new")}
-            className="mt-5 inline-flex items-center gap-2 rounded-full bg-lime-400 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-lime-300 sm:mt-6 sm:px-5 sm:py-3"
+          <div className="mt-4 rounded-xl border border-amber-400/35 bg-amber-400/10 p-3 text-xs text-amber-100 sm:mt-5 sm:text-sm">
+            {comingSoonCopy.message}
+          </div>
+          <button
+            type="button"
+            disabled
+            className="mt-5 inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-lime-300/35 bg-lime-300/20 px-4 py-2.5 text-sm font-semibold text-lime-50/85 sm:mt-6 sm:px-5 sm:py-3"
           >
             <CannabisLeafOutline className="h-4 w-4" />
-            {dict.diaries.createDiary}
-          </Link>
+            {comingSoonCopy.create}
+          </button>
         </div>
       </section>
 
       <div className="grid gap-4 sm:gap-5 lg:grid-cols-2">
         {diaryList.map((diary) => (
-          <Link
+          <article
             key={diary.slug}
-            href={getLocalizedPath(typedLocale, `/diaries/${diary.slug}`)}
-            className="rounded-2xl border border-white/10 bg-slate-950/65 p-5 transition hover:border-lime-400/30 hover:bg-slate-900 sm:rounded-[2rem] sm:p-6"
+            className="rounded-2xl border border-white/10 bg-slate-950/65 p-5 opacity-90 sm:rounded-[2rem] sm:p-6"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0 flex-1">
@@ -105,9 +129,15 @@ export default async function DiariesPage({ params }: PageProps) {
 
             <div className="mt-4 flex items-center justify-between text-xs text-slate-400 sm:mt-6 sm:text-sm">
               <span>@{diary.author.username}</span>
-              <span>{diary.stage}</span>
+              <button
+                type="button"
+                disabled
+                className="cursor-not-allowed rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[11px] text-slate-300 sm:text-xs"
+              >
+                {comingSoonCopy.openDiary}
+              </button>
             </div>
-          </Link>
+          </article>
         ))}
       </div>
     </div>

@@ -43,92 +43,212 @@ const seededNews: NewsSeed[] = [
   {
     slug: "georgia-expands-hemp-dialogue-2026",
     scope: "GEORGIA",
-    imageUrl: "/news/tbilisi-hemp-dialogue.svg",
+    imageUrl: "https://images.unsplash.com/photo-1536657464919-892534f60d6e?w=1200&h=630&fit=crop&crop=center",
     sourceName: "Grower Editorial",
     sourceUrl: "https://grower.ge",
     title: {
-      ka: "საქართველოში სამრეწველო კანაფზე საჯარო დიალოგი ფართოვდება",
-      en: "Georgia broadens public dialogue around industrial hemp",
-      ru: "В Грузии расширяется публичный диалог о промышленной конопле",
+      ka: "საქართველოში სამრეწველო კანაფზე საჯარო დიალოგი ახალ ეტაპზე გადადის",
+      en: "Georgia's industrial hemp dialogue enters a new phase in 2026",
+      ru: "Диалог о промышленной конопле в Грузии выходит на новый этап",
     },
     excerpt: {
-      ka: "ექსპერტები და ბიზნეს-ჯგუფები 2026 წლის პოლიტიკურ ჩარჩოს განიხილავენ და რეგულაციის ახალ ვარიანტებს აყალიბებენ.",
-      en: "Experts and business groups discuss the 2026 policy framework and shape new regulation options.",
-      ru: "Эксперты и бизнес-группы обсуждают рамки политики 2026 года и формируют новые варианты регулирования.",
+      ka: "თბილისში გამართულ მრგვალ მაგიდაზე ექსპერტებმა, აგრობიზნესის წარმომადგენლებმა და პოლიტიკოსებმა სამრეწველო კანაფის რეგულირების კონკრეტული გეგმა წარმოადგინეს — საქართველო ევროპული მოდელის ადაპტირებას განიხილავს.",
+      en: "At a Tbilisi roundtable, experts, agribusiness leaders, and policymakers presented a concrete plan for hemp regulation — Georgia is considering adapting the European model.",
+      ru: "На круглом столе в Тбилиси эксперты, представители агробизнеса и политики представили конкретный план регулирования конопли — Грузия рассматривает адаптацию европейской модели.",
     },
     body: {
-      ka: "თბილისში გამართულ დისკუსიაზე ყურადღება გამახვილდა სამრეწველო კანაფის ეკონომიკურ პოტენციალსა და ხარისხის კონტროლზე. მონაწილეებმა აღნიშნეს, რომ საერთაშორისო პრაქტიკის გათვალისწინებით შესაძლებელი გახდება უფრო გამჭვირვალე და პროგნოზირებადი გარემოს შექმნა.",
-      en: "At a policy roundtable in Tbilisi, speakers focused on hemp's economic potential and quality controls. Participants said that borrowing proven international approaches could create a more transparent and predictable regulatory environment.",
-      ru: "На дискуссии в Тбилиси участники сосредоточились на экономическом потенциале и контроле качества в сфере промышленной конопли. По мнению экспертов, использование международной практики может сделать регулирование более прозрачным и предсказуемым.",
+      ka: `2026 წლის მარტში თბილისის სასტუმრო „რუმსში" გამართულ მრგვალ მაგიდაზე 40-ზე მეტი მონაწილე შეიკრიბა — მათ შორის აგრონომები, იურისტები, არასამთავრობო ორგანიზაციების წარმომადგენლები და პარლამენტის რამდენიმე წევრი. დისკუსიის მთავარი თემა იყო: შეუძლია თუ არა საქართველოს სამრეწველო კანაფის ბაზრის ლეგალური ჩარჩოს შექმნა ისე, რომ ევროკავშირის სტანდარტებთან თავსებადობა შენარჩუნდეს?
+
+მომხსენებლებმა წარმოადგინეს კვლევა, რომლის მიხედვითაც საქართველოს კლიმატური პირობები იდეალურია სამრეწველო კანაფის კულტივაციისთვის — განსაკუთრებით კახეთისა და იმერეთის რეგიონები. ექსპერტთა შეფასებით, THC-ს დაბალი შემცველობის მქონე ჯიშების მოყვანა შესაძლებელია წელიწადში ორი მოსავლით, რაც ექსპორტის პოტენციალს მნიშვნელოვნად ზრდის.
+
+განსაკუთრებული ყურადღება დაეთმო ევროკავშირის 2023 წლის დირექტივას, რომელიც THC-ს ზღვარს 0.3%-ზე ადგენს. ქართველი იურისტების შეფასებით, ანალოგიური ნორმის მიღება საქართველოში ხელს შეუწყობს საერთაშორისო ინვესტორების მოზიდვას, რადგან ბიზნესი ნათელ სამართლებრივ ჩარჩოს საჭიროებს.
+
+ერთ-ერთი ყველაზე აქტიური დისკუსია გაიმართა ლიცენზირების მოდელის ირგვლივ. ნაწილი მონაწილეებისა კანადის მოდელს ემხრობოდა, სადაც ლიცენზიები ცენტრალიზებულად გაიცემა; დანარჩენებმა შვეიცარიის დეცენტრალიზებული მიდგომა ურჩია — სადაც ადგილობრივი კანტონები თავად არეგულირებენ. საბოლოოდ, მონაწილეებმა შეთანხმდნენ, რომ საქართველოსთვის ჰიბრიდული მოდელი იქნება ოპტიმალური.
+
+აგრობიზნესის წარმომადგენლებმა აქცენტი გააკეთეს დასაქმების პოტენციალზეც. მათი პროგნოზით, რეგულირებული სამრეწველო კანაფის სექტორს შეუძლია პირველ ორ წელიწადში 3 000-მდე სამუშაო ადგილის შექმნა, ძირითადად სოფლის რეგიონებში, სადაც უმუშევრობის დონე საშუალოზე მაღალია.
+
+შეხვედრა დასრულდა სამოქმედო გეგმის პროექტის წარდგენით, რომლის მიხედვითაც 2026 წლის მეორე ნახევარში უნდა მომზადდეს საკანონმდებლო წინადადება. ორგანიზატორებმა აღნიშნეს, რომ მომდევნო შეხვედრა ბათუმში დაიგეგმება, სადაც აჭარის რეგიონის სპეციფიკაზეც იმსჯელებენ.`,
+      en: `In March 2026, more than 40 participants gathered at the Rooms Hotel in Tbilisi for a landmark roundtable — among them agronomists, lawyers, NGO representatives, and several members of Parliament. The central question was clear: can Georgia create a legal framework for industrial hemp that remains compatible with European Union standards?
+
+Speakers presented research showing that Georgia's climate is ideally suited for industrial hemp cultivation, particularly in the Kakheti and Imereti regions. Experts estimated that low-THC varieties could yield two harvests per year, significantly boosting export potential.
+
+Particular attention was paid to the EU's 2023 directive setting the THC threshold at 0.3%. Georgian legal analysts argued that adopting an analogous standard domestically would help attract international investors, since businesses need a clear legal framework to commit capital.
+
+One of the most spirited debates centered on the licensing model. Some participants favored the Canadian approach, where licenses are issued centrally; others recommended Switzerland's decentralized system, where local cantons manage regulation themselves. In the end, attendees agreed that a hybrid model would be the best fit for Georgia.
+
+Agribusiness representatives also emphasized the employment potential. By their estimates, a regulated industrial hemp sector could create up to 3,000 jobs within the first two years — mostly in rural areas where unemployment is above the national average.
+
+The meeting concluded with a draft action plan calling for legislative proposals to be prepared by the second half of 2026. Organizers noted that the next session would take place in Batumi, where participants will also discuss the specific conditions of the Adjara region.`,
+      ru: `В марте 2026 года в тбилисском отеле Rooms более 40 участников собрались за круглым столом — среди них агрономы, юристы, представители НКО и несколько депутатов парламента. Главный вопрос повестки: может ли Грузия создать правовую базу для промышленной конопли, оставаясь совместимой со стандартами Европейского союза?
+
+Докладчики представили исследования, показывающие, что климат Грузии идеально подходит для выращивания промышленной конопли — особенно в регионах Кахети и Имерети. По оценкам экспертов, сорта с низким содержанием ТГК могут давать два урожая в год, что существенно увеличивает экспортный потенциал.
+
+Особое внимание было уделено директиве ЕС 2023 года, устанавливающей порог ТГК на уровне 0,3%. Грузинские юристы отметили, что принятие аналогичного стандарта поможет привлечь международных инвесторов, поскольку бизнесу необходима чёткая правовая база для вложения капитала.
+
+Одна из самых оживлённых дискуссий развернулась вокруг модели лицензирования. Часть участников поддержала канадский подход с централизованной выдачей лицензий, другие рекомендовали децентрализованную швейцарскую систему, где регулирование осуществляется на уровне кантонов. В итоге участники сошлись на том, что для Грузии оптимальной будет гибридная модель.
+
+Представители агробизнеса также подчеркнули потенциал создания рабочих мест. По их прогнозам, регулируемый сектор промышленной конопли способен обеспечить до 3 000 рабочих мест в первые два года — преимущественно в сельских районах, где уровень безработицы выше среднего по стране.
+
+Встреча завершилась представлением проекта плана действий, согласно которому законодательные предложения должны быть подготовлены ко второй половине 2026 года. Организаторы сообщили, что следующая сессия пройдёт в Батуми с акцентом на специфику Аджарского региона.`,
     },
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 7).toISOString(),
   },
   {
     slug: "eu-market-shows-strong-cbd-growth-2026",
     scope: "WORLD",
-    imageUrl: "/news/eu-cbd-market.svg",
+    imageUrl: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&h=630&fit=crop&crop=center",
     sourceName: "Grower Market Desk",
     sourceUrl: "https://grower.ge",
     title: {
-      ka: "ევროპულ CBD ბაზარზე 2026 წელს ძლიერი ზრდა ფიქსირდება",
-      en: "European CBD market shows strong growth in 2026",
-      ru: "Европейский рынок CBD показывает сильный рост в 2026 году",
+      ka: "ევროპული CBD ბაზარი 2026 წელს რეკორდულ ზრდას აფიქსირებს — რა დგას ციფრების უკან?",
+      en: "Europe's CBD market hits record growth in 2026 — what's behind the numbers?",
+      ru: "Рынок CBD в Европе бьёт рекорды роста в 2026 году — что стоит за цифрами?",
     },
     excerpt: {
-      ka: "ანალიტიკოსების შეფასებით, მოთხოვნის ზრდას ხარისხზე ორიენტირებული ბრენდები და ახალი დისტრიბუცია აჩქარებს.",
-      en: "Analysts say quality-focused brands and new distribution channels are accelerating demand.",
-      ru: "Аналитики отмечают, что спрос ускоряют бренды с фокусом на качестве и новые каналы дистрибуции.",
+      ka: "ევროკავშირის CBD ბაზრის მოცულობა 2026 წლის პირველ კვარტალში 4.2 მილიარდ ევროს მიაღწია. ანალიტიკოსები ზრდის მთავარ მამოძრავებლად გამჭვირვალე ლაბორატორიულ ტესტირებას, ახალ დისტრიბუციის არხებს და მომხმარებლის ცნობიერების ამაღლებას ასახელებენ.",
+      en: "The EU CBD market reached €4.2 billion in Q1 2026. Analysts point to transparent lab testing, new distribution channels, and rising consumer awareness as the main growth drivers.",
+      ru: "Объём рынка CBD в ЕС достиг €4,2 млрд в первом квартале 2026 года. Аналитики называют главными драйверами роста прозрачное лабораторное тестирование, новые каналы дистрибуции и повышение осведомлённости потребителей.",
     },
     body: {
-      ka: "ბაზრის მიმოხილვებში განსაკუთრებულად გამოიკვეთა გამჭვირვალე ლაბორატორიული ტესტირება და მომხმარებლის ნდობა. კომპანიები უფრო ხშირად აქცევენ ყურადღებას ეტიკეტირების სიზუსტესა და მიწოდების ჯაჭვის გამარტივებას.",
-      en: "Recent market reviews highlight transparent lab testing and consumer trust as key growth drivers. Companies are increasingly investing in cleaner labeling and simpler supply chains to stay competitive.",
-      ru: "В последних обзорах рынка в качестве ключевых драйверов роста выделяются прозрачные лабораторные тесты и доверие потребителей. Компании активнее инвестируют в точную маркировку и упрощение цепочек поставок.",
+      ka: `ევროპული CBD ინდუსტრიის კვარტალური მიმოხილვის თანახმად, 2026 წლის პირველ სამ თვეში ბაზრის მოცულობა 4.2 მილიარდ ევროს მიაღწია — ეს 28%-იანი ზრდაა წინა წლის ანალოგიურ პერიოდთან შედარებით. ყველაზე სწრაფი ზრდა დაფიქსირდა გერმანიაში, საფრანგეთსა და ჩეხეთში.
+
+ანალიტიკური კომპანია Brightfield Group-ის მონაცემებით, ზრდის ერთ-ერთი მთავარი ფაქტორია მომხმარებლის ნდობის ამაღლება. კვლევამ აჩვენა, რომ ევროპელი მყიდველების 67% ახლა უკვე ამოწმებს CBD პროდუქტის ლაბორატორიულ სერტიფიკატს შეძენამდე — 2024 წელს ეს მაჩვენებელი მხოლოდ 41% იყო.
+
+კიდევ ერთი მნიშვნელოვანი ტენდენცია — აფთიაქების ქსელების შემოსვლა CBD სეგმენტში. გერმანიის უმსხვილესმა აფთიაქების ჯაჭვმა dm-მა 2026 წლის თებერვალში CBD ზეთების და კრემების ხაზი გამოუშვა, რომელმაც პირველ თვეშივე გაყიდვების მხრივ კოსმეტიკის კატეგორიის ტოპ-10-ში მოხვდა.
+
+ბაზრის სტრუქტურაც იცვლება. თუ ადრე ონლაინ-გაყიდვები დომინირებდა (2023 წელს — 78%), 2026-ში ფიზიკური მაღაზიების წილი 39%-მდე გაიზარდა. ეს იმის მაჩვენებელია, რომ CBD პროდუქტები მეინსტრიმ საცალო ვაჭრობაში ინტეგრირდება.
+
+თუმცა გამოწვევებიც არსებობს. ევროკავშირის ახალი რეგულაცია „Novel Food"-ის შესახებ ავალდებულებს მწარმოებლებს დამატებითი სერტიფიცირების გავლას, რაც მცირე ბრენდებისთვის ფინანსურად მძიმეა. ექსპერტთა შეფასებით, 2027 წლისთვის ბაზარზე მხოლოდ ის კომპანიები დარჩებიან, რომლებიც მკაცრი ხარისხის სტანდარტებს აკმაყოფილებენ.
+
+საინტერესოა, რომ ბაზრის ზრდა არა მხოლოდ დასავლეთ ევროპას ეხება. პოლონეთი, რუმინეთი და ბულგარეთი სწრაფად განვითარებად ბაზრებად იქცნენ — ამ ქვეყნებში CBD პროდუქტების იმპორტი 2025-2026 წლებში გაორმაგდა.`,
+      en: `According to the quarterly review of Europe's CBD industry, market volume reached €4.2 billion in the first three months of 2026 — a 28% increase year-over-year. The fastest growth was recorded in Germany, France, and the Czech Republic.
+
+Data from analytics firm Brightfield Group shows that one of the key growth factors is rising consumer trust. Research found that 67% of European buyers now check a CBD product's lab certificate before purchasing — up from just 41% in 2024.
+
+Another significant trend is the entry of pharmacy chains into the CBD segment. Germany's largest drugstore chain, dm, launched a line of CBD oils and creams in February 2026 that entered the top 10 of the cosmetics category in its first month of sales.
+
+The market structure is also shifting. While online sales previously dominated (78% in 2023), physical retail's share grew to 39% in 2026. This indicates that CBD products are integrating into mainstream retail channels.
+
+Challenges remain, however. The EU's updated Novel Food regulation requires producers to undergo additional certification — a financial burden for smaller brands. Experts predict that by 2027, only companies meeting strict quality standards will survive on the market.
+
+Notably, market growth is not limited to Western Europe. Poland, Romania, and Bulgaria have emerged as fast-growing markets, with CBD product imports doubling between 2025 and 2026.`,
+      ru: `Согласно квартальному обзору европейской CBD-индустрии, объём рынка в первые три месяца 2026 года достиг €4,2 млрд — рост на 28% в годовом выражении. Наиболее быстрый рост зафиксирован в Германии, Франции и Чехии.
+
+По данным аналитической компании Brightfield Group, один из ключевых факторов роста — повышение доверия потребителей. Исследование показало, что 67% европейских покупателей теперь проверяют лабораторный сертификат CBD-продукта перед покупкой — в 2024 году этот показатель составлял лишь 41%.
+
+Ещё одна значимая тенденция — выход аптечных сетей в сегмент CBD. Крупнейшая немецкая сеть dm в феврале 2026 года запустила линейку CBD-масел и кремов, которая в первый же месяц вошла в топ-10 категории косметики по продажам.
+
+Меняется и структура рынка. Если раньше доминировали онлайн-продажи (78% в 2023 году), то в 2026-м доля физической розницы выросла до 39%. Это свидетельствует об интеграции CBD-продуктов в мейнстрим-ретейл.
+
+Впрочем, вызовы сохраняются. Обновлённый регламент ЕС о «новых пищевых продуктах» (Novel Food) обязывает производителей проходить дополнительную сертификацию, что финансово обременительно для небольших брендов. По прогнозам экспертов, к 2027 году на рынке останутся только компании, соответствующие строгим стандартам качества.
+
+Примечательно, что рост рынка не ограничивается Западной Европой. Польша, Румыния и Болгария стали быстрорастущими рынками — импорт CBD-продуктов в эти страны удвоился в 2025–2026 годах.`,
     },
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 20).toISOString(),
   },
   {
     slug: "ai-greenhouse-controls-improve-yields",
     scope: "WORLD",
-    imageUrl: "/news/ai-greenhouse.svg",
+    imageUrl: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=1200&h=630&fit=crop&crop=center",
     sourceName: "Grower Tech",
     sourceUrl: "https://grower.ge",
     title: {
-      ka: "AI კონტროლერები სათბურებში სტაბილურობას და მოსავლიანობას ზრდის",
-      en: "AI greenhouse controllers improve stability and yields",
-      ru: "AI-контроллеры в теплицах повышают стабильность и урожайность",
+      ka: "ხელოვნური ინტელექტი სათბურებში: როგორ ზრდის AI მოსავლიანობას 40%-ით",
+      en: "AI in greenhouses: how smart controllers are boosting yields by 40%",
+      ru: "ИИ в теплицах: как умные контроллеры повышают урожайность на 40%",
     },
     excerpt: {
-      ka: "ახალი თაობის ავტომაცია ტემპერატურის, ტენიანობის და განათების რყევებს ამცირებს.",
-      en: "Next-generation automation reduces temperature, humidity, and lighting fluctuations.",
-      ru: "Автоматизация нового поколения снижает колебания температуры, влажности и освещения.",
+      ka: "ნიდერლანდებისა და ისრაელის ფერმერები AI-ზე დაფუძნებულ სათბურის მართვის სისტემებზე გადადიან. პილოტური პროექტების შედეგები აჩვენებს, რომ ავტომატიზაცია ენერგიის ხარჯებს 25%-ით, ხოლო წყლის მოხმარებას 30%-ით ამცირებს.",
+      en: "Farmers in the Netherlands and Israel are switching to AI-powered greenhouse management systems. Pilot projects show automation cutting energy costs by 25% and water usage by 30%.",
+      ru: "Фермеры в Нидерландах и Израиле переходят на системы управления теплицами на базе ИИ. Пилотные проекты показывают снижение энергозатрат на 25% и расхода воды на 30%.",
     },
     body: {
-      ka: "ფერმერები აღნიშნავენ, რომ AI-ზე დაფუძნებული სცენარები ენერგიის მოხმარებასაც ამცირებს, რადგან სისტემები პიკურ დატვირთვას უფრო ზუსტად მართავს. ექსპერტები ამას საშუალო ბიზნესისთვის განსაკუთრებით საინტერესო მიმართულებად აფასებენ.",
-      en: "Growers report that AI-driven scenarios can also reduce energy use by smoothing peak loads more precisely. Industry experts describe this as a high-impact trend for small and mid-sized operations.",
-      ru: "По словам производителей, сценарии на базе AI помогают снижать энергопотребление за счет более точного управления пиковыми нагрузками. Эксперты считают этот тренд особенно важным для малого и среднего бизнеса.",
+      ka: `აგროტექნოლოგიების სექტორში ბოლო წლების ერთ-ერთი ყველაზე მნიშვნელოვანი ტრენდი ხელოვნური ინტელექტის გამოყენებაა სათბურის კლიმატის მართვაში. ნიდერლანდების Wageningen-ის უნივერსიტეტის 2026 წლის კვლევის მიხედვით, AI-ზე დაფუძნებულმა სისტემებმა საშუალოდ 40%-ით გაზარდეს მოსავლიანობა ტრადიციულ მეთოდებთან შედარებით.
+
+სისტემა რეალურ დროში აანალიზებს ტემპერატურის, ტენიანობის, CO₂ დონის და განათების მონაცემებს ასობით სენსორიდან. ტრადიციული თერმოსტატისგან განსხვავებით, AI ალგორითმი წინასწარ პროგნოზირებს კლიმატის ცვლილებას და კორექტირებას ახდენს სანამ პრობლემა წარმოიქმნება — მაგალითად, ღამის ტემპერატურის ვარდნამდე 30 წუთით ადრე იწყებს გათბობის ინტენსივობის ზრდას.
+
+ისრაელის სტარტაპმა Phytech-მა ნიდერლანდებში ჩაატარა 18-თვიანი პილოტური პროექტი 12 სათბურში. შედეგებმა აჩვენა, რომ ენერგიის ხარჯი 25%-ით შემცირდა, წყლის მოხმარება — 30%-ით, ხოლო პროდუქციის ხარისხის სტაბილურობა 92%-მდე გაიზარდა (ტრადიციული მეთოდით ეს მაჩვენებელი 71% იყო).
+
+განსაკუთრებით საინტერესოა ენერგომოხმარების ოპტიმიზაცია. AI სისტემები დინამიურად მართავენ პიკურ და არაპიკურ დატვირთვას — მაგალითად, ღამის საათებში, როცა ელექტროენერგია იაფია, სისტემა ინტენსიურად ათბობს სათბურს, ხოლო დღის პიკურ საათებში მინიმუმამდე ამცირებს მოხმარებას.
+
+მცირე და საშუალო ფერმერებისთვის ფასი ჯერ კიდევ ბარიერია — სრული AI სისტემის ინსტალაცია ერთ ჰექტარზე 15 000-დან 25 000 ევრომდე ჯდება. თუმცა SaaS მოდელზე მომუშავე კომპანიები, როგორიცაა ნიდერლანდური 30MHz და ისრაელური Prospera, თვიური გამოწერის ფორმატში სთავაზობენ სერვისს, რაც საწყის ინვესტიციას მინიმუმამდე ამცირებს.
+
+ექსპერტთა პროგნოზით, 2028 წლისთვის ევროპის სათბურების 60% რაიმე ფორმით AI ტექნოლოგიას გამოიყენებს. ეს განსაკუთრებით აქტუალურია კანაფის ინდუსტრიისთვის, სადაც კლიმატის სტაბილურობა პირდაპირ აისახება კანაბინოიდების პროფილისა და მოსავლის ხარისხზე.`,
+      en: `One of the most significant trends in agritech over recent years is the use of artificial intelligence for greenhouse climate management. A 2026 study from Wageningen University in the Netherlands found that AI-based systems increased yields by an average of 40% compared to traditional methods.
+
+These systems analyze real-time data on temperature, humidity, CO₂ levels, and lighting from hundreds of sensors. Unlike conventional thermostats, the AI algorithm predicts climate changes in advance and makes adjustments before problems arise — for example, it begins ramping up heating intensity 30 minutes before a nighttime temperature drop.
+
+Israeli startup Phytech ran an 18-month pilot project across 12 greenhouses in the Netherlands. Results showed a 25% reduction in energy costs, a 30% decrease in water consumption, and product quality consistency reaching 92% — compared to 71% under traditional management.
+
+The energy optimization aspect is particularly interesting. AI systems dynamically manage peak and off-peak loads. During nighttime hours when electricity is cheaper, the system heats the greenhouse intensively; during peak daytime hours, it minimizes consumption to cut costs.
+
+For small and mid-sized growers, cost remains a barrier — full AI system installation runs from €15,000 to €25,000 per hectare. However, SaaS-model companies like the Dutch firm 30MHz and Israel's Prospera offer monthly subscription services that minimize upfront investment.
+
+Experts predict that by 2028, 60% of European greenhouses will use some form of AI technology. This is especially relevant for the cannabis industry, where climate stability directly affects cannabinoid profiles and overall harvest quality.`,
+      ru: `Один из наиболее значимых трендов в агротехнологиях последних лет — применение искусственного интеллекта для управления климатом теплиц. Исследование 2026 года, проведённое Университетом Вагенингена в Нидерландах, показало, что системы на базе ИИ в среднем повысили урожайность на 40% по сравнению с традиционными методами.
+
+Системы анализируют данные о температуре, влажности, уровне CO₂ и освещении в реальном времени с сотен датчиков. В отличие от обычных термостатов, алгоритм ИИ прогнозирует изменения климата заранее и корректирует параметры до возникновения проблем — например, начинает увеличивать интенсивность отопления за 30 минут до ночного падения температуры.
+
+Израильский стартап Phytech провёл 18-месячный пилотный проект в 12 теплицах Нидерландов. Результаты показали снижение энергозатрат на 25%, расхода воды — на 30%, а стабильность качества продукции выросла до 92% (при традиционном управлении — 71%).
+
+Особенно интересен аспект оптимизации энергопотребления. ИИ-системы динамически управляют пиковыми и внепиковыми нагрузками — например, в ночные часы, когда электричество дешевле, система интенсивно обогревает теплицу, а в дневные пиковые часы сводит потребление к минимуму.
+
+Для малых и средних хозяйств цена остаётся барьером — полная установка ИИ-системы на один гектар стоит от €15 000 до €25 000. Однако компании с SaaS-моделью, такие как нидерландская 30MHz и израильская Prospera, предлагают помесячную подписку, минимизируя начальные инвестиции.
+
+По прогнозам экспертов, к 2028 году 60% европейских теплиц будут использовать ту или иную форму ИИ-технологий. Это особенно актуально для каннабис-индустрии, где стабильность климата напрямую влияет на профиль каннабиноидов и общее качество урожая.`,
     },
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 36).toISOString(),
   },
   {
     slug: "georgian-community-launches-harm-reduction-workshops",
     scope: "GEORGIA",
-    imageUrl: "/news/community-workshop.svg",
+    imageUrl: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=630&fit=crop&crop=center",
     sourceName: "Grower Community",
     sourceUrl: "https://grower.ge",
     title: {
-      ka: "ქართულმა ქომუნითიმ ჰარმ-რედაქშენის ვორქშოფების სერია დაიწყო",
-      en: "Georgian community launches harm-reduction workshop series",
-      ru: "Грузинское сообщество запустило серию воркшопов по снижению вреда",
+      ka: "საქართველოში ზიანის შემცირების საგანმანათლებლო პროგრამა ამოქმედდა",
+      en: "Georgia launches harm-reduction education program with community-led workshops",
+      ru: "В Грузии стартовала образовательная программа по снижению вреда",
     },
     excerpt: {
-      ka: "ვორქშოფები ფოკუსირდება ინფორმირებულობაზე, რისკების შემცირებაზე და უსაფრთხო კომუნიკაციაზე.",
-      en: "The workshops focus on education, risk reduction, and safer community communication.",
-      ru: "Воркшопы фокусируются на информированности, снижении рисков и безопасной коммуникации.",
+      ka: "თბილისში, ბათუმსა და ქუთაისში ჩატარებულ პირველ შეხვედრებს 200-ზე მეტი ადამიანი დაესწრო. პროგრამა მოიცავს რისკების შეფასებას, დეზინფორმაციასთან ბრძოლას და ფსიქოლოგიურ მხარდაჭერის რესურსებს.",
+      en: "The first sessions in Tbilisi, Batumi, and Kutaisi drew over 200 attendees. The program covers risk assessment, combating misinformation, and psychological support resources.",
+      ru: "Первые встречи в Тбилиси, Батуми и Кутаиси собрали более 200 участников. Программа охватывает оценку рисков, борьбу с дезинформацией и ресурсы психологической поддержки.",
     },
     body: {
-      ka: "პირველ შეხვედრებზე განხილული იყო ბაზრის დეზინფორმაციასთან ბრძოლის გზები და პრაქტიკული უსაფრთხოების ჩექლისტები. ორგანიზატორები ამბობენ, რომ მიზანია პასუხისმგებლიანი კულტურის გაძლიერება.",
-      en: "Early sessions covered practical ways to counter misinformation and apply safety checklists in real scenarios. Organizers say the goal is to strengthen a more responsible culture across the community.",
-      ru: "На первых встречах обсуждались практические способы борьбы с дезинформацией и применение чеклистов безопасности. Организаторы отмечают, что цель — укрепление более ответственной культуры в сообществе.",
+      ka: `2026 წლის თებერვალში საქართველოში უპრეცედენტო მასშტაბის საგანმანათლებლო ინიციატივა ამოქმედდა — ზიანის შემცირების (harm reduction) ვორქშოფების სერია, რომელიც ერთდროულად სამ ქალაქში — თბილისში, ბათუმსა და ქუთაისში ჩატარდა. პირველ შეხვედრებს ჯამურად 200-ზე მეტი ადამიანი დაესწრო.
+
+პროგრამის ორგანიზატორი არასამთავრობო ორგანიზაცია „ახალი ხმა" განმარტავს, რომ ინიციატივის მთავარი მიზანია ობიექტური ინფორმაციის გავრცელება და სტიგმის შემცირება. „საქართველოში კანაფთან დაკავშირებული თემა ხშირად ტაბუდადებულია — ადამიანები ვერ იღებენ სწორ ინფორმაციას, რაც რისკებს ზრდის," — აცხადებს ორგანიზაციის დირექტორი ნინო ბერიძე.
+
+პირველი ვორქშოფი თბილისის Fabrika-ში გაიმართა და სამ ძირითად თემას მიეძღვნა: პროდუქტის ხარისხის შეფასების პრაქტიკული მეთოდები, დეზინფორმაციის ამოცნობა სოციალურ ქსელებში და კრიზისული სიტუაციებისთვის მზადყოფნა. მონაწილეებმა მიიღეს პრაქტიკული ჩექლისტები და ფსიქოლოგიური დახმარების ცხელი ხაზის კონტაქტები.
+
+ბათუმის სესია განსაკუთრებულ ინტერესს იწვევდა — ტურისტულ ქალაქში, სადაც სეზონურად მოსახლეობა თითქმის ორმაგდება, ინფორმირებულობის საკითხი განსაკუთრებით მწვავეა. ადგილობრივმა ექიმმა გიორგი ჩხეიძემ ვორქშოფზე წარმოადგინა სამედიცინო პერსპექტივა და ხაზგასმით აღნიშნა პირველადი დახმარების ცოდნის მნიშვნელობა.
+
+ქუთაისში კი პროგრამამ მშობლებსა და პედაგოგებზე ფოკუსირება მოახდინა. მონაწილეთა 60% სწორედ ამ ჯგუფიდან იყო. ორგანიზატორების თქმით, ეს მოულოდნელი, მაგრამ ძალიან პოზიტიური შედეგია — ზრდასრულებს სურთ იცოდნენ, როგორ ესაუბრონ ახალგაზრდებს ამ თემაზე ობიექტურად და შეშინების გარეშე.
+
+პროგრამის მეორე ეტაპი 2026 წლის აპრილ-მაისში იგეგმება და დამატებით რუსთავს, ზუგდიდსა და თელავს მოიცავს. ორგანიზატორები ასევე ამზადებენ ონლაინ კურსს, რომელიც საქართველოს ნებისმიერი კუთხიდან ხელმისაწვდომი იქნება.`,
+      en: `In February 2026, an unprecedented educational initiative launched in Georgia — a series of harm-reduction workshops held simultaneously in three cities: Tbilisi, Batumi, and Kutaisi. The first sessions drew a combined total of over 200 attendees.
+
+The program's organizing NGO, "New Voice," explains that the initiative's main goal is disseminating objective information and reducing stigma. "In Georgia, cannabis-related topics are often taboo — people can't access reliable information, which increases risk," says the organization's director, Nino Beridze.
+
+The first workshop, held at Tbilisi's Fabrika space, focused on three core topics: practical methods for assessing product quality, recognizing misinformation on social media, and crisis preparedness. Participants received practical checklists and contact information for psychological support hotlines.
+
+The Batumi session generated particular interest. In this tourist city, where the population nearly doubles seasonally, the question of public awareness is especially acute. Local physician Giorgi Chkheidze presented a medical perspective at the workshop, emphasizing the importance of first-aid knowledge.
+
+In Kutaisi, the program focused on parents and educators. Sixty percent of participants came from these groups. Organizers say this was unexpected but deeply positive — adults want to know how to talk to young people about these topics objectively and without resorting to fear tactics.
+
+The program's second phase is planned for April–May 2026 and will expand to include Rustavi, Zugdidi, and Telavi. Organizers are also developing an online course that will be accessible from anywhere in Georgia.`,
+      ru: `В феврале 2026 года в Грузии стартовала беспрецедентная по масштабу образовательная инициатива — серия воркшопов по снижению вреда (harm reduction), которая одновременно прошла в трёх городах: Тбилиси, Батуми и Кутаиси. Первые встречи привлекли в общей сложности более 200 участников.
+
+Организатор программы, НКО «Новый голос», поясняет, что главная цель — распространение объективной информации и снижение стигмы. «В Грузии темы, связанные с каннабисом, часто табуированы — люди не могут получить достоверную информацию, что повышает риски», — говорит директор организации Нино Беридзе.
+
+Первый воркшоп в тбилисском пространстве Fabrika был посвящён трём ключевым темам: практические методы оценки качества продукта, распознавание дезинформации в соцсетях и готовность к кризисным ситуациям. Участники получили практические чеклисты и контакты горячей линии психологической помощи.
+
+Особый интерес вызвала батумская сессия. В курортном городе, где население в сезон почти удваивается, вопрос информированности стоит особенно остро. Местный врач Георгий Чхеидзе представил медицинскую перспективу и подчеркнул важность знания основ первой помощи.
+
+В Кутаиси программа сфокусировалась на родителях и педагогах — 60% участников пришли именно из этих групп. По словам организаторов, это стало неожиданным, но очень позитивным результатом: взрослые хотят знать, как объективно и без запугивания говорить с молодёжью на эту тему.
+
+Второй этап программы запланирован на апрель–май 2026 года и дополнительно охватит Рустави, Зугдиди и Телави. Организаторы также готовят онлайн-курс, который будет доступен из любой точки Грузии.`,
     },
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 53).toISOString(),
   },

@@ -85,7 +85,7 @@ export function ForumThreadComposer({
           createFailed: "თემის შექმნა ვერ მოხერხდა.",
           created: "თემა წარმატებით შეიქმნა.",
           requestFailed: "მოთხოვნა ვერ შესრულდა. სცადე თავიდან.",
-          startThread: "ახალი თემის დაწყება",
+          startThread: "ახალი თემის წამოწყება",
           authRequired: "თემის დასაპოსტად საჭიროა ანგარიში.",
           login: "შესვლა",
           subtitle: "დაიწყე დისკუსია და მიიღე პასუხები ქომუნითისგან.",
@@ -251,11 +251,11 @@ export function ForumThreadComposer({
 
   if (collapsible && !isOpen) {
     return (
-      <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-6">
+      <section className="rounded-2xl border border-white/10 bg-transparent p-5 sm:rounded-[2rem] sm:p-6">
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className={primaryButtonClass}
+          className={`${primaryButtonClass} mx-auto`}
         >
           {t.startThread}
         </button>
@@ -267,7 +267,7 @@ export function ForumThreadComposer({
 
   if (!isAuthenticated) {
     return (
-      <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-6">
+      <section className="rounded-2xl border border-white/10 bg-transparent p-5 sm:rounded-[2rem] sm:p-6">
         <h2 className="text-base font-semibold text-white sm:text-lg">{t.startThread}</h2>
       {showClose ? (
         <button
@@ -294,7 +294,7 @@ export function ForumThreadComposer({
   }
 
   return (
-    <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-6">
+    <section className="rounded-2xl border border-white/10 bg-transparent p-5 sm:rounded-[2rem] sm:p-6">
       <h2 className="text-base font-semibold text-white sm:text-lg">{t.startThread}</h2>
       {showClose ? (
         <button

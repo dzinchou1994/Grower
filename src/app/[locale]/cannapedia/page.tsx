@@ -4,7 +4,7 @@ import { CannapediaExplorer } from "@/components/cannapedia-explorer";
 import { CannabisLeaf } from "@/components/icons";
 import {
   getCannapediaCategories,
-  listCannapediaArticles,
+  listCannapediaArticleSummaries,
 } from "@/lib/cannapedia-data";
 import {
   isValidLocale,
@@ -97,7 +97,7 @@ export default async function CannapediaPage({ params, searchParams }: PageProps
   const copy = cannapediaCopy(typedLocale);
   const [categories, articles] = await Promise.all([
     getCannapediaCategories(typedLocale),
-    listCannapediaArticles(false),
+    listCannapediaArticleSummaries(false),
   ]);
   const activeCategorySlug = category?.trim().toLowerCase() || "";
 

@@ -116,22 +116,6 @@ export default async function ResourcesPage({ params }: Props) {
           <p className="mt-1 text-xs text-slate-400 sm:text-sm">{copy.sourceText}</p>
           <div className="mt-3 flex flex-wrap gap-2">
             <a
-              href="https://kama.bz"
-              target="_blank"
-              rel="sponsored noopener noreferrer"
-              className="inline-flex rounded-full border border-lime-400/30 px-3 py-1.5 text-xs font-medium text-lime-300 transition hover:bg-lime-400/10"
-            >
-              {copy.sourceCta}
-            </a>
-            <a
-              href="https://geoeskort.com"
-              target="_blank"
-              rel="sponsored noopener noreferrer"
-              className="inline-flex rounded-full border border-lime-400/30 px-3 py-1.5 text-xs font-medium text-lime-300 transition hover:bg-lime-400/10"
-            >
-              {copy.sourceCta2}
-            </a>
-            <a
               href="https://sweetseeds.es"
               target="_blank"
               rel="sponsored noopener noreferrer"
@@ -146,6 +130,22 @@ export default async function ResourcesPage({ params }: Props) {
               className="inline-flex rounded-full border border-lime-400/30 px-3 py-1.5 text-xs font-medium text-lime-300 transition hover:bg-lime-400/10"
             >
               {copy.sourceCta4}
+            </a>
+            <a
+              href="https://kama.bz"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              className="inline-flex rounded-full border border-lime-400/30 px-3 py-1.5 text-xs font-medium text-lime-300 transition hover:bg-lime-400/10"
+            >
+              {copy.sourceCta}
+            </a>
+            <a
+              href="https://geoeskort.com"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              className="inline-flex rounded-full border border-lime-400/30 px-3 py-1.5 text-xs font-medium text-lime-300 transition hover:bg-lime-400/10"
+            >
+              {copy.sourceCta2}
             </a>
             <Link
               href={getLocalizedPath(typedLocale, "/contact")}

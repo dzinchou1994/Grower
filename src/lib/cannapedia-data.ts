@@ -33,7 +33,6 @@ type CannapediaCategorySeed = {
 };
 
 const hasDatabase = Boolean(process.env.DATABASE_URL);
-const cannapediaDb = db as any;
 
 export const cannapediaCategories: CannapediaCategorySeed[] = [
   {
@@ -425,6 +424,8 @@ export type PublicCannapediaArticle = {
   isPublished: boolean;
 };
 
+export type PublicCannapediaArticleSummary = Omit<PublicCannapediaArticle, "content">;
+
 function asContentParagraphs(raw: string) {
   return raw
     .split("\n")
@@ -465,7 +466,7 @@ async function ensureCannapediaSeedData() {
       try {
         for (let i = 0; i < cannapediaCategories.length; i += 1) {
           const entry = cannapediaCategories[i];
-          await cannapediaDb.cannapediaCategory.upsert({
+          await db.cannapediaCategory.upsert({
             where: { slug: entry.slug },
             update: {
               nameKa: entry.name.ka,
@@ -486,13 +487,13 @@ async function ensureCannapediaSeedData() {
         }
 
         for (const article of cannapediaArticles) {
-          const category = await cannapediaDb.cannapediaCategory.findUnique({
+          const category = await db.cannapediaCategory.findUnique({
             where: { slug: article.category },
             select: { id: true },
           });
           if (!category) continue;
 
-          await cannapediaDb.cannapediaArticle.upsert({
+          await db.cannapediaArticle.upsert({
             where: { slug: article.slug },
             update: {
               categoryId: category.id,
@@ -566,12 +567,32 @@ function listArticlesFromMemory() {
   });
 }
 
+function listArticleSummariesFromMemory() {
+  return cannapediaArticles.map((entry) => {
+    const category = categorySeedBySlug(entry.category);
+    return {
+      id: entry.slug,
+      slug: entry.slug,
+      readMinutes: entry.readMinutes,
+      category: {
+        id: category.slug,
+        slug: category.slug,
+        icon: category.icon,
+        names: category.name,
+      },
+      title: entry.title,
+      excerpt: entry.excerpt,
+      isPublished: true,
+    } satisfies PublicCannapediaArticleSummary;
+  });
+}
+
 async function listCategoriesFromDatabase() {
   await ensureCannapediaSeedData();
-  const rows = await cannapediaDb.cannapediaCategory.findMany({
+  const rows = await db.cannapediaCategory.findMany({
     orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
   });
-  return rows.map((entry: any) => ({
+  return rows.map((entry) => ({
     id: entry.id,
     slug: entry.slug,
     icon: entry.icon,
@@ -586,7 +607,7 @@ async function listCategoriesFromDatabase() {
 
 async function listArticlesFromDatabase(includeDraft = false): Promise<PublicCannapediaArticle[]> {
   await ensureCannapediaSeedData();
-  const rows = await cannapediaDb.cannapediaArticle.findMany({
+  const rows = await db.cannapediaArticle.findMany({
     where: includeDraft ? {} : { isPublished: true },
     orderBy: [{ createdAt: "desc" }],
     include: {
@@ -594,7 +615,7 @@ async function listArticlesFromDatabase(includeDraft = false): Promise<PublicCan
     },
   });
 
-  return rows.map((entry: any) => ({
+  return rows.map((entry) => ({
     id: entry.id,
     slug: entry.slug,
     readMinutes: entry.readMinutes,
@@ -622,6 +643,65 @@ async function listArticlesFromDatabase(includeDraft = false): Promise<PublicCan
       ka: asContentParagraphs(entry.contentKa),
       en: asContentParagraphs(entry.contentEn),
       ru: asContentParagraphs(entry.contentRu),
+    },
+    isPublished: entry.isPublished,
+  }));
+}
+
+async function listArticleSummariesFromDatabase(
+  includeDraft = false,
+): Promise<PublicCannapediaArticleSummary[]> {
+  await ensureCannapediaSeedData();
+  const rows = await db.cannapediaArticle.findMany({
+    where: includeDraft ? {} : { isPublished: true },
+    orderBy: [{ createdAt: "desc" }],
+    select: {
+      id: true,
+      slug: true,
+      readMinutes: true,
+      isPublished: true,
+      titleKa: true,
+      titleEn: true,
+      titleRu: true,
+      excerptKa: true,
+      excerptEn: true,
+      excerptRu: true,
+      category: {
+        select: {
+          id: true,
+          slug: true,
+          icon: true,
+          nameKa: true,
+          nameEn: true,
+          nameRu: true,
+        },
+      },
+    },
+  });
+
+  return rows.map((entry) => ({
+    id: entry.id,
+    slug: entry.slug,
+    readMinutes: entry.readMinutes,
+    category: {
+      id: entry.category.id,
+      slug: entry.category.slug,
+      icon: entry.category.icon,
+      names: {
+        ka: entry.category.nameKa,
+        en: entry.category.nameEn,
+        ru: entry.category.nameRu,
+      },
+    },
+    title: {
+      ka: entry.titleKa,
+      en: entry.titleEn,
+      ru: entry.titleRu,
+    },
+    excerpt: {
+      ka: entry.excerptKa,
+      en: entry.excerptEn,
+      ru: entry.excerptRu,
     },
     isPublished: entry.isPublished,
   }));
@@ -658,13 +738,113 @@ export async function listCannapediaArticles(includeDraft = false) {
   }
 }
 
+export async function listCannapediaArticleSummaries(includeDraft = false) {
+  try {
+    return hasDatabase
+      ? await listArticleSummariesFromDatabase(includeDraft)
+      : listArticleSummariesFromMemory();
+  } catch {
+    return listArticleSummariesFromMemory();
+  }
+}
+
 export async function listCannapediaArticleSlugs() {
-  const entries = await listCannapediaArticles(false);
-  return entries.map((entry: PublicCannapediaArticle) => entry.slug);
+  if (!hasDatabase) {
+    return cannapediaArticles.map((entry) => entry.slug);
+  }
+
+  try {
+    await ensureCannapediaSeedData();
+    const rows = await db.cannapediaArticle.findMany({
+      where: { isPublished: true },
+      orderBy: [{ createdAt: "desc" }],
+      select: { slug: true },
+    });
+    return rows.map((entry: { slug: string }) => entry.slug);
+  } catch {
+    return cannapediaArticles.map((entry) => entry.slug);
+  }
 }
 
 export async function getCannapediaArticleBySlug(slug: string) {
-  const entries = await listCannapediaArticles(false);
-  return entries.find((entry) => entry.slug === slug) ?? null;
+  if (!hasDatabase) {
+    const entry = cannapediaArticles.find((article) => article.slug === slug);
+    if (!entry) return null;
+    const category = categorySeedBySlug(entry.category);
+    return {
+      id: entry.slug,
+      slug: entry.slug,
+      readMinutes: entry.readMinutes,
+      category: {
+        id: category.slug,
+        slug: category.slug,
+        icon: category.icon,
+        names: category.name,
+      },
+      title: entry.title,
+      excerpt: entry.excerpt,
+      content: entry.content,
+      isPublished: true,
+    } satisfies PublicCannapediaArticle;
+  }
+
+  try {
+    await ensureCannapediaSeedData();
+    const entry = await db.cannapediaArticle.findUnique({
+      where: { slug },
+      include: { category: true },
+    });
+    if (!entry || !entry.isPublished) return null;
+    return {
+      id: entry.id,
+      slug: entry.slug,
+      readMinutes: entry.readMinutes,
+      category: {
+        id: entry.category.id,
+        slug: entry.category.slug,
+        icon: entry.category.icon,
+        names: {
+          ka: entry.category.nameKa,
+          en: entry.category.nameEn,
+          ru: entry.category.nameRu,
+        },
+      },
+      title: {
+        ka: entry.titleKa,
+        en: entry.titleEn,
+        ru: entry.titleRu,
+      },
+      excerpt: {
+        ka: entry.excerptKa,
+        en: entry.excerptEn,
+        ru: entry.excerptRu,
+      },
+      content: {
+        ka: asContentParagraphs(entry.contentKa),
+        en: asContentParagraphs(entry.contentEn),
+        ru: asContentParagraphs(entry.contentRu),
+      },
+      isPublished: entry.isPublished,
+    } satisfies PublicCannapediaArticle;
+  } catch {
+    const entry = cannapediaArticles.find((article) => article.slug === slug);
+    if (!entry) return null;
+    const category = categorySeedBySlug(entry.category);
+    return {
+      id: entry.slug,
+      slug: entry.slug,
+      readMinutes: entry.readMinutes,
+      category: {
+        id: category.slug,
+        slug: category.slug,
+        icon: category.icon,
+        names: category.name,
+      },
+      title: entry.title,
+      excerpt: entry.excerpt,
+      content: entry.content,
+      isPublished: true,
+    } satisfies PublicCannapediaArticle;
+  }
 }
 

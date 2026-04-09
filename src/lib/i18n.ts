@@ -44,6 +44,7 @@ const translations = {
       privacyHeadline: "ანონიმურობა გარანტირებულია",
       description:
         "ვსაუბრობთ ღიად. ვიზიარებთ გამოცდილებას. ვიცავთ ერთმანეთს!",
+      joinCta: "გახდი წევრი",
       primaryCta: "დისკუსიების ნახვა",
       secondaryCta: "დღიურების ნახვა",
       tertiaryCta: "კანაპედია",
@@ -165,7 +166,7 @@ const translations = {
     },
     forum: {
       badge: "ფორუმი",
-      title: "თემები მოყვანის, აღჭურვილობისა და პრობლემების გადაჭრის შესახებ",
+      title: "ყველაფერი კანაფის გარშემო",
       description:
         "ფორუმი დღიურების გვერდით მუშაობს, რომ წევრებმა მარტივად დასვან კითხვები და განიხილონ პროგრესი.",
       topicBadge: "ფორუმის კატეგორია",
@@ -214,6 +215,7 @@ const translations = {
       privacyHeadline: "100% anonymity guaranteed",
       description:
         "Grower.ge is a Georgian cannabis community platform where you can ask questions, get answers, discuss legislation, growing and other topics.",
+      joinCta: "Become a member",
       primaryCta: "Explore discussions",
       secondaryCta: "View diaries",
       tertiaryCta: "Cannapedia",
@@ -384,6 +386,7 @@ const translations = {
       privacyHeadline: "100% анонимность гарантирована",
       description:
         "Grower.ge - платформа грузинского каннабис-сообщества, где можно задавать вопросы, получать ответы, обсуждать законодательство, выращивание и другие темы.",
+      joinCta: "Стать участником",
       primaryCta: "Смотреть обсуждения",
       secondaryCta: "Смотреть дневники",
       tertiaryCta: "Каннапедия",

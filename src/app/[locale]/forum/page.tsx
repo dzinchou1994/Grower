@@ -80,12 +80,21 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
             <CannabisLeaf className="h-4 w-4" />
             {dict.forum.badge}
           </div>
-          <h1 className="mt-2 text-2xl font-semibold text-white sm:text-4xl lg:text-5xl">
+          <h1 className="mt-2 text-xl font-semibold text-white sm:text-3xl lg:text-4xl">
             {dict.forum.title}
           </h1>
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-300 sm:mt-4 sm:text-base sm:leading-7">
+          <p className="mt-2.5 max-w-3xl text-xs leading-relaxed text-slate-300 sm:mt-3 sm:text-sm sm:leading-6">
             {dict.forum.description}
           </p>
+          <div className="mt-3 sm:mt-4">
+            <ForumThreadComposer
+              topics={forumTopicList.map((topic) => ({ slug: topic.slug, title: topic.title }))}
+              isAuthenticated={Boolean(sessionUser)}
+              loginHref={getLocalizedPath(typedLocale, "/auth/login")}
+              locale={typedLocale}
+              collapsible
+            />
+          </div>
         </div>
       </section>
 
@@ -106,14 +115,6 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
           </button>
         </form>
       </section>
-
-      <ForumThreadComposer
-        topics={forumTopicList.map((topic) => ({ slug: topic.slug, title: topic.title }))}
-        isAuthenticated={Boolean(sessionUser)}
-        loginHref={getLocalizedPath(typedLocale, "/auth/login")}
-        locale={typedLocale}
-        collapsible
-      />
 
       <div className="grid gap-4 sm:gap-5">
         {forumTopicList.length === 0 ? (
