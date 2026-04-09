@@ -1,8 +1,10 @@
 import { formatDistanceToNow } from "date-fns";
+import { enUS, ka, ru } from "date-fns/locale";
 import { db } from "@/lib/db";
 import { getDeterministicAvatarImage } from "@/lib/avatar-options";
 import { calculateXp, getLevelForXp } from "@/lib/leveling";
 import { autoTranslateText } from "@/lib/auto-translate";
+import { extractSocialsFromBio } from "@/lib/user-socials";
 import {
   diaries,
   forumTopics,
@@ -27,6 +29,7 @@ export type ForumComment = {
 export type ForumThreadRecord = ForumThread & {
   id?: string;
   authorImage?: string;
+  threadIcon?: string;
   body?: string;
   isTranslated?: boolean;
   bodyTranslated?: boolean;
@@ -62,12 +65,21 @@ export type LeaderboardUser = {
   levelEmoji: string;
 };
 
+export type PublicUserProfile = LeaderboardUser & {
+  userId?: string;
+  telegram?: string;
+  instagram?: string;
+  growDiariesUrl?: string;
+};
+
 type ForumState = {
   topics: ForumTopicRecord[];
 };
 
 const hasDatabase = Boolean(process.env.DATABASE_URL);
 const topicIconBySlug = new Map(forumTopics.map((topic) => [topic.slug, topic.icon]));
+const defaultThreadIcon = "💬";
+const threadIconPrefix = ":::icon=";
 
 declare global {
   var __forumState: ForumState | undefined;
@@ -110,9 +122,35 @@ function slugify(value: string) {
   return `${normalized || "thread"}-${suffix}`;
 }
 
-function toRelative(dateLike: Date | string) {
+function normalizeThreadIcon(icon?: string) {
+  const value = (icon ?? "").trim();
+  return value || defaultThreadIcon;
+}
+
+function encodeThreadBody(body: string, threadIcon?: string) {
+  return `${threadIconPrefix}${normalizeThreadIcon(threadIcon)}\n${body.trim()}`;
+}
+
+function decodeThreadBody(body: string | null | undefined) {
+  const raw = body ?? "";
+  if (!raw.startsWith(threadIconPrefix)) {
+    return { body: raw, threadIcon: defaultThreadIcon };
+  }
+
+  const firstLineEnd = raw.indexOf("\n");
+  if (firstLineEnd === -1) {
+    return { body: "", threadIcon: defaultThreadIcon };
+  }
+
+  const icon = raw.slice(threadIconPrefix.length, firstLineEnd).trim();
+  const cleanedBody = raw.slice(firstLineEnd + 1);
+  return { body: cleanedBody, threadIcon: normalizeThreadIcon(icon) };
+}
+
+function toRelative(dateLike: Date | string, locale?: Locale) {
   const date = typeof dateLike === "string" ? new Date(dateLike) : dateLike;
-  return formatDistanceToNow(date, { addSuffix: true });
+  const dateFnsLocale = locale === "ka" ? ka : locale === "ru" ? ru : enUS;
+  return formatDistanceToNow(date, { addSuffix: true, locale: dateFnsLocale });
 }
 
 function normalizeUsername(name: string) {
@@ -175,9 +213,10 @@ async function ensureForumSeedData() {
   await global.__forumSeedPromise;
 }
 
-function mapThreadRecord(thread: any, currentUserId?: string): ForumThreadRecord {
+function mapThreadRecord(thread: any, currentUserId?: string, locale?: Locale): ForumThreadRecord {
   const latestCommentDate = thread.comments?.[0]?.createdAt;
   const lastActivity = latestCommentDate ?? thread.updatedAt;
+  const parsedBody = decodeThreadBody(thread.body);
 
   const threadVotes: any[] = thread.votes ?? [];
   const threadUpvotes = threadVotes.filter((v: any) => v.value === 1).length;
@@ -196,9 +235,10 @@ function mapThreadRecord(thread: any, currentUserId?: string): ForumThreadRecord
       getDeterministicAvatarImage(thread.author?.username ?? "user"),
     replies: thread._count?.comments ?? 0,
     likes: thread._count?.likes ?? 0,
-    lastActivity: toRelative(lastActivity),
+    lastActivity: toRelative(lastActivity, locale),
     isPinned: Boolean(thread.isPinned),
-    body: thread.body,
+    threadIcon: parsedBody.threadIcon,
+    body: parsedBody.body,
     upvotes: threadUpvotes,
     downvotes: threadDownvotes,
     userVote: threadUserVote,
@@ -265,11 +305,14 @@ async function translateForumTopicRecord(
     ),
   ]);
 
+  const localizedTitle =
+    locale === "ka" && topic.slug === "free-talk" ? "ბირჟა 420" : titleRes.text;
+
   return {
     ...topic,
-    title: titleRes.text,
+    title: localizedTitle,
     description: descRes.text,
-    isTranslated: titleRes.translated,
+    isTranslated: locale === "ka" && topic.slug === "free-talk" ? false : titleRes.translated,
     descriptionTranslated: descRes.translated,
     threads: translatedThreads,
   };
@@ -323,7 +366,7 @@ async function listForumTopicsFromDatabase(query?: string, locale?: Locale, curr
     title: topic.title,
     description: topic.description ?? "",
     icon: topicIconBySlug.get(topic.slug) ?? "💬",
-    threads: topic.threads.map((t) => mapThreadRecord(t, currentUserId)),
+    threads: topic.threads.map((t) => mapThreadRecord(t, currentUserId, locale)),
   }));
 
   const translatedMapped = await Promise.all(
@@ -382,7 +425,7 @@ async function getForumTopicBySlugFromDatabase(slug: string, locale?: Locale, cu
     title: topic.title,
     description: topic.description ?? "",
     icon: topicIconBySlug.get(topic.slug) ?? "💬",
-    threads: topic.threads.map((t) => mapThreadRecord(t, currentUserId)),
+    threads: topic.threads.map((t) => mapThreadRecord(t, currentUserId, locale)),
   } satisfies ForumTopicRecord;
 
   return translateForumTopicRecord(mappedTopic, locale);
@@ -418,6 +461,7 @@ async function createThreadInDatabase(input: {
   title: string;
   body: string;
   author: string;
+  threadIcon?: string;
 }) {
   await ensureForumSeedData();
 
@@ -441,7 +485,7 @@ async function createThreadInDatabase(input: {
       topicId: topic.id,
       authorId: user.id,
       title: input.title.trim(),
-      body: input.body.trim(),
+      body: encodeThreadBody(input.body, input.threadIcon),
     },
     include: {
       author: { select: { username: true, image: true } },
@@ -534,6 +578,7 @@ function createThreadInMemory(input: {
   title: string;
   body: string;
   author: string;
+  threadIcon?: string;
 }) {
   const state = getState();
   const topic = state.topics.find((entry) => entry.slug === input.topicSlug);
@@ -546,6 +591,7 @@ function createThreadInMemory(input: {
     title: input.title.trim(),
     author: input.author.trim(),
     authorImage: getDeterministicAvatarImage(input.author.trim()),
+    threadIcon: normalizeThreadIcon(input.threadIcon),
     replies: 0,
     likes: 0,
     lastActivity: "just now",
@@ -624,6 +670,7 @@ export async function createForumThread(input: {
   title: string;
   body: string;
   author: string;
+  threadIcon?: string;
 }) {
   if (hasDatabase) {
     return createThreadInDatabase(input);
@@ -852,4 +899,87 @@ export async function getTopUsers(limit = 10): Promise<LeaderboardUser[]> {
   }
 
   return getTopUsersFromMemory(limit);
+}
+
+async function getPublicUserProfileFromDatabase(username: string): Promise<PublicUserProfile | null> {
+  await ensureForumSeedData();
+
+  const user = await db.user.findFirst({
+    where: { username: { equals: username, mode: "insensitive" } },
+    select: {
+      id: true,
+      username: true,
+      image: true,
+      bio: true,
+      _count: {
+        select: {
+          forumThreads: { where: { isHidden: false } },
+          forumComments: { where: { isHidden: false } },
+          diaries: { where: { isHidden: false } },
+        },
+      },
+    },
+  });
+
+  if (!user) return null;
+
+  const [threadLikes, commentLikes, diaryWeeks] = await Promise.all([
+    db.forumThread.findMany({
+      where: { authorId: user.id, isHidden: false },
+      select: { _count: { select: { likes: true } } },
+    }),
+    db.forumComment.findMany({
+      where: { authorId: user.id, isHidden: false },
+      select: { _count: { select: { likes: true } } },
+    }),
+    db.diaryWeek.findMany({
+      where: { isHidden: false, diary: { authorId: user.id, isHidden: false } },
+      select: { _count: { select: { likes: true } } },
+    }),
+  ]);
+
+  const likesReceived =
+    threadLikes.reduce((sum, row) => sum + row._count.likes, 0) +
+    commentLikes.reduce((sum, row) => sum + row._count.likes, 0) +
+    diaryWeeks.reduce((sum, row) => sum + row._count.likes, 0);
+
+  const activity = {
+    threadsCreated: user._count.forumThreads,
+    commentsPosted: user._count.forumComments,
+    likesReceived,
+    diariesCreated: user._count.diaries,
+    diaryWeeksPosted: diaryWeeks.length,
+  };
+  const xp = calculateXp(activity);
+  const level = getLevelForXp(xp);
+  const socials = extractSocialsFromBio(user.bio);
+
+  return {
+    userId: user.id,
+    username: user.username,
+    image: user.image ?? getDeterministicAvatarImage(`${user.username}:${user.id}`),
+    ...activity,
+    xp,
+    levelTitle: level.title,
+    levelEmoji: level.emoji,
+    telegram: socials.telegram,
+    instagram: socials.instagram,
+    growDiariesUrl: socials.growDiariesUrl,
+  };
+}
+
+function getPublicUserProfileFromMemory(username: string): PublicUserProfile | null {
+  const target = username.trim().toLowerCase();
+  if (!target) return null;
+  const users = getTopUsersFromMemory(200);
+  const matched = users.find((entry) => entry.username.toLowerCase() === target);
+  if (!matched) return null;
+  return matched;
+}
+
+export async function getPublicUserProfileByUsername(username: string): Promise<PublicUserProfile | null> {
+  if (hasDatabase) {
+    return getPublicUserProfileFromDatabase(username);
+  }
+  return getPublicUserProfileFromMemory(username);
 }

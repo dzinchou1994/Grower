@@ -5,7 +5,19 @@ declare global {
   var prisma: PrismaClient | undefined;
 }
 
-const connectionString = process.env.DATABASE_URL;
+function normalizeConnectionString(value: string | undefined) {
+  if (!value) {
+    return undefined;
+  }
+
+  // pg-connection-string warns that legacy SSL aliases will change semantics.
+  return value.replace(
+    /sslmode=(prefer|require|verify-ca)\b/g,
+    "sslmode=verify-full",
+  );
+}
+
+const connectionString = normalizeConnectionString(process.env.DATABASE_URL);
 
 const prismaInstance = connectionString
   ? global.prisma ??

@@ -9,6 +9,7 @@ type AdminConsoleProps = {
 type TabId =
   | "moderation"
   | "content"
+  | "messages"
   | "cannapedia"
   | "feedback"
   | "seo"
@@ -22,6 +23,7 @@ export function AdminConsole({ role }: AdminConsoleProps) {
       [
         { id: "moderation", label: "Moderation" },
         { id: "content", label: "Content" },
+        { id: "messages", label: "Messages" },
         ...(role === "ADMIN" ? [{ id: "cannapedia", label: "Cannapedia" }] : []),
         ...(role === "ADMIN" ? [{ id: "feedback", label: "Feedback" }] : []),
         ...(role === "ADMIN" ? [{ id: "seo", label: "SEO" }] : []),
@@ -55,6 +57,7 @@ export function AdminConsole({ role }: AdminConsoleProps) {
 
       {activeTab === "moderation" ? <ModerationPanel isAdmin={role === "ADMIN"} /> : null}
       {activeTab === "content" ? <ContentPanel isAdmin={role === "ADMIN"} /> : null}
+      {activeTab === "messages" ? <MessagesPanel /> : null}
       {activeTab === "cannapedia" && role === "ADMIN" ? <CannapediaPanel /> : null}
       {activeTab === "feedback" && role === "ADMIN" ? <FeedbackPanel /> : null}
       {activeTab === "seo" && role === "ADMIN" ? <SeoPanel /> : null}
@@ -920,6 +923,104 @@ function CannapediaPanel() {
   );
 }
 
+function MessagesPanel() {
+  const [items, setItems] = useState<any[]>([]);
+  const [q, setQ] = useState("");
+  const [includeHidden, setIncludeHidden] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function loadMessages() {
+    setLoading(true);
+    setError(null);
+    try {
+      const qs = new URLSearchParams();
+      if (q.trim()) qs.set("q", q.trim());
+      if (includeHidden) qs.set("includeHidden", "true");
+      const response = await fetch(`/api/admin/messages?${qs.toString()}`);
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) {
+        setError(payload?.error ?? "Could not load messages.");
+        return;
+      }
+      setItems(payload.messages ?? []);
+    } catch {
+      setError("Network error.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function toggleHide(messageId: string, nextHidden: boolean) {
+    const response = await fetch("/api/admin/messages", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messageId, isHidden: nextHidden }),
+    });
+    if (!response.ok) {
+      const payload = await response.json().catch(() => null);
+      setError(payload?.error ?? "Action failed.");
+      return;
+    }
+    await loadMessages();
+  }
+
+  return (
+    <div className="mt-6">
+      <div className="flex flex-wrap items-center gap-2">
+        <input
+          value={q}
+          onChange={(event) => setQ(event.target.value)}
+          placeholder="Search by username or message..."
+          className="min-w-[240px] rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
+        />
+        <label className="inline-flex items-center gap-2 text-xs text-slate-300">
+          <input
+            type="checkbox"
+            checked={includeHidden}
+            onChange={(event) => setIncludeHidden(event.target.checked)}
+          />
+          Include hidden
+        </label>
+        <button
+          type="button"
+          onClick={loadMessages}
+          className="rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-slate-950"
+        >
+          {loading ? "Loading..." : "Load Messages"}
+        </button>
+      </div>
+
+      {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
+
+      <div className="mt-4 grid gap-3">
+        {items.map((message) => (
+          <div key={message.id} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-sm text-white">
+                @{message.sender?.username ?? "unknown"} → @{message.recipient?.username ?? "unknown"}
+              </p>
+              <span className="rounded-full bg-white/10 px-2 py-1 text-xs text-slate-300">
+                {new Date(message.createdAt).toLocaleString()}
+              </span>
+            </div>
+            <p className="mt-2 text-sm text-slate-300">{message.body}</p>
+            <div className="mt-3 flex gap-2">
+              <button
+                type="button"
+                onClick={() => toggleHide(message.id, !message.isHidden)}
+                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200"
+              >
+                {message.isHidden ? "Unhide" : "Hide"}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function FeedbackPanel() {
   const [items, setItems] = useState<any[]>([]);
   const [status, setStatus] = useState<"ALL" | "NEW" | "REVIEWED" | "PLANNED" | "CLOSED">("ALL");
@@ -1089,11 +1190,8 @@ function SeoPanel() {
   }
 
   async function save() {
-    if (!reason.trim()) {
-      setError("Reason is required for audit.");
-      return;
-    }
     setError(null);
+    const auditReason = reason.trim() || `SEO update for ${page}/${locale}`;
 
     const response = await fetch("/api/admin/seo", {
       method: "PATCH",
@@ -1107,7 +1205,7 @@ function SeoPanel() {
         ogDescription,
         keywords,
         noIndex,
-        reason,
+        reason: auditReason,
       }),
     });
 
@@ -1226,12 +1324,12 @@ function SeoPanel() {
         <hr className="border-white/10" />
         <div>
           <label className="mb-1.5 block text-xs font-medium text-slate-300">
-            Audit Reason <span className="text-red-400">*</span>
+            Audit Reason <span className="text-slate-500">(optional)</span>
           </label>
           <input
             value={reason}
             onChange={(event) => setReason(event.target.value)}
-            placeholder="Why are you changing these settings?"
+            placeholder="Optional note for audit log"
             className="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
           />
         </div>

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { getServerSessionUser } from "@/lib/auth-session";
+import { createLocalFeedback } from "@/lib/feedback-store";
 
 const createFeedbackSchema = z.object({
   name: z.string().trim().max(80).optional(),
@@ -23,9 +24,10 @@ export async function POST(request: Request) {
   }
 
   const session = await getServerSessionUser();
+  const useDatabase = Boolean(process.env.DATABASE_URL);
 
-  const feedback = await db.feedback.create({
-    data: {
+  if (!useDatabase) {
+    const local = createLocalFeedback({
       userId: session?.userId ?? null,
       name: parsed.data.name || session?.username || null,
       siteRating: parsed.data.siteRating,
@@ -33,8 +35,34 @@ export async function POST(request: Request) {
       performanceRating: parsed.data.performanceRating,
       whatToAdd: parsed.data.whatToAdd,
       whatToImprove: parsed.data.whatToImprove || null,
-    },
-  });
+    });
+    return NextResponse.json({ feedbackId: local.id }, { status: 201 });
+  }
 
-  return NextResponse.json({ feedbackId: feedback.id }, { status: 201 });
+  try {
+    const feedback = await db.feedback.create({
+      data: {
+        userId: session?.userId ?? null,
+        name: parsed.data.name || session?.username || null,
+        siteRating: parsed.data.siteRating,
+        contentRating: parsed.data.contentRating,
+        performanceRating: parsed.data.performanceRating,
+        whatToAdd: parsed.data.whatToAdd,
+        whatToImprove: parsed.data.whatToImprove || null,
+      },
+    });
+
+    return NextResponse.json({ feedbackId: feedback.id }, { status: 201 });
+  } catch {
+    const local = createLocalFeedback({
+      userId: session?.userId ?? null,
+      name: parsed.data.name || session?.username || null,
+      siteRating: parsed.data.siteRating,
+      contentRating: parsed.data.contentRating,
+      performanceRating: parsed.data.performanceRating,
+      whatToAdd: parsed.data.whatToAdd,
+      whatToImprove: parsed.data.whatToImprove || null,
+    });
+    return NextResponse.json({ feedbackId: local.id }, { status: 201 });
+  }
 }

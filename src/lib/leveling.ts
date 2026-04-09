@@ -145,3 +145,21 @@ export function computeBadges(stats: UserActivityStats): Badge[] {
     },
   ];
 }
+
+export function getUsernameAccentClassByXp(xp: number) {
+  const level = getLevelForXp(xp).level;
+
+  if (level >= 10) {
+    return "bg-gradient-to-r from-fuchsia-300 via-violet-300 to-sky-300 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(168,85,247,0.35)]";
+  }
+  if (level >= 8) {
+    return "bg-gradient-to-r from-amber-300 via-yellow-200 to-orange-300 bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(251,191,36,0.32)]";
+  }
+  if (level >= 6) {
+    return "bg-gradient-to-r from-lime-300 via-emerald-300 to-teal-300 bg-clip-text text-transparent drop-shadow-[0_0_7px_rgba(132,204,22,0.28)]";
+  }
+  if (level >= 4) {
+    return "text-lime-300";
+  }
+  return "text-white";
+}

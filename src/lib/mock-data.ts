@@ -134,11 +134,19 @@ export const forumTopics: ForumTopic[] = [
         likes: 15,
         lastActivity: "5 სთ წინ",
       },
+      {
+        slug: "cbd-vs-thc-for-beginners",
+        title: "CBD vs THC დამწყებისთვის - რა განსხვავებაა პრაქტიკულად?",
+        author: "hemp_guide",
+        replies: 27,
+        likes: 22,
+        lastActivity: "2 სთ წინ",
+      },
     ],
   },
   {
     slug: "grow-help",
-    title: "მოყვანის დახმარება",
+    title: "მოყვანაში დახმარება",
     description: "პრობლემა გაქვს? კითხვა განათებაზე, საკვებზე, ვარჯიშზე ან მცენარის ჯანმრთელობაზე? დასვი აქ.",
     icon: "💡",
     threads: [
@@ -272,6 +280,22 @@ export const forumTopics: ForumTopic[] = [
         likes: 38,
         lastActivity: "12 სთ წინ",
       },
+      {
+        slug: "cbd-medical-reports-2026",
+        title: "CBD: სამედიცინო რეპორტები და ბოლო კვლევები 2026",
+        author: "cbd_research",
+        replies: 31,
+        likes: 29,
+        lastActivity: "3 სთ წინ",
+      },
+      {
+        slug: "real-cbd-cases-georgia",
+        title: "რეალური შემთხვევები: როგორ იყენებენ CBD-ს საქართველოში",
+        author: "casewatch",
+        replies: 18,
+        likes: 21,
+        lastActivity: "7 სთ წინ",
+      },
     ],
   },
   {
@@ -300,7 +324,7 @@ export const forumTopics: ForumTopic[] = [
   },
   {
     slug: "free-talk",
-    title: "Free Talk 420",
+    title: "ბირჟა 420",
     description: "თავისუფალი ჩატი, ისტორიები, ხუმრობები და ყოველდღიური 420 საუბრები საზოგადოების წევრებს შორის.",
     icon: "😶‍🌫️",
     threads: [

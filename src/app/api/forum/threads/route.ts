@@ -7,6 +7,7 @@ const createThreadSchema = z.object({
   topicSlug: z.string().min(2),
   title: z.string().min(6).max(140),
   body: z.string().min(10).max(5000),
+  threadIcon: z.string().trim().min(1).max(8).optional(),
 });
 
 export async function POST(request: Request) {

@@ -9,6 +9,7 @@ import {
 import { getForumStats, getTopUsers, listForumTopics } from "@/lib/forum-data";
 import { BookOpenIcon, CannabisLeaf, CannabisLeafOutline } from "@/components/icons";
 import { UserAvatar } from "@/components/user-avatar";
+import { getUsernameAccentClassByXp } from "@/lib/leveling";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPageMetadataWithSeo } from "@/lib/seo-settings";
@@ -99,7 +100,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
             </Link>
             <Link
               href={getLocalizedPath(typedLocale, "/cannapedia")}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-lime-400/30 bg-lime-400/10 px-5 py-3 text-sm font-semibold text-lime-200 transition hover:bg-lime-400/20 sm:text-base"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white/90 backdrop-blur-sm transition hover:border-lime-400/30 hover:bg-white/10 hover:text-lime-200 sm:text-base"
             >
               <BookOpenIcon className="h-4 w-4" />
               {dict.home.tertiaryCta}
@@ -120,19 +121,21 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
       <section className="relative overflow-hidden rounded-2xl border border-lime-400/15 bg-gradient-to-br from-lime-950/40 via-slate-950/60 to-slate-950/80 sm:rounded-[2rem]">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(132,204,22,0.06),transparent_60%)]" />
         <div className="relative flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:gap-6 sm:p-8">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-lime-400/10 text-2xl sm:h-14 sm:w-14 sm:text-3xl">
-            ⚖️
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-[11px] font-medium uppercase tracking-wider text-lime-400/80 sm:text-xs">
-              {dict.home.manifesto.badge}
-            </p>
-            <h2 className="mt-1 text-base font-semibold leading-snug text-white sm:text-xl">
-              {dict.home.manifesto.headline}
-            </h2>
-            <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-slate-300/80 sm:text-sm sm:leading-6">
-              {dict.home.manifesto.text}
-            </p>
+          <div className="flex min-w-0 items-start gap-3 sm:flex-1 sm:gap-4">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-lime-400/10 text-2xl sm:h-14 sm:w-14 sm:text-3xl">
+              ⚖️
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-[11px] font-medium uppercase tracking-wider text-lime-400/80 sm:text-xs">
+                {dict.home.manifesto.badge}
+              </p>
+              <h2 className="mt-1 text-base font-semibold leading-snug text-white sm:text-xl">
+                {dict.home.manifesto.headline}
+              </h2>
+              <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-slate-300/80 sm:text-sm sm:leading-6">
+                {dict.home.manifesto.text}
+              </p>
+            </div>
           </div>
           <Link
             href={getLocalizedPath(typedLocale, "/manifesto")}
@@ -277,27 +280,33 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
         <div className="mt-4 sm:mt-5">
           <ol className="grid grid-cols-2 gap-2 sm:gap-3">
             {topUsers.map((user, index) => (
-              <li
-                key={user.username}
-                className="flex flex-col gap-1.5 rounded-xl border border-white/10 bg-slate-900/40 px-2.5 py-2.5 sm:flex-row sm:items-center sm:gap-3 sm:rounded-3xl sm:px-4 sm:py-3.5"
-              >
-                <div className="flex items-center gap-2 sm:gap-2.5">
-                  <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-lime-400/15 text-[10px] font-semibold text-lime-200 sm:h-8 sm:w-8 sm:text-sm">
-                    #{index + 1}
-                  </span>
-                  <UserAvatar username={user.username} image={user.image} size="sm" />
-                  <p className="min-w-0 truncate text-xs font-medium text-white sm:text-base">
-                    @{user.username}
-                  </p>
-                </div>
-                <div className="flex items-center justify-between gap-1 pl-8 sm:min-w-0 sm:flex-1 sm:pl-0">
-                  <p className="truncate text-[9px] text-slate-400 sm:text-xs">
-                    {user.levelEmoji} {user.levelTitle} · 💬 {user.threadsCreated} · 🗨️ {user.commentsPosted}
-                  </p>
-                  <span className="shrink-0 rounded-full border border-white/15 bg-white/5 px-1.5 py-0.5 text-[9px] font-medium text-slate-200 sm:px-2 sm:py-1 sm:text-xs">
-                    {user.xp} XP
-                  </span>
-                </div>
+              <li key={user.username}>
+                <Link
+                  href={getLocalizedPath(typedLocale, `/u/${user.username}`)}
+                  className="flex flex-col gap-1.5 rounded-xl border border-white/10 bg-slate-900/40 px-2.5 py-2.5 transition hover:border-lime-400/35 hover:bg-slate-900/70 sm:flex-row sm:items-center sm:gap-3 sm:rounded-3xl sm:px-4 sm:py-3.5"
+                >
+                  <div className="flex items-center gap-2 sm:gap-2.5">
+                    <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-lime-400/15 text-[10px] font-semibold text-lime-200 sm:h-8 sm:w-8 sm:text-sm">
+                      #{index + 1}
+                    </span>
+                    <UserAvatar username={user.username} image={user.image} size="sm" />
+                    <p
+                      className={`min-w-0 truncate text-xs font-medium sm:text-base ${getUsernameAccentClassByXp(
+                        user.xp,
+                      )}`}
+                    >
+                      @{user.username}
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-between gap-1 pl-8 sm:min-w-0 sm:flex-1 sm:pl-0">
+                    <p className="truncate text-[9px] text-slate-400 sm:text-xs">
+                      {user.levelEmoji} {user.levelTitle} · 💬 {user.threadsCreated} · 🗨️ {user.commentsPosted}
+                    </p>
+                    <span className="shrink-0 rounded-full border border-white/15 bg-white/5 px-1.5 py-0.5 text-[9px] font-medium text-slate-200 sm:px-2 sm:py-1 sm:text-xs">
+                      {user.xp} XP
+                    </span>
+                  </div>
+                </Link>
               </li>
             ))}
           </ol>

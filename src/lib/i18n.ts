@@ -16,7 +16,7 @@ const localeNames: Record<Locale, string> = {
 
 const translations = {
   ka: {
-    metadataTitle: "Grower",
+    metadataTitle: "Grower.ge",
     metadataDescription:
       "ქართული კანაფის საზოგადოება - ფორუმი, ინფორმაცია, დისკუსიები და მოყვანის დღიურები.",
     brandTagline: "ფორუმი · ინფორმაცია · დღიურები",
@@ -33,7 +33,7 @@ const translations = {
       title: "შეუერთდი ფორუმს, გაიგე მეტი, გაუზიარე გამოცდილება.",
       privacyHeadline: "100% ანონიმურობა გარანტირებულია",
       description:
-        "Grower არის ქართული კანაფის საზოგადოების პლატფორმა სადაც შეგიძლია დასვა კითხვები, მიიღო პასუხები, ისაუბრო კანონმდებლობაზე, მოყვანაზე და სხვა თემებზე.",
+        "Grower.ge არის ქართული კანაფის საზოგადოების პლატფორმა სადაც შეგიძლია დასვა კითხვები, მიიღო პასუხები, ისაუბრო კანონმდებლობაზე, მოყვანაზე და სხვა თემებზე.",
       primaryCta: "დისკუსიების ნახვა",
       secondaryCta: "დღიურების ნახვა",
       tertiaryCta: "კანაპედია",
@@ -52,7 +52,7 @@ const translations = {
       startDiary: "დაიწყე დღიური",
       manifesto: {
         badge: "🟢 რატომ ვართ აქ",
-        headline: "ახალი კანონი, ძველი ბრძოლა - ერთად გავუძლებთ.",
+        headline: "ახალი კანონი, ძველი ბრძოლა - ერთად გავიმარჯვებთ.",
         text: "2025 წლის 1 თებერვლიდან საქართველოში ამოქმედდა სისხლის სამართლის კოდექსის ცვლილება, რომელიც კიდევ უფრო ამკაცრებს სანქციებს კანაფთან დაკავშირებულ ქმედებებზე. ჩვენი პლატფორმა არის უსაფრთხო, ანონიმური სივრცე, სადაც გროვერები ერთმანეთს ეხმარებიან ცოდნით, გამოცდილებით და სოლიდარობით.",
         cta: "წაიკითხე მანიფესტო",
       },
@@ -64,10 +64,10 @@ const translations = {
       },
     },
     manifesto: {
-      metaTitle: "მანიფესტო - Grower",
+      metaTitle: "მანიფესტო - Grower.ge",
       metaDescription: "ჩვენი მისია, ხედვა და პოზიცია ახალი კანონმდებლობის მიმართ.",
       title: "მანიფესტო",
-      subtitle: "რატომ არსებობს Grower და რისთვის ვიბრძვით",
+      subtitle: "რატომ არსებობს Grower.ge და რისთვის ვიბრძვით",
       lawSection: {
         title: "რა შეიცვალა კანონმდებლობაში",
         p1: "2024 წლის 13 დეკემბერს საქართველოს პარლამენტმა მიიღო სისხლის სამართლის კოდექსის ცვლილება (№175-Iმს-XIმპ), რომელიც 2025 წლის 1 თებერვლიდან ამოქმედდა.",
@@ -78,7 +78,7 @@ const translations = {
       },
       missionSection: {
         title: "ჩვენი მისია",
-        p1: "Grower შეიქმნა იმისთვის, რომ ქართველ გროვერებს ჰქონდეთ უსაფრთხო, ანონიმური სივრცე, სადაც შეძლებენ ცოდნის გაზიარებას, რჩევების მიღებას და ერთმანეთის მხარდაჭერას.",
+        p1: "Grower.ge შეიქმნა იმისთვის, რომ ქართველ გროვერებს ჰქონდეთ უსაფრთხო, ანონიმური სივრცე, სადაც შეძლებენ ცოდნის გაზიარებას, რჩევების მიღებას და ერთმანეთის მხარდაჭერას.",
         p2: "ჩვენ არ ვამხნევებთ კანონის დარღვევას. ჩვენ ვცხოვრობთ რეალობაში, სადაც ათასობით ადამიანი საქართველოში ყოველდღიურად აწყდება ამ საკითხს - და ამ ადამიანებს ესაჭიროებათ ინფორმაცია, თანხმობა და საზოგადოება.",
         p3: "ჩვენ გვჯერა ზიანის შემცირების, განათლების და საზოგადოებრივი დიალოგის ძალის.",
       },
@@ -184,7 +184,7 @@ const translations = {
     },
   },
   en: {
-    metadataTitle: "Grower",
+    metadataTitle: "Grower.ge",
     metadataDescription:
       "Georgian cannabis community - forum, information, discussions and grow diaries.",
     brandTagline: "Forum · Info · Diaries",
@@ -201,7 +201,7 @@ const translations = {
       title: "Join the forum, learn more, share your experience.",
       privacyHeadline: "100% anonymity guaranteed",
       description:
-        "Grower is a Georgian cannabis community platform where you can ask questions, get answers, discuss legislation, growing and other topics.",
+        "Grower.ge is a Georgian cannabis community platform where you can ask questions, get answers, discuss legislation, growing and other topics.",
       primaryCta: "Explore discussions",
       secondaryCta: "View diaries",
       tertiaryCta: "Cannapedia",
@@ -232,10 +232,10 @@ const translations = {
       },
     },
     manifesto: {
-      metaTitle: "Manifesto - Grower",
+      metaTitle: "Manifesto - Grower.ge",
       metaDescription: "Our mission, vision, and stance on the new legislation.",
       title: "Manifesto",
-      subtitle: "Why Grower exists and what we stand for",
+      subtitle: "Why Grower.ge exists and what we stand for",
       lawSection: {
         title: "What changed in the law",
         p1: "On December 13, 2024, the Georgian Parliament passed amendments to the Criminal Code (No. 175-Iმს-XIმპ), which took effect on February 1, 2025.",
@@ -246,7 +246,7 @@ const translations = {
       },
       missionSection: {
         title: "Our mission",
-        p1: "Grower was created so Georgian growers have a safe, anonymous space to share knowledge, get advice, and support each other.",
+        p1: "Grower.ge was created so Georgian growers have a safe, anonymous space to share knowledge, get advice, and support each other.",
         p2: "We do not encourage breaking the law. We live in a reality where thousands of people in Georgia face this issue daily - and these people need information, acceptance, and community.",
         p3: "We believe in the power of harm reduction, education, and public dialogue.",
       },
@@ -352,7 +352,7 @@ const translations = {
     },
   },
   ru: {
-    metadataTitle: "Grower",
+    metadataTitle: "Grower.ge",
     metadataDescription:
       "Грузинское каннабис-сообщество - форум, информация, дискуссии и дневники выращивания.",
     brandTagline: "Форум · Инфо · Дневники",
@@ -369,7 +369,7 @@ const translations = {
       title: "Присоединяйся к форуму, узнай больше, поделись опытом.",
       privacyHeadline: "100% анонимность гарантирована",
       description:
-        "Grower - платформа грузинского каннабис-сообщества, где можно задавать вопросы, получать ответы, обсуждать законодательство, выращивание и другие темы.",
+        "Grower.ge - платформа грузинского каннабис-сообщества, где можно задавать вопросы, получать ответы, обсуждать законодательство, выращивание и другие темы.",
       primaryCta: "Смотреть обсуждения",
       secondaryCta: "Смотреть дневники",
       tertiaryCta: "Каннапедия",
@@ -400,10 +400,10 @@ const translations = {
       },
     },
     manifesto: {
-      metaTitle: "Манифест - Grower",
+      metaTitle: "Манифест - Grower.ge",
       metaDescription: "Наша миссия, видение и позиция по новому законодательству.",
       title: "Манифест",
-      subtitle: "Почему существует Grower и за что мы боремся",
+      subtitle: "Почему существует Grower.ge и за что мы боремся",
       lawSection: {
         title: "Что изменилось в законодательстве",
         p1: "13 декабря 2024 года Парламент Грузии принял поправки в Уголовный кодекс (№175-Iმს-XIმპ), вступившие в силу 1 февраля 2025 года.",
@@ -414,7 +414,7 @@ const translations = {
       },
       missionSection: {
         title: "Наша миссия",
-        p1: "Grower создан для того, чтобы грузинские гроверы имели безопасное, анонимное пространство для обмена знаниями, получения советов и взаимной поддержки.",
+        p1: "Grower.ge создан для того, чтобы грузинские гроверы имели безопасное, анонимное пространство для обмена знаниями, получения советов и взаимной поддержки.",
         p2: "Мы не поощряем нарушение закона. Мы живём в реальности, где тысячи людей в Грузии ежедневно сталкиваются с этой проблемой - и этим людям нужна информация, принятие и сообщество.",
         p3: "Мы верим в силу снижения вреда, образования и общественного диалога.",
       },

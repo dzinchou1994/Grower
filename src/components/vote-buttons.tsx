@@ -66,27 +66,29 @@ export function VoteButtons({
 
   if (compact) {
     return (
-      <div className="inline-flex items-center gap-0.5 rounded-full border border-white/10 bg-white/[0.03]">
+      <div className="inline-flex items-center gap-1 rounded-full border border-white/12 bg-slate-900/55 px-1 py-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-sm">
         <button
           type="button"
           onClick={() => handleVote(1)}
           disabled={isPending}
-          className={`rounded-l-full px-2 py-1 text-[11px] transition ${
+          className={`flex h-7 w-7 items-center justify-center rounded-full text-[11px] transition ${
             userVote === 1
-              ? "bg-lime-400/20 text-lime-300"
-              : "text-slate-500 hover:bg-white/8 hover:text-lime-300"
+              ? "bg-lime-400/20 text-lime-300 ring-1 ring-lime-300/35"
+              : "text-slate-400 hover:bg-white/10 hover:text-lime-300"
           } disabled:opacity-50`}
           aria-label="Upvote"
         >
-          ▲
+          <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 14l6-6 6 6" />
+          </svg>
         </button>
         <span
-          className={`min-w-[24px] text-center text-[11px] font-semibold ${
+          className={`min-w-[30px] text-center text-[11px] font-semibold tabular-nums ${
             score > 0
               ? "text-lime-300"
               : score < 0
                 ? "text-red-400"
-                : "text-slate-500"
+                : "text-slate-400"
           }`}
         >
           {score}
@@ -95,43 +97,45 @@ export function VoteButtons({
           type="button"
           onClick={() => handleVote(-1)}
           disabled={isPending}
-          className={`rounded-r-full px-2 py-1 text-[11px] transition ${
+          className={`flex h-7 w-7 items-center justify-center rounded-full text-[11px] transition ${
             userVote === -1
-              ? "bg-red-400/20 text-red-400"
-              : "text-slate-500 hover:bg-white/8 hover:text-red-400"
+              ? "bg-red-400/20 text-red-400 ring-1 ring-red-300/35"
+              : "text-slate-400 hover:bg-white/10 hover:text-red-400"
           } disabled:opacity-50`}
           aria-label="Downvote"
         >
-          ▼
+          <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 10l6 6 6-6" />
+          </svg>
         </button>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center gap-0.5 rounded-xl border border-white/10 bg-white/[0.03] px-1.5 py-1">
+    <div className="flex flex-col items-center gap-1 rounded-xl border border-white/12 bg-slate-900/55 px-1.5 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-sm">
       <button
         type="button"
         onClick={() => handleVote(1)}
         disabled={isPending}
         className={`rounded-lg p-1 text-sm transition ${
           userVote === 1
-            ? "bg-lime-400/20 text-lime-300"
-            : "text-slate-500 hover:bg-white/8 hover:text-lime-300"
+            ? "bg-lime-400/20 text-lime-300 ring-1 ring-lime-300/35"
+            : "text-slate-400 hover:bg-white/10 hover:text-lime-300"
         } disabled:opacity-50`}
         aria-label="Upvote"
       >
-        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 4l-8 8h5v8h6v-8h5z" />
+        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 14l6-6 6 6" />
         </svg>
       </button>
       <span
-        className={`text-xs font-bold ${
+        className={`text-xs font-bold tabular-nums ${
           score > 0
             ? "text-lime-300"
             : score < 0
               ? "text-red-400"
-              : "text-slate-500"
+              : "text-slate-400"
         }`}
       >
         {score}
@@ -142,13 +146,13 @@ export function VoteButtons({
         disabled={isPending}
         className={`rounded-lg p-1 text-sm transition ${
           userVote === -1
-            ? "bg-red-400/20 text-red-400"
-            : "text-slate-500 hover:bg-white/8 hover:text-red-400"
+            ? "bg-red-400/20 text-red-400 ring-1 ring-red-300/35"
+            : "text-slate-400 hover:bg-white/10 hover:text-red-400"
         } disabled:opacity-50`}
         aria-label="Downvote"
       >
-        <svg className="h-4 w-4 rotate-180" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 4l-8 8h5v8h6v-8h5z" />
+        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 10l6 6 6-6" />
         </svg>
       </button>
     </div>

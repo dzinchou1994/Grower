@@ -6,18 +6,22 @@ import {
   calculateXp,
   getLevelProgress,
   computeBadges,
+  getUsernameAccentClassByXp,
 } from "@/lib/leveling";
 import { AccountAvatarPicker } from "@/components/account-avatar-picker";
 import { UserAvatar } from "@/components/user-avatar";
+import type { Locale } from "@/lib/i18n";
 
 export function AccountLevelCard({
   username,
   userImage,
   stats,
+  locale,
 }: {
   username: string;
   userImage?: string | null;
   stats: UserActivityStats;
+  locale: Locale;
 }) {
   const [avatarModalOpen, setAvatarModalOpen] = useState(false);
   const xp = calculateXp(stats);
@@ -26,6 +30,85 @@ export function AccountLevelCard({
   const badges = computeBadges(stats);
   const earnedBadges = badges.filter((b) => b.earned);
   const lockedBadges = badges.filter((b) => !b.earned);
+  const t =
+    locale === "ka"
+      ? {
+          tapAvatar: "დააჭირე ავატარს შესაცვლელად",
+          xp: "XP",
+          level: "დონე",
+          toLevel: "XP შემდეგ დონემდე",
+          max: "მაქსიმუმი",
+          maxLevel: "მაქს დონე",
+          threads: "თემები",
+          comments: "კომენტარები",
+          likes: "მოწონებები",
+          diaries: "დღიურები",
+          weeks: "კვირები",
+          badges: "ბეიჯები",
+          chooseAvatar: "პროფილის ავატარის არჩევა",
+          closeAvatar: "ავატარის ამრჩევის დახურვა",
+        }
+      : locale === "ru"
+        ? {
+            tapAvatar: "Нажмите на аватар для изменения",
+            xp: "XP",
+            level: "Уровень",
+            toLevel: "XP до следующего уровня",
+            max: "МАКС",
+            maxLevel: "МАКС УРОВЕНЬ",
+            threads: "Темы",
+            comments: "Комментарии",
+            likes: "Лайки",
+            diaries: "Дневники",
+            weeks: "Недели",
+            badges: "Бейджи",
+            chooseAvatar: "Выбор аватара профиля",
+            closeAvatar: "Закрыть выбор аватара",
+          }
+        : {
+            tapAvatar: "Tap avatar to edit",
+            xp: "XP",
+            level: "Level",
+            toLevel: "XP to level",
+            max: "MAX",
+            maxLevel: "MAX LEVEL",
+            threads: "Threads",
+            comments: "Comments",
+            likes: "Likes",
+            diaries: "Diaries",
+            weeks: "Weeks",
+            badges: "Badges",
+            chooseAvatar: "Choose profile avatar",
+            closeAvatar: "Close avatar picker",
+          };
+
+  const levelTitleByLocale: Record<string, Record<Locale, string>> = {
+    Seedling: { ka: "ჩითილი", en: "Seedling", ru: "Сидлинг" },
+    Sprout: { ka: "ამონაყარი", en: "Sprout", ru: "Росток" },
+    Vegger: { ka: "ვეგერი", en: "Vegger", ru: "Вегер" },
+    Grower: { ka: "გროვერი", en: "Grower", ru: "Гровер" },
+    Cultivator: { ka: "კულტივატორი", en: "Cultivator", ru: "Культиватор" },
+    Harvester: { ka: "ჰარვესტერი", en: "Harvester", ru: "Харвестер" },
+    Connoisseur: { ka: "მცოდნე", en: "Connoisseur", ru: "Знаток" },
+    "Master Grower": { ka: "მასტერ გროვერი", en: "Master Grower", ru: "Мастер-гровер" },
+    "OG Kush": { ka: "OG Kush", en: "OG Kush", ru: "OG Kush" },
+    "420 Legend": { ka: "420 ლეგენდა", en: "420 Legend", ru: "Легенда 420" },
+  };
+
+  const badgeTitleByLocale: Record<string, Record<Locale, string>> = {
+    "first-thread": { ka: "პირველი თემა", en: "First Thread", ru: "Первая тема" },
+    commentator: { ka: "კომენტატორი", en: "Commentator", ru: "Комментатор" },
+    popular: { ka: "პოპულარული", en: "Popular", ru: "Популярный" },
+    "diary-starter": { ka: "დღიურის სტარტი", en: "Diary Starter", ru: "Старт дневника" },
+    "weekly-grower": { ka: "კვირეული გროვერი", en: "Weekly Grower", ru: "Недельный гровер" },
+    prolific: { ka: "პროლიფიკი", en: "Prolific", ru: "Продуктивный" },
+    "community-pillar": { ka: "ქომუნითი ბურჯი", en: "Community Pillar", ru: "Опора сообщества" },
+    "420-club": { ka: "420 კლუბი", en: "420 Club", ru: "Клуб 420" },
+  };
+
+  const localizeLevelTitle = (title: string) => levelTitleByLocale[title]?.[locale] ?? title;
+  const localizeBadgeTitle = (id: string, fallback: string) =>
+    badgeTitleByLocale[id]?.[locale] ?? fallback;
 
   useEffect(() => {
     document.body.style.overflow = avatarModalOpen ? "hidden" : "";
@@ -46,20 +129,20 @@ export function AccountLevelCard({
             type="button"
             onClick={() => setAvatarModalOpen(true)}
             className="group rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70"
-            aria-label="Open avatar picker"
+            aria-label={t.chooseAvatar}
           >
             <div className="rounded-full ring-2 ring-transparent transition group-hover:ring-lime-300/40">
               <UserAvatar username={username} image={userImage} size="lg" />
             </div>
           </button>
           <div className="sm:text-center">
-            <p className="text-sm font-semibold text-white sm:text-base">
+            <p className={`text-sm font-semibold sm:text-base ${getUsernameAccentClassByXp(xp)}`}>
               @{username}
             </p>
-            <p className="mt-0.5 text-[10px] text-slate-400">Tap avatar to edit</p>
+            <p className="mt-0.5 text-[10px] text-slate-400">{t.tapAvatar}</p>
             <p className="mt-0.5 flex items-center gap-1.5 text-xs text-lime-300 sm:justify-center sm:text-sm">
               <span>{current.emoji}</span>
-              <span>{current.title}</span>
+              <span>{localizeLevelTitle(current.title)}</span>
             </p>
           </div>
         </div>
@@ -71,11 +154,11 @@ export function AccountLevelCard({
             <div>
               <p className="text-2xl font-bold tabular-nums text-white sm:text-4xl">
                 {xp.toLocaleString()}
-                <span className="ml-1 text-sm font-normal text-slate-400">XP</span>
+                <span className="ml-1 text-sm font-normal text-slate-400">{t.xp}</span>
               </p>
               <p className="mt-0.5 text-xs text-slate-400">
-                Level {current.level}
-                {next ? ` — ${xpNeeded - xpInLevel} XP to Level ${next.level}` : " — MAX"}
+                {t.level} {current.level}
+                {next ? ` - ${xpNeeded - xpInLevel} ${t.toLevel} ${next.level}` : ` - ${t.max}`}
               </p>
             </div>
             <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-lime-400/20 bg-lime-400/10 text-xl sm:h-12 sm:w-12 sm:text-2xl">
@@ -87,14 +170,14 @@ export function AccountLevelCard({
           <div className="mt-4">
             <div className="flex items-center justify-between text-[10px] text-slate-400 sm:text-xs">
               <span>
-                Lv. {current.level} {current.title}
+                Lv. {current.level} {localizeLevelTitle(current.title)}
               </span>
               {next ? (
                 <span>
-                  Lv. {next.level} {next.title} {next.emoji}
+                  Lv. {next.level} {localizeLevelTitle(next.title)} {next.emoji}
                 </span>
               ) : (
-                <span>MAX LEVEL</span>
+                <span>{t.maxLevel}</span>
               )}
             </div>
             <div className="mt-1.5 h-3 overflow-hidden rounded-full border border-white/10 bg-slate-900/80 sm:h-4">
@@ -110,11 +193,11 @@ export function AccountLevelCard({
 
           {/* Activity stats grid */}
           <div className="mt-5 grid grid-cols-3 gap-2 sm:grid-cols-5 sm:gap-3">
-            <StatPill label="Threads" value={stats.threadsCreated} icon="💬" />
-            <StatPill label="Comments" value={stats.commentsPosted} icon="🗣️" />
-            <StatPill label="Likes" value={stats.likesReceived} icon="❤️" />
-            <StatPill label="Diaries" value={stats.diariesCreated} icon="📔" />
-            <StatPill label="Weeks" value={stats.diaryWeeksPosted} icon="📅" />
+            <StatPill label={t.threads} value={stats.threadsCreated} icon="💬" />
+            <StatPill label={t.comments} value={stats.commentsPosted} icon="🗣️" />
+            <StatPill label={t.likes} value={stats.likesReceived} icon="❤️" />
+            <StatPill label={t.diaries} value={stats.diariesCreated} icon="📔" />
+            <StatPill label={t.weeks} value={stats.diaryWeeksPosted} icon="📅" />
           </div>
         </div>
       </div>
@@ -122,7 +205,7 @@ export function AccountLevelCard({
       {/* Badges section */}
       <div className="mt-6 border-t border-white/8 pt-5">
         <p className="text-xs font-medium uppercase tracking-widest text-slate-400 sm:text-sm">
-          Badges
+          {t.badges}
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           {earnedBadges.map((badge) => (
@@ -132,7 +215,7 @@ export function AccountLevelCard({
               className="inline-flex items-center gap-1.5 rounded-full border border-lime-400/30 bg-lime-400/10 px-3 py-1.5 text-xs text-lime-200 sm:text-sm"
             >
               <span>{badge.emoji}</span>
-              {badge.title}
+              {localizeBadgeTitle(badge.id, badge.title)}
             </span>
           ))}
           {lockedBadges.map((badge) => (
@@ -142,7 +225,7 @@ export function AccountLevelCard({
               className="inline-flex items-center gap-1.5 rounded-full border border-white/8 bg-white/4 px-3 py-1.5 text-xs text-slate-500 sm:text-sm"
             >
               <span className="opacity-40">{badge.emoji}</span>
-              {badge.title}
+              {localizeBadgeTitle(badge.id, badge.title)}
             </span>
           ))}
         </div>
@@ -162,12 +245,12 @@ export function AccountLevelCard({
             aria-hidden={!avatarModalOpen}
           >
             <div className="mb-3 flex items-center justify-between">
-              <h3 className="text-base font-semibold text-white sm:text-lg">Choose profile avatar</h3>
+              <h3 className="text-base font-semibold text-white sm:text-lg">{t.chooseAvatar}</h3>
               <button
                 type="button"
                 onClick={() => setAvatarModalOpen(false)}
                 className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition hover:bg-white/10"
-                aria-label="Close avatar picker"
+                aria-label={t.closeAvatar}
               >
                 ✕
               </button>

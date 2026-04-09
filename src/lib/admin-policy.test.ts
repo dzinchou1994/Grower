@@ -16,10 +16,11 @@ describe("admin policy matrix", () => {
   });
 
   it("returns expected tab access by role", () => {
-    expect(getAccessTabs("MODERATOR")).toEqual(["moderation", "content"]);
+    expect(getAccessTabs("MODERATOR")).toEqual(["moderation", "content", "messages"]);
     expect(getAccessTabs("ADMIN")).toEqual([
       "moderation",
       "content",
+      "messages",
       "cannapedia",
       "feedback",
       "seo",

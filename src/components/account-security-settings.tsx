@@ -2,9 +2,79 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import type { Locale } from "@/lib/i18n";
 
-export function AccountSecuritySettings({ currentEmail }: { currentEmail: string }) {
+export function AccountSecuritySettings({
+  currentEmail,
+  locale,
+}: {
+  currentEmail: string;
+  locale: Locale;
+}) {
   const router = useRouter();
+  const t =
+    locale === "ka"
+      ? {
+          couldNotUpdateEmail: "ელფოსტის განახლება ვერ მოხერხდა.",
+          emailUpdated: "ელფოსტა განახლდა.",
+          networkError: "ქსელის შეცდომა. სცადე თავიდან.",
+          confirmMismatch: "პაროლის დადასტურება არ ემთხვევა.",
+          couldNotUpdatePassword: "პაროლის განახლება ვერ მოხერხდა.",
+          passwordUpdated: "პაროლი განახლდა.",
+          title: "უსაფრთხოების პარამეტრები",
+          subtitle: "განაახლე ელფოსტა და პაროლი მიმდინარე პაროლის დადასტურებით.",
+          changeEmail: "ელფოსტის შეცვლა",
+          changePassword: "პაროლის შეცვლა",
+          hide: "დახურვა",
+          open: "გახსნა",
+          currentPassword: "მიმდინარე პაროლი",
+          newPassword: "ახალი პაროლი (მინ. 8)",
+          confirmNewPassword: "დაადასტურე ახალი პაროლი",
+          saving: "ინახება...",
+          updateEmail: "ელფოსტის განახლება",
+          updatePassword: "პაროლის განახლება",
+        }
+      : locale === "ru"
+        ? {
+            couldNotUpdateEmail: "Не удалось обновить email.",
+            emailUpdated: "Email обновлен.",
+            networkError: "Сетевая ошибка. Попробуйте снова.",
+            confirmMismatch: "Подтверждение пароля не совпадает.",
+            couldNotUpdatePassword: "Не удалось обновить пароль.",
+            passwordUpdated: "Пароль обновлен.",
+            title: "Настройки безопасности",
+            subtitle: "Обновите email и пароль с подтверждением текущего пароля.",
+            changeEmail: "Изменить email",
+            changePassword: "Изменить пароль",
+            hide: "Скрыть",
+            open: "Открыть",
+            currentPassword: "Текущий пароль",
+            newPassword: "Новый пароль (мин. 8)",
+            confirmNewPassword: "Подтвердите новый пароль",
+            saving: "Сохранение...",
+            updateEmail: "Обновить email",
+            updatePassword: "Обновить пароль",
+          }
+        : {
+            couldNotUpdateEmail: "Could not update email.",
+            emailUpdated: "Email updated.",
+            networkError: "Network error. Try again.",
+            confirmMismatch: "Password confirmation does not match.",
+            couldNotUpdatePassword: "Could not update password.",
+            passwordUpdated: "Password updated.",
+            title: "Security Settings",
+            subtitle: "Update your email and password with current-password verification.",
+            changeEmail: "Change Email",
+            changePassword: "Change Password",
+            hide: "Hide",
+            open: "Open",
+            currentPassword: "Current password",
+            newPassword: "New password (min 8)",
+            confirmNewPassword: "Confirm new password",
+            saving: "Saving...",
+            updateEmail: "Update email",
+            updatePassword: "Update password",
+          };
 
   const [email, setEmail] = useState(currentEmail);
   const [currentPasswordForEmail, setCurrentPasswordForEmail] = useState("");
@@ -38,15 +108,15 @@ export function AccountSecuritySettings({ currentEmail }: { currentEmail: string
 
       if (!response.ok) {
         const parsed = await response.json().catch(() => null);
-        setEmailError(parsed?.error ?? "Could not update email.");
+        setEmailError(parsed?.error ?? t.couldNotUpdateEmail);
         return;
       }
 
       setCurrentPasswordForEmail("");
-      setEmailSuccess("Email updated.");
+      setEmailSuccess(t.emailUpdated);
       router.refresh();
     } catch {
-      setEmailError("Network error. Try again.");
+      setEmailError(t.networkError);
     } finally {
       setIsSavingEmail(false);
     }
@@ -59,7 +129,7 @@ export function AccountSecuritySettings({ currentEmail }: { currentEmail: string
     setPasswordError(null);
 
     if (newPassword !== confirmPassword) {
-      setPasswordError("Password confirmation does not match.");
+      setPasswordError(t.confirmMismatch);
       setIsSavingPassword(false);
       return;
     }
@@ -77,16 +147,16 @@ export function AccountSecuritySettings({ currentEmail }: { currentEmail: string
 
       if (!response.ok) {
         const parsed = await response.json().catch(() => null);
-        setPasswordError(parsed?.error ?? "Could not update password.");
+        setPasswordError(parsed?.error ?? t.couldNotUpdatePassword);
         return;
       }
 
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
-      setPasswordSuccess("Password updated.");
+      setPasswordSuccess(t.passwordUpdated);
     } catch {
-      setPasswordError("Network error. Try again.");
+      setPasswordError(t.networkError);
     } finally {
       setIsSavingPassword(false);
     }
@@ -94,9 +164,9 @@ export function AccountSecuritySettings({ currentEmail }: { currentEmail: string
 
   return (
     <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-8">
-      <h2 className="text-lg font-semibold text-white sm:text-2xl">Security Settings</h2>
+      <h2 className="text-lg font-semibold text-white sm:text-2xl">{t.title}</h2>
       <p className="mt-1 text-xs text-slate-400 sm:text-sm">
-        Update your email and password with current-password verification.
+        {t.subtitle}
       </p>
 
       <div className="mt-5 space-y-3">
@@ -106,9 +176,9 @@ export function AccountSecuritySettings({ currentEmail }: { currentEmail: string
             onClick={() => setActivePanel(activePanel === "email" ? null : "email")}
             className="flex w-full items-center justify-between text-left"
           >
-            <span className="text-sm font-medium text-white">Change Email</span>
+            <span className="text-sm font-medium text-white">{t.changeEmail}</span>
             <span className="text-xs text-slate-400">
-              {activePanel === "email" ? "Hide" : "Open"}
+              {activePanel === "email" ? t.hide : t.open}
             </span>
           </button>
 
@@ -125,7 +195,7 @@ export function AccountSecuritySettings({ currentEmail }: { currentEmail: string
                 type="password"
                 value={currentPasswordForEmail}
                 onChange={(event) => setCurrentPasswordForEmail(event.target.value)}
-                placeholder="Current password"
+                placeholder={t.currentPassword}
                 className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2"
                 required
               />
@@ -135,7 +205,7 @@ export function AccountSecuritySettings({ currentEmail }: { currentEmail: string
                   disabled={isSavingEmail}
                   className="rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-lime-300 disabled:opacity-60"
                 >
-                  {isSavingEmail ? "Saving..." : "Update email"}
+                  {isSavingEmail ? t.saving : t.updateEmail}
                 </button>
                 {emailSuccess ? <p className="text-xs text-lime-300">{emailSuccess}</p> : null}
                 {emailError ? <p className="text-xs text-red-300">{emailError}</p> : null}
@@ -150,9 +220,9 @@ export function AccountSecuritySettings({ currentEmail }: { currentEmail: string
             onClick={() => setActivePanel(activePanel === "password" ? null : "password")}
             className="flex w-full items-center justify-between text-left"
           >
-            <span className="text-sm font-medium text-white">Change Password</span>
+            <span className="text-sm font-medium text-white">{t.changePassword}</span>
             <span className="text-xs text-slate-400">
-              {activePanel === "password" ? "Hide" : "Open"}
+              {activePanel === "password" ? t.hide : t.open}
             </span>
           </button>
 
@@ -162,7 +232,7 @@ export function AccountSecuritySettings({ currentEmail }: { currentEmail: string
                 type="password"
                 value={currentPassword}
                 onChange={(event) => setCurrentPassword(event.target.value)}
-                placeholder="Current password"
+                placeholder={t.currentPassword}
                 className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2"
                 required
               />
@@ -170,7 +240,7 @@ export function AccountSecuritySettings({ currentEmail }: { currentEmail: string
                 type="password"
                 value={newPassword}
                 onChange={(event) => setNewPassword(event.target.value)}
-                placeholder="New password (min 8)"
+                placeholder={t.newPassword}
                 minLength={8}
                 className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2"
                 required
@@ -179,7 +249,7 @@ export function AccountSecuritySettings({ currentEmail }: { currentEmail: string
                 type="password"
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
-                placeholder="Confirm new password"
+                placeholder={t.confirmNewPassword}
                 minLength={8}
                 className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2"
                 required
@@ -190,7 +260,7 @@ export function AccountSecuritySettings({ currentEmail }: { currentEmail: string
                   disabled={isSavingPassword}
                   className="rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-lime-300 disabled:opacity-60"
                 >
-                  {isSavingPassword ? "Saving..." : "Update password"}
+                  {isSavingPassword ? t.saving : t.updatePassword}
                 </button>
                 {passwordSuccess ? (
                   <p className="text-xs text-lime-300">{passwordSuccess}</p>

@@ -3,6 +3,7 @@ import { FeedbackStatus } from "@prisma/client";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { adminErrorResponse, requireAdminOrModerator } from "@/lib/admin-authz";
+import { listLocalFeedback, updateLocalFeedbackStatus } from "@/lib/feedback-store";
 
 const updateSchema = z.object({
   feedbackId: z.string().min(1),
@@ -19,14 +20,24 @@ export async function GET(request: Request) {
         ? (statusRaw as FeedbackStatus)
         : undefined;
 
-    const feedback = await db.feedback.findMany({
-      where: status ? { status } : {},
-      orderBy: [{ status: "asc" }, { createdAt: "desc" }],
-      include: {
-        user: { select: { id: true, username: true, email: true } },
-      },
-      take: 200,
-    });
+    const useDatabase = Boolean(process.env.DATABASE_URL);
+    if (!useDatabase) {
+      return NextResponse.json({ feedback: listLocalFeedback(status) });
+    }
+
+    let feedback;
+    try {
+      feedback = await db.feedback.findMany({
+        where: status ? { status } : {},
+        orderBy: [{ status: "asc" }, { createdAt: "desc" }],
+        include: {
+          user: { select: { id: true, username: true, email: true } },
+        },
+        take: 200,
+      });
+    } catch {
+      feedback = listLocalFeedback(status);
+    }
 
     return NextResponse.json({ feedback });
   } catch (error) {
@@ -47,10 +58,28 @@ export async function PATCH(request: Request) {
       );
     }
 
-    const updated = await db.feedback.update({
-      where: { id: parsed.data.feedbackId },
-      data: { status: parsed.data.status },
-    });
+    const useDatabase = Boolean(process.env.DATABASE_URL);
+    if (!useDatabase) {
+      const updatedLocal = updateLocalFeedbackStatus(parsed.data.feedbackId, parsed.data.status);
+      if (!updatedLocal) {
+        return NextResponse.json({ error: "Feedback not found." }, { status: 404 });
+      }
+      return NextResponse.json({ feedback: updatedLocal });
+    }
+
+    let updated;
+    try {
+      updated = await db.feedback.update({
+        where: { id: parsed.data.feedbackId },
+        data: { status: parsed.data.status },
+      });
+    } catch {
+      const updatedLocal = updateLocalFeedbackStatus(parsed.data.feedbackId, parsed.data.status);
+      if (!updatedLocal) {
+        return NextResponse.json({ error: "Feedback not found." }, { status: 404 });
+      }
+      updated = updatedLocal;
+    }
 
     return NextResponse.json({ feedback: updated });
   } catch (error) {

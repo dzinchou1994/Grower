@@ -20,9 +20,9 @@ type PageProps = {
 function cannapediaCopy(locale: Locale) {
   if (locale === "ka") {
     return {
-      title: "Cannapedia - გროვერის ცოდნის ბაზა",
+      title: "Cannapedia - ყველაფერი მარიხუანას გაზრდის შესახებ",
       description:
-        "პრაქტიკული გზამკვლევები დამწყებებისთვის: თესლი, ვეგეტაცია, ყვავილობა და ჰარვესტი.",
+        "პრაქტიკული გზამკვლევები დამწყებებისთვის: თესლი, ვეგეტაცია, ყვავილობა და ჰარვესტი - სახლშიც და გარე პირობებშიც გასაზრდელად.",
       badge: "Cannapedia",
       read: "წაკითხვა",
       min: "წთ",
@@ -103,17 +103,17 @@ export default async function CannapediaPage({ params, searchParams }: PageProps
 
   return (
     <div className="flex flex-col gap-5 pb-8 sm:gap-8">
-      <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/6 p-5 shadow-2xl shadow-lime-950/10 sm:rounded-[2rem] sm:p-8 lg:p-12">
-        <CannabisLeaf className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rotate-12 text-lime-400/[0.05] sm:h-60 sm:w-60" />
+      <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-transparent p-4 shadow-xl shadow-lime-950/10 sm:rounded-[2rem] sm:p-6 lg:p-8">
+        <CannabisLeaf className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rotate-12 text-lime-400/[0.06] sm:-right-10 sm:-top-10 sm:h-44 sm:w-44" />
         <div className="relative">
-          <div className="inline-flex items-center gap-2 text-xs text-lime-300 sm:text-sm">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-lime-400/25 bg-lime-400/10 px-2.5 py-1 text-[11px] text-lime-300 sm:text-xs">
             <CannabisLeaf className="h-4 w-4" />
             {copy.badge}
           </div>
-          <h1 className="mt-2 text-2xl font-semibold text-white sm:text-4xl lg:text-5xl">
+          <h1 className="mt-2 text-xl font-semibold leading-tight text-white sm:text-3xl lg:text-4xl">
             {copy.title}
           </h1>
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-300 sm:mt-4 sm:text-base sm:leading-7">
+          <p className="mt-2 max-w-3xl text-xs leading-relaxed text-slate-300 sm:mt-3 sm:text-sm sm:leading-6">
             {copy.description}
           </p>
         </div>

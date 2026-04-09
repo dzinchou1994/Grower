@@ -11,7 +11,6 @@ import {
 } from "@/lib/i18n";
 import { listForumTopics } from "@/lib/forum-data";
 import { CannabisLeaf } from "@/components/icons";
-import { UserAvatar } from "@/components/user-avatar";
 import { getPageMetadataWithSeo } from "@/lib/seo-settings";
 
 type PageProps = {
@@ -49,6 +48,24 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
 
   const typedLocale = locale as Locale;
   const { dict } = getLocalizedContent(typedLocale);
+  const ui =
+    typedLocale === "ka"
+      ? {
+          searchPlaceholder: "მოძებნე თემები, დისკუსიები ან ავტორები...",
+          search: "ძებნა",
+          noMatches: "შენს ძებნაზე შედეგი ვერ მოიძებნა.",
+        }
+      : typedLocale === "ru"
+        ? {
+            searchPlaceholder: "Ищите темы, обсуждения или авторов...",
+            search: "Поиск",
+            noMatches: "По вашему запросу ничего не найдено.",
+          }
+        : {
+            searchPlaceholder: "Search topics, threads or authors...",
+            search: "Search",
+            noMatches: "No matches found for your search.",
+          };
   const [forumTopicList, sessionUser] = await Promise.all([
     listForumTopics(q, typedLocale),
     getServerSessionUser(),
@@ -78,14 +95,14 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
             type="text"
             name="q"
             defaultValue={q ?? ""}
-            placeholder="Search topics, threads or authors..."
+            placeholder={ui.searchPlaceholder}
             className="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2"
           />
           <button
             type="submit"
             className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
           >
-            Search
+            {ui.search}
           </button>
         </form>
       </section>
@@ -94,12 +111,13 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
         topics={forumTopicList.map((topic) => ({ slug: topic.slug, title: topic.title }))}
         isAuthenticated={Boolean(sessionUser)}
         loginHref={getLocalizedPath(typedLocale, "/auth/login")}
+        locale={typedLocale}
       />
 
       <div className="grid gap-4 sm:gap-5">
         {forumTopicList.length === 0 ? (
           <div className="rounded-2xl border border-white/10 bg-slate-950/65 p-5 text-sm text-slate-300 sm:rounded-[2rem] sm:p-6">
-            No matches found for your search.
+            {ui.noMatches}
           </div>
         ) : null}
 
@@ -142,11 +160,9 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
                   className="flex items-center justify-between gap-3 rounded-2xl border border-white/8 bg-white/4 px-4 py-3 text-sm text-slate-300 sm:rounded-3xl"
                 >
                   <span className="flex min-w-0 items-center gap-2">
-                    <UserAvatar
-                      username={thread.author}
-                      image={thread.authorImage}
-                      size="sm"
-                    />
+                    <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-white/15 bg-gradient-to-br from-slate-800 to-slate-950 text-base">
+                      {thread.threadIcon ?? "💬"}
+                    </span>
                     <span className="line-clamp-1 font-medium text-white">{thread.title}</span>
                     {thread.isTranslated ? (
                       <span className="rounded-full border border-lime-400/35 bg-lime-400/10 px-1.5 py-0.5 text-[10px] text-lime-300">

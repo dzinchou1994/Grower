@@ -103,6 +103,8 @@ model User {
   likes         Like[]
   votes         Vote[]
   feedbacks     Feedback[]
+  sentMessages     Message[] @relation("MessageSender")
+  receivedMessages Message[] @relation("MessageRecipient")
 }
 
 model Diary {
@@ -353,4 +355,21 @@ model Feedback {
 
   @@index([status, createdAt])
   @@index([userId, createdAt])
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  senderId    String
+  recipientId String
+  body        String
+  isHidden    Boolean  @default(false)
+  readAt      DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  sender      User     @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  recipient   User     @relation("MessageRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+
+  @@index([senderId, createdAt])
+  @@index([recipientId, createdAt])
+  @@index([isHidden, createdAt])
 }

@@ -23,8 +23,10 @@ export function SiteHeader({
   const pathname = usePathname();
   const router = useRouter();
   const dict = getDictionary(locale);
+  const homePath = getLocalizedPath(locale);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
 
   const navigation = [
     { href: "", label: dict.nav.home, icon: "home" as const },
@@ -42,11 +44,14 @@ export function SiteHeader({
           navigation: "ნავიგაცია",
           signedIn: "შესული ხარ",
           language: "ენა",
-          login: "შესვლა",
+          login: "ავტორიზაცია",
           register: "რეგისტრაცია",
           logout: "გამოსვლა",
           loggingOut: "მიმდინარეობს გამოსვლა...",
           closeMenu: "მენიუს დახურვა",
+          theme: "თემა",
+          light: "ღია",
+          dark: "მუქი",
         }
       : locale === "ru"
         ? {
@@ -58,6 +63,9 @@ export function SiteHeader({
             logout: "Выйти",
             loggingOut: "Выход...",
             closeMenu: "Закрыть меню",
+            theme: "Тема",
+            light: "Светлая",
+            dark: "Темная",
           }
         : {
             navigation: "Navigation",
@@ -68,6 +76,9 @@ export function SiteHeader({
             logout: "Logout",
             loggingOut: "Logging out...",
             closeMenu: "Close menu",
+            theme: "Theme",
+            light: "Light",
+            dark: "Dark",
           };
   const brandSubtitle = dict.home.badge;
 
@@ -89,17 +100,43 @@ export function SiteHeader({
     };
   }, [mobileMenuOpen]);
 
+  useEffect(() => {
+    const stored = localStorage.getItem("grower_theme");
+    const preferred =
+      stored === "light" || stored === "dark"
+        ? stored
+        : window.matchMedia("(prefers-color-scheme: light)").matches
+          ? "light"
+          : "dark";
+    setTheme(preferred);
+    document.documentElement.setAttribute("data-theme", preferred);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("grower_theme", theme);
+  }, [theme]);
+
+  function handleLogoClick(event: React.MouseEvent<HTMLAnchorElement>) {
+    setMobileMenuOpen(false);
+    if (pathname === homePath) {
+      event.preventDefault();
+      router.refresh();
+    }
+  }
+
   return (
     <header className="sticky top-0 z-30 border-b border-white/8 bg-[#08111f]/75 backdrop-blur-2xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link
-          href={getLocalizedPath(locale)}
+          href={homePath}
+          onClick={handleLogoClick}
           className="group flex items-center gap-2.5"
         >
           <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl border border-lime-400/20 bg-gradient-to-br from-slate-900 to-slate-800 shadow-lg shadow-lime-950/30 transition group-hover:border-lime-300/40 group-hover:shadow-lime-400/10">
             <Image
-              src="/brand/logo-20260408.png"
+              src="/brand/logo-1923818.png"
               alt="Grower logo"
               width={24}
               height={24}
@@ -143,7 +180,7 @@ export function SiteHeader({
         </Link>
 
         {/* Desktop nav — centered */}
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 lg:flex">
           <nav className="flex items-center gap-0.5 rounded-full border border-white/8 bg-white/[0.03] p-1 text-[13px] text-slate-400">
             {navigation.map((item) => {
               const isActive = pathname === getLocalizedPath(locale, item.href);
@@ -168,7 +205,7 @@ export function SiteHeader({
         </div>
 
         {/* Right side — lang + user */}
-        <div className="hidden items-center gap-2.5 md:flex">
+        <div className="hidden items-center gap-2.5 lg:flex">
           <div className="flex items-center gap-px rounded-full border border-white/8 bg-white/[0.03] p-0.5 text-[10px] font-medium text-slate-500">
             {locales.map((entry) => (
               <Link
@@ -183,6 +220,34 @@ export function SiteHeader({
                 {entry.toUpperCase()}
               </Link>
             ))}
+          </div>
+          <div className="flex items-center gap-px rounded-full border border-white/8 bg-white/[0.03] p-0.5 text-[10px] font-medium text-slate-500">
+            <button
+              type="button"
+              onClick={() => setTheme("dark")}
+              className={`rounded-full px-2 py-1 transition ${
+                theme === "dark"
+                  ? "bg-slate-900 text-slate-100 ring-1 ring-lime-400/35 shadow-sm shadow-lime-400/20"
+                  : "text-slate-400 hover:bg-white/8 hover:text-white"
+              }`}
+              aria-label={ui.dark}
+              title={ui.dark}
+            >
+              🌙
+            </button>
+            <button
+              type="button"
+              onClick={() => setTheme("light")}
+              className={`rounded-full px-2 py-1 transition ${
+                theme === "light"
+                  ? "bg-slate-900 text-slate-100 ring-1 ring-lime-400/35 shadow-sm shadow-lime-400/20"
+                  : "text-slate-400 hover:bg-white/8 hover:text-white"
+              }`}
+              aria-label={ui.light}
+              title={ui.light}
+            >
+              ☀️
+            </button>
           </div>
 
           <div className="h-5 w-px bg-white/8" />
@@ -228,7 +293,7 @@ export function SiteHeader({
         </div>
 
         {/* Mobile menu button */}
-        <div className="relative z-20 flex items-center gap-2 md:hidden">
+        <div className="relative z-20 flex items-center gap-2 lg:hidden">
           {initialUser ? (
             <Link
               href={getLocalizedPath(locale, "/account")}
@@ -246,7 +311,7 @@ export function SiteHeader({
               href={getLocalizedPath(locale, "/auth/login")}
               className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-slate-200"
             >
-              Login
+              {ui.login}
             </Link>
           )}
 
@@ -292,7 +357,7 @@ export function SiteHeader({
 
       {/* Mobile menu overlay + panel */}
       <div
-        className={`fixed inset-0 z-40 bg-slate-950/70 transition-opacity duration-300 md:hidden ${
+        className={`fixed inset-0 z-40 bg-slate-950/70 transition-opacity duration-300 lg:hidden ${
           mobileMenuOpen
             ? "pointer-events-auto opacity-100"
             : "pointer-events-none opacity-0"
@@ -301,7 +366,7 @@ export function SiteHeader({
         aria-hidden={!mobileMenuOpen}
       />
       <aside
-        className={`fixed right-0 top-0 z-50 h-dvh w-[86%] max-w-sm border-l border-white/10 bg-gradient-to-b from-[#0a1629]/98 to-[#08111f]/98 p-4 shadow-2xl shadow-black/60 backdrop-blur-xl transition-transform duration-300 md:hidden ${
+        className={`fixed right-0 top-0 z-50 h-dvh w-[86%] max-w-sm border-l border-white/10 bg-gradient-to-b from-[#0a1629]/98 to-[#08111f]/98 p-4 shadow-2xl shadow-black/60 backdrop-blur-xl transition-transform duration-300 lg:hidden ${
           mobileMenuOpen
             ? "pointer-events-auto translate-x-0"
             : "pointer-events-none translate-x-full"
@@ -369,24 +434,58 @@ export function SiteHeader({
         </nav>
 
         <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-3">
-          <p className="mb-2 text-[11px] uppercase tracking-[0.16em] text-slate-400">
-            {ui.language}
-          </p>
-          <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-slate-900/50 p-1 text-xs text-slate-300">
-            {locales.map((entry) => (
-              <Link
-                key={entry}
-                href={replaceLocaleInPath(pathname, entry)}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`rounded-full px-2.5 py-1.5 font-medium transition ${
-                  entry === locale
-                    ? "bg-lime-400 text-slate-950"
-                    : "hover:bg-white/10 hover:text-white"
-                }`}
-              >
-                {entry.toUpperCase()}
-              </Link>
-            ))}
+          <div className="flex items-start gap-2">
+            <div className="min-w-0 flex-1">
+              <p className="mb-2 text-[11px] uppercase tracking-[0.16em] text-slate-400">
+                {ui.language}
+              </p>
+              <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-slate-900/50 p-1 text-xs text-slate-300">
+                {locales.map((entry) => (
+                  <Link
+                    key={entry}
+                    href={replaceLocaleInPath(pathname, entry)}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`rounded-full px-2.5 py-1.5 font-medium transition ${
+                      entry === locale
+                        ? "bg-lime-400 text-slate-950"
+                        : "hover:bg-white/10 hover:text-white"
+                    }`}
+                  >
+                    {entry.toUpperCase()}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <p className="mb-2 text-[11px] uppercase tracking-[0.16em] text-slate-400">
+                {ui.theme}
+              </p>
+              <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-slate-900/50 p-1 text-xs text-slate-300">
+                <button
+                  type="button"
+                  onClick={() => setTheme("dark")}
+                  className={`flex-1 rounded-full px-2 py-1.5 font-medium transition ${
+                    theme === "dark"
+                      ? "bg-slate-900 text-slate-100 ring-1 ring-lime-400/35"
+                      : "hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  🌙
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTheme("light")}
+                  className={`flex-1 rounded-full px-2 py-1.5 font-medium transition ${
+                    theme === "light"
+                      ? "bg-slate-900 text-slate-100 ring-1 ring-lime-400/35"
+                      : "hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  ☀️
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 

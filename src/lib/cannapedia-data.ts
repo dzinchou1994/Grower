@@ -6,6 +6,7 @@ export type CannapediaArticle = {
   category:
     | "basics"
     | "nutrition"
+    | "cbd-medical"
     | "seedling"
     | "vegetative"
     | "flowering"
@@ -21,6 +22,7 @@ type CannapediaCategorySeed = {
   slug:
     | "basics"
     | "nutrition"
+    | "cbd-medical"
     | "seedling"
     | "vegetative"
     | "flowering"
@@ -50,6 +52,15 @@ export const cannapediaCategories: CannapediaCategorySeed[] = [
       ka: "კვება და მოვლა",
       en: "Nutrition and Care",
       ru: "Питание и уход",
+    },
+  },
+  {
+    slug: "cbd-medical",
+    icon: "🩺",
+    name: {
+      ka: "CBD და მედიცინა",
+      en: "CBD and Medical",
+      ru: "CBD и медицина",
     },
   },
   {
@@ -161,6 +172,70 @@ export const cannapediaArticles: CannapediaArticle[] = [
         "На веге важнее всего азот, но повышайте питание постепенно, без резких скачков.",
         "Следите за pH регулярно. Для почвы диапазон 6.0-6.8 обычно дает стабильное усвоение.",
         "Leaf tucking, LST и хорошая циркуляция воздуха формируют ровный куст и лучший результат.",
+      ],
+    },
+  },
+  {
+    slug: "cbd-medical-benefits-latest-findings",
+    category: "cbd-medical",
+    readMinutes: 9,
+    title: {
+      ka: "CBD: ჯანმრთელობის სარგებელი და უახლესი მიგნებები",
+      en: "CBD: Health Benefits and Latest Findings",
+      ru: "CBD: польза для здоровья и последние данные",
+    },
+    excerpt: {
+      ka: "რა იცის თანამედროვე კვლევამ CBD-ზე: სტრესი, ძილი, ანთება და უსაფრთხოების პროფილი.",
+      en: "What recent research says about CBD for stress, sleep, inflammation, and safety profile.",
+      ru: "Что показывают последние исследования CBD по стрессу, сну, воспалению и профилю безопасности.",
+    },
+    content: {
+      ka: [
+        "უახლეს კვლევებში CBD ხშირად განიხილება როგორც დამხმარე კომპონენტი სტრესისა და ძილის პრობლემების მართვაში, თუმცა შედეგები განსხვავდება დოზისა და ინდივიდუალური ფაქტორების მიხედვით.",
+        "ზოგიერთ კლინიკურ მიმოხილვაში აღნიშნულია, რომ CBD-ს შეიძლება ჰქონდეს ანთების საწინააღმდეგო პოტენციალი, მაგრამ ეს არ ნიშნავს უნივერსალურ სამკურნალო ეფექტს ყველა მდგომარეობაზე.",
+        "უსაფრთხოება ხშირად ფასდება როგორც საშუალოდ კარგი მოკლევადიან გამოყენებაში, თუმცა აუცილებელია ექიმთან შეთანხმება, განსაკუთრებით სხვა მედიკამენტებთან კომბინაციისას.",
+      ],
+      en: [
+        "Recent studies often describe CBD as a supportive option for stress and sleep concerns, but outcomes vary by dose, product quality, and individual response.",
+        "Some clinical reviews suggest anti-inflammatory potential, yet this does not equal a universal cure across conditions.",
+        "Safety is generally considered acceptable in short-term use, but medical supervision is important, especially when combining CBD with other medications.",
+      ],
+      ru: [
+        "В последних исследованиях CBD чаще рассматривается как поддерживающий инструмент при стрессе и нарушениях сна, но эффект зависит от дозы и индивидуальной реакции.",
+        "В ряде клинических обзоров отмечается потенциальный противовоспалительный эффект, но это не означает универсальное лечение всех состояний.",
+        "Профиль безопасности обычно оценивается как приемлемый при краткосрочном применении, однако важно согласовывать прием с врачом, особенно при других препаратах.",
+      ],
+    },
+  },
+  {
+    slug: "cbd-medical-reports-real-cases",
+    category: "cbd-medical",
+    readMinutes: 10,
+    title: {
+      ka: "CBD: სამედიცინო რეპორტები და რეალური შემთხვევები",
+      en: "CBD: Medical Reports and Real-World Cases",
+      ru: "CBD: медицинские отчеты и реальные кейсы",
+    },
+    excerpt: {
+      ka: "მოკლე ანალიზი პაციენტების რეალური გამოცდილებიდან და კლინიკური რეპორტებიდან.",
+      en: "A practical summary from published medical reports and real-world patient cases.",
+      ru: "Практическая сводка по опубликованным медотчетам и реальным кейсам пациентов.",
+    },
+    content: {
+      ka: [
+        "რეალურ ქეისებში CBD ხშირად გამოიყენება როგორც დამატებითი მხარდაჭერა ქრონიკული დისკომფორტის, შფოთვითი ფონის ან ძილის დარღვევის დროს - არა როგორც ძირითადი თერაპიის სრული ჩანაცვლება.",
+        "მედიკალურ რეპორტებში მუდმივად ფიგურირებს დოზის ტიტრაცია (დაბალი დოზით დაწყება და ეტაპობრივი ზრდა), რათა შემცირდეს გვერდითი ეფექტების რისკი.",
+        "მთავარი პრაქტიკული დასკვნა: პროდუქტის ხარისხი, ლაბორატორიული ტესტირება და ექიმთან კომუნიკაცია კრიტიკულია შედეგისა და უსაფრთხოებისთვის.",
+      ],
+      en: [
+        "In real-world cases, CBD is often used as an adjunct for chronic discomfort, anxiety background, or sleep issues, rather than a full replacement for primary treatment.",
+        "Medical reports frequently emphasize dose titration (start low, increase gradually) to reduce side-effect risk.",
+        "Key practical takeaway: product quality, lab testing, and clinician communication are critical for both outcomes and safety.",
+      ],
+      ru: [
+        "В реальных кейсах CBD часто применяют как дополнительную поддержку при хроническом дискомфорте, тревожности и нарушениях сна, а не как полную замену основной терапии.",
+        "В медицинских отчетах регулярно подчеркивается важность титрации дозы (начинать с малого и повышать постепенно) для снижения рисков побочных эффектов.",
+        "Главный практический вывод: качество продукта, лабораторные тесты и контакт с врачом критичны для результата и безопасности.",
       ],
     },
   },

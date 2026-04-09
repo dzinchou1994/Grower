@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { AccountLevelCard } from "@/components/account-level-card";
+import { AccountMessageInbox } from "@/components/account-message-inbox";
 import { AccountSecuritySettings } from "@/components/account-security-settings";
+import { AccountSocialLinksSettings } from "@/components/account-social-links-settings";
 import { getServerSessionUser } from "@/lib/auth-session";
 import { db } from "@/lib/db";
 import type { UserActivityStats } from "@/lib/leveling";
+import { extractSocialsFromBio } from "@/lib/user-socials";
 import {
   getAlternates,
   getLocalizedPath,
@@ -24,9 +27,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!isValidLocale(locale)) {
     return {};
   }
+  const meta =
+    locale === "ka"
+      ? { title: "Grower.ge | ანგარიში", description: "შენი Grower.ge ანგარიშის პანელი." }
+      : locale === "ru"
+        ? { title: "Grower.ge | Аккаунт", description: "Панель вашего аккаунта Grower.ge." }
+        : { title: "Grower.ge | Account", description: "Your Grower.ge account dashboard." };
   return {
-    title: "Grower | Account",
-    description: "Your Grower account dashboard.",
+    title: meta.title,
+    description: meta.description,
     alternates: getAlternates("/account"),
   };
 }
@@ -38,6 +47,48 @@ export default async function AccountPage({ params }: PageProps) {
   }
 
   const typedLocale = locale as Locale;
+  const t =
+    typedLocale === "ka"
+      ? {
+          recentThreads: "შენი ბოლო თემები",
+          noThreads: "თემები ჯერ არ არის.",
+          comments: "კომენტარი",
+          likes: "მოწონება",
+          commentedThreads: "თემები სადაც დააკომენტარე",
+          noComments: "კომენტარები ჯერ არ არის.",
+          lastCommentSaved: "ბოლო კომენტარი შენს აქტივობაში.",
+          yourDiaries: "შენი დღიურები",
+          newDiary: "ახალი დღიური",
+          noDiaries: "დღიურები ჯერ არ გაქვს.",
+          weeklyUpdates: "კვირეული განახლება",
+        }
+      : typedLocale === "ru"
+        ? {
+            recentThreads: "Ваши последние темы",
+            noThreads: "Тем пока нет.",
+            comments: "комментариев",
+            likes: "лайков",
+            commentedThreads: "Темы, где вы комментировали",
+            noComments: "Комментариев пока нет.",
+            lastCommentSaved: "Последний комментарий сохранен в вашей активности.",
+            yourDiaries: "Ваши дневники",
+            newDiary: "Новый дневник",
+            noDiaries: "У вас пока нет дневников.",
+            weeklyUpdates: "недельных обновлений",
+          }
+        : {
+            recentThreads: "Recent Threads You Posted",
+            noThreads: "No threads yet.",
+            comments: "comments",
+            likes: "likes",
+            commentedThreads: "Last Threads You Commented On",
+            noComments: "No comments yet.",
+            lastCommentSaved: "Last comment saved in your activity.",
+            yourDiaries: "Your Diaries",
+            newDiary: "New Diary",
+            noDiaries: "You have no diaries yet.",
+            weeklyUpdates: "weekly updates",
+          };
   const sessionUser = await getServerSessionUser();
   if (!sessionUser) {
     redirect(getLocalizedPath(typedLocale, "/auth/login"));
@@ -45,7 +96,7 @@ export default async function AccountPage({ params }: PageProps) {
 
   const matchedById = await db.user.findUnique({
     where: { id: sessionUser.userId },
-    select: { id: true, username: true, email: true, image: true },
+    select: { id: true, username: true, email: true, image: true, bio: true },
   });
 
   const relatedUsers = await db.user.findMany({
@@ -70,6 +121,7 @@ export default async function AccountPage({ params }: PageProps) {
     matchedById?.username ??
     relatedUsers[0]?.username ??
     sessionUser.username;
+  const socials = extractSocialsFromBio(matchedById?.bio ?? null);
 
   const [myThreads, myCommentedThreads, myDiaries, totalComments, totalLikesReceived, totalDiaryWeeks] = await Promise.all([
     db.forumThread.findMany({
@@ -128,14 +180,21 @@ export default async function AccountPage({ params }: PageProps) {
         username={resolvedUsername}
         userImage={matchedById?.image ?? sessionUser.image}
         stats={activityStats}
+        locale={typedLocale}
       />
-      <AccountSecuritySettings currentEmail={matchedById?.email ?? ""} />
+      <AccountSocialLinksSettings
+        locale={typedLocale}
+        initialTelegram={socials.telegram}
+        initialInstagram={socials.instagram}
+        initialGrowDiariesUrl={socials.growDiariesUrl}
+      />
+      <AccountSecuritySettings currentEmail={matchedById?.email ?? ""} locale={typedLocale} />
 
       <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-8">
-        <h2 className="text-lg font-semibold text-white sm:text-2xl">Recent Threads You Posted</h2>
+        <h2 className="text-lg font-semibold text-white sm:text-2xl">{t.recentThreads}</h2>
         <div className="mt-4 space-y-3">
           {myThreads.length === 0 ? (
-            <p className="text-sm text-slate-400">No threads yet.</p>
+            <p className="text-sm text-slate-400">{t.noThreads}</p>
           ) : (
             myThreads.map((thread) => (
               <Link
@@ -146,7 +205,7 @@ export default async function AccountPage({ params }: PageProps) {
                 <p className="text-xs text-lime-300">{thread.topic.title}</p>
                 <p className="mt-1 text-sm font-medium text-white">{thread.title}</p>
                 <p className="mt-1 text-xs text-slate-400">
-                  {thread._count.comments} comments · {thread._count.likes} likes
+                  {thread._count.comments} {t.comments} · {thread._count.likes} {t.likes}
                 </p>
               </Link>
             ))
@@ -155,10 +214,10 @@ export default async function AccountPage({ params }: PageProps) {
       </section>
 
       <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-8">
-        <h2 className="text-lg font-semibold text-white sm:text-2xl">Last Threads You Commented On</h2>
+        <h2 className="text-lg font-semibold text-white sm:text-2xl">{t.commentedThreads}</h2>
         <div className="mt-4 space-y-3">
           {myCommentedThreads.length === 0 ? (
-            <p className="text-sm text-slate-400">No comments yet.</p>
+            <p className="text-sm text-slate-400">{t.noComments}</p>
           ) : (
             myCommentedThreads.map((entry) => (
               <Link
@@ -168,7 +227,7 @@ export default async function AccountPage({ params }: PageProps) {
               >
                 <p className="text-xs text-lime-300">{entry.thread.topic.title}</p>
                 <p className="mt-1 text-sm font-medium text-white">{entry.thread.title}</p>
-                <p className="mt-1 text-xs text-slate-400">Last comment saved in your activity.</p>
+                <p className="mt-1 text-xs text-slate-400">{t.lastCommentSaved}</p>
               </Link>
             ))
           )}
@@ -177,17 +236,17 @@ export default async function AccountPage({ params }: PageProps) {
 
       <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-8">
         <div className="flex items-center justify-between gap-3">
-          <h2 className="text-lg font-semibold text-white sm:text-2xl">Your Diaries</h2>
+          <h2 className="text-lg font-semibold text-white sm:text-2xl">{t.yourDiaries}</h2>
           <Link
             href={getLocalizedPath(typedLocale, "/diaries/new")}
             className="rounded-full border border-lime-400/30 px-3 py-1.5 text-xs text-lime-300 hover:bg-lime-400/10"
           >
-            New Diary
+            {t.newDiary}
           </Link>
         </div>
         <div className="mt-4 space-y-3">
           {myDiaries.length === 0 ? (
-            <p className="text-sm text-slate-400">You have no diaries yet.</p>
+            <p className="text-sm text-slate-400">{t.noDiaries}</p>
           ) : (
             myDiaries.map((diary) => (
               <Link
@@ -196,19 +255,16 @@ export default async function AccountPage({ params }: PageProps) {
                 className="block rounded-2xl border border-white/8 bg-white/4 p-4 hover:border-lime-400/30"
               >
                 <p className="text-sm font-medium text-white">{diary.title}</p>
-                <p className="mt-1 text-xs text-slate-400">{diary._count.weeks} weekly updates</p>
+                <p className="mt-1 text-xs text-slate-400">
+                  {diary._count.weeks} {t.weeklyUpdates}
+                </p>
               </Link>
             ))
           )}
         </div>
       </section>
 
-      <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-8">
-        <h2 className="text-lg font-semibold text-white sm:text-2xl">Messages / Inbox</h2>
-        <p className="mt-2 text-sm text-slate-400">
-          Coming next: private messages and mention notifications.
-        </p>
-      </section>
+      <AccountMessageInbox locale={typedLocale} currentUserId={sessionUser.userId} />
     </div>
   );
 }

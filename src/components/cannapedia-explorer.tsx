@@ -37,6 +37,7 @@ const keywordHintsByLocale: Record<Locale, Record<string, string[]>> = {
     flower: ["ყვავილობა", "flower", "stretch", "buds"],
     harvest: ["ჰარვესტი", "trim", "curing", "ტრიქომა"],
     storage: ["შენახვა", "ქილა", "ტენიანობა", "fresh"],
+    cbd: ["cbd", "კბდ", "კანაბიდიოლი", "სამედიცინო", "medical"],
   },
   en: {
     seed: ["seed", "germination", "seedling", "sprout"],
@@ -44,6 +45,7 @@ const keywordHintsByLocale: Record<Locale, Record<string, string[]>> = {
     flower: ["flowering", "flower", "stretch", "buds"],
     harvest: ["harvest", "trichome", "dry", "curing"],
     storage: ["storage", "fresh", "jar", "humidity"],
+    cbd: ["cbd", "cannabidiol", "medical", "clinical", "benefits"],
   },
   ru: {
     seed: ["семя", "проращивание", "старт", "росток"],
@@ -51,6 +53,7 @@ const keywordHintsByLocale: Record<Locale, Record<string, string[]>> = {
     flower: ["цветение", "цвет", "stretch", "шишки"],
     harvest: ["харвест", "трихомы", "сушка", "кюринг"],
     storage: ["хранение", "свежесть", "банка", "влажность"],
+    cbd: ["cbd", "каннабидиол", "медицинский", "клинический", "польза"],
   },
 };
 
@@ -193,30 +196,38 @@ export function CannapediaExplorer({
         ) : null}
       </section>
 
-      <section className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-5 sm:gap-4">
+      <section className="grid grid-cols-3 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-6">
         <Link
           href={getLocalizedPath(locale, "/cannapedia")}
-          className={`rounded-2xl border p-4 text-slate-200 transition sm:rounded-3xl sm:p-5 ${
+          className={`rounded-xl border px-2.5 py-2 text-slate-200 transition sm:rounded-2xl sm:px-3 sm:py-2.5 ${
             !activeCategorySlug
               ? "border-lime-400/40 bg-lime-400/10 text-lime-200"
               : "border-white/10 bg-slate-950/60 hover:border-lime-400/30"
           }`}
         >
-          <p className="text-xl">📚</p>
-          <p className="mt-1 text-sm font-medium sm:text-base">{copy.allCategories}</p>
+          <div className="flex items-center gap-1.5">
+            <span className="text-sm sm:text-base">📚</span>
+            <p className="line-clamp-1 text-[11px] font-medium leading-tight sm:text-xs">
+              {copy.allCategories}
+            </p>
+          </div>
         </Link>
         {categories.map((category) => (
           <Link
             key={category.slug}
             href={getLocalizedPath(locale, `/cannapedia?category=${category.slug}`)}
-            className={`rounded-2xl border p-4 text-slate-200 transition sm:rounded-3xl sm:p-5 ${
+            className={`rounded-xl border px-2.5 py-2 text-slate-200 transition sm:rounded-2xl sm:px-3 sm:py-2.5 ${
               activeCategorySlug === category.slug
                 ? "border-lime-400/40 bg-lime-400/10 text-lime-200"
                 : "border-white/10 bg-slate-950/60 hover:border-lime-400/30"
             }`}
           >
-            <p className="text-xl">{category.icon}</p>
-            <p className="mt-1 text-sm font-medium sm:text-base">{category.name}</p>
+            <div className="flex items-center gap-1.5">
+              <span className="text-sm sm:text-base">{category.icon}</span>
+              <p className="line-clamp-1 text-[11px] font-medium leading-tight sm:text-xs">
+                {category.name}
+              </p>
+            </div>
           </Link>
         ))}
       </section>

@@ -55,6 +55,8 @@ export default async function ResourcesPage({ params }: Props) {
             "დამატებითი ინფორმაციისთვის შეგიძლიათ ეწვიოთ პარტნიორ პლატფორმას.",
           sourceCta: "გადასვლა kama.bz-ზე",
           sourceCta2: "გადასვლა geoeskort.com-ზე",
+          sourceCta3: "Sweet Seeds",
+          sourceCta4: "Advanced Nutrients",
           partnerCta: "გახდი ჩვენი პარტნიორი",
           back: "მთავარზე დაბრუნება",
         }
@@ -69,6 +71,8 @@ export default async function ResourcesPage({ params }: Props) {
               "Для дополнительной информации вы можете посетить партнерскую платформу.",
             sourceCta: "Перейти на kama.bz",
             sourceCta2: "Перейти на geoeskort.com",
+            sourceCta3: "Sweet Seeds",
+            sourceCta4: "Advanced Nutrients",
             partnerCta: "Стать нашим партнером",
             back: "Назад на главную",
           }
@@ -82,6 +86,8 @@ export default async function ResourcesPage({ params }: Props) {
               "For additional information you can visit the partner platform.",
             sourceCta: "Open kama.bz",
             sourceCta2: "Open geoeskort.com",
+            sourceCta3: "Sweet Seeds",
+            sourceCta4: "Advanced Nutrients",
             partnerCta: "Become our partner",
             back: "Back to home",
           };
@@ -124,6 +130,22 @@ export default async function ResourcesPage({ params }: Props) {
               className="inline-flex rounded-full border border-lime-400/30 px-3 py-1.5 text-xs font-medium text-lime-300 transition hover:bg-lime-400/10"
             >
               {copy.sourceCta2}
+            </a>
+            <a
+              href="https://sweetseeds.es"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              className="inline-flex rounded-full border border-lime-400/30 px-3 py-1.5 text-xs font-medium text-lime-300 transition hover:bg-lime-400/10"
+            >
+              {copy.sourceCta3}
+            </a>
+            <a
+              href="https://www.advancednutrients.com"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              className="inline-flex rounded-full border border-lime-400/30 px-3 py-1.5 text-xs font-medium text-lime-300 transition hover:bg-lime-400/10"
+            >
+              {copy.sourceCta4}
             </a>
             <Link
               href={getLocalizedPath(typedLocale, "/contact")}

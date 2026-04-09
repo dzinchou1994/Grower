@@ -14,8 +14,8 @@ import {
 } from "@/lib/i18n";
 import { getForumTopicBySlug } from "@/lib/forum-data";
 import { CannabisLeaf } from "@/components/icons";
-import { UserAvatar } from "@/components/user-avatar";
 import { VoteButtons } from "@/components/vote-buttons";
+import { UserQuickProfileTrigger } from "@/components/user-quick-profile-trigger";
 
 type PageProps = {
   params: Promise<{ locale: string; slug: string }>;
@@ -147,6 +147,8 @@ export default async function ForumTopicPage({ params }: PageProps) {
             topics={[{ slug: topic.slug, title: topic.title }]}
             isAuthenticated={Boolean(sessionUser)}
             loginHref={getLocalizedPath(typedLocale, "/auth/login")}
+            locale={typedLocale}
+            collapsible
           />
         </div>
 
@@ -186,9 +188,16 @@ export default async function ForumTopicPage({ params }: PageProps) {
                           </span>
                         ) : null}
                       </div>
-                      <p className="mt-1.5 text-[10px] text-slate-400 sm:mt-2 sm:text-sm">
-                        {dict.forum.startedBy} @{thread.author}
-                      </p>
+                      <div className="mt-1.5 sm:mt-2">
+                        <UserQuickProfileTrigger
+                          locale={typedLocale}
+                          username={thread.author}
+                          image={thread.authorImage}
+                          isAuthenticated={Boolean(sessionUser)}
+                          currentUsername={sessionUser?.username}
+                          className="inline-flex items-center gap-1.5 text-[10px] text-slate-400 transition hover:text-lime-300 sm:text-sm"
+                        />
+                      </div>
                     </div>
                     <span className="shrink-0 rounded-full bg-lime-400/10 px-2.5 py-1 text-[10px] text-lime-300 sm:px-3 sm:text-xs">
                       {thread.lastActivity}
@@ -231,14 +240,15 @@ export default async function ForumTopicPage({ params }: PageProps) {
                       {thread.comments.slice(0, 3).map((comment) => (
                         <div key={comment.id} className="rounded-xl bg-slate-900/60 px-3 py-2">
                           <div className="flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-2">
-                              <UserAvatar
-                                username={comment.author}
-                                image={comment.authorImage}
-                                size="sm"
-                              />
-                              <p className="text-[10px] text-slate-500 sm:text-xs">@{comment.author}</p>
-                            </div>
+                            <UserQuickProfileTrigger
+                              locale={typedLocale}
+                              username={comment.author}
+                              image={comment.authorImage}
+                              isAuthenticated={Boolean(sessionUser)}
+                              currentUsername={sessionUser?.username}
+                              showPrefix={false}
+                              className="inline-flex items-center gap-2 text-[10px] text-slate-500 transition hover:text-lime-300 sm:text-xs"
+                            />
                             <VoteButtons
                               commentId={comment.id}
                               upvotes={comment.upvotes}
@@ -264,6 +274,7 @@ export default async function ForumTopicPage({ params }: PageProps) {
                     threadSlug={thread.slug}
                     isAuthenticated={Boolean(sessionUser)}
                     loginHref={getLocalizedPath(typedLocale, "/auth/login")}
+                    locale={typedLocale}
                   />
                 </div>
               </div>

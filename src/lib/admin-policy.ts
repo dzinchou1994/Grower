@@ -18,7 +18,7 @@ export function canRunContentAction(role: AdminRole, action: string) {
 
 export function getAccessTabs(role: AdminRole) {
   if (role === "ADMIN") {
-    return ["moderation", "content", "cannapedia", "feedback", "seo", "users", "analytics", "audit"] as const;
+    return ["moderation", "content", "messages", "cannapedia", "feedback", "seo", "users", "analytics", "audit"] as const;
   }
-  return ["moderation", "content"] as const;
+  return ["moderation", "content", "messages"] as const;
 }

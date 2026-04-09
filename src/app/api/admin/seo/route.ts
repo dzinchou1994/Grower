@@ -18,7 +18,7 @@ const updateSchema = z.object({
   ogDescription: z.string().max(320).optional().or(z.literal("")),
   keywords: z.string().max(500).optional().or(z.literal("")),
   noIndex: z.boolean().optional(),
-  reason: z.string().min(2).max(500),
+  reason: z.string().max(500).optional().or(z.literal("")),
 });
 
 function missingTable(error: unknown) {
@@ -58,6 +58,7 @@ export async function PATCH(request: Request) {
     }
 
     const input = parsed.data;
+    const auditReason = input.reason?.trim() || `SEO settings updated for ${input.page}/${input.locale}`;
     const before = await seoDb.seoSetting.findUnique({
       where: {
         page_locale: { page: input.page, locale: input.locale },
@@ -94,7 +95,7 @@ export async function PATCH(request: Request) {
       action: before ? "UPDATE" : "CREATE",
       targetType: "SYSTEM",
       targetId: `seo:${input.page}:${input.locale}`,
-      reason: input.reason,
+      reason: auditReason,
       before,
       after: upserted,
     });
