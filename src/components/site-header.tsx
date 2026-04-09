@@ -36,6 +36,39 @@ export function SiteHeader({
     },
     { href: "/diaries", label: dict.nav.diaries, icon: "diaries" as const },
   ];
+  const ui =
+    locale === "ka"
+      ? {
+          navigation: "ნავიგაცია",
+          signedIn: "შესული ხარ",
+          language: "ენა",
+          login: "შესვლა",
+          register: "რეგისტრაცია",
+          logout: "გამოსვლა",
+          loggingOut: "მიმდინარეობს გამოსვლა...",
+          closeMenu: "მენიუს დახურვა",
+        }
+      : locale === "ru"
+        ? {
+            navigation: "Навигация",
+            signedIn: "Вы вошли",
+            language: "Язык",
+            login: "Вход",
+            register: "Регистрация",
+            logout: "Выйти",
+            loggingOut: "Выход...",
+            closeMenu: "Закрыть меню",
+          }
+        : {
+            navigation: "Navigation",
+            signedIn: "Signed in",
+            language: "Language",
+            login: "Login",
+            register: "Register",
+            logout: "Logout",
+            loggingOut: "Logging out...",
+            closeMenu: "Close menu",
+          };
 
   async function handleLogout() {
     setIsLoggingOut(true);
@@ -74,10 +107,35 @@ export function SiteHeader({
             />
           </div>
           <div className="hidden min-[400px]:block">
-            <p className="text-[13px] font-bold tracking-[0.1em] text-white">
-              GROWER
-            </p>
-            <p className="text-[10px] tracking-wide text-slate-500">Georgia Cannabis Club</p>
+            <div className="flex items-center gap-1.5">
+              <p className="text-[13px] font-bold tracking-[0.1em] text-white">
+                GROWER.GE
+              </p>
+              <span className="flex h-2.5 w-3.5 overflow-hidden rounded-[1.5px] shadow-sm shadow-black/30">
+                <svg viewBox="0 0 20 14" className="h-full w-full">
+                  <rect width="20" height="14" fill="#fff" />
+                  <rect x="8.5" y="0" width="3" height="14" fill="#E8112D" />
+                  <rect x="0" y="5.5" width="20" height="3" fill="#E8112D" />
+                  <rect x="2.5" y="1.5" width="1.2" height="1.2" fill="#E8112D" />
+                  <rect x="5" y="1.5" width="1.2" height="1.2" fill="#E8112D" />
+                  <rect x="2.5" y="3.5" width="1.2" height="1.2" fill="#E8112D" />
+                  <rect x="5" y="3.5" width="1.2" height="1.2" fill="#E8112D" />
+                  <rect x="13.5" y="1.5" width="1.2" height="1.2" fill="#E8112D" />
+                  <rect x="16" y="1.5" width="1.2" height="1.2" fill="#E8112D" />
+                  <rect x="13.5" y="3.5" width="1.2" height="1.2" fill="#E8112D" />
+                  <rect x="16" y="3.5" width="1.2" height="1.2" fill="#E8112D" />
+                  <rect x="2.5" y="9.5" width="1.2" height="1.2" fill="#E8112D" />
+                  <rect x="5" y="9.5" width="1.2" height="1.2" fill="#E8112D" />
+                  <rect x="2.5" y="11.5" width="1.2" height="1.2" fill="#E8112D" />
+                  <rect x="5" y="11.5" width="1.2" height="1.2" fill="#E8112D" />
+                  <rect x="13.5" y="9.5" width="1.2" height="1.2" fill="#E8112D" />
+                  <rect x="16" y="9.5" width="1.2" height="1.2" fill="#E8112D" />
+                  <rect x="13.5" y="11.5" width="1.2" height="1.2" fill="#E8112D" />
+                  <rect x="16" y="11.5" width="1.2" height="1.2" fill="#E8112D" />
+                </svg>
+              </span>
+            </div>
+            <p className="text-[8px] tracking-wider text-slate-500">Georgia Cannabis Club</p>
           </div>
         </Link>
 
@@ -154,13 +212,13 @@ export function SiteHeader({
                 href={getLocalizedPath(locale, "/auth/login")}
                 className="rounded-full px-3 py-1.5 text-slate-400 transition hover:bg-white/8 hover:text-white"
               >
-                Login
+                {ui.login}
               </Link>
               <Link
                 href={getLocalizedPath(locale, "/auth/register")}
                 className="rounded-full bg-lime-400 px-3.5 py-1.5 font-semibold text-slate-950 shadow-sm shadow-lime-400/20 transition hover:bg-lime-300"
               >
-                Register
+                {ui.register}
               </Link>
             </div>
           )}
@@ -248,12 +306,12 @@ export function SiteHeader({
         aria-hidden={!mobileMenuOpen}
       >
         <div className="flex items-center justify-between">
-          <p className="text-sm font-semibold tracking-wide text-white">Navigation</p>
+          <p className="text-sm font-semibold tracking-wide text-white">{ui.navigation}</p>
           <button
             type="button"
             onClick={() => setMobileMenuOpen(false)}
             className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white"
-            aria-label="Close menu"
+            aria-label={ui.closeMenu}
           >
             <svg
               className="h-5 w-5"
@@ -273,7 +331,7 @@ export function SiteHeader({
 
         {initialUser ? (
           <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-3">
-            <p className="text-xs text-slate-400">Signed in</p>
+            <p className="text-xs text-slate-400">{ui.signedIn}</p>
             <div className="mt-2 flex items-center gap-2">
               <UserAvatar
                 username={initialUser.username}
@@ -309,7 +367,7 @@ export function SiteHeader({
 
         <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-3">
           <p className="mb-2 text-[11px] uppercase tracking-[0.16em] text-slate-400">
-            Language
+            {ui.language}
           </p>
           <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-slate-900/50 p-1 text-xs text-slate-300">
             {locales.map((entry) => (
@@ -336,14 +394,14 @@ export function SiteHeader({
               onClick={() => setMobileMenuOpen(false)}
               className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center text-base font-medium text-slate-100 transition hover:bg-white/10"
             >
-              Login
+              {ui.login}
             </Link>
             <Link
               href={getLocalizedPath(locale, "/auth/register")}
               onClick={() => setMobileMenuOpen(false)}
               className="rounded-xl bg-lime-400 px-4 py-3 text-center text-base font-semibold text-slate-950 transition hover:bg-lime-300"
             >
-              Register
+              {ui.register}
             </Link>
           </div>
         ) : (
@@ -353,7 +411,7 @@ export function SiteHeader({
             disabled={isLoggingOut}
             className="mt-4 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-base font-medium text-slate-100 transition hover:bg-white/10 disabled:opacity-60"
           >
-            {isLoggingOut ? "Logging out..." : "Logout"}
+            {isLoggingOut ? ui.loggingOut : ui.logout}
           </button>
         )}
       </aside>

@@ -272,30 +272,29 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
         </div>
 
         <div className="mt-4 sm:mt-5">
-          <ol className="grid gap-2.5 sm:gap-3 md:grid-cols-2">
+          <ol className="grid grid-cols-2 gap-2 sm:gap-3">
             {topUsers.map((user, index) => (
               <li
                 key={user.username}
-                className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-slate-900/40 px-3 py-3 sm:gap-3 sm:rounded-3xl sm:px-4 sm:py-3.5"
+                className="flex flex-col gap-1.5 rounded-xl border border-white/10 bg-slate-900/40 px-2.5 py-2.5 sm:flex-row sm:items-center sm:gap-3 sm:rounded-3xl sm:px-4 sm:py-3.5"
               >
-                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-lime-400/15 text-xs font-semibold text-lime-200 sm:h-8 sm:w-8 sm:text-sm">
-                  #{index + 1}
-                </span>
-
-                <UserAvatar username={user.username} image={user.image} size="sm" />
-
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-white sm:text-base">
+                <div className="flex items-center gap-2 sm:gap-2.5">
+                  <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-lime-400/15 text-[10px] font-semibold text-lime-200 sm:h-8 sm:w-8 sm:text-sm">
+                    #{index + 1}
+                  </span>
+                  <UserAvatar username={user.username} image={user.image} size="sm" />
+                  <p className="min-w-0 truncate text-xs font-medium text-white sm:text-base">
                     @{user.username}
                   </p>
-                  <p className="truncate text-[10px] text-slate-400 sm:text-xs">
-                    {user.levelEmoji} {user.levelTitle} · 💬 {user.threadsCreated} · 🗨️ {user.commentsPosted} · ❤️ {user.likesReceived}
-                  </p>
                 </div>
-
-                <span className="shrink-0 rounded-full border border-white/15 bg-white/5 px-2 py-1 text-[10px] font-medium text-slate-200 sm:text-xs">
-                  {user.xp} {dict.home.xpLabel}
-                </span>
+                <div className="flex items-center justify-between gap-1 pl-8 sm:min-w-0 sm:flex-1 sm:pl-0">
+                  <p className="truncate text-[9px] text-slate-400 sm:text-xs">
+                    {user.levelEmoji} {user.levelTitle} · 💬 {user.threadsCreated} · 🗨️ {user.commentsPosted}
+                  </p>
+                  <span className="shrink-0 rounded-full border border-white/15 bg-white/5 px-1.5 py-0.5 text-[9px] font-medium text-slate-200 sm:px-2 sm:py-1 sm:text-xs">
+                    {user.xp} XP
+                  </span>
+                </div>
               </li>
             ))}
           </ol>

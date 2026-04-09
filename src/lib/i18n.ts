@@ -18,7 +18,7 @@ const translations = {
   ka: {
     metadataTitle: "Grower",
     metadataDescription:
-      "ქართული კანაფის საზოგადოება — ფორუმი, ინფორმაცია, დისკუსიები და მოყვანის დღიურები.",
+      "ქართული კანაფის საზოგადოება - ფორუმი, ინფორმაცია, დისკუსიები და მოყვანის დღიურები.",
     brandTagline: "ფორუმი · ინფორმაცია · დღიურები",
     nav: {
       home: "მთავარი",
@@ -36,7 +36,7 @@ const translations = {
         "Grower არის ქართული კანაფის საზოგადოების პლატფორმა სადაც შეგიძლია დასვა კითხვები, მიიღო პასუხები, ისაუბრო კანონმდებლობაზე, მოყვანაზე და სხვა თემებზე.",
       primaryCta: "ფორუმის გახსნა",
       secondaryCta: "დღიურების ნახვა",
-      topUsers: "Top 10 მომხმარებელი",
+      topUsers: "Top 10 გროვერი",
       topUsersTitle: "აქტიური წევრების რეიტინგი",
       xpLabel: "XP",
       levelLabel: "დონე",
@@ -51,7 +51,7 @@ const translations = {
       startDiary: "დაიწყე დღიური",
       manifesto: {
         badge: "🟢 რატომ ვართ აქ",
-        headline: "ახალი კანონი, ძველი ბრძოლა — ერთად გავუძლებთ.",
+        headline: "ახალი კანონი, ძველი ბრძოლა - ერთად გავუძლებთ.",
         text: "2025 წლის 1 თებერვლიდან საქართველოში ამოქმედდა სისხლის სამართლის კოდექსის ცვლილება, რომელიც კიდევ უფრო ამკაცრებს სანქციებს კანაფთან დაკავშირებულ ქმედებებზე. ჩვენი პლატფორმა არის უსაფრთხო, ანონიმური სივრცე, სადაც გროვერები ერთმანეთს ეხმარებიან ცოდნით, გამოცდილებით და სოლიდარობით.",
         cta: "წაიკითხე მანიფესტო",
       },
@@ -63,34 +63,34 @@ const translations = {
       },
     },
     manifesto: {
-      metaTitle: "მანიფესტო — Grower",
+      metaTitle: "მანიფესტო - Grower",
       metaDescription: "ჩვენი მისია, ხედვა და პოზიცია ახალი კანონმდებლობის მიმართ.",
       title: "მანიფესტო",
       subtitle: "რატომ არსებობს Grower და რისთვის ვიბრძვით",
       lawSection: {
         title: "რა შეიცვალა კანონმდებლობაში",
         p1: "2024 წლის 13 დეკემბერს საქართველოს პარლამენტმა მიიღო სისხლის სამართლის კოდექსის ცვლილება (№175-Iმს-XIმპ), რომელიც 2025 წლის 1 თებერვლიდან ამოქმედდა.",
-        p2: "ცვლილებით კანაფთან დაკავშირებულ ქმედებებზე — მოხმარება, შეძენა, შენახვა, გადატანა — მნიშვნელოვნად გამკაცრდა სანქციები: ჯარიმა 500-დან 2000 ლარამდე, ადმინისტრაციული პატიმრობა 60 დღემდე.",
+        p2: "ცვლილებით კანაფთან დაკავშირებულ ქმედებებზე - მოხმარება, შეძენა, შენახვა, გადატანა - მნიშვნელოვნად გამკაცრდა სანქციები: ჯარიმა 500-დან 2000 ლარამდე, ადმინისტრაციული პატიმრობა 60 დღემდე.",
         p3: "2025 წლის მარტში, პირველი მოსმენით, მიღებულ იქნა კიდევ უფრო მკაცრი საკანონმდებლო პაკეტი, რომელიც ასევე ამკაცრებს პასუხისმგებლობას კანაფის მოყვანაზე და მასთან დაკავშირებულ ყველა ქმედებაზე.",
-        p4: "5 გრამამდე გამომშრალი მარიხუანის ფლობა — 500 ლარი ჯარიმა. 5 გრამიდან — სისხლის სამართლის საქმე. მოყვანისთვის — ჯარიმიდან ციხემდე, რაოდენობის მიხედვით.",
+        p4: "5 გრამამდე გამომშრალი მარიხუანის ფლობა - 500 ლარი ჯარიმა. 5 გრამიდან - სისხლის სამართლის საქმე. მოყვანისთვის - ჯარიმიდან ციხემდე, რაოდენობის მიხედვით.",
         lawLink: "ოფიციალური კანონის ტექსტი (matsne.gov.ge)",
       },
       missionSection: {
         title: "ჩვენი მისია",
         p1: "Grower შეიქმნა იმისთვის, რომ ქართველ გროვერებს ჰქონდეთ უსაფრთხო, ანონიმური სივრცე, სადაც შეძლებენ ცოდნის გაზიარებას, რჩევების მიღებას და ერთმანეთის მხარდაჭერას.",
-        p2: "ჩვენ არ ვამხნევებთ კანონის დარღვევას. ჩვენ ვცხოვრობთ რეალობაში, სადაც ათასობით ადამიანი საქართველოში ყოველდღიურად აწყდება ამ საკითხს — და ამ ადამიანებს ესაჭიროებათ ინფორმაცია, თანხმობა და საზოგადოება.",
+        p2: "ჩვენ არ ვამხნევებთ კანონის დარღვევას. ჩვენ ვცხოვრობთ რეალობაში, სადაც ათასობით ადამიანი საქართველოში ყოველდღიურად აწყდება ამ საკითხს - და ამ ადამიანებს ესაჭიროებათ ინფორმაცია, თანხმობა და საზოგადოება.",
         p3: "ჩვენ გვჯერა ზიანის შემცირების, განათლების და საზოგადოებრივი დიალოგის ძალის.",
       },
       anonymitySection: {
         title: "ანონიმურობა და უსაფრთხოება",
         p1: "პლატფორმაზე რეგისტრაცია არ მოითხოვს პირად მონაცემებს. თქვენი იდენტობა დაცულია.",
         p2: "ჩვენ არ ვაგროვებთ და არ ვინახავთ IP მისამართებს, ტელეფონის ნომრებს ან სხვა იდენტიფიცირებად ინფორმაციას.",
-        p3: "შენი ცოდნა და გამოცდილება ფასეულია — გააზიარე ისე, რომ დაცული იყო.",
+        p3: "შენი ცოდნა და გამოცდილება ფასეულია - გააზიარე ისე, რომ დაცული იყო.",
       },
       futureSection: {
         title: "მომავალი მწვანეა",
         p1: "მსოფლიოს მასშტაბით ლეგალიზაციისა და დეკრიმინალიზაციის ტალღა სულ უფრო ძლიერდება. ევროპის, ამერიკის და აზიის ქვეყნებში ახალი კანონები იცვლება პროგრესის სასარგებლოდ.",
-        p2: "საქართველოც ოდესმე ამ გზას დაადგება. ჩვენ ვართ აქ იმისთვის, რომ ეს დღე მოვიდეს — და მანამდე, ერთმანეთს ხელი გავუმართოთ.",
+        p2: "საქართველოც ოდესმე ამ გზას დაადგება. ჩვენ ვართ აქ იმისთვის, რომ ეს დღე მოვიდეს - და მანამდე, ერთმანეთს ხელი გავუმართოთ.",
         p3: "გაუძელი. გაიზარდე. გაუზიარე. 🌿",
       },
     },
@@ -98,7 +98,7 @@ const translations = {
       badge: "მოყვანის დღიურები",
       title: "კვირეული ჟურნალები მცენარის პროგრესისთვის",
       description:
-        "თითოეული დღიური არის მცენარის მთავარი ჩანაწერი. მომხმარებელი მასში ამატებს კვირეულ განახლებებს, ფოტოებსა და მნიშვნელოვან მოვლენებს.",
+        "თითოეული დღიური არის მცენარის მთავარი ჩანაწერი. გროვერი მასში ამატებს კვირეულ განახლებებს, ფოტოებსა და მნიშვნელოვან მოვლენებს.",
       createDiary: "ახალი დღიურის შექმნა",
       weeksLabel: "კვირა",
       backToDiaries: "დღიურებზე დაბრუნება",
@@ -185,7 +185,7 @@ const translations = {
   en: {
     metadataTitle: "Grower",
     metadataDescription:
-      "Georgian cannabis community — forum, information, discussions and grow diaries.",
+      "Georgian cannabis community - forum, information, discussions and grow diaries.",
     brandTagline: "Forum · Info · Diaries",
     nav: {
       home: "Home",
@@ -218,7 +218,7 @@ const translations = {
       startDiary: "Start a diary",
       manifesto: {
         badge: "🟢 Why we are here",
-        headline: "New law, old struggle — together we endure.",
+        headline: "New law, old struggle - together we endure.",
         text: "Starting February 1, 2025, amendments to Georgia's Criminal Code have further tightened penalties for cannabis-related activities. Our platform is a safe, anonymous space where growers support each other with knowledge, experience, and solidarity.",
         cta: "Read the manifesto",
       },
@@ -230,34 +230,34 @@ const translations = {
       },
     },
     manifesto: {
-      metaTitle: "Manifesto — Grower",
+      metaTitle: "Manifesto - Grower",
       metaDescription: "Our mission, vision, and stance on the new legislation.",
       title: "Manifesto",
       subtitle: "Why Grower exists and what we stand for",
       lawSection: {
         title: "What changed in the law",
         p1: "On December 13, 2024, the Georgian Parliament passed amendments to the Criminal Code (No. 175-Iმს-XIმპ), which took effect on February 1, 2025.",
-        p2: "The amendments significantly tightened penalties for cannabis-related activities — use, purchase, possession, and transportation — with fines from 500 to 2,000 GEL, and administrative detention of up to 60 days.",
+        p2: "The amendments significantly tightened penalties for cannabis-related activities - use, purchase, possession, and transportation - with fines from 500 to 2,000 GEL, and administrative detention of up to 60 days.",
         p3: "In March 2025, an even stricter legislative package was adopted in the first reading, further tightening responsibility for cannabis cultivation and all related activities.",
-        p4: "Possession of up to 5 grams of dried marijuana — 500 GEL fine. Over 5 grams — criminal charges. Growing — from fines to imprisonment, depending on the quantity.",
+        p4: "Possession of up to 5 grams of dried marijuana - 500 GEL fine. Over 5 grams - criminal charges. Growing - from fines to imprisonment, depending on the quantity.",
         lawLink: "Official law text (matsne.gov.ge)",
       },
       missionSection: {
         title: "Our mission",
         p1: "Grower was created so Georgian growers have a safe, anonymous space to share knowledge, get advice, and support each other.",
-        p2: "We do not encourage breaking the law. We live in a reality where thousands of people in Georgia face this issue daily — and these people need information, acceptance, and community.",
+        p2: "We do not encourage breaking the law. We live in a reality where thousands of people in Georgia face this issue daily - and these people need information, acceptance, and community.",
         p3: "We believe in the power of harm reduction, education, and public dialogue.",
       },
       anonymitySection: {
         title: "Anonymity & security",
         p1: "Registration on our platform does not require personal data. Your identity is protected.",
         p2: "We do not collect or store IP addresses, phone numbers, or other identifiable information.",
-        p3: "Your knowledge and experience are valuable — share them while staying protected.",
+        p3: "Your knowledge and experience are valuable - share them while staying protected.",
       },
       futureSection: {
         title: "The future is green",
         p1: "Globally, the wave of legalization and decriminalization continues to grow. Countries in Europe, the Americas, and Asia are passing new laws in favor of progress.",
-        p2: "Georgia will also take this path someday. We are here to bring that day closer — and until then, to support each other.",
+        p2: "Georgia will also take this path someday. We are here to bring that day closer - and until then, to support each other.",
         p3: "Endure. Grow. Share. 🌿",
       },
     },
@@ -352,7 +352,7 @@ const translations = {
   ru: {
     metadataTitle: "Grower",
     metadataDescription:
-      "Грузинское каннабис-сообщество — форум, информация, дискуссии и дневники выращивания.",
+      "Грузинское каннабис-сообщество - форум, информация, дискуссии и дневники выращивания.",
     brandTagline: "Форум · Инфо · Дневники",
     nav: {
       home: "Главная",
@@ -367,7 +367,7 @@ const translations = {
       title: "Присоединяйся к форуму, узнай больше, поделись опытом.",
       privacyHeadline: "100% анонимность гарантирована",
       description:
-        "Grower — платформа грузинского каннабис-сообщества, где можно задавать вопросы, получать ответы, обсуждать законодательство, выращивание и другие темы.",
+        "Grower - платформа грузинского каннабис-сообщества, где можно задавать вопросы, получать ответы, обсуждать законодательство, выращивание и другие темы.",
       primaryCta: "Открыть форум",
       secondaryCta: "Смотреть дневники",
       topUsers: "Топ 10 пользователей",
@@ -385,8 +385,8 @@ const translations = {
       startDiary: "Начать дневник",
       manifesto: {
         badge: "🟢 Почему мы здесь",
-        headline: "Новый закон, старая борьба — вместе выстоим.",
-        text: "С 1 февраля 2025 года в Грузии вступили в силу поправки в Уголовный кодекс, ужесточающие наказания за действия, связанные с каннабисом. Наша платформа — безопасное, анонимное пространство, где гроверы поддерживают друг друга знаниями, опытом и солидарностью.",
+        headline: "Новый закон, старая борьба - вместе выстоим.",
+        text: "С 1 февраля 2025 года в Грузии вступили в силу поправки в Уголовный кодекс, ужесточающие наказания за действия, связанные с каннабисом. Наша платформа - безопасное, анонимное пространство, где гроверы поддерживают друг друга знаниями, опытом и солидарностью.",
         cta: "Прочитать манифест",
       },
       stats: {
@@ -397,34 +397,34 @@ const translations = {
       },
     },
     manifesto: {
-      metaTitle: "Манифест — Grower",
+      metaTitle: "Манифест - Grower",
       metaDescription: "Наша миссия, видение и позиция по новому законодательству.",
       title: "Манифест",
       subtitle: "Почему существует Grower и за что мы боремся",
       lawSection: {
         title: "Что изменилось в законодательстве",
         p1: "13 декабря 2024 года Парламент Грузии принял поправки в Уголовный кодекс (№175-Iმს-XIმპ), вступившие в силу 1 февраля 2025 года.",
-        p2: "Поправки значительно ужесточили наказания за действия, связанные с каннабисом — употребление, приобретение, хранение, перевозку — с штрафами от 500 до 2000 лари и административным арестом до 60 дней.",
+        p2: "Поправки значительно ужесточили наказания за действия, связанные с каннабисом - употребление, приобретение, хранение, перевозку - с штрафами от 500 до 2000 лари и административным арестом до 60 дней.",
         p3: "В марте 2025 года в первом чтении был принят ещё более строгий законодательный пакет, ужесточающий ответственность за выращивание каннабиса и все связанные действия.",
-        p4: "Хранение до 5 граммов сушёной марихуаны — штраф 500 лари. Свыше 5 граммов — уголовное дело. Выращивание — от штрафа до тюрьмы, в зависимости от количества.",
+        p4: "Хранение до 5 граммов сушёной марихуаны - штраф 500 лари. Свыше 5 граммов - уголовное дело. Выращивание - от штрафа до тюрьмы, в зависимости от количества.",
         lawLink: "Официальный текст закона (matsne.gov.ge)",
       },
       missionSection: {
         title: "Наша миссия",
         p1: "Grower создан для того, чтобы грузинские гроверы имели безопасное, анонимное пространство для обмена знаниями, получения советов и взаимной поддержки.",
-        p2: "Мы не поощряем нарушение закона. Мы живём в реальности, где тысячи людей в Грузии ежедневно сталкиваются с этой проблемой — и этим людям нужна информация, принятие и сообщество.",
+        p2: "Мы не поощряем нарушение закона. Мы живём в реальности, где тысячи людей в Грузии ежедневно сталкиваются с этой проблемой - и этим людям нужна информация, принятие и сообщество.",
         p3: "Мы верим в силу снижения вреда, образования и общественного диалога.",
       },
       anonymitySection: {
         title: "Анонимность и безопасность",
         p1: "Регистрация на платформе не требует личных данных. Ваша личность защищена.",
         p2: "Мы не собираем и не храним IP-адреса, номера телефонов или другую идентифицирующую информацию.",
-        p3: "Ваши знания и опыт ценны — делитесь ими, оставаясь защищёнными.",
+        p3: "Ваши знания и опыт ценны - делитесь ими, оставаясь защищёнными.",
       },
       futureSection: {
-        title: "Будущее — зелёное",
+        title: "Будущее - зелёное",
         p1: "По всему миру волна легализации и декриминализации продолжает набирать силу. Страны Европы, Америки и Азии принимают новые законы в пользу прогресса.",
-        p2: "Грузия тоже когда-нибудь пойдёт по этому пути. Мы здесь, чтобы приблизить этот день — а до тех пор, поддерживать друг друга.",
+        p2: "Грузия тоже когда-нибудь пойдёт по этому пути. Мы здесь, чтобы приблизить этот день - а до тех пор, поддерживать друг друга.",
         p3: "Выстоять. Вырастить. Поделиться. 🌿",
       },
     },
@@ -503,7 +503,7 @@ const translations = {
       badge: "Админ панель",
       title: "Управление форумом, дневниками и жалобами",
       description:
-        "Эта панель — центр управления форумом, дневниками и жалобами сообщества.",
+        "Эта панель - центр управления форумом, дневниками и жалобами сообщества.",
       moderationQueue: "Очередь модерации",
       flaggedContent: "Недавно отмеченный контент",
       items: "элементов",
