@@ -4,11 +4,32 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 const createThreadSchema = z.object({
-  topicSlug: z.string().min(2),
-  title: z.string().min(6).max(140),
-  body: z.string().min(10).max(5000),
+  topicSlug: z.string().trim().min(2, "Select a forum topic."),
+  title: z
+    .string()
+    .trim()
+    .min(6, "Title must be at least 6 characters.")
+    .max(140, "Title must be 140 characters or fewer."),
+  body: z
+    .string()
+    .trim()
+    .min(10, "Thread body must be at least 10 characters.")
+    .max(5000, "Thread body must be 5000 characters or fewer."),
   threadIcon: z.string().trim().min(1).max(8).optional(),
 });
+
+function getFirstValidationError(payload: {
+  fieldErrors: Record<string, string[] | undefined>;
+  formErrors: string[];
+}) {
+  for (const fieldErrors of Object.values(payload.fieldErrors)) {
+    const firstFieldError = fieldErrors?.[0];
+    if (firstFieldError) {
+      return firstFieldError;
+    }
+  }
+  return payload.formErrors[0] ?? null;
+}
 
 export async function POST(request: Request) {
   const sessionUser = await getServerSessionUser();
@@ -20,8 +41,12 @@ export async function POST(request: Request) {
   const parsed = createThreadSchema.safeParse(payload);
 
   if (!parsed.success) {
+    const issues = parsed.error.flatten();
     return NextResponse.json(
-      { error: "Invalid payload", issues: parsed.error.flatten() },
+      {
+        error: getFirstValidationError(issues) ?? "Invalid thread payload.",
+        issues,
+      },
       { status: 400 },
     );
   }

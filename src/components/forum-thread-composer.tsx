@@ -47,6 +47,10 @@ export function ForumThreadComposer({
   collapsible?: boolean;
   startHidden?: boolean;
 }) {
+  const minTitleLength = 6;
+  const minBodyLength = 10;
+  const maxTitleLength = 140;
+  const maxBodyLength = 5000;
   const primaryButtonClass =
     "inline-flex items-center justify-center whitespace-nowrap rounded-full bg-lime-400 px-4 py-2 text-xs font-semibold text-slate-950 transition hover:bg-lime-300 sm:text-sm";
   const subtleButtonClass =
@@ -132,10 +136,11 @@ export function ForumThreadComposer({
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
     setError(null);
     setSuccess(null);
 
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(form);
     const payload = {
       topicSlug: String(formData.get("topicSlug") ?? ""),
       title: String(formData.get("title") ?? ""),
@@ -144,6 +149,8 @@ export function ForumThreadComposer({
     };
 
     setIsSubmitting(true);
+    let threadPath: string | null = null;
+
     try {
       const response = await fetch("/api/forum/threads", {
         method: "POST",
@@ -153,22 +160,57 @@ export function ForumThreadComposer({
 
       if (!response.ok) {
         const parsed = await response.json().catch(() => null);
-        setError(parsed?.error ?? t.createFailed);
+        const issueFields = parsed?.issues?.fieldErrors;
+        const firstIssue =
+          issueFields?.title?.[0] ??
+          issueFields?.body?.[0] ??
+          issueFields?.topicSlug?.[0] ??
+          issueFields?.threadIcon?.[0] ??
+          parsed?.issues?.formErrors?.[0];
+        setError(firstIssue ?? parsed?.error ?? t.createFailed);
+        setSuccess(null);
         return;
       }
 
-      setSuccess(t.created);
-      event.currentTarget.reset();
-      if (bodyRef.current) {
-        bodyRef.current.style.height = "auto";
+      const parsed = await response.json().catch(() => null);
+      const threadSlug = parsed?.thread?.slug as string | undefined;
+      if (threadSlug) {
+        threadPath = `/${locale}/forum/${payload.topicSlug}/${threadSlug}`;
       }
-      router.refresh();
-      setTimeout(() => setSuccess(null), 2500);
     } catch {
       setError(t.requestFailed);
+      setSuccess(null);
+      return;
     } finally {
       setIsSubmitting(false);
     }
+
+    form.reset();
+    if (bodyRef.current) {
+      bodyRef.current.style.height = "auto";
+    }
+    setError(null);
+    setSuccess(t.created);
+
+    if (threadPath) {
+      try {
+        router.push(threadPath);
+      } catch {
+        if (typeof window !== "undefined") {
+          window.location.assign(threadPath);
+        }
+      }
+      return;
+    }
+
+    try {
+      router.refresh();
+    } catch {
+      if (typeof window !== "undefined") {
+        window.location.reload();
+      }
+    }
+    setTimeout(() => setSuccess(null), 2500);
   }
 
   if (topics.length === 0) {
@@ -242,9 +284,8 @@ export function ForumThreadComposer({
       <form
         onSubmit={onSubmit}
         onChange={() => {
-          if (error) {
-            setError(null);
-          }
+          if (error) setError(null);
+          if (success) setSuccess(null);
         }}
         className="mt-4 grid gap-3"
       >
@@ -290,6 +331,8 @@ export function ForumThreadComposer({
           name="title"
           placeholder={t.titlePlaceholder}
           className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2"
+          minLength={minTitleLength}
+          maxLength={maxTitleLength}
           required
         />
         <textarea
@@ -299,6 +342,8 @@ export function ForumThreadComposer({
           rows={4}
           onInput={(event) => autoResizeTextarea(event.currentTarget)}
           className="resize-none overflow-hidden rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2"
+          minLength={minBodyLength}
+          maxLength={maxBodyLength}
           required
         />
 
