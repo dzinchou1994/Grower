@@ -113,11 +113,6 @@ export default async function ForumTopicPage({ params }: PageProps) {
               <h1 className="text-xl font-semibold text-white sm:text-3xl lg:text-4xl">
                 {topic.title}
               </h1>
-              {topic.isTranslated ? (
-                <span className="mt-1 inline-flex rounded-full border border-lime-400/35 bg-lime-400/10 px-2 py-0.5 text-[10px] text-lime-300 sm:text-xs">
-                  Translated
-                </span>
-              ) : null}
               <p className="mt-1 text-xs text-slate-400 sm:mt-2 sm:text-sm">
                 {topic.description}
               </p>

@@ -50,11 +50,6 @@ export function ForumThreadListItemHeader({
           >
             {thread.title}
           </Link>
-          {Boolean(thread.isTranslated) ? (
-            <span className="inline-flex shrink-0 rounded-full border border-lime-400/35 bg-lime-400/10 px-1.5 py-0.5 text-[10px] text-lime-300">
-              Translated
-            </span>
-          ) : null}
         </div>
         <div className="mt-1.5 sm:mt-2">
           <UserQuickProfileTrigger

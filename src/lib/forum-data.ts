@@ -11,6 +11,7 @@ import { db } from "@/lib/db";
 import { getDeterministicAvatarImage } from "@/lib/avatar-options";
 import { calculateXp, getLevelForXp } from "@/lib/leveling";
 import { extractSocialsFromBio } from "@/lib/user-socials";
+import { autoTranslateText } from "@/lib/auto-translate";
 import {
   diaries,
   forumTopics,
@@ -351,6 +352,63 @@ function mapThreadRecord(thread: any, currentUserId?: string, locale?: Locale): 
   };
 }
 
+async function translateForumThreadRecord(
+  thread: ForumThreadRecord,
+  locale?: Locale,
+): Promise<ForumThreadRecord> {
+  if (!locale) {
+    return thread;
+  }
+
+  const [translatedTitle, translatedBody, translatedComments] = await Promise.all([
+    autoTranslateText(thread.title, locale),
+    autoTranslateText(thread.body ?? "", locale),
+    Promise.all(
+      thread.comments.map(async (comment) => {
+        const translatedCommentBody = await autoTranslateText(comment.body, locale);
+        return {
+          ...comment,
+          body: translatedCommentBody.text,
+          isTranslated: translatedCommentBody.translated,
+        } satisfies ForumComment;
+      }),
+    ),
+  ]);
+
+  return {
+    ...thread,
+    title: translatedTitle.text,
+    isTranslated: translatedTitle.translated,
+    body: translatedBody.text,
+    bodyTranslated: translatedBody.translated,
+    comments: translatedComments,
+  };
+}
+
+async function translateForumTopicRecord(
+  topic: ForumTopicRecord,
+  locale?: Locale,
+): Promise<ForumTopicRecord> {
+  if (!locale) {
+    return topic;
+  }
+
+  const [translatedTitle, translatedDescription, translatedThreads] = await Promise.all([
+    autoTranslateText(topic.title, locale),
+    autoTranslateText(topic.description ?? "", locale),
+    Promise.all(topic.threads.map((thread) => translateForumThreadRecord(thread, locale))),
+  ]);
+
+  return {
+    ...topic,
+    title: translatedTitle.text,
+    description: translatedDescription.text,
+    isTranslated: translatedTitle.translated,
+    descriptionTranslated: translatedDescription.translated,
+    threads: translatedThreads,
+  };
+}
+
 function topicMatchesQuery(topic: ForumTopicRecord, query: string) {
   const q = query.toLowerCase();
   return (
@@ -402,12 +460,16 @@ async function listForumTopicsFromDatabase(query?: string, locale?: Locale, curr
     }),
   );
 
+  const translatedMapped = await Promise.all(
+    mapped.map((topic) => translateForumTopicRecord(topic, locale)),
+  );
+
   if (!query?.trim()) {
-    return mapped;
+    return translatedMapped;
   }
 
   const q = query.trim();
-  return mapped
+  return translatedMapped
     .map((topic) => {
       if (topicMatchesQuery(topic, q)) {
         return topic;
@@ -465,7 +527,7 @@ async function getForumTopicBySlugFromDatabase(slug: string, locale?: Locale, cu
     threads: topic.threads.map((t) => mapThreadRecord(t, currentUserId, locale)),
   } satisfies ForumTopicRecord);
 
-  return mappedTopic;
+  return translateForumTopicRecord(mappedTopic, locale);
 }
 
 async function upsertForumUser(author: string) {
@@ -578,17 +640,23 @@ async function addCommentInDatabase(input: {
   };
 }
 
-function listForumTopicsFromMemory(query?: string): ForumTopicRecord[] {
+async function listForumTopicsFromMemory(
+  query?: string,
+  locale?: Locale,
+): Promise<ForumTopicRecord[]> {
   const state = getState();
   const topics = state.topics.map(applyCanonicalTopicMeta);
+  const translatedTopics = await Promise.all(
+    topics.map((topic) => translateForumTopicRecord(topic, locale)),
+  );
 
   if (!query?.trim()) {
-    return topics;
+    return translatedTopics;
   }
 
   const q = query.trim().toLowerCase();
 
-  return topics
+  return translatedTopics
     .map((topic) => {
       const topicMatch =
         topic.title.toLowerCase().includes(q) ||
@@ -603,9 +671,13 @@ function listForumTopicsFromMemory(query?: string): ForumTopicRecord[] {
     .filter((topic) => topic.threads.length > 0);
 }
 
-function getForumTopicBySlugFromMemory(slug: string) {
+async function getForumTopicBySlugFromMemory(slug: string, locale?: Locale) {
   const topic = getState().topics.find((entry) => entry.slug === slug) ?? null;
-  return topic ? applyCanonicalTopicMeta(topic) : null;
+  if (!topic) {
+    return null;
+  }
+
+  return translateForumTopicRecord(applyCanonicalTopicMeta(topic), locale);
 }
 
 function createThreadInMemory(input: {
@@ -688,7 +760,7 @@ export async function listForumTopics(
     return listForumTopicsFromDatabase(query, locale, currentUserId);
   }
 
-  return listForumTopicsFromMemory(query);
+  return listForumTopicsFromMemory(query, locale);
 }
 
 export async function getForumTopicBySlug(
@@ -700,7 +772,7 @@ export async function getForumTopicBySlug(
     return getForumTopicBySlugFromDatabase(slug, locale, currentUserId);
   }
 
-  return getForumTopicBySlugFromMemory(slug);
+  return getForumTopicBySlugFromMemory(slug, locale);
 }
 
 export type ForumThreadPageData = {
@@ -744,19 +816,27 @@ export async function getForumThreadBySlug(
     }
 
     const mappedThread = mapThreadRecord(thread, currentUserId, locale);
+    const translatedThread = await translateForumThreadRecord(mappedThread, locale);
+    const [translatedTopicTitle, translatedTopicDescription] = locale
+      ? await Promise.all([
+          autoTranslateText(thread.topic.title, locale),
+          autoTranslateText(thread.topic.description ?? "", locale),
+        ])
+      : [
+          { text: thread.topic.title, translated: false },
+          { text: thread.topic.description ?? "", translated: false },
+        ];
 
     return {
       topic: {
         slug: thread.topic.slug,
-        title: thread.topic.title,
-        description: thread.topic.description ?? "",
+        title: translatedTopicTitle.text,
+        description: translatedTopicDescription.text,
         icon: topicIconBySlug.get(thread.topic.slug) ?? "💬",
-        isTranslated: false,
+        isTranslated: translatedTopicTitle.translated,
       },
       thread: {
-        ...mappedThread,
-        isTranslated: false,
-        bodyTranslated: false,
+        ...translatedThread,
       },
     };
   }
@@ -810,21 +890,32 @@ export async function getForumCommentById(
     }
 
     const commentVotes = comment.votes ?? [];
+    const [translatedTopicTitle, translatedThreadTitle, translatedCommentBody] = locale
+      ? await Promise.all([
+          autoTranslateText(comment.thread.topic.title, locale),
+          autoTranslateText(comment.thread.title, locale),
+          autoTranslateText(comment.body, locale),
+        ])
+      : [
+          { text: comment.thread.topic.title, translated: false },
+          { text: comment.thread.title, translated: false },
+          { text: comment.body, translated: false },
+        ];
 
     return {
       topic: {
         slug: comment.thread.topic.slug,
-        title: comment.thread.topic.title,
+        title: translatedTopicTitle.text,
         icon: topicIconBySlug.get(comment.thread.topic.slug) ?? "💬",
       },
       thread: {
         slug: comment.thread.slug,
-        title: comment.thread.title,
+        title: translatedThreadTitle.text,
         author: comment.thread.author.username,
         authorImage:
           comment.thread.author.image ??
           getDeterministicAvatarImage(comment.thread.author.username),
-        isTranslated: false,
+        isTranslated: translatedThreadTitle.translated,
       },
       comment: {
         id: comment.id,
@@ -832,8 +923,8 @@ export async function getForumCommentById(
         authorImage:
           comment.author?.image ??
           getDeterministicAvatarImage(comment.author?.username ?? "user"),
-        body: comment.body,
-        isTranslated: false,
+        body: translatedCommentBody.text,
+        isTranslated: translatedCommentBody.translated,
         createdAt: comment.createdAt.toISOString(),
         upvotes: commentVotes.filter((vote) => vote.value === 1).length,
         downvotes: commentVotes.filter((vote) => vote.value === -1).length,
