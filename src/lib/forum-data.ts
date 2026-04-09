@@ -19,13 +19,20 @@ export type ForumComment = {
   body: string;
   isTranslated?: boolean;
   createdAt: string;
+  upvotes: number;
+  downvotes: number;
+  userVote: number;
 };
 
 export type ForumThreadRecord = ForumThread & {
+  id?: string;
   authorImage?: string;
   body?: string;
   isTranslated?: boolean;
   bodyTranslated?: boolean;
+  upvotes: number;
+  downvotes: number;
+  userVote: number;
   comments: ForumComment[];
 };
 
@@ -165,11 +172,19 @@ async function ensureForumSeedData() {
   await global.__forumSeedPromise;
 }
 
-function mapThreadRecord(thread: any): ForumThreadRecord {
+function mapThreadRecord(thread: any, currentUserId?: string): ForumThreadRecord {
   const latestCommentDate = thread.comments?.[0]?.createdAt;
   const lastActivity = latestCommentDate ?? thread.updatedAt;
 
+  const threadVotes: any[] = thread.votes ?? [];
+  const threadUpvotes = threadVotes.filter((v: any) => v.value === 1).length;
+  const threadDownvotes = threadVotes.filter((v: any) => v.value === -1).length;
+  const threadUserVote = currentUserId
+    ? (threadVotes.find((v: any) => v.userId === currentUserId)?.value ?? 0)
+    : 0;
+
   return {
+    id: thread.id,
     slug: thread.slug,
     title: thread.title,
     author: thread.author?.username ?? "user",
@@ -181,16 +196,31 @@ function mapThreadRecord(thread: any): ForumThreadRecord {
     lastActivity: toRelative(lastActivity),
     isPinned: Boolean(thread.isPinned),
     body: thread.body,
+    upvotes: threadUpvotes,
+    downvotes: threadDownvotes,
+    userVote: threadUserVote,
     comments:
-      thread.comments?.map((comment: any) => ({
-        id: comment.id,
-        author: comment.author?.username ?? "user",
-        authorImage:
-          comment.author?.image ??
-          getDeterministicAvatarImage(comment.author?.username ?? "user"),
-        body: comment.body,
-        createdAt: comment.createdAt.toISOString(),
-      })) ?? [],
+      thread.comments?.map((comment: any) => {
+        const commentVotes: any[] = comment.votes ?? [];
+        const commentUp = commentVotes.filter((v: any) => v.value === 1).length;
+        const commentDown = commentVotes.filter((v: any) => v.value === -1).length;
+        const commentUserVote = currentUserId
+          ? (commentVotes.find((v: any) => v.userId === currentUserId)?.value ?? 0)
+          : 0;
+
+        return {
+          id: comment.id,
+          author: comment.author?.username ?? "user",
+          authorImage:
+            comment.author?.image ??
+            getDeterministicAvatarImage(comment.author?.username ?? "user"),
+          body: comment.body,
+          createdAt: comment.createdAt.toISOString(),
+          upvotes: commentUp,
+          downvotes: commentDown,
+          userVote: commentUserVote,
+        };
+      }) ?? [],
   };
 }
 
@@ -258,7 +288,7 @@ function filterThreadByQuery(thread: ForumThreadRecord, query: string) {
   );
 }
 
-async function listForumTopicsFromDatabase(query?: string, locale?: Locale) {
+async function listForumTopicsFromDatabase(query?: string, locale?: Locale, currentUserId?: string) {
   await ensureForumSeedData();
 
   const topics = await db.forumTopic.findMany({
@@ -269,11 +299,15 @@ async function listForumTopicsFromDatabase(query?: string, locale?: Locale) {
         orderBy: [{ isPinned: "desc" }, { updatedAt: "desc" }],
         include: {
           author: { select: { username: true, image: true } },
+          votes: { select: { userId: true, value: true } },
           comments: {
             where: { isHidden: false },
             orderBy: { createdAt: "desc" },
             take: 3,
-            include: { author: { select: { username: true, image: true } } },
+            include: {
+              author: { select: { username: true, image: true } },
+              votes: { select: { userId: true, value: true } },
+            },
           },
           _count: { select: { comments: true, likes: true } },
         },
@@ -286,7 +320,7 @@ async function listForumTopicsFromDatabase(query?: string, locale?: Locale) {
     title: topic.title,
     description: topic.description ?? "",
     icon: topicIconBySlug.get(topic.slug) ?? "💬",
-    threads: topic.threads.map(mapThreadRecord),
+    threads: topic.threads.map((t) => mapThreadRecord(t, currentUserId)),
   }));
 
   const translatedMapped = await Promise.all(
@@ -309,7 +343,7 @@ async function listForumTopicsFromDatabase(query?: string, locale?: Locale) {
     .filter((topic) => topic.threads.length > 0);
 }
 
-async function getForumTopicBySlugFromDatabase(slug: string, locale?: Locale) {
+async function getForumTopicBySlugFromDatabase(slug: string, locale?: Locale, currentUserId?: string) {
   await ensureForumSeedData();
 
   const topic = await db.forumTopic.findUnique({
@@ -320,11 +354,15 @@ async function getForumTopicBySlugFromDatabase(slug: string, locale?: Locale) {
         orderBy: [{ isPinned: "desc" }, { updatedAt: "desc" }],
         include: {
           author: { select: { username: true, image: true } },
+          votes: { select: { userId: true, value: true } },
           comments: {
             where: { isHidden: false },
             orderBy: { createdAt: "desc" },
             take: 10,
-            include: { author: { select: { username: true, image: true } } },
+            include: {
+              author: { select: { username: true, image: true } },
+              votes: { select: { userId: true, value: true } },
+            },
           },
           _count: { select: { comments: true, likes: true } },
         },
@@ -341,7 +379,7 @@ async function getForumTopicBySlugFromDatabase(slug: string, locale?: Locale) {
     title: topic.title,
     description: topic.description ?? "",
     icon: topicIconBySlug.get(topic.slug) ?? "💬",
-    threads: topic.threads.map(mapThreadRecord),
+    threads: topic.threads.map((t) => mapThreadRecord(t, currentUserId)),
   } satisfies ForumTopicRecord;
 
   return translateForumTopicRecord(mappedTopic, locale);
@@ -362,7 +400,7 @@ async function upsertForumUser(author: string) {
 
   return db.user.upsert({
     where: { username },
-    update: {},
+    update: { image: getDeterministicAvatarImage(username) },
     create: {
       username,
       email,
@@ -453,6 +491,9 @@ async function addCommentInDatabase(input: {
       authorImage: comment.author.image ?? getDeterministicAvatarImage(comment.author.username),
       body: comment.body,
       createdAt: comment.createdAt.toISOString(),
+      upvotes: 0,
+      downvotes: 0,
+      userVote: 0,
     } satisfies ForumComment,
   };
 }
@@ -507,6 +548,9 @@ function createThreadInMemory(input: {
     lastActivity: "just now",
     isPinned: false,
     body: input.body.trim(),
+    upvotes: 0,
+    downvotes: 0,
+    userVote: 0,
     comments: [],
   };
 
@@ -533,6 +577,9 @@ function addCommentInMemory(input: {
       authorImage: getDeterministicAvatarImage(input.author.trim()),
       body: input.body.trim(),
       createdAt: new Date().toISOString(),
+      upvotes: 0,
+      downvotes: 0,
+      userVote: 0,
     };
 
     thread.comments.unshift(comment);
@@ -548,9 +595,10 @@ function addCommentInMemory(input: {
 export async function listForumTopics(
   query?: string,
   locale?: Locale,
+  currentUserId?: string,
 ): Promise<ForumTopicRecord[]> {
   if (hasDatabase) {
-    return listForumTopicsFromDatabase(query, locale);
+    return listForumTopicsFromDatabase(query, locale, currentUserId);
   }
 
   return listForumTopicsFromMemory(query);
@@ -559,9 +607,10 @@ export async function listForumTopics(
 export async function getForumTopicBySlug(
   slug: string,
   locale?: Locale,
+  currentUserId?: string,
 ): Promise<ForumTopicRecord | null> {
   if (hasDatabase) {
-    return getForumTopicBySlugFromDatabase(slug, locale);
+    return getForumTopicBySlugFromDatabase(slug, locale, currentUserId);
   }
 
   return getForumTopicBySlugFromMemory(slug);

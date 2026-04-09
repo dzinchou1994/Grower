@@ -1,0 +1,156 @@
+"use client";
+
+import { useState, useTransition } from "react";
+
+type Props = {
+  threadId?: string;
+  commentId?: string;
+  upvotes: number;
+  downvotes: number;
+  userVote: number; // 1, -1, or 0
+  isAuthenticated: boolean;
+  loginHref: string;
+  compact?: boolean;
+};
+
+export function VoteButtons({
+  threadId,
+  commentId,
+  upvotes: initialUp,
+  downvotes: initialDown,
+  userVote: initialVote,
+  isAuthenticated,
+  loginHref,
+  compact = false,
+}: Props) {
+  const [upvotes, setUpvotes] = useState(initialUp);
+  const [downvotes, setDownvotes] = useState(initialDown);
+  const [userVote, setUserVote] = useState(initialVote);
+  const [isPending, startTransition] = useTransition();
+
+  const score = upvotes - downvotes;
+
+  function handleVote(newValue: 1 | -1) {
+    if (!isAuthenticated) {
+      window.location.href = loginHref;
+      return;
+    }
+
+    const targetValue = userVote === newValue ? 0 : newValue;
+
+    startTransition(async () => {
+      const prev = { up: upvotes, down: downvotes, vote: userVote };
+
+      if (userVote === 1) setUpvotes((v) => v - 1);
+      if (userVote === -1) setDownvotes((v) => v - 1);
+      if (targetValue === 1) setUpvotes((v) => v + 1);
+      if (targetValue === -1) setDownvotes((v) => v + 1);
+      setUserVote(targetValue);
+
+      try {
+        const res = await fetch("/api/forum/vote", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ threadId, commentId, value: targetValue }),
+        });
+        if (!res.ok) {
+          throw new Error("Vote failed");
+        }
+      } catch {
+        setUpvotes(prev.up);
+        setDownvotes(prev.down);
+        setUserVote(prev.vote);
+      }
+    });
+  }
+
+  if (compact) {
+    return (
+      <div className="inline-flex items-center gap-0.5 rounded-full border border-white/10 bg-white/[0.03]">
+        <button
+          type="button"
+          onClick={() => handleVote(1)}
+          disabled={isPending}
+          className={`rounded-l-full px-2 py-1 text-[11px] transition ${
+            userVote === 1
+              ? "bg-lime-400/20 text-lime-300"
+              : "text-slate-500 hover:bg-white/8 hover:text-lime-300"
+          } disabled:opacity-50`}
+          aria-label="Upvote"
+        >
+          ▲
+        </button>
+        <span
+          className={`min-w-[24px] text-center text-[11px] font-semibold ${
+            score > 0
+              ? "text-lime-300"
+              : score < 0
+                ? "text-red-400"
+                : "text-slate-500"
+          }`}
+        >
+          {score}
+        </span>
+        <button
+          type="button"
+          onClick={() => handleVote(-1)}
+          disabled={isPending}
+          className={`rounded-r-full px-2 py-1 text-[11px] transition ${
+            userVote === -1
+              ? "bg-red-400/20 text-red-400"
+              : "text-slate-500 hover:bg-white/8 hover:text-red-400"
+          } disabled:opacity-50`}
+          aria-label="Downvote"
+        >
+          ▼
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col items-center gap-0.5 rounded-xl border border-white/10 bg-white/[0.03] px-1.5 py-1">
+      <button
+        type="button"
+        onClick={() => handleVote(1)}
+        disabled={isPending}
+        className={`rounded-lg p-1 text-sm transition ${
+          userVote === 1
+            ? "bg-lime-400/20 text-lime-300"
+            : "text-slate-500 hover:bg-white/8 hover:text-lime-300"
+        } disabled:opacity-50`}
+        aria-label="Upvote"
+      >
+        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 4l-8 8h5v8h6v-8h5z" />
+        </svg>
+      </button>
+      <span
+        className={`text-xs font-bold ${
+          score > 0
+            ? "text-lime-300"
+            : score < 0
+              ? "text-red-400"
+              : "text-slate-500"
+        }`}
+      >
+        {score}
+      </span>
+      <button
+        type="button"
+        onClick={() => handleVote(-1)}
+        disabled={isPending}
+        className={`rounded-lg p-1 text-sm transition ${
+          userVote === -1
+            ? "bg-red-400/20 text-red-400"
+            : "text-slate-500 hover:bg-white/8 hover:text-red-400"
+        } disabled:opacity-50`}
+        aria-label="Downvote"
+      >
+        <svg className="h-4 w-4 rotate-180" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 4l-8 8h5v8h6v-8h5z" />
+        </svg>
+      </button>
+    </div>
+  );
+}

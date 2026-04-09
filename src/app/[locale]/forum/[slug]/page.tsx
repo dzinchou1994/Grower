@@ -15,6 +15,7 @@ import {
 import { getForumTopicBySlug } from "@/lib/forum-data";
 import { CannabisLeaf } from "@/components/icons";
 import { UserAvatar } from "@/components/user-avatar";
+import { VoteButtons } from "@/components/vote-buttons";
 
 type PageProps = {
   params: Promise<{ locale: string; slug: string }>;
@@ -71,10 +72,8 @@ export default async function ForumTopicPage({ params }: PageProps) {
 
   const typedLocale = locale as Locale;
   const { dict } = getLocalizedContent(typedLocale);
-  const [topic, sessionUser] = await Promise.all([
-    getForumTopicBySlug(slug, typedLocale),
-    getServerSessionUser(),
-  ]);
+  const sessionUser = await getServerSessionUser();
+  const topic = await getForumTopicBySlug(slug, typedLocale, sessionUser?.userId);
 
   if (!topic) {
     notFound();
@@ -155,87 +154,119 @@ export default async function ForumTopicPage({ params }: PageProps) {
           {topic.threads.map((thread) => (
             <article
               key={thread.slug}
-              className="rounded-2xl border border-white/8 bg-white/4 p-4 transition hover:border-lime-400/20 sm:rounded-[1.75rem] sm:p-5"
+              className="rounded-2xl border border-white/8 bg-white/4 transition hover:border-lime-400/20 sm:rounded-[1.75rem]"
             >
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
-                    {thread.isPinned && (
-                      <span className="shrink-0 text-xs text-lime-300">📌</span>
-                    )}
-                    <h3 className="line-clamp-1 text-sm font-semibold text-white sm:text-lg">
-                      {thread.title}
-                    </h3>
-                    {thread.isTranslated ? (
-                      <span className="inline-flex rounded-full border border-lime-400/35 bg-lime-400/10 px-1.5 py-0.5 text-[10px] text-lime-300">
-                        Translated
-                      </span>
-                    ) : null}
-                  </div>
-                  <div className="mt-1.5 flex items-center gap-2 text-[10px] text-slate-400 sm:mt-2 sm:text-sm">
-                    <UserAvatar
-                      username={thread.author}
-                      image={thread.authorImage}
-                      size="sm"
-                    />
-                    <p>
-                      {dict.forum.startedBy} @{thread.author}
-                    </p>
-                  </div>
+              <div className="flex">
+                {/* Vote column */}
+                <div className="hidden shrink-0 items-start justify-center border-r border-white/8 px-2 py-4 sm:flex">
+                  <VoteButtons
+                    threadId={thread.id}
+                    upvotes={thread.upvotes}
+                    downvotes={thread.downvotes}
+                    userVote={thread.userVote}
+                    isAuthenticated={Boolean(sessionUser)}
+                    loginHref={getLocalizedPath(typedLocale, "/auth/login")}
+                  />
                 </div>
-                <span className="shrink-0 rounded-full bg-lime-400/10 px-2.5 py-1 text-[10px] text-lime-300 sm:px-3 sm:text-xs">
-                  {thread.lastActivity}
-                </span>
-              </div>
 
-              <div className="mt-3 flex flex-wrap gap-1.5 text-[10px] text-slate-300 sm:mt-4 sm:gap-2 sm:text-xs">
-                <span className="rounded-full bg-white/6 px-2.5 py-1 sm:px-3">
-                  {thread.replies} {dict.forum.replies}
-                </span>
-                <span className="rounded-full bg-white/6 px-2.5 py-1 sm:px-3">
-                  {thread.likes} {dict.forum.likes}
-                </span>
-              </div>
-
-              {thread.body ? (
-                <p className="mt-3 text-xs leading-relaxed text-slate-300 sm:text-sm">
-                  {thread.body}
-                  {thread.bodyTranslated ? (
-                    <span className="ml-2 inline-flex rounded-full border border-lime-400/35 bg-lime-400/10 px-1.5 py-0.5 text-[10px] text-lime-300">
-                      Translated
-                    </span>
-                  ) : null}
-                </p>
-              ) : null}
-
-              {thread.comments.length > 0 ? (
-                <div className="mt-3 space-y-2 border-t border-white/10 pt-3">
-                  {thread.comments.slice(0, 3).map((comment) => (
-                    <div key={comment.id} className="rounded-xl bg-slate-900/60 px-3 py-2">
+                {/* Content */}
+                <div className="min-w-0 flex-1 p-4 sm:p-5">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <UserAvatar
-                          username={comment.author}
-                          image={comment.authorImage}
-                          size="sm"
-                        />
-                        <p className="text-[10px] text-slate-500 sm:text-xs">@{comment.author}</p>
+                        {thread.isPinned && (
+                          <span className="shrink-0 text-xs text-lime-300">📌</span>
+                        )}
+                        <h3 className="line-clamp-1 text-sm font-semibold text-white sm:text-lg">
+                          {thread.title}
+                        </h3>
+                        {thread.isTranslated ? (
+                          <span className="inline-flex rounded-full border border-lime-400/35 bg-lime-400/10 px-1.5 py-0.5 text-[10px] text-lime-300">
+                            Translated
+                          </span>
+                        ) : null}
                       </div>
-                      <p className="mt-1 text-xs text-slate-300 sm:text-sm">{comment.body}</p>
-                      {comment.isTranslated ? (
-                        <span className="mt-1 inline-flex rounded-full border border-lime-400/35 bg-lime-400/10 px-1.5 py-0.5 text-[10px] text-lime-300">
+                      <p className="mt-1.5 text-[10px] text-slate-400 sm:mt-2 sm:text-sm">
+                        {dict.forum.startedBy} @{thread.author}
+                      </p>
+                    </div>
+                    <span className="shrink-0 rounded-full bg-lime-400/10 px-2.5 py-1 text-[10px] text-lime-300 sm:px-3 sm:text-xs">
+                      {thread.lastActivity}
+                    </span>
+                  </div>
+
+                  {/* Mobile vote + stats row */}
+                  <div className="mt-3 flex items-center gap-2 sm:mt-4">
+                    <div className="sm:hidden">
+                      <VoteButtons
+                        threadId={thread.id}
+                        upvotes={thread.upvotes}
+                        downvotes={thread.downvotes}
+                        userVote={thread.userVote}
+                        isAuthenticated={Boolean(sessionUser)}
+                        loginHref={getLocalizedPath(typedLocale, "/auth/login")}
+                        compact
+                      />
+                    </div>
+                    <div className="flex flex-wrap gap-1.5 text-[10px] text-slate-300 sm:gap-2 sm:text-xs">
+                      <span className="rounded-full bg-white/6 px-2.5 py-1 sm:px-3">
+                        {thread.replies} {dict.forum.replies}
+                      </span>
+                    </div>
+                  </div>
+
+                  {thread.body ? (
+                    <p className="mt-3 text-xs leading-relaxed text-slate-300 sm:text-sm">
+                      {thread.body}
+                      {thread.bodyTranslated ? (
+                        <span className="ml-2 inline-flex rounded-full border border-lime-400/35 bg-lime-400/10 px-1.5 py-0.5 text-[10px] text-lime-300">
                           Translated
                         </span>
                       ) : null}
-                    </div>
-                  ))}
-                </div>
-              ) : null}
+                    </p>
+                  ) : null}
 
-              <ForumCommentForm
-                threadSlug={thread.slug}
-                isAuthenticated={Boolean(sessionUser)}
-                loginHref={getLocalizedPath(typedLocale, "/auth/login")}
-              />
+                  {thread.comments.length > 0 ? (
+                    <div className="mt-3 space-y-2 border-t border-white/10 pt-3">
+                      {thread.comments.slice(0, 3).map((comment) => (
+                        <div key={comment.id} className="rounded-xl bg-slate-900/60 px-3 py-2">
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-2">
+                              <UserAvatar
+                                username={comment.author}
+                                image={comment.authorImage}
+                                size="sm"
+                              />
+                              <p className="text-[10px] text-slate-500 sm:text-xs">@{comment.author}</p>
+                            </div>
+                            <VoteButtons
+                              commentId={comment.id}
+                              upvotes={comment.upvotes}
+                              downvotes={comment.downvotes}
+                              userVote={comment.userVote}
+                              isAuthenticated={Boolean(sessionUser)}
+                              loginHref={getLocalizedPath(typedLocale, "/auth/login")}
+                              compact
+                            />
+                          </div>
+                          <p className="mt-1 text-xs text-slate-300 sm:text-sm">{comment.body}</p>
+                          {comment.isTranslated ? (
+                            <span className="mt-1 inline-flex rounded-full border border-lime-400/25 bg-lime-400/5 px-1 py-px text-[8px] text-lime-400/60">
+                              translated
+                            </span>
+                          ) : null}
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+
+                  <ForumCommentForm
+                    threadSlug={thread.slug}
+                    isAuthenticated={Boolean(sessionUser)}
+                    loginHref={getLocalizedPath(typedLocale, "/auth/login")}
+                  />
+                </div>
+              </div>
             </article>
           ))}
         </div>

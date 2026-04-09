@@ -89,7 +89,7 @@ export function ForumCommentForm({
       <button
         type="submit"
         disabled={isSubmitting || !isAuthenticated}
-        className="inline-flex w-fit rounded-full border border-lime-400/40 px-3 py-1.5 text-xs font-medium text-lime-300 transition hover:bg-lime-400/10 disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex w-fit rounded-full border border-lime-400/30 px-2.5 py-1 text-[10px] font-medium text-lime-300 transition hover:bg-lime-400/10 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {isSubmitting ? "Posting..." : "Add comment"}
       </button>

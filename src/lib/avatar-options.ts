@@ -53,10 +53,11 @@ export function getAvatarOptionByImage(image: string | undefined | null): Avatar
 
 export function getDeterministicAvatarImage(seed: string) {
   const normalized = seed.trim().toLowerCase();
-  let hash = 0;
+  let h = 2166136261;
   for (let i = 0; i < normalized.length; i += 1) {
-    hash = (hash * 31 + normalized.charCodeAt(i)) % 2147483647;
+    h ^= normalized.charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
   }
-  const index = Math.abs(hash) % avatarOptions.length;
+  const index = h % avatarOptions.length;
   return `avatar:${avatarOptions[index].id}`;
 }
