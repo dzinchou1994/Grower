@@ -166,6 +166,7 @@ const translations = {
       startedBy: "დაიწყო",
       replies: "პასუხი",
       likes: "მოწონება",
+      permalink: "ბმული",
     },
     admin: {
       badge: "ადმინ პანელი",
@@ -335,6 +336,7 @@ const translations = {
       startedBy: "Started by",
       replies: "replies",
       likes: "likes",
+      permalink: "Permalink",
     },
     admin: {
       badge: "Admin panel",
@@ -504,6 +506,7 @@ const translations = {
       startedBy: "Начал",
       replies: "ответов",
       likes: "лайков",
+      permalink: "Ссылка",
     },
     admin: {
       badge: "Админ панель",

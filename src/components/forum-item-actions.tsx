@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -8,16 +9,23 @@ type Locale = "ka" | "en" | "ru";
 export function ForumItemActions({
   locale,
   canDelete,
+  canReport,
   deleteEndpoint,
   reportTargetType,
   reportTargetId,
+  permalinkHref,
+  permalinkLabel,
   className,
 }: {
   locale: Locale;
   canDelete: boolean;
+  /** When true, show report (e.g. not your content). Omit to derive from `!canDelete` for backwards compatibility. */
+  canReport?: boolean;
   deleteEndpoint?: string;
   reportTargetType?: "THREAD" | "COMMENT";
   reportTargetId?: string;
+  permalinkHref?: string;
+  permalinkLabel?: string;
   className?: string;
 }) {
   const router = useRouter();
@@ -147,9 +155,15 @@ export function ForumItemActions({
     }
   }
 
-  const showReport = Boolean(reportTargetType && reportTargetId && !canDelete);
+  const showDelete = Boolean(deleteEndpoint && canDelete);
+  const showReport = Boolean(
+    reportTargetType &&
+      reportTargetId &&
+      (canReport === undefined ? !canDelete : canReport),
+  );
+  const showPermalink = Boolean(permalinkHref && permalinkLabel);
 
-  if (!canDelete && !showReport) {
+  if (!showPermalink && !showDelete && !showReport) {
     return null;
   }
 
@@ -170,7 +184,16 @@ export function ForumItemActions({
         </button>
 
         {isMenuOpen ? (
-          <div className="absolute right-0 top-7 z-20 min-w-[120px] overflow-hidden rounded-xl border border-white/10 bg-slate-950/95 p-1.5 shadow-lg shadow-black/40 backdrop-blur">
+          <div className="absolute right-0 top-7 z-20 min-w-[132px] overflow-hidden rounded-xl border border-white/10 bg-slate-950/95 p-1.5 shadow-lg shadow-black/40 backdrop-blur">
+            {showPermalink ? (
+              <Link
+                href={permalinkHref!}
+                onClick={() => setIsMenuOpen(false)}
+                className="flex w-full items-center rounded-lg px-2 py-1.5 text-left text-[11px] text-slate-200 transition hover:bg-white/10"
+              >
+                {permalinkLabel}
+              </Link>
+            ) : null}
             {showReport ? (
               <button
                 type="button"
@@ -181,7 +204,7 @@ export function ForumItemActions({
                 {t.report}
               </button>
             ) : null}
-            {canDelete && deleteEndpoint ? (
+            {showDelete ? (
               <button
                 type="button"
                 onClick={handleDelete}

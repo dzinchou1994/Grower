@@ -74,6 +74,9 @@ export default async function ForumTopicPage({ params }: PageProps) {
   const typedLocale = locale as Locale;
   const { dict } = getLocalizedContent(typedLocale);
   const sessionUser = await getServerSessionUser();
+  const isStaff = Boolean(
+    sessionUser && (sessionUser.role === "ADMIN" || sessionUser.role === "MODERATOR"),
+  );
   const topic = await getForumTopicBySlug(slug, typedLocale, sessionUser?.userId);
 
   if (!topic) {
@@ -154,7 +157,14 @@ export default async function ForumTopicPage({ params }: PageProps) {
         </div>
 
         <div className="mt-5 space-y-3 sm:mt-6 sm:space-y-4">
-          {topic.threads.map((thread) => (
+          {topic.threads.map((thread) => {
+            const isThreadOwner = Boolean(
+              sessionUser &&
+                sessionUser.username.toLowerCase() === thread.author.toLowerCase(),
+            );
+            const canModerateThread = isThreadOwner || isStaff;
+
+            return (
             <article
               key={thread.slug}
               className="rounded-2xl border border-white/8 bg-white/4 transition hover:border-lime-400/20 sm:rounded-[1.75rem]"
@@ -172,19 +182,26 @@ export default async function ForumTopicPage({ params }: PageProps) {
                   />
                 </div>
 
-                {/* Content */}
-                <div className="relative min-w-0 flex-1 p-4 pr-12 sm:p-5 sm:pr-14">
-                  {sessionUser ? (
-                    <ForumItemActions
-                      locale={typedLocale}
-                      canDelete={sessionUser.username.toLowerCase() === thread.author.toLowerCase()}
-                      deleteEndpoint={`/api/forum/threads/${thread.slug}`}
-                      reportTargetType="THREAD"
-                      reportTargetId={thread.id}
-                      className="absolute right-3 top-3 z-10 sm:right-4 sm:top-4"
-                    />
-                  ) : null}
-                  <div className="flex items-start justify-between gap-3">
+                {/* Content — symmetric padding; extra pr only above comments so previews span full width */}
+                <div className="relative flex w-full min-w-0 flex-1 flex-col p-4 sm:p-5">
+                  <ForumItemActions
+                    locale={typedLocale}
+                    canDelete={canModerateThread}
+                    canReport={Boolean(sessionUser && !isThreadOwner)}
+                    deleteEndpoint={
+                      canModerateThread ? `/api/forum/threads/${thread.slug}` : undefined
+                    }
+                    reportTargetType="THREAD"
+                    reportTargetId={thread.id}
+                    permalinkHref={getLocalizedPath(
+                      typedLocale,
+                      `/forum/${topic.slug}/${thread.slug}`,
+                    )}
+                    permalinkLabel={dict.forum.permalink}
+                    className="absolute right-3 top-3 z-10 sm:right-4 sm:top-4"
+                  />
+                  <div className="min-w-0 pr-12 sm:pr-14">
+                  <div className="flex w-full min-w-0 items-start justify-between gap-3">
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         {thread.isPinned && (
@@ -219,7 +236,7 @@ export default async function ForumTopicPage({ params }: PageProps) {
                   </div>
 
                   {/* Mobile vote + stats row */}
-                  <div className="mt-3 flex items-center gap-2 sm:mt-4">
+                  <div className="mt-3 flex w-full min-w-0 items-center gap-2 sm:mt-4">
                     <div className="sm:hidden">
                       <VoteButtons
                         threadId={thread.id}
@@ -239,7 +256,7 @@ export default async function ForumTopicPage({ params }: PageProps) {
                   </div>
 
                   {thread.body ? (
-                    <p className="mt-3 text-xs leading-relaxed text-slate-300 sm:text-sm">
+                    <p className="mt-3 w-full min-w-0 text-xs leading-relaxed text-slate-300 sm:text-sm">
                       {thread.body}
                       {thread.bodyTranslated ? (
                         <span className="ml-2 inline-flex rounded-full border border-lime-400/35 bg-lime-400/10 px-1.5 py-0.5 text-[10px] text-lime-300">
@@ -248,11 +265,22 @@ export default async function ForumTopicPage({ params }: PageProps) {
                       ) : null}
                     </p>
                   ) : null}
+                  </div>
 
                   {thread.comments.length > 0 ? (
-                    <div className="mt-3 space-y-2 border-t border-white/10 pt-3">
-                      {thread.comments.slice(0, 3).map((comment) => (
-                        <div key={comment.id} className="rounded-xl bg-slate-900/60 px-3 py-2">
+                    <div className="mt-3 flex w-full min-w-0 flex-col gap-2 border-t border-white/10 pt-3">
+                      {thread.comments.slice(0, 3).map((comment) => {
+                        const isCommentOwner = Boolean(
+                          sessionUser &&
+                            sessionUser.username.toLowerCase() === comment.author.toLowerCase(),
+                        );
+                        const canModerateComment = isCommentOwner || isStaff;
+
+                        return (
+                        <div
+                          key={comment.id}
+                          className="w-full min-w-0 rounded-xl bg-slate-900/60 px-3 py-2 sm:px-4"
+                        >
                           <div className="flex items-center justify-between gap-2">
                             <UserQuickProfileTrigger
                               locale={typedLocale}
@@ -261,29 +289,26 @@ export default async function ForumTopicPage({ params }: PageProps) {
                               isAuthenticated={Boolean(sessionUser)}
                               currentUsername={sessionUser?.username}
                               showPrefix={false}
-                              className="inline-flex items-center gap-2 text-[10px] text-slate-500 transition hover:text-lime-300 sm:text-xs"
+                              className="inline-flex min-w-0 flex-1 items-center gap-2 text-[10px] text-slate-500 transition hover:text-lime-300 sm:text-xs"
                             />
-                            <div className="flex items-center gap-2">
-                              <Link
-                                href={getLocalizedPath(
-                                  typedLocale,
-                                  `/forum/${topic.slug}/${thread.slug}/comments/${comment.id}`,
-                                )}
-                                className="text-[10px] text-slate-400 transition hover:text-lime-300 sm:text-xs"
-                              >
-                                permalink
-                              </Link>
-                              {sessionUser ? (
-                                <ForumItemActions
-                                  locale={typedLocale}
-                                  canDelete={sessionUser.username.toLowerCase() === comment.author.toLowerCase()}
-                                  deleteEndpoint={`/api/forum/comments/${comment.id}`}
-                                  reportTargetType="COMMENT"
-                                  reportTargetId={comment.id}
-                                  className=""
-                                />
-                              ) : null}
-                            </div>
+                            <ForumItemActions
+                              locale={typedLocale}
+                              canDelete={canModerateComment}
+                              canReport={Boolean(sessionUser && !isCommentOwner)}
+                              deleteEndpoint={
+                                canModerateComment
+                                  ? `/api/forum/comments/${comment.id}`
+                                  : undefined
+                              }
+                              reportTargetType="COMMENT"
+                              reportTargetId={comment.id}
+                              permalinkHref={getLocalizedPath(
+                                typedLocale,
+                                `/forum/${topic.slug}/${thread.slug}/comments/${comment.id}`,
+                              )}
+                              permalinkLabel={dict.forum.permalink}
+                              className="shrink-0"
+                            />
                           </div>
                           <p className="mt-1 text-xs text-slate-300 sm:text-sm">{comment.body}</p>
                           <div className="mt-1.5 flex justify-end">
@@ -303,7 +328,8 @@ export default async function ForumTopicPage({ params }: PageProps) {
                             </span>
                           ) : null}
                         </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   ) : null}
 
@@ -316,7 +342,8 @@ export default async function ForumTopicPage({ params }: PageProps) {
                 </div>
               </div>
             </article>
-          ))}
+            );
+          })}
         </div>
       </section>
     </div>
