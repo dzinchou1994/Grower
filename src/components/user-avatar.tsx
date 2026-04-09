@@ -30,7 +30,16 @@ export function UserAvatar({
       title={`${username} - ${option.label}`}
       aria-label={`${username} avatar`}
     >
-      <span>{option.emoji}</span>
+      {option.imagePath ? (
+        <img
+          src={option.imagePath}
+          alt=""
+          className="h-full w-full object-cover"
+          draggable={false}
+        />
+      ) : (
+        <span className="text-[1em] leading-none">{option.emoji ?? "🧔"}</span>
+      )}
     </span>
   );
 }

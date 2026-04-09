@@ -74,7 +74,18 @@ export function AccountAvatarPicker({
                 : "border-white/10 bg-white/5 hover:border-white/20"
             }`}
           >
-            <p className="text-2xl">{option.emoji}</p>
+            <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-white/15 bg-slate-900/70 text-lg">
+              {option.imagePath ? (
+                <img
+                  src={option.imagePath}
+                  alt=""
+                  className="h-full w-full object-cover"
+                  draggable={false}
+                />
+              ) : (
+                <span>{option.emoji ?? "🧔"}</span>
+              )}
+            </div>
             <p className="mt-1 text-xs text-slate-300">{option.label}</p>
           </button>
         ))}

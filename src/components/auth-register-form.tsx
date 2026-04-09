@@ -82,7 +82,18 @@ export function AuthRegisterForm({ redirectTo }: { redirectTo: string }) {
                   : "border-white/10 bg-slate-900 hover:border-white/20"
               }`}
             >
-              <p className="text-lg">{option.emoji}</p>
+              <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-white/15 bg-slate-900/70 text-base">
+                {option.imagePath ? (
+                  <img
+                    src={option.imagePath}
+                    alt=""
+                    className="h-full w-full object-cover"
+                    draggable={false}
+                  />
+                ) : (
+                  <span>{option.emoji ?? "🧔"}</span>
+                )}
+              </div>
               <p className="mt-1 text-[11px] text-slate-300">{option.label}</p>
             </button>
           ))}

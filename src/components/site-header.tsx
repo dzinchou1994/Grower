@@ -121,7 +121,7 @@ export function SiteHeader({
     setMobileMenuOpen(false);
     if (pathname === homePath) {
       event.preventDefault();
-      router.refresh();
+      window.location.assign(homePath);
     }
   }
 
@@ -149,27 +149,34 @@ export function SiteHeader({
               <p className="text-[13px] font-bold tracking-[0.1em] text-white transition-colors duration-200 group-hover:text-lime-200">
                 GROWER.GE
               </p>
-              <span className="flex h-2.5 w-3.5 overflow-hidden rounded-[1.5px] shadow-sm shadow-black/30 transition-all duration-200 group-hover:shadow-lime-500/30">
-                <svg viewBox="0 0 20 14" className="h-full w-full transition-transform duration-200 group-hover:scale-105">
+              <span
+                suppressHydrationWarning
+                className="flex h-2.5 w-3.5 overflow-hidden rounded-[1.5px] border border-lime-400/25 shadow-sm shadow-black/30 transition-all duration-200 group-hover:border-lime-300/40 group-hover:shadow-lime-500/30"
+              >
+                <svg
+                  suppressHydrationWarning
+                  viewBox="0 0 20 14"
+                  className="h-full w-full transition-transform duration-200 group-hover:scale-105"
+                >
                   <rect width="20" height="14" fill="#fff" />
-                  <rect x="8.5" y="0" width="3" height="14" fill="#E8112D" />
-                  <rect x="0" y="5.5" width="20" height="3" fill="#E8112D" />
-                  <rect x="2.5" y="1.5" width="1.2" height="1.2" fill="#E8112D" />
-                  <rect x="5" y="1.5" width="1.2" height="1.2" fill="#E8112D" />
-                  <rect x="2.5" y="3.5" width="1.2" height="1.2" fill="#E8112D" />
-                  <rect x="5" y="3.5" width="1.2" height="1.2" fill="#E8112D" />
-                  <rect x="13.5" y="1.5" width="1.2" height="1.2" fill="#E8112D" />
-                  <rect x="16" y="1.5" width="1.2" height="1.2" fill="#E8112D" />
-                  <rect x="13.5" y="3.5" width="1.2" height="1.2" fill="#E8112D" />
-                  <rect x="16" y="3.5" width="1.2" height="1.2" fill="#E8112D" />
-                  <rect x="2.5" y="9.5" width="1.2" height="1.2" fill="#E8112D" />
-                  <rect x="5" y="9.5" width="1.2" height="1.2" fill="#E8112D" />
-                  <rect x="2.5" y="11.5" width="1.2" height="1.2" fill="#E8112D" />
-                  <rect x="5" y="11.5" width="1.2" height="1.2" fill="#E8112D" />
-                  <rect x="13.5" y="9.5" width="1.2" height="1.2" fill="#E8112D" />
-                  <rect x="16" y="9.5" width="1.2" height="1.2" fill="#E8112D" />
-                  <rect x="13.5" y="11.5" width="1.2" height="1.2" fill="#E8112D" />
-                  <rect x="16" y="11.5" width="1.2" height="1.2" fill="#E8112D" />
+                  <rect x="8.5" y="0" width="3" height="14" fill="#65A30D" />
+                  <rect x="0" y="5.5" width="20" height="3" fill="#65A30D" />
+                  <rect x="2.5" y="1.5" width="1.2" height="1.2" fill="#84CC16" />
+                  <rect x="5" y="1.5" width="1.2" height="1.2" fill="#84CC16" />
+                  <rect x="2.5" y="3.5" width="1.2" height="1.2" fill="#84CC16" />
+                  <rect x="5" y="3.5" width="1.2" height="1.2" fill="#84CC16" />
+                  <rect x="13.5" y="1.5" width="1.2" height="1.2" fill="#84CC16" />
+                  <rect x="16" y="1.5" width="1.2" height="1.2" fill="#84CC16" />
+                  <rect x="13.5" y="3.5" width="1.2" height="1.2" fill="#84CC16" />
+                  <rect x="16" y="3.5" width="1.2" height="1.2" fill="#84CC16" />
+                  <rect x="2.5" y="9.5" width="1.2" height="1.2" fill="#84CC16" />
+                  <rect x="5" y="9.5" width="1.2" height="1.2" fill="#84CC16" />
+                  <rect x="2.5" y="11.5" width="1.2" height="1.2" fill="#84CC16" />
+                  <rect x="5" y="11.5" width="1.2" height="1.2" fill="#84CC16" />
+                  <rect x="13.5" y="9.5" width="1.2" height="1.2" fill="#84CC16" />
+                  <rect x="16" y="9.5" width="1.2" height="1.2" fill="#84CC16" />
+                  <rect x="13.5" y="11.5" width="1.2" height="1.2" fill="#84CC16" />
+                  <rect x="16" y="11.5" width="1.2" height="1.2" fill="#84CC16" />
                 </svg>
               </span>
             </div>

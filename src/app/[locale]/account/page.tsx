@@ -3,8 +3,6 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { AccountLevelCard } from "@/components/account-level-card";
 import { AccountMessageInbox } from "@/components/account-message-inbox";
-import { AccountSecuritySettings } from "@/components/account-security-settings";
-import { AccountSocialLinksSettings } from "@/components/account-social-links-settings";
 import { getServerSessionUser } from "@/lib/auth-session";
 import { db } from "@/lib/db";
 import type { UserActivityStats } from "@/lib/leveling";
@@ -181,22 +179,11 @@ export default async function AccountPage({ params }: PageProps) {
         userImage={matchedById?.image ?? sessionUser.image}
         stats={activityStats}
         locale={typedLocale}
+        currentEmail={matchedById?.email ?? ""}
+        initialTelegram={socials.telegram}
+        initialInstagram={socials.instagram}
+        initialGrowDiariesUrl={socials.growDiariesUrl}
       />
-      <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-4 sm:rounded-[2rem] sm:p-5">
-        <AccountSocialLinksSettings
-          locale={typedLocale}
-          initialTelegram={socials.telegram}
-          initialInstagram={socials.instagram}
-          initialGrowDiariesUrl={socials.growDiariesUrl}
-          embedded
-        />
-        <div className="my-4 h-px bg-white/10" />
-        <AccountSecuritySettings
-          currentEmail={matchedById?.email ?? ""}
-          locale={typedLocale}
-          embedded
-        />
-      </section>
 
       <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-8">
         <h2 className="text-lg font-semibold text-white sm:text-2xl">{t.recentThreads}</h2>

@@ -9,6 +9,8 @@ import {
   getUsernameAccentClassByXp,
 } from "@/lib/leveling";
 import { AccountAvatarPicker } from "@/components/account-avatar-picker";
+import { AccountSecuritySettings } from "@/components/account-security-settings";
+import { AccountSocialLinksSettings } from "@/components/account-social-links-settings";
 import { UserAvatar } from "@/components/user-avatar";
 import type { Locale } from "@/lib/i18n";
 
@@ -17,13 +19,22 @@ export function AccountLevelCard({
   userImage,
   stats,
   locale,
+  currentEmail,
+  initialTelegram,
+  initialInstagram,
+  initialGrowDiariesUrl,
 }: {
   username: string;
   userImage?: string | null;
   stats: UserActivityStats;
   locale: Locale;
+  currentEmail: string;
+  initialTelegram?: string;
+  initialInstagram?: string;
+  initialGrowDiariesUrl?: string;
 }) {
   const [avatarModalOpen, setAvatarModalOpen] = useState(false);
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
   const xp = calculateXp(stats);
   const { current, next, progressPercent, xpInLevel, xpNeeded } =
     getLevelProgress(xp);
@@ -47,6 +58,9 @@ export function AccountLevelCard({
           badges: "ბეიჯები",
           chooseAvatar: "პროფილის ავატარის არჩევა",
           closeAvatar: "ავატარის ამრჩევის დახურვა",
+          editProfile: "პროფილის რედაქტირება",
+          profileSettings: "პროფილის პარამეტრები",
+          closeProfile: "პროფილის პარამეტრების დახურვა",
         }
       : locale === "ru"
         ? {
@@ -64,6 +78,9 @@ export function AccountLevelCard({
             badges: "Бейджи",
             chooseAvatar: "Выбор аватара профиля",
             closeAvatar: "Закрыть выбор аватара",
+            editProfile: "Редактировать профиль",
+            profileSettings: "Настройки профиля",
+            closeProfile: "Закрыть настройки профиля",
           }
         : {
             tapAvatar: "Tap avatar to edit",
@@ -80,6 +97,9 @@ export function AccountLevelCard({
             badges: "Badges",
             chooseAvatar: "Choose profile avatar",
             closeAvatar: "Close avatar picker",
+            editProfile: "Edit Profile",
+            profileSettings: "Profile Settings",
+            closeProfile: "Close profile settings",
           };
 
   const levelTitleByLocale: Record<string, Record<Locale, string>> = {
@@ -111,11 +131,11 @@ export function AccountLevelCard({
     badgeTitleByLocale[id]?.[locale] ?? fallback;
 
   useEffect(() => {
-    document.body.style.overflow = avatarModalOpen ? "hidden" : "";
+    document.body.style.overflow = avatarModalOpen || profileModalOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [avatarModalOpen]);
+  }, [avatarModalOpen, profileModalOpen]);
 
   return (
     <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-950/80 via-[#0a1629]/90 to-slate-950/80 p-5 shadow-2xl shadow-lime-950/10 sm:rounded-[2rem] sm:p-8">
@@ -131,7 +151,7 @@ export function AccountLevelCard({
             className="group rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70"
             aria-label={t.chooseAvatar}
           >
-            <div className="rounded-full ring-2 ring-transparent transition group-hover:ring-lime-300/40">
+            <div className="rounded-full transition duration-200 group-hover:scale-[1.03] group-hover:shadow-[0_0_0_1px_rgba(132,204,22,0.35)]">
               <UserAvatar username={username} image={userImage} size="lg" />
             </div>
           </button>
@@ -139,6 +159,13 @@ export function AccountLevelCard({
             <p className={`text-sm font-semibold sm:text-base ${getUsernameAccentClassByXp(xp)}`}>
               @{username}
             </p>
+            <button
+              type="button"
+              onClick={() => setProfileModalOpen(true)}
+              className="mt-1 inline-flex items-center rounded-full border border-white/12 bg-white/5 px-2 py-0.5 text-[10px] font-medium text-slate-200 transition hover:border-lime-400/30 hover:bg-white/10 hover:text-lime-200"
+            >
+              {t.editProfile}
+            </button>
             <p className="mt-0.5 text-[10px] text-slate-400">{t.tapAvatar}</p>
             <p className="mt-0.5 flex items-center gap-1.5 text-xs text-lime-300 sm:justify-center sm:text-sm">
               <span>{current.emoji}</span>
@@ -256,6 +283,49 @@ export function AccountLevelCard({
               </button>
             </div>
             <AccountAvatarPicker currentImage={userImage} compact />
+          </div>
+        </>
+      ) : null}
+
+      {profileModalOpen ? (
+        <>
+          <div
+            className="fixed inset-0 z-50 bg-slate-950/75 transition-opacity duration-300"
+            onClick={() => setProfileModalOpen(false)}
+            aria-hidden={!profileModalOpen}
+          />
+          <div
+            className="fixed inset-x-0 bottom-0 z-[60] max-h-[88vh] overflow-y-auto rounded-t-3xl border border-white/10 bg-[#0b1425] p-4 shadow-2xl shadow-black/60 transition-transform duration-300 sm:inset-x-auto sm:left-1/2 sm:top-1/2 sm:w-[min(760px,94vw)] sm:max-h-[90vh] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-3xl sm:p-6"
+            role="dialog"
+            aria-modal="true"
+            aria-hidden={!profileModalOpen}
+          >
+            <div className="mb-3 flex items-center justify-between">
+              <h3 className="text-base font-semibold text-white sm:text-lg">{t.profileSettings}</h3>
+              <button
+                type="button"
+                onClick={() => setProfileModalOpen(false)}
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition hover:bg-white/10"
+                aria-label={t.closeProfile}
+              >
+                ✕
+              </button>
+            </div>
+            <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-4 sm:rounded-[2rem] sm:p-5">
+              <AccountSocialLinksSettings
+                locale={locale}
+                initialTelegram={initialTelegram}
+                initialInstagram={initialInstagram}
+                initialGrowDiariesUrl={initialGrowDiariesUrl}
+                embedded
+              />
+              <div className="my-4 h-px bg-white/10" />
+              <AccountSecuritySettings
+                currentEmail={currentEmail}
+                locale={locale}
+                embedded
+              />
+            </section>
           </div>
         </>
       ) : null}
