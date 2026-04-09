@@ -65,7 +65,9 @@ export default async function LocaleLayout({
       </main>
       <footer className="mx-auto w-full max-w-7xl px-4 pb-6 text-center sm:px-6 lg:px-8">
         <div className="py-2 text-xs text-slate-400">
-          <div id="top-ge-counter-container" data-site-id="118645" />
+          <div className="mx-auto mt-1 h-2 w-10 overflow-hidden opacity-[0.08] saturate-0">
+            <div id="top-ge-counter-container" data-site-id="118645" />
+          </div>
           <p className="mt-2 text-[10px] text-slate-600/80">
             External link:
             {" "}

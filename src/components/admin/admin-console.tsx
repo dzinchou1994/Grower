@@ -1033,72 +1033,122 @@ function SeoPanel() {
 
       {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
 
-      <div className="mt-4 grid gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
-        <input
-          value={metaTitle}
-          onChange={(event) => setMetaTitle(event.target.value)}
-          placeholder="Meta title"
-          className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
-        />
-        <textarea
-          value={metaDescription}
-          onChange={(event) => setMetaDescription(event.target.value)}
-          placeholder="Meta description"
-          rows={3}
-          className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
-        />
-        <input
-          value={ogTitle}
-          onChange={(event) => setOgTitle(event.target.value)}
-          placeholder="OG title (optional)"
-          className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
-        />
-        <textarea
-          value={ogDescription}
-          onChange={(event) => setOgDescription(event.target.value)}
-          placeholder="OG description (optional)"
-          rows={2}
-          className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
-        />
-        <input
-          value={keywords}
-          onChange={(event) => setKeywords(event.target.value)}
-          placeholder="Keywords (comma separated)"
-          className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
-        />
+      <div className="mt-4 grid gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-slate-300">
+            Page Title <span className="text-slate-500">— browser tab &amp; Google title</span>
+          </label>
+          <input
+            value={metaTitle}
+            onChange={(event) => setMetaTitle(event.target.value)}
+            placeholder="e.g. Grower — ქართული კანაფის საზოგადოება"
+            className="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
+          />
+        </div>
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-slate-300">
+            Page Description <span className="text-slate-500">— Google snippet description</span>
+          </label>
+          <textarea
+            value={metaDescription}
+            onChange={(event) => setMetaDescription(event.target.value)}
+            placeholder="160 characters recommended for best Google display"
+            rows={3}
+            className="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
+          />
+          <p className="mt-1 text-[10px] text-slate-500">{metaDescription.length}/160 characters</p>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label className="mb-1.5 block text-xs font-medium text-slate-300">
+              OG Title <span className="text-slate-500">— social share title</span>
+            </label>
+            <input
+              value={ogTitle}
+              onChange={(event) => setOgTitle(event.target.value)}
+              placeholder="Leave empty to use page title"
+              className="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
+            />
+          </div>
+          <div>
+            <label className="mb-1.5 block text-xs font-medium text-slate-300">
+              Keywords <span className="text-slate-500">— comma separated</span>
+            </label>
+            <input
+              value={keywords}
+              onChange={(event) => setKeywords(event.target.value)}
+              placeholder="cannabis, grower, forum, georgia"
+              className="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
+            />
+          </div>
+        </div>
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-slate-300">
+            OG Description <span className="text-slate-500">— social share description</span>
+          </label>
+          <textarea
+            value={ogDescription}
+            onChange={(event) => setOgDescription(event.target.value)}
+            placeholder="Leave empty to use page description"
+            rows={2}
+            className="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
+          />
+        </div>
         <label className="inline-flex items-center gap-2 text-xs text-slate-300">
           <input
             type="checkbox"
             checked={noIndex}
             onChange={(event) => setNoIndex(event.target.checked)}
+            className="rounded"
           />
-          Noindex this page
+          <span>Noindex — hide this page from Google</span>
         </label>
-        <input
-          value={reason}
-          onChange={(event) => setReason(event.target.value)}
-          placeholder="Audit reason (required)"
-          className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
-        />
+        <hr className="border-white/10" />
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-slate-300">
+            Audit Reason <span className="text-red-400">*</span>
+          </label>
+          <input
+            value={reason}
+            onChange={(event) => setReason(event.target.value)}
+            placeholder="Why are you changing these settings?"
+            className="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
+          />
+        </div>
         <button
           type="button"
           onClick={save}
-          className="w-fit rounded-full border border-lime-400/30 bg-lime-400/10 px-4 py-2 text-sm font-medium text-lime-200"
+          className="w-fit rounded-full border border-lime-400/30 bg-lime-400/10 px-4 py-2 text-sm font-medium text-lime-200 transition hover:bg-lime-400/20"
         >
           Save SEO settings
         </button>
       </div>
 
-      <div className="mt-4 grid gap-3">
-        {items.map((item) => (
-          <div key={`${item.page}:${item.locale}`} className="rounded-2xl border border-white/10 bg-white/5 p-3">
-            <p className="text-sm text-white">
-              {item.page} · {item.locale.toUpperCase()}
-            </p>
-            <p className="mt-1 text-xs text-slate-400">{item.metaTitle}</p>
+      {items.length > 0 && (
+        <div className="mt-5">
+          <p className="mb-2 text-xs font-medium text-slate-400">Saved settings</p>
+          <div className="grid gap-3">
+            {items.map((item) => (
+              <div
+                key={`${item.page}:${item.locale}`}
+                className="cursor-pointer rounded-2xl border border-white/10 bg-white/5 p-3 transition hover:border-lime-400/20"
+                onClick={() => { setPage(item.page); setLocale(item.locale); }}
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-medium text-white">
+                    {item.page} · {item.locale.toUpperCase()}
+                  </p>
+                  {item.noIndex && (
+                    <span className="rounded-full bg-red-400/15 px-2 py-0.5 text-[10px] text-red-300">noindex</span>
+                  )}
+                </div>
+                <p className="mt-1 truncate text-xs text-lime-300/80">{item.metaTitle || "—"}</p>
+                <p className="mt-0.5 truncate text-[10px] text-slate-500">{item.metaDescription || "No description"}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

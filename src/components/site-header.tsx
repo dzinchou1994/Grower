@@ -56,60 +56,67 @@ export function SiteHeader({
   }, [mobileMenuOpen]);
 
   return (
-    <header className="sticky top-0 z-30 border-b border-white/10 bg-[#08111f]/80 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-30 border-b border-white/8 bg-[#08111f]/75 backdrop-blur-2xl">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 sm:px-6 lg:px-8">
+        {/* Logo */}
         <Link
           href={getLocalizedPath(locale)}
           className="group flex items-center gap-2.5"
         >
-          <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-2xl border border-lime-400/20 bg-gradient-to-br from-slate-900 to-slate-800 shadow-lg shadow-lime-950/30 transition group-hover:border-lime-300/40">
+          <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl border border-lime-400/20 bg-gradient-to-br from-slate-900 to-slate-800 shadow-lg shadow-lime-950/30 transition group-hover:border-lime-300/40 group-hover:shadow-lime-400/10">
             <Image
               src="/brand/logo-20260408.png"
               alt="Grower logo"
-              width={28}
-              height={28}
-              className="h-7 w-7 object-contain"
+              width={24}
+              height={24}
+              className="h-6 w-6 object-contain"
               priority
             />
           </div>
           <div className="hidden min-[400px]:block">
-            <p className="text-sm font-semibold tracking-[0.08em] text-white">
-              GROWER.GE
+            <p className="text-[13px] font-bold tracking-[0.1em] text-white">
+              GROWER
             </p>
-            <p className="text-[11px] text-slate-400">Georgia Cannabis Club</p>
+            <p className="text-[10px] tracking-wide text-slate-500">Georgia Cannabis Club</p>
           </div>
         </Link>
 
-        {/* Desktop nav */}
-        <div className="hidden items-center gap-2 md:flex">
-          <nav className="flex items-center gap-1 rounded-2xl border border-white/10 bg-white/5 p-1 text-sm text-slate-300 shadow-inner shadow-black/10">
-            {navigation.map((item) => (
-              <Link
-                key={item.href}
-                href={getLocalizedPath(locale, item.href)}
-                className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 transition ${
-                  pathname === getLocalizedPath(locale, item.href)
-                    ? "bg-lime-400 text-slate-950"
-                    : "hover:bg-white/10 hover:text-white"
-                }`}
-              >
-                <span className="text-[11px]">
-                  <NavIcon icon={item.icon} />
-                </span>
-                {item.label}
-              </Link>
-            ))}
+        {/* Desktop nav — centered */}
+        <div className="hidden items-center gap-3 md:flex">
+          <nav className="flex items-center gap-0.5 rounded-full border border-white/8 bg-white/[0.03] p-1 text-[13px] text-slate-400">
+            {navigation.map((item) => {
+              const isActive = pathname === getLocalizedPath(locale, item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={getLocalizedPath(locale, item.href)}
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 font-medium transition-all duration-200 ${
+                    isActive
+                      ? "bg-lime-400 text-slate-950 shadow-sm shadow-lime-400/25"
+                      : "hover:bg-white/8 hover:text-white"
+                  }`}
+                >
+                  <span className="text-[11px] opacity-80">
+                    <NavIcon icon={item.icon} />
+                  </span>
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
+        </div>
 
-          <div className="flex items-center gap-0.5 rounded-full border border-white/10 bg-white/5 p-0.5 text-[10px] text-slate-300">
+        {/* Right side — lang + user */}
+        <div className="hidden items-center gap-2.5 md:flex">
+          <div className="flex items-center gap-px rounded-full border border-white/8 bg-white/[0.03] p-0.5 text-[10px] font-medium text-slate-500">
             {locales.map((entry) => (
               <Link
                 key={entry}
                 href={replaceLocaleInPath(pathname, entry)}
-                className={`rounded-full px-2 py-1 font-medium transition hover:bg-white/10 hover:text-white ${
+                className={`rounded-full px-2 py-1 transition-all duration-200 ${
                   entry === locale
-                    ? "bg-lime-400 text-slate-950"
-                    : ""
+                    ? "bg-lime-400 text-slate-950 shadow-sm shadow-lime-400/20"
+                    : "text-slate-400 hover:bg-white/8 hover:text-white"
                 }`}
               >
                 {entry.toUpperCase()}
@@ -117,39 +124,41 @@ export function SiteHeader({
             ))}
           </div>
 
+          <div className="h-5 w-px bg-white/8" />
+
           {initialUser ? (
-            <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-200">
+            <div className="flex items-center gap-1.5">
               <Link
                 href={getLocalizedPath(locale, "/account")}
-                className="inline-flex items-center gap-2 rounded-xl px-1 py-0.5 transition hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-full border border-white/8 bg-white/[0.03] py-1 pl-1 pr-3 text-xs text-slate-300 transition-all duration-200 hover:border-lime-400/20 hover:bg-white/[0.06]"
               >
                 <UserAvatar
                   username={initialUser.username}
                   image={initialUser.image}
                   size="sm"
                 />
-                <span>@{initialUser.username}</span>
+                <span className="font-medium">@{initialUser.username}</span>
               </Link>
               <button
                 type="button"
                 onClick={handleLogout}
                 disabled={isLoggingOut}
-                className="rounded-full border border-white/15 px-2 py-1 text-[11px] text-slate-300 transition hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-full px-2.5 py-1.5 text-[11px] text-slate-500 transition hover:bg-white/8 hover:text-slate-200 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {isLoggingOut ? "..." : "Logout"}
+                {isLoggingOut ? "..." : "✕"}
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-1 text-xs">
+            <div className="flex items-center gap-1.5 text-xs">
               <Link
                 href={getLocalizedPath(locale, "/auth/login")}
-                className="rounded-xl border border-white/10 px-3 py-1.5 text-slate-300 transition hover:bg-white/10 hover:text-white"
+                className="rounded-full px-3 py-1.5 text-slate-400 transition hover:bg-white/8 hover:text-white"
               >
                 Login
               </Link>
               <Link
                 href={getLocalizedPath(locale, "/auth/register")}
-                className="rounded-xl bg-lime-400 px-3 py-1.5 font-semibold text-slate-950 transition hover:bg-lime-300"
+                className="rounded-full bg-lime-400 px-3.5 py-1.5 font-semibold text-slate-950 shadow-sm shadow-lime-400/20 transition hover:bg-lime-300"
               >
                 Register
               </Link>

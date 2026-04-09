@@ -113,6 +113,33 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
         </div>
       </section>
 
+      {/* Manifesto / law awareness banner */}
+      <section className="relative overflow-hidden rounded-2xl border border-lime-400/15 bg-gradient-to-br from-lime-950/40 via-slate-950/60 to-slate-950/80 sm:rounded-[2rem]">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(132,204,22,0.06),transparent_60%)]" />
+        <div className="relative flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:gap-6 sm:p-8">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-lime-400/10 text-2xl sm:h-14 sm:w-14 sm:text-3xl">
+            ⚖️
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-medium uppercase tracking-wider text-lime-400/80 sm:text-xs">
+              {dict.home.manifesto.badge}
+            </p>
+            <h2 className="mt-1 text-base font-semibold leading-snug text-white sm:text-xl">
+              {dict.home.manifesto.headline}
+            </h2>
+            <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-slate-300/80 sm:text-sm sm:leading-6">
+              {dict.home.manifesto.text}
+            </p>
+          </div>
+          <Link
+            href={getLocalizedPath(typedLocale, "/manifesto")}
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full border border-lime-400/30 bg-lime-400/10 px-5 py-2.5 text-sm font-medium text-lime-300 transition hover:bg-lime-400/20 sm:py-3"
+          >
+            📜 {dict.home.manifesto.cta}
+          </Link>
+        </div>
+      </section>
+
       {/* Forum categories + Latest threads */}
       <section className="flex flex-col gap-5 lg:grid lg:grid-cols-[1fr_1fr] lg:gap-6">
         {/* Forum categories */}
