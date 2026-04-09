@@ -151,7 +151,7 @@ export function AccountLevelCard({
             className="group rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70"
             aria-label={t.chooseAvatar}
           >
-            <div className="rounded-full transition duration-200 group-hover:scale-[1.03] group-hover:shadow-[0_0_0_1px_rgba(132,204,22,0.35)]">
+            <div className="rounded-full transition duration-200 group-hover:scale-[1.03]">
               <UserAvatar username={username} image={userImage} size="lg" />
             </div>
           </button>

@@ -17,6 +17,7 @@ import { CannabisLeaf } from "@/components/icons";
 import { VoteButtons } from "@/components/vote-buttons";
 import { UserQuickProfileTrigger } from "@/components/user-quick-profile-trigger";
 import { ForumItemActions } from "@/components/forum-item-actions";
+import { ForumThreadListItemHeader } from "@/components/forum-thread-list-item-header";
 
 type PageProps = {
   params: Promise<{ locale: string; slug: string }>;
@@ -184,55 +185,29 @@ export default async function ForumTopicPage({ params }: PageProps) {
 
                 {/* Content — symmetric padding; extra pr only above comments so previews span full width */}
                 <div className="relative flex w-full min-w-0 flex-1 flex-col p-4 sm:p-5">
-                  <ForumItemActions
-                    locale={typedLocale}
-                    canDelete={canModerateThread}
-                    canReport={Boolean(sessionUser && !isThreadOwner)}
-                    deleteEndpoint={
-                      canModerateThread ? `/api/forum/threads/${thread.slug}` : undefined
-                    }
-                    reportTargetType="THREAD"
-                    reportTargetId={thread.id}
-                    permalinkHref={getLocalizedPath(
-                      typedLocale,
-                      `/forum/${topic.slug}/${thread.slug}`,
-                    )}
-                    permalinkLabel={dict.forum.permalink}
-                    className="absolute right-3 top-3 z-10 sm:right-4 sm:top-4"
-                  />
-                  <div className="min-w-0 pr-12 sm:pr-14">
-                  <div className="flex w-full min-w-0 items-start justify-between gap-3">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        {thread.isPinned && (
-                          <span className="shrink-0 text-xs text-lime-300">📌</span>
-                        )}
-                        <Link
-                          href={getLocalizedPath(typedLocale, `/forum/${topic.slug}/${thread.slug}`)}
-                          className="line-clamp-1 text-sm font-semibold text-white transition hover:text-lime-300 sm:text-lg"
-                        >
-                          {thread.title}
-                        </Link>
-                        {thread.isTranslated ? (
-                          <span className="inline-flex rounded-full border border-lime-400/35 bg-lime-400/10 px-1.5 py-0.5 text-[10px] text-lime-300">
-                            Translated
-                          </span>
-                        ) : null}
-                      </div>
-                      <div className="mt-1.5 sm:mt-2">
-                        <UserQuickProfileTrigger
-                          locale={typedLocale}
-                          username={thread.author}
-                          image={thread.authorImage}
-                          isAuthenticated={Boolean(sessionUser)}
-                          currentUsername={sessionUser?.username}
-                          className="inline-flex items-center gap-1.5 text-[10px] text-slate-400 transition hover:text-lime-300 sm:text-sm"
-                        />
-                      </div>
-                    </div>
-                    <span className="shrink-0 rounded-full bg-lime-400/10 px-2.5 py-1 text-[10px] text-lime-300 sm:px-3 sm:text-xs">
-                      {thread.lastActivity}
-                    </span>
+                  <div className="min-w-0 w-full">
+                    <ForumThreadListItemHeader
+                      locale={typedLocale}
+                      topicSlug={topic.slug}
+                      thread={{
+                        id: thread.id,
+                        slug: thread.slug,
+                        title: thread.title,
+                        isPinned: thread.isPinned,
+                        isTranslated: thread.isTranslated,
+                        author: thread.author,
+                        authorImage: thread.authorImage,
+                        lastActivity: thread.lastActivity,
+                      }}
+                      isAuthenticated={Boolean(sessionUser)}
+                      currentUsername={sessionUser?.username}
+                      canModerateThread={canModerateThread}
+                      canReportThread={Boolean(sessionUser && !isThreadOwner)}
+                      deleteEndpoint={
+                        canModerateThread ? `/api/forum/threads/${thread.slug}` : undefined
+                      }
+                      permalinkLabel={dict.forum.permalink}
+                    />
                   </div>
 
                   {/* Mobile vote + stats row */}
@@ -265,7 +240,6 @@ export default async function ForumTopicPage({ params }: PageProps) {
                       ) : null}
                     </p>
                   ) : null}
-                  </div>
 
                   {thread.comments.length > 0 ? (
                     <div className="mt-3 flex w-full min-w-0 flex-col gap-2 border-t border-white/10 pt-3">

@@ -20,6 +20,7 @@ html {
   scroll-behavior: smooth;
   scrollbar-color: rgba(132, 204, 22, 0.18) transparent;
   scrollbar-width: thin;
+  overflow-x: clip;
 }
 
 body {

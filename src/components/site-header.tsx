@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import { UserAvatar } from "@/components/user-avatar";
 import type { SessionUser } from "@/lib/auth-session";
 import {
@@ -42,6 +43,7 @@ export function SiteHeader({
   const dict = getDictionary(locale);
   const homePath = getLocalizedPath(locale);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [portalReady, setPortalReady] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const scrolled = useSyncExternalStore(
@@ -117,8 +119,32 @@ export function SiteHeader({
   }
 
   useEffect(() => {
-    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
+    setPortalReady(true);
+  }, []);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setMobileMenuOpen(false);
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [mobileMenuOpen]);
+
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+    } else {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    }
     return () => {
+      document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
     };
   }, [mobileMenuOpen]);
@@ -359,168 +385,169 @@ export function SiteHeader({
         </div>
       </div>
 
-      {/* Mobile menu overlay + panel */}
-      <div
-        className={`fixed inset-0 z-40 bg-slate-950/70 transition-opacity duration-300 lg:hidden ${
-          mobileMenuOpen
-            ? "pointer-events-auto opacity-100"
-            : "pointer-events-none opacity-0"
-        }`}
-        onClick={() => setMobileMenuOpen(false)}
-        aria-hidden={!mobileMenuOpen}
-      />
-      <aside
-        className={`fixed right-0 top-0 z-50 h-dvh w-[86%] max-w-sm border-l border-white/10 bg-gradient-to-b from-[#0a1629]/98 to-[#08111f]/98 p-4 shadow-2xl shadow-black/60 backdrop-blur-xl transition-transform duration-300 lg:hidden ${
-          mobileMenuOpen
-            ? "pointer-events-auto translate-x-0"
-            : "pointer-events-none translate-x-full"
-        }`}
-        aria-hidden={!mobileMenuOpen}
-      >
-        <div className="flex items-center justify-between">
-          <p className="text-sm font-semibold tracking-wide text-white">{ui.navigation}</p>
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white"
-            aria-label={ui.closeMenu}
-          >
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-
-        {initialUser ? (
-          <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-3">
-            <p className="text-xs text-slate-400">{ui.signedIn}</p>
-            <div className="mt-2 flex items-center gap-2">
-              <UserAvatar
-                username={initialUser.username}
-                image={initialUser.image}
-                size="md"
-              />
-              <p className="text-sm font-medium text-white">@{initialUser.username}</p>
-            </div>
-          </div>
-        ) : null}
-
-        <nav className="mt-4 flex flex-col gap-2">
-          {navigation.map((item) => (
-            <Link
-              key={item.href}
-              href={getLocalizedPath(locale, item.href)}
+      {/* Mobile menu: portal to body so sticky/backdrop ancestors cannot break fixed + scroll */}
+      {portalReady &&
+        mobileMenuOpen &&
+        createPortal(
+          <div className="lg:hidden">
+            <div
+              className="fixed inset-0 z-[70] bg-slate-950/70"
               onClick={() => setMobileMenuOpen(false)}
-              className={`rounded-2xl border px-4 py-3 text-base font-medium transition ${
-                pathname === getLocalizedPath(locale, item.href)
-                  ? "border-lime-400/40 bg-lime-400/15 text-lime-200"
-                  : "border-white/10 bg-white/5 text-slate-100 hover:bg-white/10"
-              }`}
+              aria-hidden
+            />
+            <aside
+              className="fixed right-0 top-0 z-[75] flex h-dvh w-[86%] max-w-sm flex-col overflow-y-auto overscroll-contain border-l border-white/10 bg-gradient-to-b from-[#0a1629]/98 to-[#08111f]/98 p-4 shadow-2xl shadow-black/60 backdrop-blur-xl"
+              role="dialog"
+              aria-modal="true"
+              aria-label={ui.navigation}
             >
-              <span className="inline-flex items-center gap-2">
-                <span className="text-sm">
-                  <NavIcon icon={item.icon} />
-                </span>
-                {item.label}
-              </span>
-            </Link>
-          ))}
-        </nav>
+              <div className="flex shrink-0 items-center justify-between">
+                <p className="text-sm font-semibold tracking-wide text-white">{ui.navigation}</p>
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white"
+                  aria-label={ui.closeMenu}
+                >
+                  <svg
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
 
-        <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-3">
-          <div className="flex items-start gap-2">
-            <div className="min-w-0 flex-1">
-              <p className="mb-2 text-[11px] uppercase tracking-[0.16em] text-slate-400">
-                {ui.language}
-              </p>
-              <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-slate-900/50 p-1 text-xs text-slate-300">
-                {locales.map((entry) => (
+              {initialUser ? (
+                <div className="mt-4 shrink-0 rounded-2xl border border-white/10 bg-white/5 p-3">
+                  <p className="text-xs text-slate-400">{ui.signedIn}</p>
+                  <div className="mt-2 flex items-center gap-2">
+                    <UserAvatar
+                      username={initialUser.username}
+                      image={initialUser.image}
+                      size="md"
+                    />
+                    <p className="text-sm font-medium text-white">@{initialUser.username}</p>
+                  </div>
+                </div>
+              ) : null}
+
+              <nav className="mt-4 flex flex-col gap-2">
+                {navigation.map((item) => (
                   <Link
-                    key={entry}
-                    href={replaceLocaleInPath(pathname, entry)}
+                    key={item.href}
+                    href={getLocalizedPath(locale, item.href)}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`rounded-full px-2.5 py-1.5 font-medium transition ${
-                      entry === locale
-                        ? "bg-lime-400 text-slate-950"
-                        : "hover:bg-white/10 hover:text-white"
+                    className={`rounded-2xl border px-4 py-3 text-base font-medium transition ${
+                      pathname === getLocalizedPath(locale, item.href)
+                        ? "border-lime-400/40 bg-lime-400/15 text-lime-200"
+                        : "border-white/10 bg-white/5 text-slate-100 hover:bg-white/10"
                     }`}
                   >
-                    {entry.toUpperCase()}
+                    <span className="inline-flex items-center gap-2">
+                      <span className="text-sm">
+                        <NavIcon icon={item.icon} />
+                      </span>
+                      {item.label}
+                    </span>
                   </Link>
                 ))}
-              </div>
-            </div>
+              </nav>
 
-            <div className="min-w-0 flex-1">
-              <p className="mb-2 text-[11px] uppercase tracking-[0.16em] text-slate-400">
-                {ui.theme}
-              </p>
-              <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-slate-900/50 p-1 text-xs text-slate-300">
+              <div className="mt-4 shrink-0 rounded-2xl border border-white/10 bg-white/5 p-3">
+                <div className="flex items-start gap-2">
+                  <div className="min-w-0 flex-1">
+                    <p className="mb-2 text-[11px] uppercase tracking-[0.16em] text-slate-400">
+                      {ui.language}
+                    </p>
+                    <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-slate-900/50 p-1 text-xs text-slate-300">
+                      {locales.map((entry) => (
+                        <Link
+                          key={entry}
+                          href={replaceLocaleInPath(pathname, entry)}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={`rounded-full px-2.5 py-1.5 font-medium transition ${
+                            entry === locale
+                              ? "bg-lime-400 text-slate-950"
+                              : "hover:bg-white/10 hover:text-white"
+                          }`}
+                        >
+                          {entry.toUpperCase()}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <p className="mb-2 text-[11px] uppercase tracking-[0.16em] text-slate-400">
+                      {ui.theme}
+                    </p>
+                    <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-slate-900/50 p-1 text-xs text-slate-300">
+                      <button
+                        type="button"
+                        onClick={() => setTheme("dark")}
+                        className={`flex-1 rounded-full px-2 py-1.5 font-medium transition ${
+                          theme === "dark"
+                            ? "bg-slate-900 text-slate-100 ring-1 ring-lime-400/35"
+                            : "hover:bg-white/10 hover:text-white"
+                        }`}
+                      >
+                        🌙
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setTheme("light")}
+                        className={`flex-1 rounded-full px-2 py-1.5 font-medium transition ${
+                          theme === "light"
+                            ? "bg-slate-900 text-slate-100 ring-1 ring-lime-400/35"
+                            : "hover:bg-white/10 hover:text-white"
+                        }`}
+                      >
+                        ☀️
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {!initialUser ? (
+                <div className="mt-4 grid shrink-0 gap-2">
+                  <Link
+                    href={getLocalizedPath(locale, "/auth/login")}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center text-base font-medium text-slate-100 transition hover:bg-white/10"
+                  >
+                    {ui.login}
+                  </Link>
+                  <Link
+                    href={getLocalizedPath(locale, "/auth/register")}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="rounded-xl bg-lime-400 px-4 py-3 text-center text-base font-semibold text-slate-950 transition hover:bg-lime-300"
+                  >
+                    {ui.register}
+                  </Link>
+                </div>
+              ) : (
                 <button
                   type="button"
-                  onClick={() => setTheme("dark")}
-                  className={`flex-1 rounded-full px-2 py-1.5 font-medium transition ${
-                    theme === "dark"
-                      ? "bg-slate-900 text-slate-100 ring-1 ring-lime-400/35"
-                      : "hover:bg-white/10 hover:text-white"
-                  }`}
+                  onClick={handleLogout}
+                  disabled={isLoggingOut}
+                  className="mt-4 w-full shrink-0 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-base font-medium text-slate-100 transition hover:bg-white/10 disabled:opacity-60"
                 >
-                  🌙
+                  {isLoggingOut ? ui.loggingOut : ui.logout}
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setTheme("light")}
-                  className={`flex-1 rounded-full px-2 py-1.5 font-medium transition ${
-                    theme === "light"
-                      ? "bg-slate-900 text-slate-100 ring-1 ring-lime-400/35"
-                      : "hover:bg-white/10 hover:text-white"
-                  }`}
-                >
-                  ☀️
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {!initialUser ? (
-          <div className="mt-4 grid gap-2">
-            <Link
-              href={getLocalizedPath(locale, "/auth/login")}
-              onClick={() => setMobileMenuOpen(false)}
-              className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center text-base font-medium text-slate-100 transition hover:bg-white/10"
-            >
-              {ui.login}
-            </Link>
-            <Link
-              href={getLocalizedPath(locale, "/auth/register")}
-              onClick={() => setMobileMenuOpen(false)}
-              className="rounded-xl bg-lime-400 px-4 py-3 text-center text-base font-semibold text-slate-950 transition hover:bg-lime-300"
-            >
-              {ui.register}
-            </Link>
-          </div>
-        ) : (
-          <button
-            type="button"
-            onClick={handleLogout}
-            disabled={isLoggingOut}
-            className="mt-4 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-base font-medium text-slate-100 transition hover:bg-white/10 disabled:opacity-60"
-          >
-            {isLoggingOut ? ui.loggingOut : ui.logout}
-          </button>
+              )}
+            </aside>
+          </div>,
+          document.body,
         )}
-      </aside>
     </header>
   );
 }
