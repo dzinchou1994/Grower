@@ -1,26 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <!-- Simple Georgian-flag style in green on transparent background -->
-  <g fill="#39ff14">
-    <!-- central cross -->
-    <rect x="28" y="10" width="8" height="44" rx="1"/>
-    <rect x="10" y="28" width="44" height="8" rx="1"/>
-
-    <!-- four smaller crosses -->
-    <g transform="translate(20 20)">
-      <rect x="-1.5" y="-5" width="3" height="10" rx="0.7"/>
-      <rect x="-5" y="-1.5" width="10" height="3" rx="0.7"/>
-    </g>
-    <g transform="translate(44 20)">
-      <rect x="-1.5" y="-5" width="3" height="10" rx="0.7"/>
-      <rect x="-5" y="-1.5" width="10" height="3" rx="0.7"/>
-    </g>
-    <g transform="translate(20 44)">
-      <rect x="-1.5" y="-5" width="3" height="10" rx="0.7"/>
-      <rect x="-5" y="-1.5" width="10" height="3" rx="0.7"/>
-    </g>
-    <g transform="translate(44 44)">
-      <rect x="-1.5" y="-5" width="3" height="10" rx="0.7"/>
-      <rect x="-5" y="-1.5" width="10" height="3" rx="0.7"/>
-    </g>
-  </g>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0%" stop-color="#a3e635"/>
+      <stop offset="100%" stop-color="#4ade80"/>
+    </linearGradient>
+  </defs>
+  <!-- rounded square badge -->
+  <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#g)"/>
+  <!-- sprout: two leaves + stem, knocked out in dark -->
+  <path d="M32 48 V30" stroke="#08111f" stroke-width="3" stroke-linecap="round"/>
+  <path d="M32 30 C32 22 24 16 16 16 C16 26 22 32 32 30Z" fill="#08111f"/>
+  <path d="M32 36 C32 30 40 24 48 24 C48 32 40 38 32 36Z" fill="#08111f"/>
 </svg>
