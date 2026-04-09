@@ -112,6 +112,7 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
         isAuthenticated={Boolean(sessionUser)}
         loginHref={getLocalizedPath(typedLocale, "/auth/login")}
         locale={typedLocale}
+        collapsible
       />
 
       <div className="grid gap-4 sm:gap-5">

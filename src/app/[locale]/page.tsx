@@ -77,28 +77,15 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
         <div className="relative p-5 sm:p-8 lg:p-12">
           <h1 className="max-w-2xl text-2xl font-semibold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
             {dict.home.title}{" "}
-            <span className="ml-1 inline-flex h-[0.6em] w-[0.85em] translate-y-[-0.05em] overflow-hidden rounded-[2px] border border-white/20 align-middle shadow-sm shadow-black/30">
-              <svg viewBox="0 0 20 14" className="h-full w-full">
-                <rect width="20" height="14" fill="#fff" />
-                <rect x="8.5" y="0" width="3" height="14" fill="#65A30D" />
-                <rect x="0" y="5.5" width="20" height="3" fill="#65A30D" />
-                <rect x="2.5" y="1.5" width="1.2" height="1.2" fill="#84CC16" />
-                <rect x="5" y="1.5" width="1.2" height="1.2" fill="#84CC16" />
-                <rect x="2.5" y="3.5" width="1.2" height="1.2" fill="#84CC16" />
-                <rect x="5" y="3.5" width="1.2" height="1.2" fill="#84CC16" />
-                <rect x="13.5" y="1.5" width="1.2" height="1.2" fill="#84CC16" />
-                <rect x="16" y="1.5" width="1.2" height="1.2" fill="#84CC16" />
-                <rect x="13.5" y="3.5" width="1.2" height="1.2" fill="#84CC16" />
-                <rect x="16" y="3.5" width="1.2" height="1.2" fill="#84CC16" />
-                <rect x="2.5" y="9.5" width="1.2" height="1.2" fill="#84CC16" />
-                <rect x="5" y="9.5" width="1.2" height="1.2" fill="#84CC16" />
-                <rect x="2.5" y="11.5" width="1.2" height="1.2" fill="#84CC16" />
-                <rect x="5" y="11.5" width="1.2" height="1.2" fill="#84CC16" />
-                <rect x="13.5" y="9.5" width="1.2" height="1.2" fill="#84CC16" />
-                <rect x="16" y="9.5" width="1.2" height="1.2" fill="#84CC16" />
-                <rect x="13.5" y="11.5" width="1.2" height="1.2" fill="#84CC16" />
-                <rect x="16" y="11.5" width="1.2" height="1.2" fill="#84CC16" />
-              </svg>
+            <span className="ml-1 inline-flex h-[0.8em] w-[0.8em] translate-y-[-0.05em] overflow-hidden rounded-[4px] border border-white/20 align-middle shadow-sm shadow-black/30">
+              <Image
+                src="/brand/logo-1923818.png"
+                alt="Grower logo"
+                width={24}
+                height={24}
+                sizes="24px"
+                className="h-full w-full object-cover"
+              />
             </span>
           </h1>
           <p className="mt-3 inline-flex max-w-fit items-center rounded-full border border-lime-400/25 bg-lime-400/10 px-3 py-1 text-xs font-medium text-lime-200 sm:text-sm">

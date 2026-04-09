@@ -87,7 +87,7 @@ export default async function CannapediaArticlePage({ params }: PageProps) {
           ← {copy.back}
         </Link>
 
-        <div className="mt-4 inline-flex items-center gap-2 text-xs text-lime-300 sm:text-sm">
+        <div className="mt-4 flex items-center gap-2 text-xs text-lime-300 sm:text-sm">
           <CannabisLeaf className="h-4 w-4" />
           Cannapedia
         </div>

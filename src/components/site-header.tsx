@@ -165,20 +165,17 @@ export function SiteHeader({
           onClick={handleLogoClick}
           className="group flex items-center gap-2"
         >
-          <div className={`relative flex items-center justify-center overflow-hidden rounded-xl border border-lime-400/20 bg-gradient-to-br from-slate-900 to-slate-800 shadow-lg shadow-lime-950/30 transition-all duration-300 group-hover:border-lime-300/40 group-hover:shadow-lime-400/10 ${scrolled ? "h-7 w-7" : "h-9 w-9"}`}>
-            <span className="animate-breathe pointer-events-none absolute inset-0 rounded-xl bg-lime-400/20" />
-            <Image
-              src="/brand/logo-1923818.png"
-              alt="Grower logo"
-              width={24}
-              height={24}
-              sizes="24px"
-              className={`object-contain transition-all duration-300 ${scrolled ? "h-[18px] w-[18px]" : "h-6 w-6"}`}
-            />
-          </div>
+          <Image
+            src="/leafwell-logo.png"
+            alt="Leafwell logo"
+            width={36}
+            height={36}
+            sizes="36px"
+            className={`object-contain saturate-150 drop-shadow-[0_0_10px_rgba(132,204,22,0.45)] transition-all duration-300 group-hover:drop-shadow-[0_0_14px_rgba(163,230,53,0.6)] ${scrolled ? "h-7 w-7" : "h-9 w-9"}`}
+          />
           <div className="hidden min-[400px]:flex min-[400px]:flex-col min-[400px]:justify-center">
             <div className="flex items-center">
-              <p className={`font-black tracking-[0.11em] text-white transition-all duration-300 group-hover:text-lime-200 ${scrolled ? "text-[13px]" : "text-[15px]"}`}>
+              <p className={`font-['Trebuchet_MS'] font-bold tracking-[0.15em] text-white transition-all duration-300 group-hover:text-lime-200 ${scrolled ? "text-[13px]" : "text-[15px]"}`}>
                 GROWER.GE
               </p>
             </div>

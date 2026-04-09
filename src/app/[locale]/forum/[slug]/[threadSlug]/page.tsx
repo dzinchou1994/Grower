@@ -61,7 +61,7 @@ export default async function ForumThreadPage({ params }: PageProps) {
   return (
     <div className="flex flex-col gap-5 sm:gap-6">
       <section className="relative rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-8">
-        <div className="absolute right-5 top-5 z-10 sm:right-8 sm:top-8">
+        <div className="absolute right-5 top-5 z-10 flex flex-col items-end gap-2 sm:right-8 sm:top-8">
           <VoteButtons
             threadId={threadData.thread.id}
             upvotes={threadData.thread.upvotes}
@@ -71,9 +71,12 @@ export default async function ForumThreadPage({ params }: PageProps) {
             loginHref={getLocalizedPath(typedLocale, "/auth/login")}
             compact
           />
+          <span className="shrink-0 rounded-full bg-lime-400/10 px-2.5 py-1 text-[10px] text-lime-300 sm:px-3 sm:text-xs">
+            {threadData.thread.lastActivity}
+          </span>
         </div>
 
-        <div className="min-w-0 pr-[6.25rem] sm:pr-36">
+        <div className="min-w-0 pr-32 sm:pr-40">
           <Link
             href={getLocalizedPath(typedLocale, `/forum/${threadData.topic.slug}`)}
             className="inline-flex items-center gap-1.5 text-xs text-slate-400 transition hover:text-lime-300 sm:text-sm"
@@ -85,7 +88,7 @@ export default async function ForumThreadPage({ params }: PageProps) {
             {threadData.thread.title}
           </h1>
 
-          <div className="mt-2 flex items-center justify-between gap-3">
+          <div className="mt-2 flex items-center gap-3">
             <UserQuickProfileTrigger
               locale={typedLocale}
               username={threadData.thread.author}
@@ -94,9 +97,6 @@ export default async function ForumThreadPage({ params }: PageProps) {
               currentUsername={sessionUser?.username}
               className="inline-flex items-center gap-1.5 text-[10px] text-slate-400 transition hover:text-lime-300 sm:text-sm"
             />
-            <span className="shrink-0 rounded-full bg-lime-400/10 px-2.5 py-1 text-[10px] text-lime-300 sm:px-3 sm:text-xs">
-              {threadData.thread.lastActivity}
-            </span>
           </div>
         </div>
 
