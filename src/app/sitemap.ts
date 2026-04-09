@@ -1,8 +1,6 @@
 import type { MetadataRoute } from "next";
-import { listCannapediaArticleSlugs } from "@/lib/cannapedia-data";
 import { locales, siteUrl } from "@/lib/i18n";
 import { diaries as mockDiaries, forumTopics as mockForumTopics } from "@/lib/mock-data";
-import { listNewsSlugs } from "@/lib/news-data";
 
 async function getDynamicSlugs() {
   if (!process.env.DATABASE_URL) {
@@ -96,13 +94,22 @@ async function getDynamicSlugs() {
   }
 }
 
+async function getContentSlugs() {
+  const [cannapediaResult, newsResult] = await Promise.allSettled([
+    import("@/lib/cannapedia-data").then((mod) => mod.listCannapediaArticleSlugs()),
+    import("@/lib/news-data").then((mod) => mod.listNewsSlugs()),
+  ]);
+
+  return {
+    cannapediaSlugs: cannapediaResult.status === "fulfilled" ? cannapediaResult.value : [],
+    newsSlugs: newsResult.status === "fulfilled" ? newsResult.value : [],
+  };
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { diarySlugs, diaryWeeks, forumTopicSlugs, forumThreads, forumComments } =
     await getDynamicSlugs();
-  const [cannapediaSlugs, newsSlugs] = await Promise.all([
-    listCannapediaArticleSlugs(),
-    listNewsSlugs(),
-  ]);
+  const { cannapediaSlugs, newsSlugs } = await getContentSlugs();
 
   const staticRoutes = [
     "",
