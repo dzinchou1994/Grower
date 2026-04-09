@@ -35,6 +35,17 @@ export function SiteHeader({
   const router = useRouter();
   const dict = dictionary;
   const homePath = getLocalizedPath(locale);
+  const languageSwitcherLocales: Locale[] = ["ka", "en"];
+  const localeButtonLabel: Record<Locale, string> = {
+    ka: "GEO",
+    en: "EN",
+    ru: "RU",
+  };
+  const localeButtonFlag: Record<Locale, string> = {
+    ka: "🇬🇪",
+    en: "🇬🇧",
+    ru: "🇷🇺",
+  };
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [portalReady, setPortalReady] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -230,7 +241,7 @@ export function SiteHeader({
         {/* Right side — lang + user */}
         <div className="hidden items-center gap-2.5 lg:flex">
           <div className="flex items-center gap-px rounded-full border border-white/8 bg-white/[0.03] p-0.5 text-[10px] font-medium text-slate-500">
-            {locales.map((entry) => (
+            {languageSwitcherLocales.map((entry) => (
               <Link
                 key={entry}
                 href={replaceLocaleInPath(pathname, entry)}
@@ -240,7 +251,10 @@ export function SiteHeader({
                     : "text-slate-400 hover:bg-white/8 hover:text-white"
                 }`}
               >
-                {entry.toUpperCase()}
+                <span className="inline-flex items-center gap-1">
+                  <span aria-hidden>{localeButtonFlag[entry]}</span>
+                  <span>{localeButtonLabel[entry]}</span>
+                </span>
               </Link>
             ))}
           </div>
@@ -464,7 +478,7 @@ export function SiteHeader({
                       {ui.language}
                     </p>
                     <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-slate-900/50 p-1 text-xs text-slate-300">
-                      {locales.map((entry) => (
+                      {languageSwitcherLocales.map((entry) => (
                         <Link
                           key={entry}
                           href={replaceLocaleInPath(pathname, entry)}
@@ -475,7 +489,10 @@ export function SiteHeader({
                               : "hover:bg-white/10 hover:text-white"
                           }`}
                         >
-                          {entry.toUpperCase()}
+                          <span className="inline-flex items-center gap-1">
+                            <span aria-hidden>{localeButtonFlag[entry]}</span>
+                            <span>{localeButtonLabel[entry]}</span>
+                          </span>
                         </Link>
                       ))}
                     </div>

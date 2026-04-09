@@ -100,6 +100,344 @@ const threadIconPrefix = ":::icon=";
 const forumListRevalidateSeconds = 120;
 const forumTopUsersRevalidateSeconds = 180;
 
+type SeedCommentTemplate = {
+  author: string;
+  body: string;
+  minutesAgo: number;
+  upvotes?: number;
+  downvotes?: number;
+};
+
+const threadSeedComments: Record<string, SeedCommentTemplate[]> = {
+  "first-grow-what-to-buy": [
+    {
+      author: "kartveli_green",
+      body: "პირველად აიღე მარტივი სეტი: 2x2 კარავი, LED 150W და კარგი ვენტილატორი. ზედმეტი მოწყობილობა თავიდან არ გჭირდება.",
+      minutesAgo: 46,
+      upvotes: 7,
+    },
+    {
+      author: "nino_grows",
+      body: "თუ ბიუჯეტი შეზღუდულია, pH მეტრი და ტაიმერი მაინც აუცილებლად იყიდე. ეგ ორი ყველაზე ხშირად გიშველის.",
+      minutesAgo: 29,
+      upvotes: 5,
+    },
+    {
+      author: "soilstep",
+      body: "მე პირდაპირ პრემიქს ნიადაგით დავიწყე და გაცილებით მარტივი იყო. მერე შეგიძლია ეტაპობრივად დაამატო ქოქოსი/პერლიტი.",
+      minutesAgo: 14,
+      upvotes: 4,
+    },
+  ],
+  "auto-vs-photo": [
+    {
+      author: "rustavi_root",
+      body: "დამწყებისთვის ავტო უფრო მარტივია დროში, მაგრამ ფოტოპერიოდი გაძლევს შეცდომების გამოსწორების შანსს.",
+      minutesAgo: 71,
+      upvotes: 6,
+    },
+    {
+      author: "tazo420",
+      body: "თუ სივრცე პატარაა და სწრაფი ციკლი გინდა, ავტო ჯობია. პირველ რაუნდზე შედეგს მალე ნახავ.",
+      minutesAgo: 22,
+      upvotes: 3,
+    },
+    {
+      author: "nino_grows",
+      body: "მე მეორე ციკლში ფოტოპერიოდზე გადავედი და ბევრად მეტი კონტროლი მქონდა ტრენინგზე. თავიდან ავტოთი დაწყება მაინც პრაქტიკულია.",
+      minutesAgo: 9,
+      upvotes: 4,
+    },
+  ],
+  "yellow-leaves-week-3": [
+    {
+      author: "growdoc_ge",
+      body: "ფოთლის ქვედა რიგიდან თუ იწყება გაყვითლება, ხშირად აზოტის მსუბუქი დეფიციტია. დოზა ნელა გაზარდე და pH გადაამოწმე.",
+      minutesAgo: 25,
+      upvotes: 8,
+    },
+    {
+      author: "green_kakha",
+      body: "ფესვებიც შეამოწმე - ზედმეტი მორწყვა იგივე სიმპტომს იძლევა. ქოთანი მორწყვის წინ ბოლომდე უნდა გაშრეს.",
+      minutesAgo: 11,
+      upvotes: 4,
+    },
+  ],
+  "best-led-budget": [
+    {
+      author: "led_tbilisi",
+      body: "2x4-ზე 240W კლასის LED უკვე კარგი სტარტია. უმჯობესია დიმერიანი მოდელი აიღო, ვეგში სიმძლავრეს დაწევ.",
+      minutesAgo: 87,
+      upvotes: 6,
+    },
+    {
+      author: "geolab_420",
+      body: "რეალური მოხმარება შეამოწმე, მარტო მარკეტინგულ Watt-ს ნუ ენდობი. მე პირადად PPFD ჩარტსაც ყოველთვის ვუყურებ.",
+      minutesAgo: 33,
+      upvotes: 5,
+    },
+    {
+      author: "kartveli_green",
+      body: "თუ მომავალში გაფართოებას ფიქრობ, ოდნავ ძლიერი დრაივერიანი მოდელი აიღე და ახლა უბრალოდ დაბალ პროცენტზე ამუშავე.",
+      minutesAgo: 18,
+      upvotes: 4,
+    },
+  ],
+  "when-to-start-outdoor": [
+    {
+      author: "mziuri_farmer",
+      body: "ქართლში ჩვეულებრივ აპრილის ბოლოს ვიწყებ, სანამ ღამის ტემპერატურა 10C-ზე დაბლა აღარ ჩამოდის.",
+      minutesAgo: 64,
+      upvotes: 5,
+    },
+    {
+      author: "adjara_bud",
+      body: "ზღვისპირეთში ტენიანობა მაღალია, ამიტომ თავიდანვე ჰაერგამტარ ნიადაგს ვამზადებ რომ ფესვი არ დაიხრჩოს.",
+      minutesAgo: 19,
+      upvotes: 4,
+    },
+    {
+      author: "growdoc_ge",
+      body: "სტაბილური ამინდის პროგნოზს თუ დაელოდები, გადარგვის სტრესი გაცილებით ნაკლებია. პირველ კვირაში მსუბუქი ჩრდილიც ეხმარება.",
+      minutesAgo: 7,
+      upvotes: 3,
+    },
+  ],
+  "best-420-playlist": [
+    {
+      author: "vinyl_saba",
+      body: "ძველი ქართული ჰიპ-ჰოპი + lo-fi მიქსი იდეალურია საღამოსთვის. მეც share-ს გავაკეთებ ჩემს პლეილისტს.",
+      minutesAgo: 51,
+      upvotes: 5,
+    },
+    {
+      author: "chill_beka",
+      body: "თუ გინდა, თემაში Spotify ლინკებიც ჩავყაროთ და ყოველ კვირას განვაახლოთ.",
+      minutesAgo: 16,
+      upvotes: 3,
+    },
+    {
+      author: "nino_grows",
+      body: "ჩემი ვერსია უფრო mellow-ია - თუ დაინტერესდებით, ქართულ ტრეკებსაც დავამატებ და აქვე დავპოსტავ.",
+      minutesAgo: 6,
+      upvotes: 2,
+    },
+  ],
+  "soil-or-hydro": [
+    {
+      author: "phbalance",
+      body: "პირველ ციკლზე ნიადაგი უფრო forgiving-ია. შეცდომის გამოსწორების დრო გაქვს და ყოველდღე EC/pH სირბილი არ გჭირდება.",
+      minutesAgo: 58,
+      upvotes: 6,
+    },
+    {
+      author: "geo_nika",
+      body: "თუ მაინც ჰიდროზე ფიქრობ, DWC-ზე პირდაპირ არ გადახვიდე. ჯერ ქოქოსი სცადე - ნახევრად მარტივი, მაგრამ ბევრს გასწავლის.",
+      minutesAgo: 35,
+      upvotes: 4,
+    },
+    {
+      author: "nino_grows",
+      body: "დამწყებისთვის ჩემი რეკომენდაციაა: კარგი პრემიქს ნიადაგი + მსუბუქი კვება. შედეგი სტაბილური გამოდის.",
+      minutesAgo: 12,
+      upvotes: 3,
+    },
+  ],
+  "cbd-vs-thc-for-beginners": [
+    {
+      author: "medina_ka",
+      body: "CBD პრაქტიკაში უფრო რბილი ეფექტია და ბევრს დღის რეჟიმში ურჩევნია. THC კი უფრო ინტენსიურია და დოზას ყურადღება უნდა.",
+      minutesAgo: 77,
+      upvotes: 5,
+    },
+    {
+      author: "oldschool_koba",
+      body: "ახალბედამ რაც არ უნდა აირჩიოს, დაბალი დოზით დაიწყოს და თავის რეაქციას დააკვირდეს. ეს ყველაზე უსაფრთხოა.",
+      minutesAgo: 41,
+      upvotes: 4,
+    },
+  ],
+  "humidity-too-high": [
+    {
+      author: "tent_nika",
+      body: "ღამით RH თუ იწევს, lights-off დროს გამწოვის სიჩქარე ოდნავ გაზარდე. მხოლოდ ეს ცვლილებაც კარგად მუშაობს.",
+      minutesAgo: 66,
+      upvotes: 6,
+    },
+    {
+      author: "led_tbilisi",
+      body: "თუ პატარა კარავია, dehumidifier გარეთ დადგი და კარავში ჰაერის ბრუნვა გააძლიერე - ადგილი და სიცხე დაზოგე.",
+      minutesAgo: 28,
+      upvotes: 4,
+    },
+    {
+      author: "green_kakha",
+      body: "ქოთნებს შორის დაშორებაც მოქმედებს. ძალიან მჭიდროდ თუ დგას, მიკროკლიმატი უარესდება.",
+      minutesAgo: 9,
+      upvotes: 3,
+    },
+  ],
+  "best-feeding-schedule": [
+    {
+      author: "growdoc_ge",
+      body: "ვეგის მე-3 კვირაზე მე 60-70% დოზით ვმუშაობ და მცენარის რეაქციით ვზრდი. ცხრილზე ბრმად მიყოლა არ ღირს.",
+      minutesAgo: 83,
+      upvotes: 7,
+    },
+    {
+      author: "phbalance",
+      body: "კალციუმ-მაგნიუმი განსაკუთრებით თუ RO წყალს იყენებ, გამოტოვო არ ჯობს. ბევრ პრობლემას თავიდან აირიდებ.",
+      minutesAgo: 44,
+      upvotes: 4,
+    },
+  ],
+  "favorite-autoflowers": [
+    {
+      author: "seedhunter_ge",
+      body: "ამ სეზონზე Gorilla ავტო ყველაზე სტაბილური გამომივიდა - სწრაფი და სურნელიც კარგი აქვს.",
+      minutesAgo: 95,
+      upvotes: 5,
+    },
+    {
+      author: "batumi_buds",
+      body: "მე Northern Lights ავტო დამწყებებსაც ვურჩევდი. ნაკლებად ჭირვეულია და კარგი შედეგი მოაქვს.",
+      minutesAgo: 36,
+      upvotes: 4,
+    },
+    {
+      author: "rustavi_root",
+      body: "თუ გარეთ გაქვს, მოკლე ციკლის ავტოები აირჩიე - ამინდთან ადაპტაცია უკეთესია.",
+      minutesAgo: 14,
+      upvotes: 3,
+    },
+  ],
+  "ventilation-basics": [
+    {
+      author: "airflow_lab",
+      body: "მინიმუმ: გამწოვი + ნახშირის ფილტრი + 1-2 კლიპ ვენტილატორი. ჰაერის მუდმივი მოძრაობა სოკოს რისკს ამცირებს.",
+      minutesAgo: 73,
+      upvotes: 6,
+    },
+    {
+      author: "kartveli_green",
+      body: "ნეგატიური წნევა თუ სწორია, კარავი ოდნავ შიგნით იწევა. ეგ კარგი ინდიკატორია რომ სისტემა მუშაობს.",
+      minutesAgo: 24,
+      upvotes: 4,
+    },
+  ],
+  "diy-grow-tent": [
+    {
+      author: "dedaena_grow",
+      body: "DIY კარავში ჩემთვის მთავარი იყო სინათლის გაჟონვის კონტროლი. შავი-თეთრი ფირით კარგი შედეგი მივიღე.",
+      minutesAgo: 88,
+      upvotes: 4,
+    },
+    {
+      author: "tent_nika",
+      body: "თუ ჩარჩოს აწყობ, თავიდანვე ვიბრაციის საწინააღმდეგო სამაგრები დაუმატე - ხმაურს საგრძნობლად აგდებს.",
+      minutesAgo: 31,
+      upvotes: 3,
+    },
+  ],
+  "balcony-grow-tbilisi": [
+    {
+      author: "gardener_luka",
+      body: "თბილისში სამხრეთის მხარეს ბალკონზე შუადღის მზე ძალიან ძლიერია, მე ნახევრადჩრდილს ვიყენებ და ფოთოლი აღარ იწვება.",
+      minutesAgo: 62,
+      upvotes: 5,
+    },
+    {
+      author: "adjara_bud",
+      body: "ქარისგან დამცავი ბადე მეც ძალიან დამეხმარა. ყლორტები ნაკლებად ზიანდება.",
+      minutesAgo: 27,
+      upvotes: 3,
+    },
+  ],
+  "current-laws-georgia": [
+    {
+      author: "lawwatch_ge",
+      body: "ხშირად იცვლება ინტერპრეტაციები, ამიტომ ოფიციალურ წყაროს გადაამოწმეთ და ძველ პოსტებს მარტო ნუ დაეყრდნობით.",
+      minutesAgo: 52,
+      upvotes: 6,
+    },
+    {
+      author: "casewatch",
+      body: "ვფიქრობ კარგი იქნება პირველ პოსტში მოკლე checklist დავამატოთ: რა არის ნებადართული და რა არა.",
+      minutesAgo: 21,
+      upvotes: 4,
+    },
+  ],
+  "medical-cannabis-future": [
+    {
+      author: "med_advocate",
+      body: "თუ ექიმების ჩართულობა გაიზარდა, საზოგადოებრივი დამოკიდებულებაც უფრო სწრაფად შეიცვლება. ეს პრაქტიკაში ბევრ ქვეყანაში ვნახეთ.",
+      minutesAgo: 69,
+      upvotes: 5,
+    },
+    {
+      author: "tamuna420",
+      body: "მთავარია ხარისხის კონტროლის სტანდარტი იყოს მკაფიო, რომ პაციენტს სტაბილური პროდუქტი მიუწვდებოდეს.",
+      minutesAgo: 18,
+      upvotes: 3,
+    },
+  ],
+  "led-light-market-tbilisi": [
+    {
+      author: "market_kote",
+      body: "თუ ჯერ არ გაყიდე, რეალური მოხმარება (wall draw) მიუწერე პოსტში და უფრო მალე წაიღებენ.",
+      minutesAgo: 47,
+      upvotes: 2,
+    },
+    {
+      author: "greenbuyer",
+      body: "დეტალური ფოტოებიც დადე დრაივერზე/დიოდებზე. მყიდველს უფრო მეტი ნდობა ექნება.",
+      minutesAgo: 17,
+      upvotes: 2,
+    },
+  ],
+  "looking-for-grow-tent-80x80": [
+    {
+      author: "market420",
+      body: "მე მქონდა 80x80 ზედმეტი ინვენტარიდან, თუ ისევ ეძებ PM-ში მომწერე.",
+      minutesAgo: 54,
+      upvotes: 2,
+    },
+    {
+      author: "geo_nika",
+      body: "ყიდვისას ელვა და ნაკერის ხარისხი ნახე, იაფ მოდელებში ეგ ყველაზე მალე ფუჭდება.",
+      minutesAgo: 23,
+      upvotes: 3,
+    },
+  ],
+  "stoned-night-stories": [
+    {
+      author: "playlist_tea",
+      body: "გუშინ მთაწმინდაზე ღამის ხედთან ერთად მოვუსმინე ძველ ალბომებს და მართლა საუკეთესო chill გამოვიდა.",
+      minutesAgo: 40,
+      upvotes: 4,
+    },
+    {
+      author: "vinyl_saba",
+      body: "ასეთი თემები კარგია, community-ს vibe-ს ინარჩუნებს. ვინც წერს, მუსიკაც მიაყოლეთ.",
+      minutesAgo: 13,
+      upvotes: 3,
+    },
+  ],
+};
+
+function toSeedComment(template: SeedCommentTemplate): ForumComment {
+  return {
+    id: crypto.randomUUID(),
+    author: template.author,
+    authorImage: getDeterministicAvatarImage(template.author),
+    body: template.body,
+    createdAt: new Date(Date.now() - template.minutesAgo * 60_000).toISOString(),
+    upvotes: template.upvotes ?? 0,
+    downvotes: template.downvotes ?? 0,
+    userVote: 0,
+  };
+}
+
 declare global {
   var __forumState: ForumState | undefined;
   var __forumSeedPromise: Promise<void> | undefined;
@@ -115,7 +453,7 @@ function createInitialState(): ForumState {
         upvotes: 0,
         downvotes: 0,
         userVote: 0,
-        comments: [],
+        comments: (threadSeedComments[thread.slug] ?? []).map((comment) => toSeedComment(comment)),
       })),
     })),
   };
@@ -270,7 +608,7 @@ async function ensureForumSeedData() {
 
         for (const sourceThread of sourceTopic.threads) {
           const user = await upsertForumUser(sourceThread.author);
-          await db.forumThread.upsert({
+          const thread = await db.forumThread.upsert({
             where: { slug: sourceThread.slug },
             update: {
               topicId: topic.id,
@@ -287,6 +625,31 @@ async function ensureForumSeedData() {
               isPinned: sourceThread.isPinned ?? false,
             },
           });
+
+          const seedComments = threadSeedComments[sourceThread.slug] ?? [];
+          for (const seedComment of seedComments) {
+            const commentUser = await upsertForumUser(seedComment.author);
+            const existingComment = await db.forumComment.findFirst({
+              where: {
+                threadId: thread.id,
+                authorId: commentUser.id,
+                body: seedComment.body,
+              },
+              select: { id: true },
+            });
+            if (existingComment) {
+              continue;
+            }
+
+            await db.forumComment.create({
+              data: {
+                threadId: thread.id,
+                authorId: commentUser.id,
+                body: seedComment.body,
+                createdAt: new Date(Date.now() - seedComment.minutesAgo * 60_000),
+              },
+            });
+          }
         }
       }
     })();
@@ -1341,6 +1704,9 @@ function getTopUsersFromMemory(limit: number): LeaderboardUser[] {
 
 export async function getTopUsers(limit = 10): Promise<LeaderboardUser[]> {
   if (hasDatabase) {
+    if (process.env.NODE_ENV !== "production") {
+      return getTopUsersFromDatabase(limit);
+    }
     if (limit > 0) {
       const cacheKey = `forum-top-users-${limit}`;
       return unstable_cache(() => getTopUsersFromDatabase(limit), [cacheKey], {

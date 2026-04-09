@@ -25,9 +25,9 @@ function requireActionPermission(action: string, role: "ADMIN" | "MODERATOR") {
 }
 
 function revalidateForumListCaches() {
-  revalidateTag("forum-topics-ka");
-  revalidateTag("forum-topics-en");
-  revalidateTag("forum-topics-ru");
+  revalidateTag("forum-topics-ka", "max");
+  revalidateTag("forum-topics-en", "max");
+  revalidateTag("forum-topics-ru", "max");
 }
 
 export async function GET(request: Request) {
