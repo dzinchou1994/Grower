@@ -20,7 +20,7 @@ type PageProps = {
 function cannapediaCopy(locale: Locale) {
   if (locale === "ka") {
     return {
-      title: "Cannapedia - ყველაფერი მარიხუანას გაზრდის შესახებ",
+      title: "ყველაფერი მარიხუანას გაზრდის შესახებ",
       description:
         "პრაქტიკული გზამკვლევები დამწყებებისთვის: თესლი, ვეგეტაცია, ყვავილობა და ჰარვესტი - სახლშიც და გარე პირობებშიც გასაზრდელად.",
       badge: "Cannapedia",

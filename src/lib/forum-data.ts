@@ -691,6 +691,138 @@ export async function addForumComment(input: {
   return addCommentInMemory(input);
 }
 
+type DeleteOwnContentInput = {
+  requesterUserId: string;
+  requesterUsername: string;
+  requesterRole: "USER" | "MODERATOR" | "ADMIN";
+};
+
+type DeleteOwnContentResult =
+  | { ok: true }
+  | { ok: false; reason: "NOT_FOUND" | "FORBIDDEN" };
+
+async function deleteForumThreadInDatabase(
+  slug: string,
+  input: DeleteOwnContentInput,
+): Promise<DeleteOwnContentResult> {
+  const thread = await db.forumThread.findUnique({
+    where: { slug },
+    select: { id: true, authorId: true },
+  });
+
+  if (!thread) {
+    return { ok: false, reason: "NOT_FOUND" };
+  }
+
+  const canDelete = input.requesterRole !== "USER" || thread.authorId === input.requesterUserId;
+  if (!canDelete) {
+    return { ok: false, reason: "FORBIDDEN" };
+  }
+
+  await db.forumThread.delete({ where: { id: thread.id } });
+  return { ok: true };
+}
+
+function deleteForumThreadInMemory(
+  slug: string,
+  input: DeleteOwnContentInput,
+): DeleteOwnContentResult {
+  const normalizedUsername = input.requesterUsername.trim().toLowerCase();
+
+  for (const topic of getState().topics) {
+    const threadIndex = topic.threads.findIndex((thread) => thread.slug === slug);
+    if (threadIndex === -1) {
+      continue;
+    }
+
+    const thread = topic.threads[threadIndex];
+    const isOwner = thread.author.trim().toLowerCase() === normalizedUsername;
+    const canDelete = input.requesterRole !== "USER" || isOwner;
+    if (!canDelete) {
+      return { ok: false, reason: "FORBIDDEN" };
+    }
+
+    topic.threads.splice(threadIndex, 1);
+    return { ok: true };
+  }
+
+  return { ok: false, reason: "NOT_FOUND" };
+}
+
+export async function deleteForumThreadBySlug(
+  slug: string,
+  input: DeleteOwnContentInput,
+): Promise<DeleteOwnContentResult> {
+  if (hasDatabase) {
+    return deleteForumThreadInDatabase(slug, input);
+  }
+
+  return deleteForumThreadInMemory(slug, input);
+}
+
+async function deleteForumCommentInDatabase(
+  id: string,
+  input: DeleteOwnContentInput,
+): Promise<DeleteOwnContentResult> {
+  const comment = await db.forumComment.findUnique({
+    where: { id },
+    select: { id: true, authorId: true },
+  });
+
+  if (!comment) {
+    return { ok: false, reason: "NOT_FOUND" };
+  }
+
+  const canDelete = input.requesterRole !== "USER" || comment.authorId === input.requesterUserId;
+  if (!canDelete) {
+    return { ok: false, reason: "FORBIDDEN" };
+  }
+
+  await db.forumComment.delete({ where: { id: comment.id } });
+  return { ok: true };
+}
+
+function deleteForumCommentInMemory(
+  id: string,
+  input: DeleteOwnContentInput,
+): DeleteOwnContentResult {
+  const normalizedUsername = input.requesterUsername.trim().toLowerCase();
+
+  for (const topic of getState().topics) {
+    for (const thread of topic.threads) {
+      const commentIndex = thread.comments.findIndex((comment) => comment.id === id);
+      if (commentIndex === -1) {
+        continue;
+      }
+
+      const comment = thread.comments[commentIndex];
+      const isOwner = comment.author.trim().toLowerCase() === normalizedUsername;
+      const canDelete = input.requesterRole !== "USER" || isOwner;
+      if (!canDelete) {
+        return { ok: false, reason: "FORBIDDEN" };
+      }
+
+      thread.comments.splice(commentIndex, 1);
+      thread.replies = Math.max(0, thread.replies - 1);
+      thread.lastActivity = "just now";
+      return { ok: true };
+    }
+  }
+
+  return { ok: false, reason: "NOT_FOUND" };
+}
+
+export async function deleteForumCommentById(
+  id: string,
+  input: DeleteOwnContentInput,
+): Promise<DeleteOwnContentResult> {
+  if (hasDatabase) {
+    return deleteForumCommentInDatabase(id, input);
+  }
+
+  return deleteForumCommentInMemory(id, input);
+}
+
 async function getForumStatsFromDatabase(): Promise<ForumStats> {
   await ensureForumSeedData();
 

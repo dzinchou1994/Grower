@@ -182,13 +182,21 @@ export default async function AccountPage({ params }: PageProps) {
         stats={activityStats}
         locale={typedLocale}
       />
-      <AccountSocialLinksSettings
-        locale={typedLocale}
-        initialTelegram={socials.telegram}
-        initialInstagram={socials.instagram}
-        initialGrowDiariesUrl={socials.growDiariesUrl}
-      />
-      <AccountSecuritySettings currentEmail={matchedById?.email ?? ""} locale={typedLocale} />
+      <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-4 sm:rounded-[2rem] sm:p-5">
+        <AccountSocialLinksSettings
+          locale={typedLocale}
+          initialTelegram={socials.telegram}
+          initialInstagram={socials.instagram}
+          initialGrowDiariesUrl={socials.growDiariesUrl}
+          embedded
+        />
+        <div className="my-4 h-px bg-white/10" />
+        <AccountSecuritySettings
+          currentEmail={matchedById?.email ?? ""}
+          locale={typedLocale}
+          embedded
+        />
+      </section>
 
       <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-8">
         <h2 className="text-lg font-semibold text-white sm:text-2xl">{t.recentThreads}</h2>

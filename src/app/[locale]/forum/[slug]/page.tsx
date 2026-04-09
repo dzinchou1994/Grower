@@ -16,6 +16,7 @@ import { getForumTopicBySlug } from "@/lib/forum-data";
 import { CannabisLeaf } from "@/components/icons";
 import { VoteButtons } from "@/components/vote-buttons";
 import { UserQuickProfileTrigger } from "@/components/user-quick-profile-trigger";
+import { ForumItemActions } from "@/components/forum-item-actions";
 
 type PageProps = {
   params: Promise<{ locale: string; slug: string }>;
@@ -173,6 +174,15 @@ export default async function ForumTopicPage({ params }: PageProps) {
 
                 {/* Content */}
                 <div className="min-w-0 flex-1 p-4 sm:p-5">
+                  {sessionUser ? (
+                    <ForumItemActions
+                      locale={typedLocale}
+                      canDelete={sessionUser.username.toLowerCase() === thread.author.toLowerCase()}
+                      deleteEndpoint={`/api/forum/threads/${thread.slug}`}
+                      reportTargetType="THREAD"
+                      reportTargetId={thread.id}
+                    />
+                  ) : null}
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
@@ -260,6 +270,15 @@ export default async function ForumTopicPage({ params }: PageProps) {
                             />
                           </div>
                           <p className="mt-1 text-xs text-slate-300 sm:text-sm">{comment.body}</p>
+                          {sessionUser ? (
+                            <ForumItemActions
+                              locale={typedLocale}
+                              canDelete={sessionUser.username.toLowerCase() === comment.author.toLowerCase()}
+                              deleteEndpoint={`/api/forum/comments/${comment.id}`}
+                              reportTargetType="COMMENT"
+                              reportTargetId={comment.id}
+                            />
+                          ) : null}
                           {comment.isTranslated ? (
                             <span className="mt-1 inline-flex rounded-full border border-lime-400/25 bg-lime-400/5 px-1 py-px text-[8px] text-lime-400/60">
                               translated

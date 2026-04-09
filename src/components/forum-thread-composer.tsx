@@ -45,7 +45,7 @@ export function ForumThreadComposer({
           bodyPlaceholder: "დაწერე შენი შეკითხვა ან დისკუსიის დეტალები...",
           iconLabel: "თემის აიქონი",
           posting: "იტვირთება...",
-          postThread: "თემის გამოქვეყნება",
+          postThread: "გამოქვეყნება",
           close: "დახურვა",
         }
       : locale === "ru"
@@ -76,7 +76,7 @@ export function ForumThreadComposer({
             bodyPlaceholder: "Write details for your question or discussion...",
             iconLabel: "Thread icon",
             posting: "Posting...",
-            postThread: "Post Thread",
+            postThread: "Post",
             close: "Close",
           };
 
@@ -138,7 +138,7 @@ export function ForumThreadComposer({
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="inline-flex items-center justify-center rounded-full bg-lime-400 px-3 py-1.5 text-[11px] font-semibold text-slate-950 transition hover:bg-lime-300"
+          className="inline-flex items-center justify-center whitespace-nowrap rounded-full bg-lime-400 px-2.5 py-1 text-[10px] font-semibold text-slate-950 transition hover:bg-lime-300"
         >
           {t.startThread}
         </button>
@@ -259,7 +259,7 @@ export function ForumThreadComposer({
         <button
           type="submit"
           disabled={isSubmitting}
-          className="inline-flex w-fit items-center justify-center rounded-full bg-lime-400 px-3 py-1.5 text-[11px] font-semibold text-slate-950 transition hover:bg-lime-300 disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex w-fit items-center justify-center whitespace-nowrap rounded-full bg-lime-400 px-2.5 py-1 text-[10px] font-semibold text-slate-950 transition hover:bg-lime-300 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting ? t.posting : t.postThread}
         </button>

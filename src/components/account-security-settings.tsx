@@ -7,9 +7,11 @@ import type { Locale } from "@/lib/i18n";
 export function AccountSecuritySettings({
   currentEmail,
   locale,
+  embedded = false,
 }: {
   currentEmail: string;
   locale: Locale;
+  embedded?: boolean;
 }) {
   const router = useRouter();
   const t =
@@ -163,13 +165,13 @@ export function AccountSecuritySettings({
   }
 
   return (
-    <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-8">
-      <h2 className="text-lg font-semibold text-white sm:text-2xl">{t.title}</h2>
-      <p className="mt-1 text-xs text-slate-400 sm:text-sm">
+    <div className={embedded ? "" : "rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-8"}>
+      <h2 className="text-base font-semibold text-white sm:text-lg">{t.title}</h2>
+      <p className="mt-1 text-[11px] text-slate-400 sm:text-xs">
         {t.subtitle}
       </p>
 
-      <div className="mt-5 space-y-3">
+      <div className="mt-3 space-y-2">
         <div className="rounded-2xl border border-white/8 bg-white/4 p-4">
           <button
             type="button"
@@ -188,7 +190,7 @@ export function AccountSecuritySettings({
                 type="email"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2"
+                className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2 sm:text-sm"
                 required
               />
               <input
@@ -196,14 +198,14 @@ export function AccountSecuritySettings({
                 value={currentPasswordForEmail}
                 onChange={(event) => setCurrentPasswordForEmail(event.target.value)}
                 placeholder={t.currentPassword}
-                className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2"
+                className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2 sm:text-sm"
                 required
               />
               <div className="mt-1 flex items-center gap-2">
                 <button
                   type="submit"
                   disabled={isSavingEmail}
-                  className="rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-lime-300 disabled:opacity-60"
+                  className="rounded-full bg-lime-400 px-3 py-1 text-[11px] font-semibold text-slate-950 transition hover:bg-lime-300 disabled:opacity-60"
                 >
                   {isSavingEmail ? t.saving : t.updateEmail}
                 </button>
@@ -233,7 +235,7 @@ export function AccountSecuritySettings({
                 value={currentPassword}
                 onChange={(event) => setCurrentPassword(event.target.value)}
                 placeholder={t.currentPassword}
-                className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2"
+                className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2 sm:text-sm"
                 required
               />
               <input
@@ -242,7 +244,7 @@ export function AccountSecuritySettings({
                 onChange={(event) => setNewPassword(event.target.value)}
                 placeholder={t.newPassword}
                 minLength={8}
-                className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2"
+                className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2 sm:text-sm"
                 required
               />
               <input
@@ -251,14 +253,14 @@ export function AccountSecuritySettings({
                 onChange={(event) => setConfirmPassword(event.target.value)}
                 placeholder={t.confirmNewPassword}
                 minLength={8}
-                className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2"
+                className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2 sm:text-sm"
                 required
               />
               <div className="mt-1 flex items-center gap-2">
                 <button
                   type="submit"
                   disabled={isSavingPassword}
-                  className="rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-lime-300 disabled:opacity-60"
+                  className="rounded-full bg-lime-400 px-3 py-1 text-[11px] font-semibold text-slate-950 transition hover:bg-lime-300 disabled:opacity-60"
                 >
                   {isSavingPassword ? t.saving : t.updatePassword}
                 </button>
@@ -271,6 +273,6 @@ export function AccountSecuritySettings({
           ) : null}
         </div>
       </div>
-    </section>
+    </div>
   );
 }
