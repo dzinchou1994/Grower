@@ -17,8 +17,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const { dict } = getLocalizedContent(locale);
-  const manageNewsLabel =
-    locale === "ka" ? "სიახლეების მართვა" : locale === "ru" ? "Управление новостями" : "Manage News";
 
   return {
     title: `Grower | ${dict.nav.admin}`,
@@ -43,6 +41,8 @@ export default async function AdminPage({ params }: PageProps) {
   }
 
   const { dict } = getLocalizedContent(locale);
+  const manageNewsLabel =
+    locale === "ka" ? "სიახლეების მართვა" : locale === "ru" ? "Управление новостями" : "Manage News";
 
   return (
     <div className="flex flex-col gap-6">
