@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import {
   AdminAuthError,
@@ -21,6 +22,12 @@ function requireActionPermission(action: string, role: "ADMIN" | "MODERATOR") {
   if (!canRunContentAction(role, action)) {
     throw new AdminAuthError(403, "Only ADMIN can permanently delete content.");
   }
+}
+
+function revalidateForumListCaches() {
+  revalidateTag("forum-topics-ka");
+  revalidateTag("forum-topics-en");
+  revalidateTag("forum-topics-ru");
 }
 
 export async function GET(request: Request) {
@@ -142,6 +149,7 @@ export async function PATCH(request: Request) {
       } else {
         await db.forumThread.delete({ where: { id: targetId } });
       }
+      revalidateForumListCaches();
     } else if (targetType === "COMMENT") {
       before = await db.forumComment.findUnique({ where: { id: targetId } });
       if (!before) {
@@ -157,6 +165,7 @@ export async function PATCH(request: Request) {
       } else {
         return NextResponse.json({ error: "Unsupported action for comment." }, { status: 400 });
       }
+      revalidateForumListCaches();
     } else if (targetType === "DIARY") {
       before = await db.diary.findUnique({ where: { id: targetId } });
       if (!before) {

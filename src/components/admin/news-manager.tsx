@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type AdminNewsRecord = {
   id: string;
@@ -223,16 +223,21 @@ export function NewsManager() {
     await loadData();
   }
 
+  useEffect(() => {
+    void loadData();
+  }, []);
+
   return (
     <div className="flex flex-col gap-5 sm:gap-6">
       <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-4 sm:rounded-[2rem] sm:p-6">
         <div className="flex items-center gap-2">
+          {loading ? <span className="text-xs text-slate-400">Loading news data...</span> : null}
           <button
             type="button"
             onClick={loadData}
             className="rounded-full bg-lime-400 px-4 py-2 text-xs font-semibold text-slate-950"
           >
-            {loading ? "Loading..." : "Load News Data"}
+            Refresh News Data
           </button>
           {error ? <p className="text-xs text-red-300">{error}</p> : null}
         </div>

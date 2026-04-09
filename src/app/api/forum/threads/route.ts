@@ -54,11 +54,19 @@ export async function POST(request: Request) {
   const thread = await createForumThread({
     ...parsed.data,
     author: sessionUser.username,
+    isHidden: true,
   });
 
   if (!thread) {
     return NextResponse.json({ error: "Topic not found" }, { status: 404 });
   }
 
-  return NextResponse.json({ thread }, { status: 201 });
+  return NextResponse.json(
+    {
+      thread,
+      moderationStatus: "PENDING",
+      message: "Your thread was submitted and is pending moderator approval.",
+    },
+    { status: 201 },
+  );
 }

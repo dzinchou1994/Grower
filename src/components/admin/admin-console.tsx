@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { NewsManager } from "@/components/admin/news-manager";
 
 type AdminConsoleProps = {
   role: "ADMIN" | "MODERATOR";
@@ -10,6 +11,7 @@ type TabId =
   | "moderation"
   | "content"
   | "messages"
+  | "news"
   | "cannapedia"
   | "feedback"
   | "seo"
@@ -24,6 +26,7 @@ export function AdminConsole({ role }: AdminConsoleProps) {
         { id: "moderation", label: "Moderation" },
         { id: "content", label: "Content" },
         { id: "messages", label: "Messages" },
+        { id: "news", label: "News" },
         ...(role === "ADMIN" ? [{ id: "cannapedia", label: "Cannapedia" }] : []),
         ...(role === "ADMIN" ? [{ id: "feedback", label: "Feedback" }] : []),
         ...(role === "ADMIN" ? [{ id: "seo", label: "SEO" }] : []),
@@ -58,6 +61,7 @@ export function AdminConsole({ role }: AdminConsoleProps) {
       {activeTab === "moderation" ? <ModerationPanel isAdmin={role === "ADMIN"} /> : null}
       {activeTab === "content" ? <ContentPanel isAdmin={role === "ADMIN"} /> : null}
       {activeTab === "messages" ? <MessagesPanel /> : null}
+      {activeTab === "news" ? <NewsManager /> : null}
       {activeTab === "cannapedia" && role === "ADMIN" ? <CannapediaPanel /> : null}
       {activeTab === "feedback" && role === "ADMIN" ? <FeedbackPanel /> : null}
       {activeTab === "seo" && role === "ADMIN" ? <SeoPanel /> : null}
@@ -116,6 +120,10 @@ function ModerationPanel({ isAdmin }: { isAdmin: boolean }) {
     }
   }
 
+  useEffect(() => {
+    void loadReports();
+  }, [status]);
+
   return (
     <div className="mt-6">
       <div className="flex flex-wrap items-center gap-2">
@@ -130,13 +138,7 @@ function ModerationPanel({ isAdmin }: { isAdmin: boolean }) {
           <option value="RESOLVED">RESOLVED</option>
           <option value="DISMISSED">DISMISSED</option>
         </select>
-        <button
-          type="button"
-          onClick={loadReports}
-          className="rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-slate-950"
-        >
-          {loading ? "Loading..." : "Load Reports"}
-        </button>
+        {loading ? <span className="text-xs text-slate-400">Loading...</span> : null}
       </div>
 
       {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
@@ -196,10 +198,12 @@ function ContentPanel({ isAdmin }: { isAdmin: boolean }) {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   async function loadContent() {
     setLoading(true);
     setError(null);
+    setSuccess(null);
     const qs = new URLSearchParams({ type });
     if (q.trim()) qs.set("q", q.trim());
 
@@ -218,21 +222,38 @@ function ContentPanel({ isAdmin }: { isAdmin: boolean }) {
     }
   }
 
-  async function runAction(targetType: "THREAD" | "COMMENT" | "DIARY", targetId: string, action: string) {
-    const reason = window.prompt(`Reason for ${action.toLowerCase()} action:`);
-    if (!reason) return;
+  useEffect(() => {
+    void loadContent();
+  }, []);
 
-    const response = await fetch("/api/admin/content", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ targetType, targetId, action, reason }),
-    });
-    if (!response.ok) {
-      const payload = await response.json().catch(() => null);
-      setError(payload?.error ?? "Action failed.");
-      return;
+  async function runAction(targetType: "THREAD" | "COMMENT" | "DIARY", targetId: string, action: string) {
+    const isDelete = action === "DELETE";
+    const promptedReason = window.prompt(
+      isDelete
+        ? "Reason for delete action (required):"
+        : `Reason for ${action.toLowerCase()} action (optional):`,
+    );
+    const reason = promptedReason?.trim() || `${action} via admin panel`;
+    if (isDelete && !promptedReason?.trim()) return;
+
+    try {
+      setError(null);
+      setSuccess(null);
+      const response = await fetch("/api/admin/content", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ targetType, targetId, action, reason }),
+      });
+      if (!response.ok) {
+        const payload = await response.json().catch(() => null);
+        setError(payload?.error ?? "Action failed.");
+        return;
+      }
+      setSuccess(`${action === "UNHIDE" ? "Approved" : action} completed.`);
+      await loadContent();
+    } catch {
+      setError("Network error.");
     }
-    await loadContent();
   }
 
   return (
@@ -258,11 +279,12 @@ function ContentPanel({ isAdmin }: { isAdmin: boolean }) {
           onClick={loadContent}
           className="rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-slate-950"
         >
-          {loading ? "Loading..." : "Load Content"}
+          {loading ? "Loading..." : "Refresh Content"}
         </button>
       </div>
 
       {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
+      {success ? <p className="mt-3 text-sm text-lime-300">{success}</p> : null}
 
       <div className="mt-4 grid gap-3">
         {items.map((item) => (
@@ -273,6 +295,11 @@ function ContentPanel({ isAdmin }: { isAdmin: boolean }) {
               {type === "comments" ? `Comment by @${item.author?.username}` : null}
               {type === "diaries" ? `Diary by @${item.author?.username}` : null}
             </p>
+            {type === "threads" && item.isHidden ? (
+              <span className="mt-2 inline-flex rounded-full border border-amber-400/30 bg-amber-400/10 px-2.5 py-1 text-[10px] text-amber-200">
+                Pending moderation
+              </span>
+            ) : null}
             <div className="mt-3 flex flex-wrap gap-2">
               <button
                 type="button"
@@ -296,9 +323,13 @@ function ContentPanel({ isAdmin }: { isAdmin: boolean }) {
                     "UNHIDE",
                   )
                 }
-                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white"
+                className={`rounded-full px-3 py-1 text-xs ${
+                  type === "threads" && item.isHidden
+                    ? "border border-lime-400/30 bg-lime-400/10 text-lime-200"
+                    : "border border-white/10 bg-white/5 text-white"
+                }`}
               >
-                Unhide
+                {type === "threads" && item.isHidden ? "Approve" : "Unhide"}
               </button>
               {type === "threads" ? (
                 <>
@@ -394,6 +425,10 @@ function UsersPanel() {
     await loadUsers();
   }
 
+  useEffect(() => {
+    void loadUsers();
+  }, []);
+
   return (
     <div className="mt-6">
       <div className="flex flex-wrap items-center gap-2">
@@ -408,7 +443,7 @@ function UsersPanel() {
           onClick={loadUsers}
           className="rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-slate-950"
         >
-          {loading ? "Loading..." : "Load Users"}
+          {loading ? "Loading..." : "Refresh Users"}
         </button>
       </div>
       {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
@@ -506,6 +541,10 @@ function AnalyticsPanel() {
     }
   }
 
+  useEffect(() => {
+    void loadAnalytics();
+  }, [days]);
+
   return (
     <div className="mt-6">
       <div className="flex flex-wrap items-center gap-2">
@@ -518,13 +557,7 @@ function AnalyticsPanel() {
           <option value={30}>Last 30 days</option>
           <option value={90}>Last 90 days</option>
         </select>
-        <button
-          type="button"
-          onClick={loadAnalytics}
-          className="rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-slate-950"
-        >
-          {loading ? "Loading..." : "Load Analytics"}
-        </button>
+        {loading ? <span className="text-xs text-slate-400">Loading...</span> : null}
       </div>
       {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
 
@@ -563,15 +596,13 @@ function AuditPanel() {
     }
   }
 
+  useEffect(() => {
+    void loadLogs();
+  }, []);
+
   return (
     <div className="mt-6">
-      <button
-        type="button"
-        onClick={loadLogs}
-        className="rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-slate-950"
-      >
-        {loading ? "Loading..." : "Load Audit Logs"}
-      </button>
+      {loading ? <p className="text-xs text-slate-400">Loading audit logs...</p> : null}
       {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
 
       <div className="mt-4 grid gap-3">
@@ -821,15 +852,13 @@ function CannapediaPanel() {
     await loadData();
   }
 
+  useEffect(() => {
+    void loadData();
+  }, []);
+
   return (
     <div className="mt-6">
-      <button
-        type="button"
-        onClick={loadData}
-        className="rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-slate-950"
-      >
-        {loading ? "Loading..." : "Load Cannapedia"}
-      </button>
+      {loading ? <p className="text-xs text-slate-400">Loading Cannapedia...</p> : null}
       {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
 
       <div className="mt-4 grid gap-4 lg:grid-cols-2">
@@ -965,6 +994,10 @@ function MessagesPanel() {
     await loadMessages();
   }
 
+  useEffect(() => {
+    void loadMessages();
+  }, [includeHidden]);
+
   return (
     <div className="mt-6">
       <div className="flex flex-wrap items-center gap-2">
@@ -987,7 +1020,7 @@ function MessagesPanel() {
           onClick={loadMessages}
           className="rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-slate-950"
         >
-          {loading ? "Loading..." : "Load Messages"}
+          {loading ? "Loading..." : "Refresh Messages"}
         </button>
       </div>
 
@@ -1060,6 +1093,10 @@ function FeedbackPanel() {
     await loadFeedback();
   }
 
+  useEffect(() => {
+    void loadFeedback();
+  }, [status]);
+
   return (
     <div className="mt-6">
       <div className="flex flex-wrap items-center gap-2">
@@ -1074,13 +1111,7 @@ function FeedbackPanel() {
           <option value="PLANNED">PLANNED</option>
           <option value="CLOSED">CLOSED</option>
         </select>
-        <button
-          type="button"
-          onClick={loadFeedback}
-          className="rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-slate-950"
-        >
-          {loading ? "Loading..." : "Load Feedback"}
-        </button>
+        {loading ? <span className="text-xs text-slate-400">Loading...</span> : null}
       </div>
 
       {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
@@ -1189,6 +1220,10 @@ function SeoPanel() {
     }
   }
 
+  useEffect(() => {
+    void loadItems();
+  }, []);
+
   async function save() {
     setError(null);
     const auditReason = reason.trim() || `SEO update for ${page}/${locale}`;
@@ -1221,13 +1256,7 @@ function SeoPanel() {
   return (
     <div className="mt-6">
       <div className="flex flex-wrap items-center gap-2">
-        <button
-          type="button"
-          onClick={loadItems}
-          className="rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-slate-950"
-        >
-          {loading ? "Loading..." : "Load SEO Settings"}
-        </button>
+        {loading ? <span className="text-xs text-slate-400">Loading settings...</span> : null}
         <select
           value={page}
           onChange={(event) => setPage(event.target.value as typeof page)}

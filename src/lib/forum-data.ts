@@ -38,6 +38,7 @@ export type ForumThreadRecord = ForumThread & {
   authorImage?: string;
   threadIcon?: string;
   body?: string;
+  isHidden?: boolean;
   isTranslated?: boolean;
   bodyTranslated?: boolean;
   upvotes: number;
@@ -561,6 +562,7 @@ async function createThreadInDatabase(input: {
   body: string;
   author: string;
   threadIcon?: string;
+  isHidden?: boolean;
 }) {
   const topic = await db.forumTopic.findUnique({ where: { slug: input.topicSlug } });
   if (!topic) {
@@ -583,6 +585,7 @@ async function createThreadInDatabase(input: {
       authorId: user.id,
       title: input.title.trim(),
       body: encodeThreadBody(input.body, input.threadIcon),
+      isHidden: Boolean(input.isHidden),
     },
     include: {
       author: { select: { username: true, image: true } },
@@ -604,8 +607,8 @@ async function addCommentInDatabase(input: {
   author: string;
   body: string;
 }) {
-  const thread = await db.forumThread.findUnique({
-    where: { slug: input.threadSlug },
+  const thread = await db.forumThread.findFirst({
+    where: { slug: input.threadSlug, isHidden: false },
     select: { id: true, slug: true, topic: { select: { slug: true } } },
   });
 
@@ -649,14 +652,20 @@ async function listForumTopicsFromMemory(
   const translatedTopics = await Promise.all(
     topics.map((topic) => translateForumTopicRecord(topic, locale)),
   );
+  const visibleTopics = translatedTopics
+    .map((topic) => ({
+      ...topic,
+      threads: topic.threads.filter((thread) => !thread.isHidden),
+    }))
+    .filter((topic) => topic.threads.length > 0);
 
   if (!query?.trim()) {
-    return translatedTopics;
+    return visibleTopics;
   }
 
   const q = query.trim().toLowerCase();
 
-  return translatedTopics
+  return visibleTopics
     .map((topic) => {
       const topicMatch =
         topic.title.toLowerCase().includes(q) ||
@@ -677,7 +686,11 @@ async function getForumTopicBySlugFromMemory(slug: string, locale?: Locale) {
     return null;
   }
 
-  return translateForumTopicRecord(applyCanonicalTopicMeta(topic), locale);
+  const translatedTopic = await translateForumTopicRecord(applyCanonicalTopicMeta(topic), locale);
+  return {
+    ...translatedTopic,
+    threads: translatedTopic.threads.filter((thread) => !thread.isHidden),
+  };
 }
 
 function createThreadInMemory(input: {
@@ -686,6 +699,7 @@ function createThreadInMemory(input: {
   body: string;
   author: string;
   threadIcon?: string;
+  isHidden?: boolean;
 }) {
   const state = getState();
   const topic = state.topics.find((entry) => entry.slug === input.topicSlug);
@@ -703,6 +717,7 @@ function createThreadInMemory(input: {
     likes: 0,
     lastActivity: toRelativeCompact(new Date(), "en"),
     isPinned: false,
+    isHidden: Boolean(input.isHidden),
     body: input.body.trim(),
     upvotes: 0,
     downvotes: 0,
@@ -812,6 +827,9 @@ export async function getForumThreadBySlug(
     });
 
     if (!thread) {
+      return null;
+    }
+    if (thread.isHidden) {
       return null;
     }
 
@@ -970,6 +988,7 @@ export async function createForumThread(input: {
   body: string;
   author: string;
   threadIcon?: string;
+  isHidden?: boolean;
 }) {
   if (hasDatabase) {
     return createThreadInDatabase(input);

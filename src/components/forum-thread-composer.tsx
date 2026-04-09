@@ -59,6 +59,7 @@ export function ForumThreadComposer({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [pendingTopicSlug, setPendingTopicSlug] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(!collapsible && !startHidden);
   const bodyRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -93,6 +94,12 @@ export function ForumThreadComposer({
           iconLabel: "თემის აიქონი",
           posting: "იტვირთება...",
           postThread: "გამოქვეყნება",
+          submitAnother: "კიდევ ერთი თემის შექმნა",
+          goToForum: "ფორუმზე დაბრუნება",
+          goToTopic: "თემატურ გვერდზე გადასვლა",
+          moderationTitle: "გაგზავნილია მოდერაციაზე",
+          moderationBody:
+            "მადლობა! შენი თემა წარმატებით გაიგზავნა და გამოქვეყნდება მოდერატორის დამტკიცების შემდეგ.",
           close: "დახურვა",
         }
       : locale === "ru"
@@ -109,6 +116,12 @@ export function ForumThreadComposer({
             iconLabel: "Иконка темы",
             posting: "Публикация...",
             postThread: "Опубликовать тему",
+            submitAnother: "Создать еще одну тему",
+            goToForum: "Вернуться на форум",
+            goToTopic: "Открыть раздел",
+            moderationTitle: "Отправлено на модерацию",
+            moderationBody:
+              "Спасибо! Тема успешно отправлена и будет опубликована после проверки модератором.",
             close: "Закрыть",
           }
         : {
@@ -124,6 +137,12 @@ export function ForumThreadComposer({
             iconLabel: "Thread icon",
             posting: "Posting...",
             postThread: "Post",
+            submitAnother: "Create another thread",
+            goToForum: "Back to forum",
+            goToTopic: "Open topic page",
+            moderationTitle: "Sent for moderation",
+            moderationBody:
+              "Thanks! Your thread was submitted successfully and will appear after moderator approval.",
             close: "Close",
           };
 
@@ -139,6 +158,7 @@ export function ForumThreadComposer({
     const form = event.currentTarget;
     setError(null);
     setSuccess(null);
+    setPendingTopicSlug(null);
 
     const formData = new FormData(form);
     const payload = {
@@ -150,6 +170,7 @@ export function ForumThreadComposer({
 
     setIsSubmitting(true);
     let threadPath: string | null = null;
+    let isPendingModeration = false;
 
     try {
       const response = await fetch("/api/forum/threads", {
@@ -174,6 +195,9 @@ export function ForumThreadComposer({
 
       const parsed = await response.json().catch(() => null);
       const threadSlug = parsed?.thread?.slug as string | undefined;
+      const moderationStatus = parsed?.moderationStatus as string | undefined;
+      const serverMarkedHidden = Boolean(parsed?.thread?.isHidden);
+      isPendingModeration = moderationStatus === "PENDING" || serverMarkedHidden;
       if (threadSlug) {
         threadPath = `/${locale}/forum/${payload.topicSlug}/${threadSlug}`;
       }
@@ -190,6 +214,10 @@ export function ForumThreadComposer({
       bodyRef.current.style.height = "auto";
     }
     setError(null);
+    if (isPendingModeration) {
+      setPendingTopicSlug(payload.topicSlug);
+      return;
+    }
     setSuccess(t.created);
 
     if (threadPath) {
@@ -281,13 +309,47 @@ export function ForumThreadComposer({
         {t.subtitle}
       </p>
 
+      {pendingTopicSlug ? (
+        <div className="mt-4 overflow-hidden rounded-2xl border border-lime-400/30 bg-gradient-to-br from-lime-400/12 via-lime-300/8 to-emerald-400/12 p-4 sm:p-5">
+          <div className="flex items-start gap-3">
+            <div className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-lime-300/35 bg-lime-300/15 text-lg">
+              ✅
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-lime-100 sm:text-base">{t.moderationTitle}</p>
+              <p className="mt-1 text-xs leading-relaxed text-lime-50/85 sm:text-sm">
+                {t.moderationBody}
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setPendingTopicSlug(null)}
+                  className={primaryButtonClass}
+                >
+                  {t.submitAnother}
+                </button>
+                <Link
+                  href={`/${locale}/forum/${pendingTopicSlug}`}
+                  className={subtleButtonClass}
+                >
+                  {t.goToTopic}
+                </Link>
+                <Link href={`/${locale}/forum`} className={subtleButtonClass}>
+                  {t.goToForum}
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       <form
         onSubmit={onSubmit}
         onChange={() => {
           if (error) setError(null);
           if (success) setSuccess(null);
         }}
-        className="mt-4 grid gap-3"
+        className={`mt-4 grid gap-3 ${pendingTopicSlug ? "hidden" : ""}`}
       >
         <div className="grid gap-3">
           <div className="rounded-xl border border-white/10 bg-slate-900/70 p-2">
