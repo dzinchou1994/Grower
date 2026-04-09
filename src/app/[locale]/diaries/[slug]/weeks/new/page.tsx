@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `Grower | ${dict.diaries.newWeek.titlePrefix} ${slug}`,
     description: dict.diaries.newWeek.description,
-    alternates: getAlternates(`/diaries/${slug}/weeks/new`),
+    alternates: getAlternates(`/diaries/${slug}/weeks/new`, locale),
   };
 }
 

@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `Grower | ${topic.title}`,
     description: topic.description,
-    alternates: getAlternates(`/forum/${slug}`),
+    alternates: getAlternates(`/forum/${slug}`, locale),
   };
 }
 

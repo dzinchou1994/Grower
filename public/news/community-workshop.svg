@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Community workshop">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a1322"/>
+      <stop offset="100%" stop-color="#22311a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <g opacity="0.2" fill="#84cc16">
+    <circle cx="100" cy="520" r="150"/>
+    <circle cx="1130" cy="130" r="120"/>
+  </g>
+  <g fill="#e2e8f0">
+    <circle cx="360" cy="300" r="62"/>
+    <circle cx="540" cy="280" r="62"/>
+    <circle cx="720" cy="300" r="62"/>
+    <circle cx="900" cy="280" r="62"/>
+  </g>
+  <g fill="#bef264">
+    <rect x="300" y="390" width="130" height="16" rx="8"/>
+    <rect x="480" y="370" width="130" height="16" rx="8"/>
+    <rect x="660" y="390" width="130" height="16" rx="8"/>
+    <rect x="840" y="370" width="130" height="16" rx="8"/>
+  </g>
+  <text x="70" y="100" font-family="Arial, sans-serif" font-size="52" fill="#f8fafc" font-weight="700">
+    Harm Reduction Community Workshops
+  </text>
+</svg>

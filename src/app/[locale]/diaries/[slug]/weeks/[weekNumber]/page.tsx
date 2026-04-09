@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `Grower | ${diary.title} - Week ${diaryWeek.weekNumber}`,
     description: diaryWeek.description.slice(0, 160),
-    alternates: getAlternates(`/diaries/${slug}/weeks/${weekNumber}`),
+    alternates: getAlternates(`/diaries/${slug}/weeks/${weekNumber}`, locale),
   };
 }
 

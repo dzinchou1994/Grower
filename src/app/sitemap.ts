@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { listCannapediaArticleSlugs } from "@/lib/cannapedia-data";
 import { locales, siteUrl } from "@/lib/i18n";
 import { diaries as mockDiaries, forumTopics as mockForumTopics } from "@/lib/mock-data";
+import { listNewsSlugs } from "@/lib/news-data";
 
 async function getDynamicSlugs() {
   if (!process.env.DATABASE_URL) {
@@ -98,13 +99,17 @@ async function getDynamicSlugs() {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { diarySlugs, diaryWeeks, forumTopicSlugs, forumThreads, forumComments } =
     await getDynamicSlugs();
-  const cannapediaSlugs = await listCannapediaArticleSlugs();
+  const [cannapediaSlugs, newsSlugs] = await Promise.all([
+    listCannapediaArticleSlugs(),
+    listNewsSlugs(),
+  ]);
 
   const staticRoutes = [
     "",
     "/diaries",
     "/forum",
     "/cannapedia",
+    "/news",
     "/manifesto",
     "/about",
     "/privacy",
@@ -202,6 +207,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   );
 
+  const localizedNews = locales.flatMap((locale) =>
+    newsSlugs.map((slug) => ({
+      url: `${siteUrl}/${locale}/news/${slug}`,
+      lastModified: new Date(),
+      alternates: {
+        languages: Object.fromEntries(
+          locales.map((entry) => [entry, `${siteUrl}/${entry}/news/${slug}`]),
+        ),
+      },
+    })),
+  );
+
   return [
     ...localizedStatic,
     ...localizedDiaries,
@@ -210,5 +227,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...localizedForumThreads,
     ...localizedForumComments,
     ...localizedCannapedia,
+    ...localizedNews,
   ];
 }

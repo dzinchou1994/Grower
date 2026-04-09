@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: "Grower | Register",
     description: "Create an account on Grower forum.",
-    alternates: getAlternates("/auth/register"),
+    alternates: getAlternates("/auth/register", locale),
   };
 }
 

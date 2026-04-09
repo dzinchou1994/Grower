@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="EU CBD market growth">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#09131f"/>
+      <stop offset="100%" stop-color="#11271a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <g opacity="0.22" fill="#a3e635">
+    <circle cx="140" cy="120" r="70"/>
+    <circle cx="1060" cy="520" r="120"/>
+    <circle cx="980" cy="140" r="60"/>
+  </g>
+  <g fill="#bef264">
+    <rect x="180" y="420" width="90" height="120" rx="12"/>
+    <rect x="320" y="370" width="90" height="170" rx="12"/>
+    <rect x="460" y="310" width="90" height="230" rx="12"/>
+    <rect x="600" y="255" width="90" height="285" rx="12"/>
+    <rect x="740" y="210" width="90" height="330" rx="12"/>
+  </g>
+  <polyline points="160,470 300,410 440,350 580,300 720,250 860,200" fill="none" stroke="#f0fdf4" stroke-width="8"/>
+  <circle cx="860" cy="200" r="12" fill="#f0fdf4"/>
+  <text x="70" y="100" font-family="Arial, sans-serif" font-size="54" fill="#f8fafc" font-weight="700">
+    EU CBD Market Momentum
+  </text>
+</svg>

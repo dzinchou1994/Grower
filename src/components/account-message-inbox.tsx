@@ -85,9 +85,11 @@ function copy(locale: Locale) {
 export function AccountMessageInbox({
   locale,
   currentUserId,
+  fullPage = false,
 }: {
   locale: Locale;
   currentUserId: string;
+  fullPage?: boolean;
 }) {
   const t = copy(locale);
   const [messages, setMessages] = useState<MessageRecord[]>([]);
@@ -244,12 +246,28 @@ export function AccountMessageInbox({
   }
 
   return (
-    <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-8">
-      <h2 className="text-lg font-semibold text-white sm:text-2xl">{t.title}</h2>
-      <p className="mt-2 text-sm text-slate-400">{t.subtitle}</p>
+    <section
+      className={
+        fullPage
+          ? "relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-950/80 via-[#0a1629]/85 to-slate-950/80 p-4 shadow-2xl shadow-lime-950/10 sm:rounded-[2rem] sm:p-6"
+          : "rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-8"
+      }
+    >
+      {fullPage ? (
+        <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-lime-400/10 blur-2xl sm:h-36 sm:w-36" />
+      ) : null}
 
-      <div className="mt-4 grid gap-3 lg:grid-cols-[280px_1fr]">
-        <aside className="rounded-2xl border border-white/10 bg-white/5 p-3">
+      <div className="relative">
+        <h2 className={fullPage ? "text-xl font-semibold text-white sm:text-3xl" : "text-lg font-semibold text-white sm:text-2xl"}>
+          {t.title}
+        </h2>
+        <p className={fullPage ? "mt-1 text-sm text-slate-300 sm:text-base" : "mt-2 text-sm text-slate-400"}>
+          {t.subtitle}
+        </p>
+      </div>
+
+      <div className={`mt-4 grid gap-3 ${fullPage ? "lg:grid-cols-[320px_1fr]" : "lg:grid-cols-[280px_1fr]"}`}>
+        <aside className={`rounded-2xl border border-white/10 ${fullPage ? "bg-slate-900/55 p-3.5" : "bg-white/5 p-3"}`}>
           <input
             value={filter}
             onFocus={() => setShowSuggestions(true)}
@@ -319,10 +337,10 @@ export function AccountMessageInbox({
           </div>
         </aside>
 
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
+        <div className={`rounded-2xl border border-white/10 ${fullPage ? "bg-slate-900/50 p-3.5" : "bg-white/5 p-3"}`}>
           <div
             className={`rounded-xl border border-white/10 bg-slate-900/60 p-3 ${
-              selectedThread ? "min-h-[220px]" : "min-h-[120px]"
+              selectedThread ? (fullPage ? "min-h-[320px]" : "min-h-[220px]") : "min-h-[120px]"
             }`}
           >
             {!selectedThread ? (

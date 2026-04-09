@@ -27,6 +27,7 @@ export function SiteHeader({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [scrolled, setScrolled] = useState(false);
 
   const navigation = [
     { href: "", label: dict.nav.home, icon: "home" as const },
@@ -36,6 +37,7 @@ export function SiteHeader({
       label: dict.nav.cannapedia,
       icon: "cannapedia" as const,
     },
+    { href: "/news", label: dict.nav.news, icon: "news" as const },
     { href: "/diaries", label: dict.nav.diaries, icon: "diaries" as const },
   ];
   const ui =
@@ -101,6 +103,13 @@ export function SiteHeader({
   }, [mobileMenuOpen]);
 
   useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 48);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
     const stored = localStorage.getItem("grower_theme");
     const preferred =
       stored === "light" || stored === "dark"
@@ -126,61 +135,32 @@ export function SiteHeader({
   }
 
   return (
-    <header className="sticky top-0 z-30 border-b border-white/8 bg-[#08111f]/75 backdrop-blur-2xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 sm:px-6 lg:px-8">
+    <header className={`sticky top-0 z-30 border-b border-white/8 backdrop-blur-2xl transition-all duration-300 ${scrolled ? "bg-[#08111f]/55" : "bg-[#08111f]/75"}`}>
+      <div className={`mx-auto flex max-w-7xl items-center justify-between px-4 transition-all duration-300 sm:px-6 lg:px-8 ${scrolled ? "py-1" : "py-2.5"}`}>
         {/* Logo */}
         <Link
           href={homePath}
           onClick={handleLogoClick}
-          className="group flex items-center gap-2.5"
+          className="group flex items-center gap-2"
         >
-          <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl border border-lime-400/20 bg-gradient-to-br from-slate-900 to-slate-800 shadow-lg shadow-lime-950/30 transition group-hover:border-lime-300/40 group-hover:shadow-lime-400/10">
+          <div className={`relative flex items-center justify-center overflow-hidden rounded-xl border border-lime-400/20 bg-gradient-to-br from-slate-900 to-slate-800 shadow-lg shadow-lime-950/30 transition-all duration-300 group-hover:border-lime-300/40 group-hover:shadow-lime-400/10 ${scrolled ? "h-7 w-7" : "h-9 w-9"}`}>
+            <span className="animate-breathe pointer-events-none absolute inset-0 rounded-xl bg-lime-400/20" />
             <Image
               src="/brand/logo-1923818.png"
               alt="Grower logo"
               width={24}
               height={24}
-              className="h-6 w-6 object-contain"
+              className={`object-contain transition-all duration-300 ${scrolled ? "h-[18px] w-[18px]" : "h-6 w-6"}`}
               priority
             />
           </div>
-          <div className="hidden min-[400px]:block">
-            <div className="flex items-center gap-1.5">
-              <p className="text-[13px] font-bold tracking-[0.1em] text-white transition-colors duration-200 group-hover:text-lime-200">
+          <div className="hidden min-[400px]:flex min-[400px]:flex-col min-[400px]:justify-center">
+            <div className="flex items-center">
+              <p className={`font-black tracking-[0.11em] text-white transition-all duration-300 group-hover:text-lime-200 ${scrolled ? "text-[13px]" : "text-[15px]"}`}>
                 GROWER.GE
               </p>
-              <span
-                suppressHydrationWarning
-                className="flex h-3 w-4 overflow-hidden rounded-[1.5px] border border-lime-400/25 shadow-sm shadow-black/30 transition-all duration-200 group-hover:border-lime-300/40 group-hover:shadow-lime-500/30"
-              >
-                <svg
-                  suppressHydrationWarning
-                  viewBox="0 0 20 14"
-                  className="h-full w-full transition-transform duration-200 group-hover:scale-105"
-                >
-                  <rect width="20" height="14" fill="#fff" />
-                  <rect x="8.5" y="0" width="3" height="14" fill="#65A30D" />
-                  <rect x="0" y="5.5" width="20" height="3" fill="#65A30D" />
-                  <rect x="2.5" y="1.5" width="1.2" height="1.2" fill="#84CC16" />
-                  <rect x="5" y="1.5" width="1.2" height="1.2" fill="#84CC16" />
-                  <rect x="2.5" y="3.5" width="1.2" height="1.2" fill="#84CC16" />
-                  <rect x="5" y="3.5" width="1.2" height="1.2" fill="#84CC16" />
-                  <rect x="13.5" y="1.5" width="1.2" height="1.2" fill="#84CC16" />
-                  <rect x="16" y="1.5" width="1.2" height="1.2" fill="#84CC16" />
-                  <rect x="13.5" y="3.5" width="1.2" height="1.2" fill="#84CC16" />
-                  <rect x="16" y="3.5" width="1.2" height="1.2" fill="#84CC16" />
-                  <rect x="2.5" y="9.5" width="1.2" height="1.2" fill="#84CC16" />
-                  <rect x="5" y="9.5" width="1.2" height="1.2" fill="#84CC16" />
-                  <rect x="2.5" y="11.5" width="1.2" height="1.2" fill="#84CC16" />
-                  <rect x="5" y="11.5" width="1.2" height="1.2" fill="#84CC16" />
-                  <rect x="13.5" y="9.5" width="1.2" height="1.2" fill="#84CC16" />
-                  <rect x="16" y="9.5" width="1.2" height="1.2" fill="#84CC16" />
-                  <rect x="13.5" y="11.5" width="1.2" height="1.2" fill="#84CC16" />
-                  <rect x="16" y="11.5" width="1.2" height="1.2" fill="#84CC16" />
-                </svg>
-              </span>
             </div>
-            <p className="max-w-[180px] text-[7px] leading-tight tracking-wide text-slate-500 transition-colors duration-200 group-hover:text-slate-300">
+            <p className={`max-w-[132px] leading-tight tracking-wide text-slate-500 transition-all duration-300 group-hover:text-slate-300 ${scrolled ? "h-0 overflow-hidden opacity-0" : "text-[6.5px] opacity-100"}`}>
               {brandSubtitle}
             </p>
           </div>
@@ -188,20 +168,20 @@ export function SiteHeader({
 
         {/* Desktop nav — centered */}
         <div className="hidden items-center gap-3 lg:flex">
-          <nav className="flex items-center gap-0.5 rounded-full border border-white/8 bg-white/[0.03] p-1 text-[13px] text-slate-400">
+          <nav className={`flex items-center gap-0.5 rounded-full border border-white/8 bg-white/[0.03] p-1 text-slate-400 transition-all duration-300 ${scrolled ? "text-[11px]" : "text-[13px]"}`}>
             {navigation.map((item) => {
               const isActive = pathname === getLocalizedPath(locale, item.href);
               return (
                 <Link
                   key={item.href}
                   href={getLocalizedPath(locale, item.href)}
-                  className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 font-medium transition-all duration-200 ${
+                  className={`inline-flex items-center gap-1.5 rounded-full font-medium transition-all duration-300 ${scrolled ? "px-2.5 py-1" : "px-3.5 py-1.5"} ${
                     isActive
-                      ? "bg-lime-400 text-slate-950 shadow-sm shadow-lime-400/25"
+                      ? "bg-lime-400 text-slate-950 shadow-[0_0_12px_rgba(132,204,22,0.3)] shadow-lime-400/25"
                       : "hover:bg-white/8 hover:text-white"
                   }`}
                 >
-                  <span className="text-[11px] opacity-80">
+                  <span className={`opacity-80 transition-all duration-300 ${scrolled ? "text-[9px]" : "text-[11px]"}`}>
                     <NavIcon icon={item.icon} />
                   </span>
                   {item.label}
@@ -304,19 +284,19 @@ export function SiteHeader({
           {initialUser ? (
             <Link
               href={getLocalizedPath(locale, "/account")}
-              className="relative z-20 inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[11px] text-slate-100 transition-all duration-200 hover:-translate-y-0.5 hover:border-lime-400/30 hover:bg-white/10 hover:text-white hover:shadow-sm hover:shadow-lime-500/20"
+              className={`relative z-20 inline-flex items-center rounded-full border border-white/10 bg-white/5 text-slate-100 transition-all duration-300 hover:-translate-y-0.5 hover:border-lime-400/30 hover:bg-white/10 hover:text-white hover:shadow-sm hover:shadow-lime-500/20 ${scrolled ? "p-0.5" : "gap-1 px-2 py-1 text-[11px]"}`}
             >
               <UserAvatar
                 username={initialUser.username}
                 image={initialUser.image}
                 size="sm"
               />
-              <span>@{initialUser.username}</span>
+              {!scrolled && <span>@{initialUser.username}</span>}
             </Link>
           ) : (
             <Link
               href={getLocalizedPath(locale, "/auth/login")}
-              className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-slate-200"
+              className={`rounded-full border border-white/10 text-slate-200 transition-all duration-300 ${scrolled ? "px-2 py-0.5 text-[9px]" : "px-2.5 py-1 text-[11px]"}`}
             >
               {ui.login}
             </Link>
@@ -325,13 +305,13 @@ export function SiteHeader({
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition hover:bg-white/10"
+            className={`flex items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition-all duration-300 hover:bg-white/10 ${scrolled ? "h-7 w-7" : "h-9 w-9"}`}
             aria-label="Toggle menu"
             aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? (
               <svg
-                className="h-5 w-5"
+                className={`transition-all duration-300 ${scrolled ? "h-4 w-4" : "h-5 w-5"}`}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -345,7 +325,7 @@ export function SiteHeader({
               </svg>
             ) : (
               <svg
-                className="h-5 w-5"
+                className={`transition-all duration-300 ${scrolled ? "h-4 w-4" : "h-5 w-5"}`}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -531,7 +511,7 @@ export function SiteHeader({
 function NavIcon({
   icon,
 }: {
-  icon: "home" | "forum" | "cannapedia" | "diaries" | "account" | "admin";
+  icon: "home" | "forum" | "cannapedia" | "news" | "diaries" | "account" | "admin";
 }) {
   const common = "h-[1.05em] w-[1.05em]";
 
@@ -565,6 +545,15 @@ function NavIcon({
       <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 5.25h9a2.25 2.25 0 0 1 2.25 2.25v11.25l-3.75-1.875L10.5 18.75l-3.75-1.875-3.75 1.875V7.5a2.25 2.25 0 0 1 2.25-2.25h1.5Z" />
         <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 9.75h4.5M9.75 13.5h4.5" />
+      </svg>
+    );
+  }
+
+  if (icon === "news") {
+    return (
+      <svg className={common} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 5.25h15A1.5 1.5 0 0 1 21 6.75v10.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.25V6.75a1.5 1.5 0 0 1 1.5-1.5Z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 9h9M7.5 12h9M7.5 15h5.25" />
       </svg>
     );
   }

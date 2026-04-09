@@ -14,19 +14,19 @@ import {
 } from "@/lib/i18n";
 
 type PageProps = {
-  params: Promise<{ locale: string; topicSlug: string; threadSlug: string }>;
+  params: Promise<{ locale: string; slug: string; threadSlug: string }>;
 };
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { locale, topicSlug, threadSlug } = await params;
+  const { locale, slug, threadSlug } = await params;
   if (!isValidLocale(locale)) {
     return {};
   }
 
   const threadData = await getForumThreadBySlug(threadSlug, locale);
-  if (!threadData || threadData.topic.slug !== topicSlug) {
+  if (!threadData || threadData.topic.slug !== slug) {
     return {};
   }
 
@@ -34,12 +34,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `Grower | ${threadData.thread.title}`,
     description,
-    alternates: getAlternates(`/forum/${topicSlug}/${threadSlug}`),
+    alternates: getAlternates(`/forum/${slug}/${threadSlug}`, locale),
   };
 }
 
 export default async function ForumThreadPage({ params }: PageProps) {
-  const { locale, topicSlug, threadSlug } = await params;
+  const { locale, slug, threadSlug } = await params;
   if (!isValidLocale(locale)) {
     notFound();
   }
@@ -48,7 +48,7 @@ export default async function ForumThreadPage({ params }: PageProps) {
   const sessionUser = await getServerSessionUser();
   const threadData = await getForumThreadBySlug(threadSlug, typedLocale, sessionUser?.userId);
 
-  if (!threadData || threadData.topic.slug !== topicSlug) {
+  if (!threadData || threadData.topic.slug !== slug) {
     notFound();
   }
 

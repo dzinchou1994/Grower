@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `Grower | ${diary.title}`,
     description: diary.summary,
-    alternates: getAlternates(`/diaries/${slug}`),
+    alternates: getAlternates(`/diaries/${slug}`, locale),
   };
 }
 

@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : locale === "ru"
         ? "Условия использования сайта."
         : "Website terms of use.";
-  return { title, description, alternates: getAlternates("/terms") };
+  return { title, description, alternates: getAlternates("/terms", locale) };
 }
 
 export default async function TermsPage({ params }: Props) {

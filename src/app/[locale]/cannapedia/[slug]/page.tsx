@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `Grower | ${article.title[locale]}`,
     description: article.excerpt[locale],
-    alternates: getAlternates(`/cannapedia/${slug}`),
+    alternates: getAlternates(`/cannapedia/${slug}`, locale),
   };
 }
 

@@ -51,6 +51,9 @@ export function SiteFooter() {
         >
           {feedbackLabel}
         </Link>
+        <p className="select-none text-[8px] tracking-[0.35em] text-lime-900/40" aria-hidden="true">
+          4 : 2 0
+        </p>
         <div className="mt-1 flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 text-[10px] text-slate-500/90">
           <Link href={`/${locale}/about`} className="transition hover:text-slate-300">
             {links.about}
@@ -82,7 +85,7 @@ export function SiteFooter() {
           {" · "}
           <span className="text-slate-700/80">{resourcesHint}</span>
         </p>
-        <div className="mt-1 h-2 w-10 overflow-hidden opacity-[0.08] saturate-0">
+        <div className="mt-1 h-3 w-14 overflow-hidden opacity-[0.18] saturate-0">
           <div id="top-ge-counter-container" data-site-id="118645" />
         </div>
       </div>

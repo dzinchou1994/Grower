@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : locale === "ru"
         ? "Миссия и ценности Grower."
         : "Grower mission and values.";
-  return { title, description, alternates: getAlternates("/about") };
+  return { title, description, alternates: getAlternates("/about", locale) };
 }
 
 export default async function AboutPage({ params }: Props) {

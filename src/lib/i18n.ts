@@ -24,6 +24,7 @@ const translations = {
       home: "მთავარი",
       forum: "ფორუმი",
       cannapedia: "კანაპედია",
+      news: "სიახლეები",
       diaries: "დღიურები",
       account: "ანგარიში",
       admin: "ადმინი",
@@ -192,6 +193,7 @@ const translations = {
       home: "Home",
       forum: "Forum",
       cannapedia: "Cannapedia",
+      news: "News",
       diaries: "Diaries",
       account: "Account",
       admin: "Admin",
@@ -360,6 +362,7 @@ const translations = {
       home: "Главная",
       forum: "Форум",
       cannapedia: "Каннапедия",
+      news: "Новости",
       diaries: "Дневники",
       account: "Аккаунт",
       admin: "Админ",
@@ -537,9 +540,9 @@ export function getLocalizedPath(locale: Locale, path = "") {
   return `/${locale}${path}`;
 }
 
-export function getAlternates(path = ""): Metadata["alternates"] {
+export function getAlternates(path = "", canonicalLocale: Locale = defaultLocale): Metadata["alternates"] {
   return {
-    canonical: `${siteUrl}${getLocalizedPath(defaultLocale, path)}`,
+    canonical: `${siteUrl}${getLocalizedPath(canonicalLocale, path)}`,
     languages: {
       ka: `${siteUrl}${getLocalizedPath("ka", path)}`,
       en: `${siteUrl}${getLocalizedPath("en", path)}`,

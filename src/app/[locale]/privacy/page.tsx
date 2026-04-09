@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : locale === "ru"
         ? "Политика конфиденциальности и обработка данных."
         : "Privacy policy and data handling.";
-  return { title, description, alternates: getAlternates("/privacy") };
+  return { title, description, alternates: getAlternates("/privacy", locale) };
 }
 
 export default async function PrivacyPage({ params }: Props) {

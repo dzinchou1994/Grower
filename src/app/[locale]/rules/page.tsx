@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : locale === "ru"
         ? "Правила сообщества для безопасных и уважительных обсуждений."
         : "Community rules for safe and respectful discussions.";
-  return { title, description, alternates: getAlternates("/rules") };
+  return { title, description, alternates: getAlternates("/rules", locale) };
 }
 
 export default async function RulesPage({ params }: Props) {

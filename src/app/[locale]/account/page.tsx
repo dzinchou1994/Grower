@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { AccountLevelCard } from "@/components/account-level-card";
-import { AccountMessageInbox } from "@/components/account-message-inbox";
 import { getServerSessionUser } from "@/lib/auth-session";
 import { db } from "@/lib/db";
 import type { UserActivityStats } from "@/lib/leveling";
@@ -34,7 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: meta.title,
     description: meta.description,
-    alternates: getAlternates("/account"),
+    alternates: getAlternates("/account", locale),
   };
 }
 
@@ -59,6 +58,9 @@ export default async function AccountPage({ params }: PageProps) {
           newDiary: "ახალი დღიური",
           noDiaries: "დღიურები ჯერ არ გაქვს.",
           weeklyUpdates: "კვირეული განახლება",
+          inboxTitle: "შეტყობინებები",
+          inboxSubtitle: "პირადი მესიჯები ცალკე გვერდზე, უფრო კომფორტული UI-თი.",
+          openInbox: "Inbox გახსნა",
         }
       : typedLocale === "ru"
         ? {
@@ -73,6 +75,9 @@ export default async function AccountPage({ params }: PageProps) {
             newDiary: "Новый дневник",
             noDiaries: "У вас пока нет дневников.",
             weeklyUpdates: "недельных обновлений",
+            inboxTitle: "Сообщения",
+            inboxSubtitle: "Личные чаты вынесены на отдельную страницу с улучшенным UI.",
+            openInbox: "Открыть Inbox",
           }
         : {
             recentThreads: "Recent Threads You Posted",
@@ -86,6 +91,9 @@ export default async function AccountPage({ params }: PageProps) {
             newDiary: "New Diary",
             noDiaries: "You have no diaries yet.",
             weeklyUpdates: "weekly updates",
+            inboxTitle: "Messages",
+            inboxSubtitle: "Private chats are now on a dedicated page with a cleaner UI.",
+            openInbox: "Open Inbox",
           };
   const sessionUser = await getServerSessionUser();
   if (!sessionUser) {
@@ -259,7 +267,23 @@ export default async function AccountPage({ params }: PageProps) {
         </div>
       </section>
 
-      <AccountMessageInbox locale={typedLocale} currentUserId={sessionUser.userId} />
+      <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-8">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-semibold text-white sm:text-2xl">{t.inboxTitle}</h2>
+            <p className="mt-1 text-xs text-slate-400 sm:text-sm">{t.inboxSubtitle}</p>
+          </div>
+          <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-lime-400/30 bg-lime-400/10 text-lg text-lime-300">
+            💬
+          </span>
+        </div>
+        <Link
+          href={getLocalizedPath(typedLocale, "/messages")}
+          className="mt-4 inline-flex rounded-full border border-lime-400/30 bg-lime-400/10 px-4 py-2 text-xs font-semibold text-lime-200 transition hover:bg-lime-400/20 sm:text-sm"
+        >
+          {t.openInbox}
+        </Link>
+      </section>
     </div>
   );
 }

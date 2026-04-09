@@ -79,6 +79,17 @@ enum FeedbackStatus {
   CLOSED
 }
 
+enum NewsScope {
+  GEORGIA
+  WORLD
+}
+
+enum NewsSubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model User {
   id            String          @id @default(cuid())
   email         String          @unique
@@ -105,6 +116,10 @@ model User {
   feedbacks     Feedback[]
   sentMessages     Message[] @relation("MessageSender")
   receivedMessages Message[] @relation("MessageRecipient")
+  createdNews      NewsArticle[]      @relation("NewsCreator")
+  reviewedNews     NewsArticle[]      @relation("NewsReviewer")
+  newsSubmissions  NewsSubmission[]   @relation("NewsSubmitter")
+  reviewedSubmissions NewsSubmission[] @relation("NewsSubmissionReviewer")
 }
 
 model Diary {
@@ -372,4 +387,55 @@ model Message {
   @@index([senderId, createdAt])
   @@index([recipientId, createdAt])
   @@index([isHidden, createdAt])
+}
+
+model NewsArticle {
+  id           String    @id @default(cuid())
+  slug         String    @unique
+  scope        NewsScope
+  imageUrl     String?
+  sourceName   String?
+  sourceUrl    String?
+  titleKa      String
+  titleEn      String
+  titleRu      String
+  excerptKa    String
+  excerptEn    String
+  excerptRu    String
+  bodyKa       String
+  bodyEn       String
+  bodyRu       String
+  isPublished  Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  createdById  String?
+  reviewedById String?
+  createdBy    User?     @relation("NewsCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  reviewedBy   User?     @relation("NewsReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  submissionId String?   @unique
+  submission   NewsSubmission? @relation(fields: [submissionId], references: [id], onDelete: SetNull)
+
+  @@index([scope, createdAt])
+  @@index([isPublished, createdAt])
+}
+
+model NewsSubmission {
+  id          String               @id @default(cuid())
+  title       String
+  body        String
+  imageUrl    String?
+  sourceName  String?
+  sourceUrl   String?
+  scope       NewsScope
+  status      NewsSubmissionStatus @default(PENDING)
+  adminNote   String?
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  submitterId String?
+  reviewedById String?
+  submitter   User?                @relation("NewsSubmitter", fields: [submitterId], references: [id], onDelete: SetNull)
+  reviewedBy  User?                @relation("NewsSubmissionReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  article     NewsArticle?
+
+  @@index([status, createdAt])
 }

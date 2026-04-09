@@ -8,31 +8,31 @@ import { getForumCommentById } from "@/lib/forum-data";
 import { getAlternates, getLocalizedPath, isValidLocale, type Locale } from "@/lib/i18n";
 
 type PageProps = {
-  params: Promise<{ locale: string; topicSlug: string; threadSlug: string; commentId: string }>;
+  params: Promise<{ locale: string; slug: string; threadSlug: string; commentId: string }>;
 };
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { locale, topicSlug, threadSlug, commentId } = await params;
+  const { locale, slug, threadSlug, commentId } = await params;
   if (!isValidLocale(locale)) {
     return {};
   }
 
   const data = await getForumCommentById(commentId, locale);
-  if (!data || data.topic.slug !== topicSlug || data.thread.slug !== threadSlug) {
+  if (!data || data.topic.slug !== slug || data.thread.slug !== threadSlug) {
     return {};
   }
 
   return {
     title: `Grower | ${data.thread.title}`,
     description: data.comment.body.slice(0, 160),
-    alternates: getAlternates(`/forum/${topicSlug}/${threadSlug}/comments/${commentId}`),
+    alternates: getAlternates(`/forum/${slug}/${threadSlug}/comments/${commentId}`, locale),
   };
 }
 
 export default async function ForumCommentPage({ params }: PageProps) {
-  const { locale, topicSlug, threadSlug, commentId } = await params;
+  const { locale, slug, threadSlug, commentId } = await params;
   if (!isValidLocale(locale)) {
     notFound();
   }
@@ -41,7 +41,7 @@ export default async function ForumCommentPage({ params }: PageProps) {
   const sessionUser = await getServerSessionUser();
   const data = await getForumCommentById(commentId, typedLocale, sessionUser?.userId);
 
-  if (!data || data.topic.slug !== topicSlug || data.thread.slug !== threadSlug) {
+  if (!data || data.topic.slug !== slug || data.thread.slug !== threadSlug) {
     notFound();
   }
 

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AdminConsole } from "@/components/admin/admin-console";
 import { getServerSessionUser } from "@/lib/auth-session";
-import { getAlternates, getLocalizedContent, isValidLocale } from "@/lib/i18n";
+import { getAlternates, getLocalizedContent, getLocalizedPath, isValidLocale } from "@/lib/i18n";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -16,11 +17,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const { dict } = getLocalizedContent(locale);
+  const manageNewsLabel =
+    locale === "ka" ? "სიახლეების მართვა" : locale === "ru" ? "Управление новостями" : "Manage News";
 
   return {
     title: `Grower | ${dict.nav.admin}`,
     description: dict.admin.description,
-    alternates: getAlternates("/admin"),
+    alternates: getAlternates("/admin", locale),
   };
 }
 
@@ -54,6 +57,12 @@ export default async function AdminPage({ params }: PageProps) {
         <p className="mt-2 text-xs text-slate-400">
           Access role: {sessionUser.role}
         </p>
+        <Link
+          href={getLocalizedPath(locale, "/admin/news")}
+          className="mt-4 inline-flex rounded-full border border-lime-400/30 bg-lime-400/10 px-4 py-2 text-xs font-semibold text-lime-200 transition hover:bg-lime-400/20"
+        >
+          {manageNewsLabel}
+        </Link>
       </section>
 
       <AdminConsole role={sessionUser.role} />

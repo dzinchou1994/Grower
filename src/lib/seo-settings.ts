@@ -79,7 +79,7 @@ export async function getPageMetadataWithSeo(input: {
   return {
     title,
     description,
-    alternates: getAlternates(input.path),
+    alternates: getAlternates(input.path, input.locale),
     robots: override?.noIndex
       ? { index: false, follow: false }
       : { index: true, follow: true },

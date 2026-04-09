@@ -60,7 +60,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
     .slice(0, 5);
 
   return (
-    <div className="flex flex-col gap-5 pb-8 sm:gap-8">
+    <div className="flex flex-col gap-5 pb-3 sm:gap-8 sm:pb-4">
       {/* Hero section with background image */}
       <section className="relative overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-lime-950/10 sm:rounded-[2rem]">
         <Image
@@ -76,7 +76,30 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
 
         <div className="relative p-5 sm:p-8 lg:p-12">
           <h1 className="max-w-2xl text-2xl font-semibold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
-            {dict.home.title}
+            {dict.home.title}{" "}
+            <span className="ml-1 inline-flex h-[0.6em] w-[0.85em] translate-y-[-0.05em] overflow-hidden rounded-[2px] border border-white/20 align-middle shadow-sm shadow-black/30">
+              <svg viewBox="0 0 20 14" className="h-full w-full">
+                <rect width="20" height="14" fill="#fff" />
+                <rect x="8.5" y="0" width="3" height="14" fill="#65A30D" />
+                <rect x="0" y="5.5" width="20" height="3" fill="#65A30D" />
+                <rect x="2.5" y="1.5" width="1.2" height="1.2" fill="#84CC16" />
+                <rect x="5" y="1.5" width="1.2" height="1.2" fill="#84CC16" />
+                <rect x="2.5" y="3.5" width="1.2" height="1.2" fill="#84CC16" />
+                <rect x="5" y="3.5" width="1.2" height="1.2" fill="#84CC16" />
+                <rect x="13.5" y="1.5" width="1.2" height="1.2" fill="#84CC16" />
+                <rect x="16" y="1.5" width="1.2" height="1.2" fill="#84CC16" />
+                <rect x="13.5" y="3.5" width="1.2" height="1.2" fill="#84CC16" />
+                <rect x="16" y="3.5" width="1.2" height="1.2" fill="#84CC16" />
+                <rect x="2.5" y="9.5" width="1.2" height="1.2" fill="#84CC16" />
+                <rect x="5" y="9.5" width="1.2" height="1.2" fill="#84CC16" />
+                <rect x="2.5" y="11.5" width="1.2" height="1.2" fill="#84CC16" />
+                <rect x="5" y="11.5" width="1.2" height="1.2" fill="#84CC16" />
+                <rect x="13.5" y="9.5" width="1.2" height="1.2" fill="#84CC16" />
+                <rect x="16" y="9.5" width="1.2" height="1.2" fill="#84CC16" />
+                <rect x="13.5" y="11.5" width="1.2" height="1.2" fill="#84CC16" />
+                <rect x="16" y="11.5" width="1.2" height="1.2" fill="#84CC16" />
+              </svg>
+            </span>
           </h1>
           <p className="mt-3 inline-flex max-w-fit items-center rounded-full border border-lime-400/25 bg-lime-400/10 px-3 py-1 text-xs font-medium text-lime-200 sm:text-sm">
             🔒 {dict.home.privacyHeadline}
@@ -87,9 +110,10 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
           <div className="mt-5 flex flex-col gap-2.5 sm:mt-8 sm:flex-row sm:gap-3">
             <Link
               href={getLocalizedPath(typedLocale, "/forum")}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-lime-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-lime-400/20 transition hover:bg-lime-300 sm:text-base"
+              className="relative inline-flex items-center justify-center gap-2 rounded-full bg-lime-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-lime-400/20 transition hover:bg-lime-300 sm:text-base"
             >
-              {dict.home.primaryCta}
+              <span className="animate-breathe pointer-events-none absolute inset-0 rounded-full bg-lime-400/40" />
+              <span className="relative">{dict.home.primaryCta}</span>
             </Link>
             <Link
               href={getLocalizedPath(typedLocale, "/diaries")}
@@ -244,7 +268,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
 
       {/* Diary promo (smaller section) */}
       <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-r from-lime-950/30 to-slate-950/50 p-5 sm:rounded-[2rem] sm:p-8">
-        <CannabisLeaf className="pointer-events-none absolute -right-6 top-1/2 h-32 w-32 -translate-y-1/2 rotate-[20deg] text-lime-400/[0.06] sm:h-44 sm:w-44" />
+        <CannabisLeaf className="animate-float pointer-events-none absolute -right-6 top-1/2 h-32 w-32 -translate-y-1/2 rotate-[20deg] text-lime-400/[0.06] sm:h-44 sm:w-44" />
         <div className="relative flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 text-xs text-lime-300 sm:text-sm">
@@ -319,7 +343,9 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
     <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-2.5 text-center backdrop-blur-sm sm:rounded-3xl sm:p-5 sm:text-left">
-      <p className="text-base font-semibold text-white sm:text-3xl">{value}</p>
+      <p className="animate-shimmer bg-gradient-to-r from-white via-lime-200 to-white bg-clip-text text-base font-semibold text-transparent sm:text-3xl">
+        {value}
+      </p>
       <p className="mt-1 text-[9px] leading-tight text-slate-300 sm:mt-2 sm:text-sm sm:leading-normal">
         {label}
       </p>
