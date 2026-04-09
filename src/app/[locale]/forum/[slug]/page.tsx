@@ -72,7 +72,7 @@ export default async function ForumTopicPage({ params }: PageProps) {
   const typedLocale = locale as Locale;
   const { dict } = getLocalizedContent(typedLocale);
   const [topic, sessionUser] = await Promise.all([
-    getForumTopicBySlug(slug),
+    getForumTopicBySlug(slug, typedLocale),
     getServerSessionUser(),
   ]);
 
@@ -109,6 +109,11 @@ export default async function ForumTopicPage({ params }: PageProps) {
               <h1 className="text-xl font-semibold text-white sm:text-3xl lg:text-4xl">
                 {topic.title}
               </h1>
+              {topic.isTranslated ? (
+                <span className="mt-1 inline-flex rounded-full border border-lime-400/35 bg-lime-400/10 px-2 py-0.5 text-[10px] text-lime-300 sm:text-xs">
+                  Translated
+                </span>
+              ) : null}
               <p className="mt-1 text-xs text-slate-400 sm:mt-2 sm:text-sm">
                 {topic.description}
               </p>
@@ -161,6 +166,11 @@ export default async function ForumTopicPage({ params }: PageProps) {
                     <h3 className="line-clamp-1 text-sm font-semibold text-white sm:text-lg">
                       {thread.title}
                     </h3>
+                    {thread.isTranslated ? (
+                      <span className="inline-flex rounded-full border border-lime-400/35 bg-lime-400/10 px-1.5 py-0.5 text-[10px] text-lime-300">
+                        Translated
+                      </span>
+                    ) : null}
                   </div>
                   <div className="mt-1.5 flex items-center gap-2 text-[10px] text-slate-400 sm:mt-2 sm:text-sm">
                     <UserAvatar
@@ -190,6 +200,11 @@ export default async function ForumTopicPage({ params }: PageProps) {
               {thread.body ? (
                 <p className="mt-3 text-xs leading-relaxed text-slate-300 sm:text-sm">
                   {thread.body}
+                  {thread.bodyTranslated ? (
+                    <span className="ml-2 inline-flex rounded-full border border-lime-400/35 bg-lime-400/10 px-1.5 py-0.5 text-[10px] text-lime-300">
+                      Translated
+                    </span>
+                  ) : null}
                 </p>
               ) : null}
 
@@ -206,6 +221,11 @@ export default async function ForumTopicPage({ params }: PageProps) {
                         <p className="text-[10px] text-slate-500 sm:text-xs">@{comment.author}</p>
                       </div>
                       <p className="mt-1 text-xs text-slate-300 sm:text-sm">{comment.body}</p>
+                      {comment.isTranslated ? (
+                        <span className="mt-1 inline-flex rounded-full border border-lime-400/35 bg-lime-400/10 px-1.5 py-0.5 text-[10px] text-lime-300">
+                          Translated
+                        </span>
+                      ) : null}
                     </div>
                   ))}
                 </div>

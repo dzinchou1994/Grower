@@ -2,6 +2,7 @@ import { formatDistanceToNow } from "date-fns";
 import { db } from "@/lib/db";
 import { getDeterministicAvatarImage } from "@/lib/avatar-options";
 import { calculateXp, getLevelForXp } from "@/lib/leveling";
+import { autoTranslateText } from "@/lib/auto-translate";
 import {
   diaries,
   forumTopics,
@@ -9,22 +10,28 @@ import {
   type ForumTopic,
   type ForumThread,
 } from "@/lib/mock-data";
+import type { Locale } from "@/lib/i18n";
 
 export type ForumComment = {
   id: string;
   author: string;
   authorImage?: string;
   body: string;
+  isTranslated?: boolean;
   createdAt: string;
 };
 
 export type ForumThreadRecord = ForumThread & {
   authorImage?: string;
   body?: string;
+  isTranslated?: boolean;
+  bodyTranslated?: boolean;
   comments: ForumComment[];
 };
 
 export type ForumTopicRecord = Omit<ForumTopic, "threads"> & {
+  isTranslated?: boolean;
+  descriptionTranslated?: boolean;
   threads: ForumThreadRecord[];
 };
 
@@ -187,6 +194,54 @@ function mapThreadRecord(thread: any): ForumThreadRecord {
   };
 }
 
+async function translateForumTopicRecord(
+  topic: ForumTopicRecord,
+  locale?: Locale,
+): Promise<ForumTopicRecord> {
+  if (!locale) return topic;
+
+  const [titleRes, descRes, translatedThreads] = await Promise.all([
+    autoTranslateText(topic.title, locale),
+    autoTranslateText(topic.description ?? "", locale),
+    Promise.all(
+      topic.threads.map(async (thread) => {
+        const [threadTitle, threadBody, translatedComments] = await Promise.all([
+          autoTranslateText(thread.title, locale),
+          autoTranslateText(thread.body ?? "", locale),
+          Promise.all(
+            thread.comments.map(async (comment) => {
+              const translatedCommentBody = await autoTranslateText(comment.body, locale);
+              return {
+                ...comment,
+                body: translatedCommentBody.text,
+                isTranslated: translatedCommentBody.translated,
+              };
+            }),
+          ),
+        ]);
+
+        return {
+          ...thread,
+          title: threadTitle.text,
+          isTranslated: threadTitle.translated,
+          body: threadBody.text,
+          bodyTranslated: threadBody.translated,
+          comments: translatedComments,
+        } satisfies ForumThreadRecord;
+      }),
+    ),
+  ]);
+
+  return {
+    ...topic,
+    title: titleRes.text,
+    description: descRes.text,
+    isTranslated: titleRes.translated,
+    descriptionTranslated: descRes.translated,
+    threads: translatedThreads,
+  };
+}
+
 function topicMatchesQuery(topic: ForumTopicRecord, query: string) {
   const q = query.toLowerCase();
   return (
@@ -203,7 +258,7 @@ function filterThreadByQuery(thread: ForumThreadRecord, query: string) {
   );
 }
 
-async function listForumTopicsFromDatabase(query?: string) {
+async function listForumTopicsFromDatabase(query?: string, locale?: Locale) {
   await ensureForumSeedData();
 
   const topics = await db.forumTopic.findMany({
@@ -234,12 +289,16 @@ async function listForumTopicsFromDatabase(query?: string) {
     threads: topic.threads.map(mapThreadRecord),
   }));
 
+  const translatedMapped = await Promise.all(
+    mapped.map((topic) => translateForumTopicRecord(topic, locale)),
+  );
+
   if (!query?.trim()) {
-    return mapped;
+    return translatedMapped;
   }
 
   const q = query.trim();
-  return mapped
+  return translatedMapped
     .map((topic) => {
       if (topicMatchesQuery(topic, q)) {
         return topic;
@@ -250,7 +309,7 @@ async function listForumTopicsFromDatabase(query?: string) {
     .filter((topic) => topic.threads.length > 0);
 }
 
-async function getForumTopicBySlugFromDatabase(slug: string) {
+async function getForumTopicBySlugFromDatabase(slug: string, locale?: Locale) {
   await ensureForumSeedData();
 
   const topic = await db.forumTopic.findUnique({
@@ -277,13 +336,15 @@ async function getForumTopicBySlugFromDatabase(slug: string) {
     return null;
   }
 
-  return {
+  const mappedTopic = {
     slug: topic.slug,
     title: topic.title,
     description: topic.description ?? "",
     icon: topicIconBySlug.get(topic.slug) ?? "💬",
     threads: topic.threads.map(mapThreadRecord),
   } satisfies ForumTopicRecord;
+
+  return translateForumTopicRecord(mappedTopic, locale);
 }
 
 async function upsertForumUser(author: string) {
@@ -484,17 +545,23 @@ function addCommentInMemory(input: {
   return null;
 }
 
-export async function listForumTopics(query?: string): Promise<ForumTopicRecord[]> {
+export async function listForumTopics(
+  query?: string,
+  locale?: Locale,
+): Promise<ForumTopicRecord[]> {
   if (hasDatabase) {
-    return listForumTopicsFromDatabase(query);
+    return listForumTopicsFromDatabase(query, locale);
   }
 
   return listForumTopicsFromMemory(query);
 }
 
-export async function getForumTopicBySlug(slug: string): Promise<ForumTopicRecord | null> {
+export async function getForumTopicBySlug(
+  slug: string,
+  locale?: Locale,
+): Promise<ForumTopicRecord | null> {
   if (hasDatabase) {
-    return getForumTopicBySlugFromDatabase(slug);
+    return getForumTopicBySlugFromDatabase(slug, locale);
   }
 
   return getForumTopicBySlugFromMemory(slug);

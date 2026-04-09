@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CannapediaExplorer } from "@/components/cannapedia-explorer";
 import { CannabisLeaf } from "@/components/icons";
 import {
   getCannapediaCategories,
   listCannapediaArticles,
 } from "@/lib/cannapedia-data";
 import {
-  getLocalizedPath,
   isValidLocale,
   type Locale,
 } from "@/lib/i18n";
@@ -27,6 +26,12 @@ function cannapediaCopy(locale: Locale) {
       badge: "Cannapedia",
       read: "წაკითხვა",
       min: "წთ",
+      allCategories: "ყველა",
+      searchPlaceholder: "ძებნა თემის, საკვანძო სიტყვის ან პრობლემის მიხედვით...",
+      searchHint: "მაგ: თესლი, ვეგეტაცია, ყვავილობა, შენახვა, trim, curing",
+      noCategoryResults: "ამ კატეგორიაში სტატია ჯერ არ არის.",
+      noSearchResults: "ამ ძიებაზე ვერაფერი მოიძებნა. სცადე სხვა საკვანძო სიტყვა.",
+      suggestionsTitle: "რეკომენდებული",
     };
   }
 
@@ -38,6 +43,12 @@ function cannapediaCopy(locale: Locale) {
       badge: "Cannapedia",
       read: "Читать",
       min: "мин",
+      allCategories: "Все",
+      searchPlaceholder: "Поиск по теме, ключевому слову или проблеме...",
+      searchHint: "Например: семена, вега, цветение, хранение, trim, curing",
+      noCategoryResults: "В этой категории пока нет статей.",
+      noSearchResults: "По этому запросу ничего не найдено. Попробуйте другое слово.",
+      suggestionsTitle: "Подсказки",
     };
   }
 
@@ -48,6 +59,12 @@ function cannapediaCopy(locale: Locale) {
     badge: "Cannapedia",
     read: "Read article",
     min: "min",
+    allCategories: "All",
+    searchPlaceholder: "Search by topic, keyword, or problem...",
+    searchHint: "Example: seed, vegetative, flowering, storage, trim, curing",
+    noCategoryResults: "No articles in this category yet.",
+    noSearchResults: "No matches for this search. Try another keyword.",
+    suggestionsTitle: "Suggestions",
   };
 }
 
@@ -83,9 +100,6 @@ export default async function CannapediaPage({ params, searchParams }: PageProps
     listCannapediaArticles(false),
   ]);
   const activeCategorySlug = category?.trim().toLowerCase() || "";
-  const visibleArticles = activeCategorySlug
-    ? articles.filter((article) => article.category.slug === activeCategorySlug)
-    : articles;
 
   return (
     <div className="flex flex-col gap-5 pb-8 sm:gap-8">
@@ -105,61 +119,22 @@ export default async function CannapediaPage({ params, searchParams }: PageProps
         </div>
       </section>
 
-      <section className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-5 sm:gap-4">
-        <Link
-          href={getLocalizedPath(typedLocale, "/cannapedia")}
-          className={`rounded-2xl border p-4 text-slate-200 transition sm:rounded-3xl sm:p-5 ${
-            !activeCategorySlug
-              ? "border-lime-400/40 bg-lime-400/10 text-lime-200"
-              : "border-white/10 bg-slate-950/60 hover:border-lime-400/30"
-          }`}
-        >
-          <p className="text-xl">📚</p>
-          <p className="mt-1 text-sm font-medium sm:text-base">ყველა</p>
-        </Link>
-        {categories.map((category) => (
-          <Link
-            key={category.slug}
-            href={getLocalizedPath(typedLocale, `/cannapedia?category=${category.slug}`)}
-            className={`rounded-2xl border p-4 text-slate-200 transition sm:rounded-3xl sm:p-5 ${
-              activeCategorySlug === category.slug
-                ? "border-lime-400/40 bg-lime-400/10 text-lime-200"
-                : "border-white/10 bg-slate-950/60 hover:border-lime-400/30"
-            }`}
-          >
-            <p className="text-xl">{category.icon}</p>
-            <p className="mt-1 text-sm font-medium sm:text-base">{category.name}</p>
-          </Link>
-        ))}
-      </section>
-
-      <section className="grid gap-3 sm:gap-4">
-        {visibleArticles.map((article) => (
-          <Link
-            key={article.slug}
-            href={getLocalizedPath(typedLocale, `/cannapedia/${article.slug}`)}
-            className="rounded-2xl border border-white/10 bg-slate-950/65 p-4 transition hover:border-lime-400/30 hover:bg-slate-900 sm:rounded-3xl sm:p-5"
-          >
-            <div className="flex items-start justify-between gap-3">
-              <h2 className="text-base font-semibold text-white sm:text-xl">
-                {article.title[typedLocale]}
-              </h2>
-              <span className="shrink-0 rounded-full border border-white/10 px-2 py-1 text-[11px] text-slate-300">
-                {article.readMinutes} {copy.min}
-              </span>
-            </div>
-            <p className="mt-2 text-xs leading-relaxed text-slate-400 sm:text-sm sm:leading-6">
-              {article.excerpt[typedLocale]}
-            </p>
-            <p className="mt-3 text-xs font-medium text-lime-300 sm:text-sm">{copy.read} →</p>
-          </Link>
-        ))}
-        {visibleArticles.length === 0 ? (
-          <div className="rounded-2xl border border-white/10 bg-slate-950/65 p-5 text-sm text-slate-300 sm:rounded-3xl sm:p-6">
-            ამ კატეგორიაში სტატია ჯერ არ არის.
-          </div>
-        ) : null}
-      </section>
+      <CannapediaExplorer
+        locale={typedLocale}
+        categories={categories}
+        articles={articles}
+        activeCategorySlug={activeCategorySlug}
+        copy={{
+          read: copy.read,
+          min: copy.min,
+          allCategories: copy.allCategories,
+          searchPlaceholder: copy.searchPlaceholder,
+          searchHint: copy.searchHint,
+          noCategoryResults: copy.noCategoryResults,
+          noSearchResults: copy.noSearchResults,
+          suggestionsTitle: copy.suggestionsTitle,
+        }}
+      />
     </div>
   );
 }

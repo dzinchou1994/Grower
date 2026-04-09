@@ -47,7 +47,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
   const typedLocale = locale as Locale;
   const { dict } = getLocalizedContent(typedLocale);
   const [forumTopicList, stats, topUsers] = await Promise.all([
-    listForumTopics(),
+    listForumTopics(undefined, typedLocale),
     getForumStats(),
     getTopUsers(10),
   ]);

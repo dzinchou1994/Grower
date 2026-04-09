@@ -7,6 +7,8 @@ export type CannapediaArticle = {
     | "basics"
     | "nutrition"
     | "seedling"
+    | "vegetative"
+    | "flowering"
     | "harvest"
     | "post-harvest";
   readMinutes: number;
@@ -16,7 +18,14 @@ export type CannapediaArticle = {
 };
 
 type CannapediaCategorySeed = {
-  slug: "basics" | "nutrition" | "seedling" | "harvest" | "post-harvest";
+  slug:
+    | "basics"
+    | "nutrition"
+    | "seedling"
+    | "vegetative"
+    | "flowering"
+    | "harvest"
+    | "post-harvest";
   icon: string;
   name: Record<Locale, string>;
 };
@@ -50,6 +59,24 @@ export const cannapediaCategories: CannapediaCategorySeed[] = [
       ka: "თესლი და სტარტი",
       en: "Seedling Start",
       ru: "Семена и старт",
+    },
+  },
+  {
+    slug: "vegetative",
+    icon: "🌿",
+    name: {
+      ka: "ვეგეტაცია",
+      en: "Vegetative Stage",
+      ru: "Вегетация",
+    },
+  },
+  {
+    slug: "flowering",
+    icon: "🌸",
+    name: {
+      ka: "ყვავილობა",
+      en: "Flowering",
+      ru: "Цветение",
     },
   },
   {
@@ -198,6 +225,70 @@ export const cannapediaArticles: CannapediaArticle[] = [
         "На позднем цвете ориентируйтесь на цвет трихом: от прозрачных к мутным и янтарным.",
         "После харвеста медленная сушка при 18-21C и умеренной влажности лучше сохраняет качество.",
         "Кюринг минимум 2-4 недели заметно улучшает аромат и мягкость.",
+      ],
+    },
+  },
+  {
+    slug: "vegetative-stage-rhythm",
+    category: "vegetative",
+    readMinutes: 7,
+    title: {
+      ka: "ვეგეტაცია: სწორი რიტმი ზრდისთვის",
+      en: "Vegetative Stage: Rhythm for Strong Growth",
+      ru: "Вегетация: правильный ритм для сильного роста",
+    },
+    excerpt: {
+      ka: "სინათლის ციკლი, მორწყვა, კვება და ვარჯიში ვეგეტაციის ფაზაში.",
+      en: "Light cycle, watering, feeding, and training in vegetative phase.",
+      ru: "Световой цикл, полив, питание и тренировки на стадии веги.",
+    },
+    content: {
+      ka: [
+        "ვეგეტაციაში სტაბილური რეჟიმი ყველაზე მნიშვნელოვანია: განათება, ტემპერატურა და მორწყვა იყოს თანმიმდევრული.",
+        "კვება გაზარდე ნელა და მცენარის რეაქციას დააკვირდი. სწრაფი ცვლილება ხშირად სტრესს იწვევს.",
+        "LST და მსუბუქი canopy მართვა ამ ეტაპზე ეხმარება თანაბარ ზრდას და მომავალში უკეთეს ყვავილობას.",
+      ],
+      en: [
+        "Consistency is key in veg: keep light, temperature, and watering patterns stable.",
+        "Increase nutrients gradually and observe plant response before each adjustment.",
+        "LST and gentle canopy shaping in veg improve structure for better flowering later.",
+      ],
+      ru: [
+        "На веге важна стабильность: свет, температура и полив должны быть ровными.",
+        "Повышайте питание постепенно и смотрите на реакцию растения перед следующими изменениями.",
+        "LST и мягкая работа с кроной на веге дают более сильную структуру к цветению.",
+      ],
+    },
+  },
+  {
+    slug: "flowering-weekly-checkpoints",
+    category: "flowering",
+    readMinutes: 8,
+    title: {
+      ka: "ყვავილობა: კვირეული საკონტროლო პუნქტები",
+      en: "Flowering: Weekly Checkpoints",
+      ru: "Цветение: недельные контрольные точки",
+    },
+    excerpt: {
+      ka: "როგორ აკონტროლო stretch, კვება და bud development ყვავილობის კვირებში.",
+      en: "How to manage stretch, feeding, and bud development week by week.",
+      ru: "Как контролировать stretch, питание и развитие шишек по неделям.",
+    },
+    content: {
+      ka: [
+        "ყვავილობის პირველ კვირებში stretch ნორმალურია; სიმაღლის კონტროლი და სინათლის დისტანცია აკონტროლე ყოველდღე.",
+        "კვების ბალანსი ნელა გადაიტანე ყვავილობის პროფილზე და არ გააკეთო მკვეთრი ნახტომები დოზაში.",
+        "კვირაში ერთხელ დეტალურად შეამოწმე ყვავილები, ფოთლები და გარემო, რომ პრობლემა ადრე დაიჭირო.",
+      ],
+      en: [
+        "Early flower stretch is expected; monitor canopy height and light distance daily.",
+        "Transition feeding gradually into bloom profile without abrupt dosage spikes.",
+        "Run a weekly deep check on buds, leaves, and environment to catch issues early.",
+      ],
+      ru: [
+        "В первые недели цветения stretch нормален; ежедневно контролируйте высоту и дистанцию до света.",
+        "Плавно переводите питание в режим цветения без резких скачков дозировок.",
+        "Делайте еженедельную проверку шишек, листьев и среды, чтобы рано замечать проблемы.",
       ],
     },
   },

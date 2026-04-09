@@ -50,7 +50,7 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
   const typedLocale = locale as Locale;
   const { dict } = getLocalizedContent(typedLocale);
   const [forumTopicList, sessionUser] = await Promise.all([
-    listForumTopics(q),
+    listForumTopics(q, typedLocale),
     getServerSessionUser(),
   ]);
 
@@ -115,9 +115,16 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
               </span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-start justify-between gap-3">
-                  <h2 className="text-lg font-semibold text-white sm:text-2xl">
-                    {topic.title}
-                  </h2>
+                  <div>
+                    <h2 className="text-lg font-semibold text-white sm:text-2xl">
+                      {topic.title}
+                    </h2>
+                    {topic.isTranslated ? (
+                      <span className="mt-1 inline-flex rounded-full border border-lime-400/35 bg-lime-400/10 px-2 py-0.5 text-[10px] text-lime-300">
+                        Translated
+                      </span>
+                    ) : null}
+                  </div>
                   <span className="shrink-0 rounded-full bg-white/6 px-3 py-1 text-[10px] text-slate-300 sm:text-xs">
                     {topic.threads.length} {dict.forum.threads}
                   </span>
@@ -141,6 +148,11 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
                       size="sm"
                     />
                     <span className="line-clamp-1 font-medium text-white">{thread.title}</span>
+                    {thread.isTranslated ? (
+                      <span className="rounded-full border border-lime-400/35 bg-lime-400/10 px-1.5 py-0.5 text-[10px] text-lime-300">
+                        Translated
+                      </span>
+                    ) : null}
                   </span>
                   <span className="shrink-0 text-xs">
                     {thread.replies} {dict.forum.replies}
