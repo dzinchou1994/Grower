@@ -81,9 +81,9 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
         />
         <div className="absolute inset-0 bg-gradient-to-br from-[#08111f]/[0.97] via-[#08111f]/90 to-[#08111f]/70" />
 
-        <div className="relative flex flex-col gap-6 p-6 sm:p-10 lg:p-14">
+        <div className="relative flex flex-col gap-3 p-4 sm:gap-4 sm:p-6 lg:p-7">
           {/* Status pill */}
-          <span className="inline-flex w-fit items-center gap-2 rounded-full border border-lime-400/20 bg-lime-400/[0.08] px-3.5 py-1.5 text-[11px] font-medium text-lime-300 backdrop-blur-sm sm:text-xs">
+          <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-lime-400/20 bg-lime-400/[0.08] px-2.5 py-1 text-[10px] font-medium text-lime-300 backdrop-blur-sm sm:text-[11px]">
             <svg
               className="h-3.5 w-3.5"
               viewBox="0 0 24 24"
@@ -99,32 +99,32 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
           </span>
 
           {/* Headline */}
-          <h1 className="max-w-xl text-[1.65rem] font-bold leading-[1.15] tracking-tight text-white sm:text-4xl lg:max-w-2xl lg:text-5xl">
+          <h1 className="max-w-xl text-[1.3rem] font-bold leading-[1.14] tracking-tight text-white sm:text-[1.85rem] lg:max-w-2xl lg:text-[2.25rem]">
             {dict.home.title}
           </h1>
 
           {/* Description */}
-          <p className="max-w-lg text-[13px] leading-relaxed text-slate-400 sm:max-w-xl sm:text-[15px] sm:leading-7">
+          <p className="max-w-md text-[11px] leading-relaxed text-slate-400 sm:max-w-lg sm:text-[13px] sm:leading-6">
             {dict.home.description}
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-3">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             <Link
               href={getLocalizedPath(typedLocale, "/forum")}
-              className="inline-flex items-center justify-center rounded-xl bg-lime-400 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-lime-300 sm:text-[15px]"
+              className="inline-flex items-center justify-center rounded-lg bg-lime-400 px-3.5 py-1.5 text-[12px] font-semibold text-slate-950 transition hover:bg-lime-300 sm:px-4 sm:py-2 sm:text-sm"
             >
               {dict.home.primaryCta}
             </Link>
             <Link
               href={getLocalizedPath(typedLocale, "/diaries")}
-              className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] px-5 py-2.5 text-sm font-medium text-slate-200 transition hover:bg-white/[0.08] sm:text-[15px]"
+              className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[12px] font-medium text-slate-200 transition hover:bg-white/[0.08] sm:px-4 sm:py-2 sm:text-sm"
             >
               {dict.home.secondaryCta}
             </Link>
             <Link
               href={getLocalizedPath(typedLocale, "/cannapedia")}
-              className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] px-5 py-2.5 text-sm font-medium text-slate-200 transition hover:border-lime-400/20 hover:bg-white/[0.08] hover:text-lime-200 sm:text-[15px]"
+              className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[12px] font-medium text-slate-200 transition hover:border-lime-400/20 hover:bg-white/[0.08] hover:text-lime-200 sm:px-4 sm:py-2 sm:text-sm"
             >
               {dict.home.tertiaryCta}
             </Link>
@@ -140,7 +140,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
           href={getLocalizedPath(typedLocale, "/manifesto")}
           className="group relative block"
         >
-          <div className="relative flex flex-col gap-3 p-4 sm:gap-4 sm:p-5">
+          <div className="relative flex flex-col gap-2.5 p-3 sm:gap-3 sm:p-4">
             <div className="flex items-center gap-2">
               <span className="inline-flex h-6 items-center gap-1.5 rounded-full border border-lime-400/20 bg-lime-400/10 px-2.5 text-[10px] font-semibold uppercase tracking-wide text-lime-300">
                 <svg
@@ -160,15 +160,15 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
               </span>
             </div>
             <div className="max-w-2xl">
-              <h2 className="text-base font-semibold leading-snug text-white sm:text-xl">
+              <h2 className="text-[15px] font-semibold leading-snug text-white sm:text-lg">
                 {dict.home.manifesto.headline}
               </h2>
-              <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-slate-400 sm:text-sm sm:leading-6">
+              <p className="mt-1.5 line-clamp-2 text-[11px] leading-relaxed text-slate-400 sm:text-[13px] sm:leading-5">
                 {dict.home.manifesto.text}
               </p>
             </div>
             <div>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-slate-200 transition group-hover:bg-lime-400/15 group-hover:text-lime-200">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.06] px-2.5 py-1 text-[11px] font-medium text-slate-200 transition group-hover:bg-lime-400/15 group-hover:text-lime-200 sm:text-xs">
                 {dict.home.manifesto.cta}
                 <svg className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
               </span>
