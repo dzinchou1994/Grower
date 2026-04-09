@@ -45,6 +45,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/cannapedia",
     "/manifesto",
     "/resources",
+    "/contact",
+    "/feedback",
   ];
 
   const localizedStatic = locales.flatMap((locale) =>

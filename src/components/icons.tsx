@@ -27,3 +27,24 @@ export function CannabisLeafOutline({ className = "h-6 w-6" }: { className?: str
     </svg>
   );
 }
+
+export function BookOpenIcon({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <path d="M3.5 5.5A2.5 2.5 0 0 1 6 3h6.5v15H6a2.5 2.5 0 0 0-2.5 2.5V5.5Z" />
+      <path d="M20.5 5.5A2.5 2.5 0 0 0 18 3h-6.5v15H18a2.5 2.5 0 0 1 2.5 2.5V5.5Z" />
+      <path d="M12 6h4" />
+      <path d="M12 9h4" />
+    </svg>
+  );
+}

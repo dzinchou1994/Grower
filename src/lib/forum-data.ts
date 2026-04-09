@@ -81,6 +81,9 @@ function createInitialState(): ForumState {
       threads: topic.threads.map((thread) => ({
         ...thread,
         body: "",
+        upvotes: 0,
+        downvotes: 0,
+        userVote: 0,
         comments: [],
       })),
     })),

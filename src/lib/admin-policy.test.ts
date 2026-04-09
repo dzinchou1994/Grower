@@ -21,6 +21,7 @@ describe("admin policy matrix", () => {
       "moderation",
       "content",
       "cannapedia",
+      "feedback",
       "seo",
       "users",
       "analytics",

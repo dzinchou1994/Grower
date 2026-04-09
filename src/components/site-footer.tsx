@@ -9,6 +9,8 @@ export function SiteFooter() {
 
   const resourcesLabel =
     locale === "ka" ? "რესურსები" : locale === "ru" ? "Ресурсы" : "Resources";
+  const feedbackLabel =
+    locale === "ka" ? "ფიდბექი" : locale === "ru" ? "Фидбек" : "Feedback";
   const resourcesHint =
     locale === "ka"
       ? "გარე წყაროები"
@@ -23,6 +25,13 @@ export function SiteFooter() {
           <div id="top-ge-counter-container" data-site-id="118645" />
         </div>
         <p className="text-[10px] text-slate-600/80">
+          <Link
+            href={`/${locale}/feedback`}
+            className="rounded-full border border-white/10 px-2 py-0.5 text-slate-500 transition hover:border-lime-400/25 hover:text-lime-300"
+          >
+            {feedbackLabel}
+          </Link>
+          {" · "}
           <Link
             href={`/${locale}/resources`}
             className="text-slate-500 transition hover:text-slate-300"

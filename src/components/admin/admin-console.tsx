@@ -10,6 +10,7 @@ type TabId =
   | "moderation"
   | "content"
   | "cannapedia"
+  | "feedback"
   | "seo"
   | "users"
   | "analytics"
@@ -22,6 +23,7 @@ export function AdminConsole({ role }: AdminConsoleProps) {
         { id: "moderation", label: "Moderation" },
         { id: "content", label: "Content" },
         ...(role === "ADMIN" ? [{ id: "cannapedia", label: "Cannapedia" }] : []),
+        ...(role === "ADMIN" ? [{ id: "feedback", label: "Feedback" }] : []),
         ...(role === "ADMIN" ? [{ id: "seo", label: "SEO" }] : []),
         ...(role === "ADMIN" ? [{ id: "users", label: "Users" }] : []),
         ...(role === "ADMIN" ? [{ id: "analytics", label: "Analytics" }] : []),
@@ -54,6 +56,7 @@ export function AdminConsole({ role }: AdminConsoleProps) {
       {activeTab === "moderation" ? <ModerationPanel isAdmin={role === "ADMIN"} /> : null}
       {activeTab === "content" ? <ContentPanel isAdmin={role === "ADMIN"} /> : null}
       {activeTab === "cannapedia" && role === "ADMIN" ? <CannapediaPanel /> : null}
+      {activeTab === "feedback" && role === "ADMIN" ? <FeedbackPanel /> : null}
       {activeTab === "seo" && role === "ADMIN" ? <SeoPanel /> : null}
       {activeTab === "users" && role === "ADMIN" ? <UsersPanel /> : null}
       {activeTab === "analytics" && role === "ADMIN" ? <AnalyticsPanel /> : null}
@@ -908,6 +911,123 @@ function CannapediaPanel() {
                 className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-100"
               >
                 Edit article
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function FeedbackPanel() {
+  const [items, setItems] = useState<any[]>([]);
+  const [status, setStatus] = useState<"ALL" | "NEW" | "REVIEWED" | "PLANNED" | "CLOSED">("ALL");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function loadFeedback() {
+    setLoading(true);
+    setError(null);
+    try {
+      const query = status === "ALL" ? "" : `?status=${status}`;
+      const response = await fetch(`/api/admin/feedback${query}`);
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) {
+        setError(payload?.error ?? "Could not load feedback.");
+        return;
+      }
+      setItems(payload.feedback ?? []);
+    } catch {
+      setError("Network error.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function updateStatus(feedbackId: string, nextStatus: "NEW" | "REVIEWED" | "PLANNED" | "CLOSED") {
+    const response = await fetch("/api/admin/feedback", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ feedbackId, status: nextStatus }),
+    });
+    if (!response.ok) {
+      const payload = await response.json().catch(() => null);
+      setError(payload?.error ?? "Could not update feedback.");
+      return;
+    }
+    await loadFeedback();
+  }
+
+  return (
+    <div className="mt-6">
+      <div className="flex flex-wrap items-center gap-2">
+        <select
+          value={status}
+          onChange={(event) => setStatus(event.target.value as typeof status)}
+          className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
+        >
+          <option value="ALL">All</option>
+          <option value="NEW">NEW</option>
+          <option value="REVIEWED">REVIEWED</option>
+          <option value="PLANNED">PLANNED</option>
+          <option value="CLOSED">CLOSED</option>
+        </select>
+        <button
+          type="button"
+          onClick={loadFeedback}
+          className="rounded-full bg-lime-400 px-4 py-2 text-sm font-semibold text-slate-950"
+        >
+          {loading ? "Loading..." : "Load Feedback"}
+        </button>
+      </div>
+
+      {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
+
+      <div className="mt-4 grid gap-3">
+        {items.map((entry) => (
+          <div key={entry.id} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-sm font-medium text-white">
+                {entry.name || entry.user?.username || "Anonymous"} · {new Date(entry.createdAt).toLocaleString()}
+              </p>
+              <span className="rounded-full bg-white/10 px-2 py-1 text-xs text-slate-300">
+                {entry.status}
+              </span>
+            </div>
+            <p className="mt-1 text-xs text-slate-400">
+              Site {entry.siteRating}/5 · Content {entry.contentRating}/5 · Speed {entry.performanceRating}/5
+            </p>
+            <p className="mt-3 text-sm text-slate-200">
+              <span className="text-slate-400">Add:</span> {entry.whatToAdd}
+            </p>
+            {entry.whatToImprove ? (
+              <p className="mt-1 text-sm text-slate-300">
+                <span className="text-slate-500">Improve:</span> {entry.whatToImprove}
+              </p>
+            ) : null}
+
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => updateStatus(entry.id, "REVIEWED")}
+                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-100"
+              >
+                Review
+              </button>
+              <button
+                type="button"
+                onClick={() => updateStatus(entry.id, "PLANNED")}
+                className="rounded-full border border-lime-400/30 bg-lime-400/10 px-3 py-1 text-xs text-lime-200"
+              >
+                Plan
+              </button>
+              <button
+                type="button"
+                onClick={() => updateStatus(entry.id, "CLOSED")}
+                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300"
+              >
+                Close
               </button>
             </div>
           </div>

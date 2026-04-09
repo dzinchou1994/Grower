@@ -69,6 +69,7 @@ export function SiteHeader({
             loggingOut: "Logging out...",
             closeMenu: "Close menu",
           };
+  const brandSubtitle = dict.home.badge;
 
   async function handleLogout() {
     setIsLoggingOut(true);
@@ -135,7 +136,9 @@ export function SiteHeader({
                 </svg>
               </span>
             </div>
-            <p className="text-[8px] tracking-wider text-slate-500">Georgia Cannabis Club</p>
+            <p className="max-w-[180px] text-[7px] leading-tight tracking-wide text-slate-500">
+              {brandSubtitle}
+            </p>
           </div>
         </Link>
 

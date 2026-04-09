@@ -7,7 +7,7 @@ import {
   type Locale,
 } from "@/lib/i18n";
 import { getForumStats, getTopUsers, listForumTopics } from "@/lib/forum-data";
-import { CannabisLeaf, CannabisLeafOutline } from "@/components/icons";
+import { BookOpenIcon, CannabisLeaf, CannabisLeafOutline } from "@/components/icons";
 import { UserAvatar } from "@/components/user-avatar";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -74,10 +74,6 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
         <div className="absolute inset-0 bg-gradient-to-t from-[#08111f]/90 via-transparent to-[#08111f]/40" />
 
         <div className="relative p-5 sm:p-8 lg:p-12">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-lime-400/25 bg-lime-400/10 px-3 py-1 text-xs font-medium text-lime-300 backdrop-blur-sm sm:mb-6">
-            <CannabisLeaf className="h-3.5 w-3.5" />
-            {dict.home.badge}
-          </div>
           <h1 className="max-w-2xl text-2xl font-semibold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
             {dict.home.title}
           </h1>
@@ -100,6 +96,13 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
             >
               <CannabisLeafOutline className="h-4 w-4 text-lime-300" />
               {dict.home.secondaryCta}
+            </Link>
+            <Link
+              href={getLocalizedPath(typedLocale, "/cannapedia")}
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-lime-400/30 bg-lime-400/10 px-5 py-3 text-sm font-semibold text-lime-200 transition hover:bg-lime-400/20 sm:text-base"
+            >
+              <BookOpenIcon className="h-4 w-4" />
+              {dict.home.tertiaryCta}
             </Link>
           </div>
 

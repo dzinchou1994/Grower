@@ -54,6 +54,8 @@ export default async function ResourcesPage({ params }: Props) {
           sourceText:
             "დამატებითი ინფორმაციისთვის შეგიძლიათ ეწვიოთ პარტნიორ პლატფორმას.",
           sourceCta: "გადასვლა kama.bz-ზე",
+          sourceCta2: "გადასვლა geoeskort.com-ზე",
+          partnerCta: "გახდი ჩვენი პარტნიორი",
           back: "მთავარზე დაბრუნება",
         }
       : typedLocale === "ru"
@@ -66,6 +68,8 @@ export default async function ResourcesPage({ params }: Props) {
             sourceText:
               "Для дополнительной информации вы можете посетить партнерскую платформу.",
             sourceCta: "Перейти на kama.bz",
+            sourceCta2: "Перейти на geoeskort.com",
+            partnerCta: "Стать нашим партнером",
             back: "Назад на главную",
           }
         : {
@@ -77,6 +81,8 @@ export default async function ResourcesPage({ params }: Props) {
             sourceText:
               "For additional information you can visit the partner platform.",
             sourceCta: "Open kama.bz",
+            sourceCta2: "Open geoeskort.com",
+            partnerCta: "Become our partner",
             back: "Back to home",
           };
 
@@ -102,14 +108,30 @@ export default async function ResourcesPage({ params }: Props) {
         <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-5">
           <p className="text-sm font-medium text-white">{copy.sourceTitle}</p>
           <p className="mt-1 text-xs text-slate-400 sm:text-sm">{copy.sourceText}</p>
-          <a
-            href="https://kama.bz"
-            target="_blank"
-            rel="sponsored noopener noreferrer"
-            className="mt-3 inline-flex rounded-full border border-lime-400/30 px-3 py-1.5 text-xs font-medium text-lime-300 transition hover:bg-lime-400/10"
-          >
-            {copy.sourceCta}
-          </a>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <a
+              href="https://kama.bz"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              className="inline-flex rounded-full border border-lime-400/30 px-3 py-1.5 text-xs font-medium text-lime-300 transition hover:bg-lime-400/10"
+            >
+              {copy.sourceCta}
+            </a>
+            <a
+              href="https://geoeskort.com"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              className="inline-flex rounded-full border border-lime-400/30 px-3 py-1.5 text-xs font-medium text-lime-300 transition hover:bg-lime-400/10"
+            >
+              {copy.sourceCta2}
+            </a>
+            <Link
+              href={getLocalizedPath(typedLocale, "/contact")}
+              className="inline-flex rounded-full border border-white/20 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-white/10"
+            >
+              {copy.partnerCta}
+            </Link>
+          </div>
         </div>
       </section>
     </div>

@@ -34,8 +34,9 @@ const translations = {
       privacyHeadline: "100% ანონიმურობა გარანტირებულია",
       description:
         "Grower არის ქართული კანაფის საზოგადოების პლატფორმა სადაც შეგიძლია დასვა კითხვები, მიიღო პასუხები, ისაუბრო კანონმდებლობაზე, მოყვანაზე და სხვა თემებზე.",
-      primaryCta: "ფორუმის გახსნა",
+      primaryCta: "დისკუსიების ნახვა",
       secondaryCta: "დღიურების ნახვა",
+      tertiaryCta: "კანაპედია",
       topUsers: "Top 10 გროვერი",
       topUsersTitle: "აქტიური წევრების რეიტინგი",
       xpLabel: "XP",
@@ -201,8 +202,9 @@ const translations = {
       privacyHeadline: "100% anonymity guaranteed",
       description:
         "Grower is a Georgian cannabis community platform where you can ask questions, get answers, discuss legislation, growing and other topics.",
-      primaryCta: "Open Forum",
-      secondaryCta: "View Diaries",
+      primaryCta: "Explore discussions",
+      secondaryCta: "View diaries",
+      tertiaryCta: "Cannapedia",
       topUsers: "Top 10 users",
       topUsersTitle: "Activity leaderboard",
       xpLabel: "XP",
@@ -368,8 +370,9 @@ const translations = {
       privacyHeadline: "100% анонимность гарантирована",
       description:
         "Grower - платформа грузинского каннабис-сообщества, где можно задавать вопросы, получать ответы, обсуждать законодательство, выращивание и другие темы.",
-      primaryCta: "Открыть форум",
+      primaryCta: "Смотреть обсуждения",
       secondaryCta: "Смотреть дневники",
+      tertiaryCta: "Каннапедия",
       topUsers: "Топ 10 пользователей",
       topUsersTitle: "Рейтинг активности",
       xpLabel: "XP",
