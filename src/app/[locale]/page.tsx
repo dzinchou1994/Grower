@@ -49,7 +49,6 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
 
   const typedLocale = locale as Locale;
   const { dict } = getLocalizedContent(typedLocale);
-  const manifestoBadgeLabel = dict.home.manifesto.badge.replace(/^🟢\s*/, "");
   const [forumTopicList, topUsers] = await Promise.all([
     listForumTopics(undefined, typedLocale),
     getTopUsers(10),
@@ -141,24 +140,6 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
           className="group relative block"
         >
           <div className="relative flex flex-col gap-2.5 p-3 sm:gap-3 sm:p-4">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex h-6 items-center gap-1.5 rounded-full border border-lime-400/20 bg-lime-400/10 px-2.5 text-[10px] font-semibold uppercase tracking-wide text-lime-300">
-                <svg
-                  className="h-3 w-3"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  aria-hidden="true"
-                >
-                  <circle cx="12" cy="6.5" r="1.8" />
-                  <circle cx="6.5" cy="15.5" r="1.8" />
-                  <circle cx="17.5" cy="15.5" r="1.8" />
-                  <path d="M12 8.5v3M8 14h8" />
-                </svg>
-                {manifestoBadgeLabel}
-              </span>
-            </div>
             <div className="max-w-2xl">
               <h2 className="text-[15px] font-semibold leading-snug text-white sm:text-lg">
                 {dict.home.manifesto.headline}
@@ -223,7 +204,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
         </div>
 
         {/* Latest threads */}
-        <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-white/6 p-5 sm:rounded-[2rem] sm:p-6">
+        <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-slate-950/55 p-5 sm:rounded-[2rem] sm:p-6">
           <div className="flex items-start justify-between gap-3 sm:items-center">
             <div>
               <p className="text-xs text-slate-400 sm:text-sm">{dict.home.latestThreads}</p>
