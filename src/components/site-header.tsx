@@ -7,23 +7,33 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { UserAvatar } from "@/components/user-avatar";
 import type { SessionUser } from "@/lib/auth-session";
-import {
-  getDictionary,
-  getLocalizedPath,
-  locales,
-  type Locale,
-} from "@/lib/i18n";
+import { getLocalizedPath, locales, type Locale } from "@/lib/i18n-routing";
+
+type SiteHeaderDictionary = {
+  nav: {
+    home: string;
+    forum: string;
+    cannapedia: string;
+    news: string;
+    diaries: string;
+  };
+  home: {
+    badge: string;
+  };
+};
 
 export function SiteHeader({
   locale,
   initialUser,
+  dictionary,
 }: {
   locale: Locale;
   initialUser: SessionUser | null;
+  dictionary: SiteHeaderDictionary;
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const dict = getDictionary(locale);
+  const dict = dictionary;
   const homePath = getLocalizedPath(locale);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [portalReady, setPortalReady] = useState(false);
@@ -166,8 +176,8 @@ export function SiteHeader({
           className="group flex items-center gap-2"
         >
           <Image
-            src="/leafwell-logo.png"
-            alt="Leafwell logo"
+            src="/logo.svg"
+            alt="Grower logo"
             width={36}
             height={36}
             sizes="36px"

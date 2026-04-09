@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { getAlternates, getLocalizedPath, isValidLocale, type Locale } from "@/lib/i18n";
 import { getNewsBySlug, listNewsSlugs } from "@/lib/news-data";
 
+const newsFallbackImageSrc = "/news/community-workshop.svg";
+
 type PageProps = {
   params: Promise<{ locale: string; slug: string }>;
 };
@@ -59,9 +61,9 @@ export default async function NewsArticlePage({ params }: PageProps) {
           ← {backLabel}
         </Link>
 
-        {(article.imageUrl ?? "/images/hero-cannabis.avif").startsWith("/") ? (
+        {(article.imageUrl ?? newsFallbackImageSrc).startsWith("/") ? (
           <Image
-            src={article.imageUrl ?? "/images/hero-cannabis.avif"}
+            src={article.imageUrl ?? newsFallbackImageSrc}
             alt={article.title[typedLocale]}
             width={1200}
             height={720}
@@ -72,7 +74,7 @@ export default async function NewsArticlePage({ params }: PageProps) {
         ) : (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={article.imageUrl ?? "/images/hero-cannabis.avif"}
+            src={article.imageUrl ?? newsFallbackImageSrc}
             alt={article.title[typedLocale]}
             width={1200}
             height={720}

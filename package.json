@@ -5,13 +5,17 @@
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
+    "analyze": "ANALYZE=true next build",
     "start": "next start",
     "postinstall": "prisma generate",
     "lint": "eslint",
     "test": "vitest run",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:seed:forum": "tsx scripts/seed-forum.ts",
+    "perf:baseline": "npm run build && node scripts/perf/collect-build-stats.mjs",
+    "perf:budget": "npm run build && node scripts/perf/check-bundle-budget.mjs"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
@@ -31,6 +35,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^16.2.3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -38,6 +43,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.2",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5",
     "vitest": "^4.1.3"
   }

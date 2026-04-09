@@ -14,6 +14,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPageMetadataWithSeo } from "@/lib/seo-settings";
 
+const homeHeroImageSrc = "/images/hero-cannabis.avif";
+
 type LocalizedPageProps = {
   params: Promise<{ locale: string }>;
 };
@@ -60,57 +62,52 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
 
   return (
     <div className="flex flex-col gap-5 pb-3 sm:gap-8 sm:pb-4">
-      {/* Hero section with background image */}
-      <section className="relative overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-lime-950/10 sm:rounded-[2rem]">
+      {/* Hero */}
+      <section className="relative overflow-hidden rounded-2xl border border-white/[0.06] sm:rounded-[2rem]">
         <Image
-          src="/images/hero-cannabis.avif"
+          src={homeHeroImageSrc}
           alt="Cannabis plant"
           fill
           priority
-          quality={72}
+          quality={58}
           className="object-cover"
           sizes="(max-width: 1280px) 100vw, 1280px"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#08111f]/95 via-[#08111f]/85 to-[#08111f]/60" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#08111f]/90 via-transparent to-[#08111f]/40" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#08111f]/[0.97] via-[#08111f]/90 to-[#08111f]/70" />
 
-        <div className="relative p-5 sm:p-8 lg:p-12">
-          <h1 className="max-w-2xl text-2xl font-semibold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
-            {dict.home.title}{" "}
-            <span className="ml-1 inline-flex h-[0.8em] w-[0.8em] translate-y-[-0.05em] overflow-hidden rounded-[4px] border border-white/20 align-middle shadow-sm shadow-black/30">
-              <Image
-                src="/brand/logo-1923818.png"
-                alt="Grower logo"
-                width={24}
-                height={24}
-                sizes="24px"
-                className="h-full w-full object-cover"
-              />
-            </span>
-          </h1>
-          <p className="mt-3 inline-flex max-w-fit items-center rounded-full border border-lime-400/25 bg-lime-400/10 px-3 py-1 text-xs font-medium text-lime-200 sm:text-sm">
+        <div className="relative flex flex-col gap-6 p-6 sm:p-10 lg:p-14">
+          {/* Status pill */}
+          <span className="inline-flex w-fit items-center gap-2 rounded-full border border-lime-400/20 bg-lime-400/[0.08] px-3.5 py-1.5 text-[11px] font-medium text-lime-300 backdrop-blur-sm sm:text-xs">
             🔒 {dict.home.privacyHeadline}
-          </p>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-200/80 sm:mt-4 sm:text-base sm:leading-7">
+          </span>
+
+          {/* Headline */}
+          <h1 className="max-w-xl text-[1.65rem] font-bold leading-[1.15] tracking-tight text-white sm:text-4xl lg:max-w-2xl lg:text-5xl">
+            {dict.home.title}
+          </h1>
+
+          {/* Description */}
+          <p className="max-w-lg text-[13px] leading-relaxed text-slate-400 sm:max-w-xl sm:text-[15px] sm:leading-7">
             {dict.home.description}
           </p>
-          <div className="mt-5 flex flex-col gap-2.5 sm:mt-8 sm:flex-row sm:gap-3">
+
+          {/* CTAs */}
+          <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-3">
             <Link
               href={getLocalizedPath(typedLocale, "/forum")}
-              className="relative inline-flex items-center justify-center gap-2 rounded-full bg-lime-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-lime-400/20 transition hover:bg-lime-300 sm:text-base"
+              className="inline-flex items-center justify-center rounded-xl bg-lime-400 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-lime-300 sm:text-[15px]"
             >
-              <span className="animate-breathe pointer-events-none absolute inset-0 rounded-full bg-lime-400/40" />
-              <span className="relative">{dict.home.primaryCta}</span>
+              {dict.home.primaryCta}
             </Link>
             <Link
               href={getLocalizedPath(typedLocale, "/diaries")}
-              className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/10 sm:text-base"
+              className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] px-5 py-2.5 text-sm font-medium text-slate-200 transition hover:bg-white/[0.08] sm:text-[15px]"
             >
               {dict.home.secondaryCta}
             </Link>
             <Link
               href={getLocalizedPath(typedLocale, "/cannapedia")}
-              className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white/90 backdrop-blur-sm transition hover:border-lime-400/30 hover:bg-white/10 hover:text-lime-200 sm:text-base"
+              className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] px-5 py-2.5 text-sm font-medium text-slate-200 transition hover:border-lime-400/20 hover:bg-white/[0.08] hover:text-lime-200 sm:text-[15px]"
             >
               {dict.home.tertiaryCta}
             </Link>
@@ -119,32 +116,33 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
       </section>
 
       {/* Manifesto / law awareness banner */}
-      <section className="defer-render relative overflow-hidden rounded-2xl border border-lime-400/15 bg-gradient-to-br from-lime-950/40 via-slate-950/60 to-slate-950/80 sm:rounded-[2rem]">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(132,204,22,0.06),transparent_60%)]" />
+      <section className="defer-render relative overflow-hidden rounded-2xl border border-white/[0.06] sm:rounded-[2rem]">
+        <div className="absolute inset-0 bg-gradient-to-r from-lime-950/50 via-slate-950/80 to-slate-950/90" />
+        <div className="absolute -left-20 -top-20 h-56 w-56 rounded-full bg-lime-400/[0.07] blur-3xl" />
         <Link
           href={getLocalizedPath(typedLocale, "/manifesto")}
-          className="group relative block transition hover:bg-white/[0.02]"
+          className="group relative block"
         >
-          <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:gap-6 sm:p-8">
-            <div className="flex min-w-0 items-start gap-3 sm:flex-1 sm:gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-lime-400/10 text-2xl sm:h-14 sm:w-14 sm:text-3xl">
-                ⚖️
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-[11px] font-medium uppercase tracking-wider text-lime-400/80 sm:text-xs">
-                  {dict.home.manifesto.badge}
-                </p>
-                <h2 className="mt-1 text-base font-semibold leading-snug text-white sm:text-xl">
-                  {dict.home.manifesto.headline}
-                </h2>
-                <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-slate-300/80 sm:text-sm sm:leading-6">
-                  {dict.home.manifesto.text}
-                </p>
-              </div>
+          <div className="relative flex flex-col gap-5 p-5 sm:p-8">
+            <div className="flex items-center gap-2.5">
+              <span className="inline-flex h-7 items-center gap-1.5 rounded-full border border-lime-400/20 bg-lime-400/10 px-3 text-[11px] font-semibold uppercase tracking-widest text-lime-300">
+                {dict.home.manifesto.badge}
+              </span>
             </div>
-            <span className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full border border-lime-400/30 bg-lime-400/10 px-5 py-2.5 text-sm font-medium text-lime-300 transition group-hover:bg-lime-400/20 sm:py-3">
-              📜 {dict.home.manifesto.cta}
-            </span>
+            <div className="max-w-2xl">
+              <h2 className="text-lg font-semibold leading-snug text-white sm:text-2xl">
+                {dict.home.manifesto.headline}
+              </h2>
+              <p className="mt-2.5 line-clamp-3 text-[13px] leading-relaxed text-slate-400 sm:text-sm sm:leading-7">
+                {dict.home.manifesto.text}
+              </p>
+            </div>
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-4 py-2 text-[13px] font-medium text-slate-200 transition group-hover:bg-lime-400/15 group-hover:text-lime-200">
+                {dict.home.manifesto.cta}
+                <svg className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+              </span>
+            </div>
           </div>
         </Link>
       </section>

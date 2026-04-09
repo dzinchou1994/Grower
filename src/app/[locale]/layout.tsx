@@ -54,6 +54,11 @@ export default async function LocaleLayout({
     notFound();
   }
 
+  const dict = getDictionary(locale);
+  const headerDictionary = {
+    nav: dict.nav,
+    home: { badge: dict.home.badge },
+  };
   const sessionUser = await getServerSessionUser();
 
   return (
@@ -72,7 +77,11 @@ export default async function LocaleLayout({
       </div>
       <AgeGate />
       <NavigationFeedback />
-      <SiteHeader locale={locale as Locale} initialUser={sessionUser} />
+      <SiteHeader
+        locale={locale as Locale}
+        initialUser={sessionUser}
+        dictionary={headerDictionary}
+      />
       {/* overflow-x hidden below header to prevent horizontal bleed */}
       <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden">
         <main className="mx-auto flex w-full max-w-7xl flex-col px-4 py-6 sm:px-6 lg:px-8">

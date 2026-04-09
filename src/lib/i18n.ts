@@ -1,12 +1,21 @@
 import type { Metadata } from "next";
 import { diaries, forumTopics, moderationQueue, platformStats } from "@/lib/mock-data";
-
-export const locales = ["ka", "en", "ru"] as const;
-
-export type Locale = (typeof locales)[number];
-
-export const defaultLocale: Locale = "ka";
-export const siteUrl = "https://grower.ge";
+import {
+  defaultLocale,
+  getLocalizedPath,
+  isValidLocale,
+  locales,
+  siteUrl,
+  type Locale,
+} from "@/lib/i18n-routing";
+export {
+  defaultLocale,
+  getLocalizedPath,
+  isValidLocale,
+  locales,
+  siteUrl,
+  type Locale,
+};
 
 const localeNames: Record<Locale, string> = {
   ka: "ქართული",
@@ -48,8 +57,8 @@ const translations = {
       viewAllTopics: "ყველა კატეგორია",
       viewAllThreads: "ყველა თემა",
       diaryPromo: "მოყვანის დღიურები",
-      diaryPromoTitle: "აჩვენე შენი მოყვანა კვირა-კვირა",
-      diaryPromoDescription: "შექმენი დღიური და გააზიარე შენი მცენარის პროგრესი კვირეული განახლებებით და ფოტოებით.",
+      diaryPromoTitle: "აჩვენე შენი გროუ კვირების მიხედვით",
+      diaryPromoDescription: "აწარმოე დღიური და გააზიარე შენი მცენარის პროგრესი კვირეული განახლებებით და ფოტოებით.",
       startDiary: "დაიწყე დღიური",
       manifesto: {
         badge: "🟢 რატომ ვართ აქ",
@@ -527,20 +536,12 @@ const translations = {
   },
 } as const;
 
-export function isValidLocale(value: string): value is Locale {
-  return locales.includes(value as Locale);
-}
-
 export function getDictionary(locale: Locale) {
   return translations[locale];
 }
 
 export function getLocaleName(locale: Locale) {
   return localeNames[locale];
-}
-
-export function getLocalizedPath(locale: Locale, path = "") {
-  return `/${locale}${path}`;
 }
 
 export function getAlternates(path = "", canonicalLocale: Locale = defaultLocale): Metadata["alternates"] {

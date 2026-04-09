@@ -7,6 +7,8 @@ import { getServerSessionUser } from "@/lib/auth-session";
 import { listPublishedNews, type NewsScope } from "@/lib/news-data";
 import { getAlternates, getLocalizedPath, isValidLocale, type Locale } from "@/lib/i18n";
 
+const newsFallbackImageSrc = "/news/community-workshop.svg";
+
 type PageProps = {
   params: Promise<{ locale: string }>;
   searchParams: Promise<{ scope?: string }>;
@@ -119,9 +121,9 @@ export default async function NewsPage({ params, searchParams }: PageProps) {
               className="rounded-2xl border border-white/10 bg-white/4 p-4 transition hover:border-lime-400/30 hover:bg-white/8 sm:rounded-3xl sm:p-5"
             >
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
-                {(article.imageUrl ?? "/images/hero-cannabis.avif").startsWith("/") ? (
+                {(article.imageUrl ?? newsFallbackImageSrc).startsWith("/") ? (
                   <Image
-                    src={article.imageUrl ?? "/images/hero-cannabis.avif"}
+                    src={article.imageUrl ?? newsFallbackImageSrc}
                     alt={article.title[typedLocale]}
                     width={160}
                     height={96}
@@ -132,7 +134,7 @@ export default async function NewsPage({ params, searchParams }: PageProps) {
                 ) : (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={article.imageUrl ?? "/images/hero-cannabis.avif"}
+                    src={article.imageUrl ?? newsFallbackImageSrc}
                     alt={article.title[typedLocale]}
                     width={160}
                     height={96}

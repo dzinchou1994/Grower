@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import { getLocalizedPath, type Locale } from "@/lib/i18n-routing";
 
 type CategoryItem = {
   slug: string;

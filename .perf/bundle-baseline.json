@@ -1,0 +1,108 @@
+{
+  "generatedAt": "2026-04-09T15:03:07.024Z",
+  "totalBytes": 845118,
+  "initialBytes": 568420,
+  "chunkCount": 24,
+  "largestChunks": [
+    {
+      "file": "0.~2ky53fo~10.js",
+      "bytes": 226355,
+      "initial": true
+    },
+    {
+      "file": "0e-wrhqh4h3r5.js",
+      "bytes": 140798,
+      "initial": true
+    },
+    {
+      "file": "03~yq9q893hmn.js",
+      "bytes": 112594,
+      "initial": true
+    },
+    {
+      "file": "0d3shmwh5_nmn.js",
+      "bytes": 54646,
+      "initial": false
+    },
+    {
+      "file": "0v4fyxf96.vhq.js",
+      "bytes": 51648,
+      "initial": false
+    },
+    {
+      "file": "0pqt~8bl3ukh4.js",
+      "bytes": 44414,
+      "initial": true
+    },
+    {
+      "file": "0d0u77e8~n2ki.js",
+      "bytes": 36993,
+      "initial": false
+    },
+    {
+      "file": "0wam~s8s.fo9f.js",
+      "bytes": 33679,
+      "initial": true
+    },
+    {
+      "file": "0_~-.tlyqbwve.js",
+      "bytes": 28242,
+      "initial": false
+    },
+    {
+      "file": "0_21y7euvi2m7.js",
+      "bytes": 24499,
+      "initial": false
+    },
+    {
+      "file": "0~om.-ml1traz.js",
+      "bytes": 17031,
+      "initial": false
+    },
+    {
+      "file": "turbopack-00e4gcj~8h-.e.js",
+      "bytes": 10580,
+      "initial": true
+    },
+    {
+      "file": "04ybvlfd8kt.-.js",
+      "bytes": 10273,
+      "initial": false
+    },
+    {
+      "file": "0wbg_xngec7g6.js",
+      "bytes": 9250,
+      "initial": false
+    },
+    {
+      "file": "07r5mihes8358.js",
+      "bytes": 9008,
+      "initial": false
+    },
+    {
+      "file": "0nhiaozeigrzp.js",
+      "bytes": 7582,
+      "initial": false
+    },
+    {
+      "file": "0ilnhaz~q7~ts.js",
+      "bytes": 6490,
+      "initial": false
+    },
+    {
+      "file": "0v4wfonxepyxh.js",
+      "bytes": 5550,
+      "initial": false
+    },
+    {
+      "file": "07id4e99_86p9.js",
+      "bytes": 4507,
+      "initial": false
+    },
+    {
+      "file": "01xlw8hd842-c.js",
+      "bytes": 3377,
+      "initial": false
+    }
+  ]
+}

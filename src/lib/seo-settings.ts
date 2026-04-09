@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { unstable_cache } from "next/cache";
 import { db } from "@/lib/db";
 import { getAlternates, type Locale } from "@/lib/i18n";
 
@@ -20,7 +21,7 @@ declare global {
   var __seoSettingsUnavailable: boolean | undefined;
 }
 
-async function getSeoOverride(page: SeoPage, locale: Locale): Promise<SeoOverride | null> {
+async function getSeoOverrideUncached(page: SeoPage, locale: Locale): Promise<SeoOverride | null> {
   if (!hasDatabase || global.__seoSettingsUnavailable) {
     return null;
   }
@@ -59,6 +60,19 @@ async function getSeoOverride(page: SeoPage, locale: Locale): Promise<SeoOverrid
     global.__seoSettingsUnavailable = true;
     return null;
   }
+}
+
+const getSeoOverrideCached = unstable_cache(
+  async (page: SeoPage, locale: Locale) => getSeoOverrideUncached(page, locale),
+  ["seo-overrides"],
+  {
+    revalidate: 300,
+    tags: ["seo-overrides"],
+  },
+);
+
+async function getSeoOverride(page: SeoPage, locale: Locale): Promise<SeoOverride | null> {
+  return getSeoOverrideCached(page, locale);
 }
 
 export async function getPageMetadataWithSeo(input: {
