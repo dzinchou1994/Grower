@@ -719,8 +719,8 @@ function CannapediaPanel() {
     const icon = window.prompt("Icon", category.icon) ?? category.icon;
     const slug = window.prompt("Slug", category.slug) ?? category.slug;
     const sortOrder = window.prompt("Sort order", String(category.sortOrder ?? 0));
-    const reason = window.prompt("Reason for edit (audit)") ?? "";
-    if (!reason.trim()) return;
+    const reasonInput = window.prompt("Reason for edit (audit, optional)") ?? "";
+    const reason = reasonInput.trim() || "Updated Cannapedia category";
 
     const response = await fetch("/api/admin/cannapedia", {
       method: "PATCH",
@@ -813,8 +813,8 @@ function CannapediaPanel() {
       String(article.isPublished);
     const slug = window.prompt("Slug", article.slug) ?? article.slug;
     const readMinutes = window.prompt("Read minutes", String(article.readMinutes ?? 6));
-    const reason = window.prompt("Reason for edit (audit)") ?? "";
-    if (!reason.trim()) return;
+    const reasonInput = window.prompt("Reason for edit (audit, optional)") ?? "";
+    const reason = reasonInput.trim() || "Updated Cannapedia article";
 
     const response = await fetch("/api/admin/cannapedia", {
       method: "PATCH",
