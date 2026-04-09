@@ -10,7 +10,6 @@ import {
   type Locale,
 } from "@/lib/i18n";
 import { listForumTopics } from "@/lib/forum-data";
-import { CannabisLeaf } from "@/components/icons";
 import { getPageMetadataWithSeo } from "@/lib/seo-settings";
 
 type PageProps = {
@@ -74,10 +73,16 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
   return (
     <div className="flex flex-col gap-6">
       <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/6 p-5 sm:rounded-[2rem] sm:p-8">
-        <CannabisLeaf className="pointer-events-none absolute -right-6 -top-6 h-40 w-40 rotate-12 text-lime-400/[0.04] sm:h-56 sm:w-56" />
         <div className="relative">
           <div className="inline-flex items-center gap-2 text-xs text-lime-300 sm:text-sm">
-            <CannabisLeaf className="h-4 w-4" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo.svg"
+              alt="Grower Georgia flag logo"
+              width={16}
+              height={16}
+              className="h-4 w-4 shrink-0"
+            />
             {dict.forum.badge}
           </div>
           <h1 className="mt-2 text-xl font-semibold text-white sm:text-3xl lg:text-4xl">
