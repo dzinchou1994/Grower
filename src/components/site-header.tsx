@@ -146,11 +146,11 @@ export function SiteHeader({
           </div>
           <div className="hidden min-[400px]:block">
             <div className="flex items-center gap-1.5">
-              <p className="text-[13px] font-bold tracking-[0.1em] text-white">
+              <p className="text-[13px] font-bold tracking-[0.1em] text-white transition-colors duration-200 group-hover:text-lime-200">
                 GROWER.GE
               </p>
-              <span className="flex h-2.5 w-3.5 overflow-hidden rounded-[1.5px] shadow-sm shadow-black/30">
-                <svg viewBox="0 0 20 14" className="h-full w-full">
+              <span className="flex h-2.5 w-3.5 overflow-hidden rounded-[1.5px] shadow-sm shadow-black/30 transition-all duration-200 group-hover:shadow-lime-500/30">
+                <svg viewBox="0 0 20 14" className="h-full w-full transition-transform duration-200 group-hover:scale-105">
                   <rect width="20" height="14" fill="#fff" />
                   <rect x="8.5" y="0" width="3" height="14" fill="#E8112D" />
                   <rect x="0" y="5.5" width="20" height="3" fill="#E8112D" />
@@ -173,7 +173,7 @@ export function SiteHeader({
                 </svg>
               </span>
             </div>
-            <p className="max-w-[180px] text-[7px] leading-tight tracking-wide text-slate-500">
+            <p className="max-w-[180px] text-[7px] leading-tight tracking-wide text-slate-500 transition-colors duration-200 group-hover:text-slate-300">
               {brandSubtitle}
             </p>
           </div>
@@ -297,7 +297,7 @@ export function SiteHeader({
           {initialUser ? (
             <Link
               href={getLocalizedPath(locale, "/account")}
-              className="relative z-20 inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[11px] text-slate-100"
+              className="relative z-20 inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[11px] text-slate-100 transition-all duration-200 hover:-translate-y-0.5 hover:border-lime-400/30 hover:bg-white/10 hover:text-white hover:shadow-sm hover:shadow-lime-500/20"
             >
               <UserAvatar
                 username={initialUser.username}

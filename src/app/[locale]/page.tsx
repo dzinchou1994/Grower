@@ -7,7 +7,7 @@ import {
   type Locale,
 } from "@/lib/i18n";
 import { getForumStats, getTopUsers, listForumTopics } from "@/lib/forum-data";
-import { BookOpenIcon, CannabisLeaf, CannabisLeafOutline } from "@/components/icons";
+import { CannabisLeaf, CannabisLeafOutline } from "@/components/icons";
 import { UserAvatar } from "@/components/user-avatar";
 import { getUsernameAccentClassByXp } from "@/lib/leveling";
 import type { Metadata } from "next";
@@ -93,16 +93,14 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
             </Link>
             <Link
               href={getLocalizedPath(typedLocale, "/diaries")}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/10 sm:text-base"
+              className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/10 sm:text-base"
             >
-              <CannabisLeafOutline className="h-4 w-4 text-lime-300" />
               {dict.home.secondaryCta}
             </Link>
             <Link
               href={getLocalizedPath(typedLocale, "/cannapedia")}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white/90 backdrop-blur-sm transition hover:border-lime-400/30 hover:bg-white/10 hover:text-lime-200 sm:text-base"
+              className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white/90 backdrop-blur-sm transition hover:border-lime-400/30 hover:bg-white/10 hover:text-lime-200 sm:text-base"
             >
-              <BookOpenIcon className="h-4 w-4" />
               {dict.home.tertiaryCta}
             </Link>
           </div>
