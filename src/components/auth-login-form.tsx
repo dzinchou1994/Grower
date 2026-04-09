@@ -3,7 +3,31 @@
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
-export function AuthLoginForm({ redirectTo }: { redirectTo: string }) {
+type AuthLoginCopy = {
+  emailPlaceholder: string;
+  passwordPlaceholder: string;
+  loginFailed: string;
+  networkError: string;
+  signingIn: string;
+  signIn: string;
+};
+
+const defaultAuthLoginCopy: AuthLoginCopy = {
+  emailPlaceholder: "Email",
+  passwordPlaceholder: "Password",
+  loginFailed: "Login failed.",
+  networkError: "Network error. Try again.",
+  signingIn: "Signing in...",
+  signIn: "Sign in",
+};
+
+export function AuthLoginForm({
+  redirectTo,
+  copy = defaultAuthLoginCopy,
+}: {
+  redirectTo: string;
+  copy?: AuthLoginCopy;
+}) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,14 +52,14 @@ export function AuthLoginForm({ redirectTo }: { redirectTo: string }) {
 
       if (!response.ok) {
         const parsed = await response.json().catch(() => null);
-        setError(parsed?.error ?? "Login failed.");
+        setError(parsed?.error ?? copy.loginFailed);
         return;
       }
 
       router.push(redirectTo);
       router.refresh();
     } catch {
-      setError("Network error. Try again.");
+      setError(copy.networkError);
     } finally {
       setIsSubmitting(false);
     }
@@ -46,14 +70,14 @@ export function AuthLoginForm({ redirectTo }: { redirectTo: string }) {
       <input
         name="email"
         type="email"
-        placeholder="Email"
+        placeholder={copy.emailPlaceholder}
         className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2"
         required
       />
       <input
         name="password"
         type="password"
-        placeholder="Password"
+        placeholder={copy.passwordPlaceholder}
         className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2"
         required
       />
@@ -63,7 +87,7 @@ export function AuthLoginForm({ redirectTo }: { redirectTo: string }) {
         disabled={isSubmitting}
         className="rounded-full bg-lime-400 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-lime-300 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {isSubmitting ? "Signing in..." : "Sign in"}
+        {isSubmitting ? copy.signingIn : copy.signIn}
       </button>
     </form>
   );

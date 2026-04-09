@@ -49,6 +49,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
 
   const typedLocale = locale as Locale;
   const { dict } = getLocalizedContent(typedLocale);
+  const manifestoBadgeLabel = dict.home.manifesto.badge.replace(/^🟢\s*/, "");
   const [forumTopicList, topUsers] = await Promise.all([
     listForumTopics(undefined, typedLocale),
     getTopUsers(10),
@@ -59,6 +60,11 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
       topic.threads.map((thread) => ({ ...thread, topicSlug: topic.slug, topicTitle: topic.title }))
     )
     .slice(0, 5);
+  const buySellTopic = forumTopicList.find((topic) => topic.slug === "buy-sell");
+  const homeForumTopics = [
+    ...forumTopicList.filter((topic) => topic.slug !== "buy-sell").slice(0, 4),
+    ...(buySellTopic ? [buySellTopic] : []),
+  ];
 
   return (
     <div className="flex flex-col gap-5 pb-3 sm:gap-8 sm:pb-4">
@@ -78,7 +84,18 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
         <div className="relative flex flex-col gap-6 p-6 sm:p-10 lg:p-14">
           {/* Status pill */}
           <span className="inline-flex w-fit items-center gap-2 rounded-full border border-lime-400/20 bg-lime-400/[0.08] px-3.5 py-1.5 text-[11px] font-medium text-lime-300 backdrop-blur-sm sm:text-xs">
-            🔒 {dict.home.privacyHeadline}
+            <svg
+              className="h-3.5 w-3.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              aria-hidden="true"
+            >
+              <rect x="5" y="11" width="14" height="9" rx="2" />
+              <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+            </svg>
+            {dict.home.privacyHeadline}
           </span>
 
           {/* Headline */}
@@ -123,22 +140,35 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
           href={getLocalizedPath(typedLocale, "/manifesto")}
           className="group relative block"
         >
-          <div className="relative flex flex-col gap-5 p-5 sm:p-8">
-            <div className="flex items-center gap-2.5">
-              <span className="inline-flex h-7 items-center gap-1.5 rounded-full border border-lime-400/20 bg-lime-400/10 px-3 text-[11px] font-semibold uppercase tracking-widest text-lime-300">
-                {dict.home.manifesto.badge}
+          <div className="relative flex flex-col gap-3 p-4 sm:gap-4 sm:p-5">
+            <div className="flex items-center gap-2">
+              <span className="inline-flex h-6 items-center gap-1.5 rounded-full border border-lime-400/20 bg-lime-400/10 px-2.5 text-[10px] font-semibold uppercase tracking-wide text-lime-300">
+                <svg
+                  className="h-3 w-3"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="6.5" r="1.8" />
+                  <circle cx="6.5" cy="15.5" r="1.8" />
+                  <circle cx="17.5" cy="15.5" r="1.8" />
+                  <path d="M12 8.5v3M8 14h8" />
+                </svg>
+                {manifestoBadgeLabel}
               </span>
             </div>
             <div className="max-w-2xl">
-              <h2 className="text-lg font-semibold leading-snug text-white sm:text-2xl">
+              <h2 className="text-base font-semibold leading-snug text-white sm:text-xl">
                 {dict.home.manifesto.headline}
               </h2>
-              <p className="mt-2.5 line-clamp-3 text-[13px] leading-relaxed text-slate-400 sm:text-sm sm:leading-7">
+              <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-slate-400 sm:text-sm sm:leading-6">
                 {dict.home.manifesto.text}
               </p>
             </div>
             <div>
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-4 py-2 text-[13px] font-medium text-slate-200 transition group-hover:bg-lime-400/15 group-hover:text-lime-200">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-slate-200 transition group-hover:bg-lime-400/15 group-hover:text-lime-200">
                 {dict.home.manifesto.cta}
                 <svg className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
               </span>
@@ -148,9 +178,9 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
       </section>
 
       {/* Forum categories + Latest threads */}
-      <section className="defer-render flex flex-col gap-5 lg:grid lg:grid-cols-[1fr_1fr] lg:gap-6">
+      <section className="defer-render flex flex-col gap-5 lg:grid lg:grid-cols-[1fr_1fr] lg:items-stretch lg:gap-6">
         {/* Forum categories */}
-        <div className="rounded-2xl border border-white/10 bg-slate-950/55 p-5 sm:rounded-[2rem] sm:p-6">
+        <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-slate-950/55 p-5 sm:rounded-[2rem] sm:p-6">
           <div className="flex items-start justify-between gap-3 sm:items-center">
             <div>
               <p className="text-xs text-slate-400 sm:text-sm">{dict.home.forumHighlight}</p>
@@ -166,8 +196,8 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
             </Link>
           </div>
 
-          <div className="mt-5 space-y-3 sm:mt-6 sm:space-y-4">
-            {forumTopicList.slice(0, 4).map((topic) => (
+          <div className="mt-5 flex-1 space-y-3 sm:mt-6 sm:space-y-4">
+            {homeForumTopics.map((topic) => (
               <Link
                 key={topic.slug}
                 href={getLocalizedPath(typedLocale, `/forum/${topic.slug}`)}
@@ -193,7 +223,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
         </div>
 
         {/* Latest threads */}
-        <div className="rounded-2xl border border-white/10 bg-white/6 p-5 sm:rounded-[2rem] sm:p-6">
+        <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-white/6 p-5 sm:rounded-[2rem] sm:p-6">
           <div className="flex items-start justify-between gap-3 sm:items-center">
             <div>
               <p className="text-xs text-slate-400 sm:text-sm">{dict.home.latestThreads}</p>
@@ -209,7 +239,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
             </Link>
           </div>
 
-          <div className="mt-5 space-y-3 sm:mt-6 sm:space-y-4">
+          <div className="mt-5 flex-1 space-y-3 sm:mt-6 sm:space-y-4">
             {allThreads.map((thread) => (
               <Link
                 key={thread.slug}
