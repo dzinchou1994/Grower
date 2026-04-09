@@ -97,15 +97,17 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
             {dict.home.privacyHeadline}
           </span>
 
-          {/* Headline */}
-          <h1 className="max-w-xl text-[1.3rem] font-bold leading-[1.14] tracking-tight text-white sm:text-[1.85rem] lg:max-w-2xl lg:text-[2.25rem]">
-            {dict.home.title}
-          </h1>
+          <div className="w-full max-w-xl lg:max-w-2xl">
+            {/* Headline */}
+            <h1 className="w-full text-[1.3rem] font-bold leading-[1.14] tracking-tight text-white sm:text-[1.85rem] lg:text-[2.25rem]">
+              {dict.home.title}
+            </h1>
 
-          {/* Description */}
-          <p className="max-w-md text-[11px] leading-relaxed text-slate-400 sm:max-w-lg sm:text-[13px] sm:leading-6">
-            {dict.home.description}
-          </p>
+            {/* Description */}
+            <p className="mt-2 w-full text-[13px] leading-relaxed text-slate-300 sm:text-[15px] sm:leading-7 lg:text-[17px]">
+              {dict.home.description}
+            </p>
+          </div>
 
           {/* CTAs */}
           <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
@@ -133,12 +135,31 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
           href={getLocalizedPath(typedLocale, "/manifesto")}
           className="group relative block"
         >
-          <div className="relative flex flex-col gap-2.5 p-3 sm:gap-3 sm:p-4">
-            <div className="max-w-2xl">
-              <h2 className="text-[15px] font-semibold leading-snug text-white sm:text-lg">
-                {dict.home.manifesto.headline}
-              </h2>
-              <p className="mt-1.5 line-clamp-2 text-[11px] leading-relaxed text-slate-400 sm:text-[13px] sm:leading-5">
+          <div className="relative flex flex-col gap-2.5 p-4 sm:gap-3 sm:p-6 lg:p-7">
+            <div className="w-full max-w-xl lg:max-w-2xl">
+              <div className="flex items-start">
+                <h2 className="inline-flex items-center gap-2 text-[15px] font-semibold leading-snug text-white sm:text-lg">
+                  <svg
+                    className="h-[1.05em] w-[1.05em] shrink-0 text-lime-200"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.9}
+                    aria-hidden="true"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h10" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 7 5.8 11.2a1.5 1.5 0 0 0 1.2 2.4h4a1.5 1.5 0 0 0 1.2-2.4L9 7Zm6 0-3.2 4.2a1.5 1.5 0 0 0 1.2 2.4h4a1.5 1.5 0 0 0 1.2-2.4L15 7Z"
+                    />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 20h6" />
+                  </svg>
+                  {dict.home.manifesto.headline}
+                </h2>
+              </div>
+              <p className="mt-1.5 line-clamp-2 text-[11px] leading-relaxed text-slate-400 sm:text-[13px] sm:leading-6">
                 {dict.home.manifesto.text}
               </p>
             </div>

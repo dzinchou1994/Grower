@@ -128,6 +128,12 @@ const threadSeedComments: Record<string, SeedCommentTemplate[]> = {
       minutesAgo: 14,
       upvotes: 4,
     },
+    {
+      author: "nino_grows",
+      body: "ფულის დაზოგვა თუ გინდა, თავიდან ნუ იყიდი ბევრ ბუსტერს. საბაზისო კვება + სტაბილური გარემო სავსებით საკმარისია.",
+      minutesAgo: 8,
+      upvotes: 3,
+    },
   ],
   "auto-vs-photo": [
     {
@@ -161,6 +167,12 @@ const threadSeedComments: Record<string, SeedCommentTemplate[]> = {
       body: "ფესვებიც შეამოწმე - ზედმეტი მორწყვა იგივე სიმპტომს იძლევა. ქოთანი მორწყვის წინ ბოლომდე უნდა გაშრეს.",
       minutesAgo: 11,
       upvotes: 4,
+    },
+    {
+      author: "nino_grows",
+      body: "თუ ბოლო კვებაზე დოზა მკვეთრად გაზარდე, flush-ს ნუ იჩქარებ - ჯერ pH და runoff შეამოწმე, მერე გადაწყვიტე.",
+      minutesAgo: 5,
+      upvotes: 3,
     },
   ],
   "best-led-budget": [
@@ -324,6 +336,12 @@ const threadSeedComments: Record<string, SeedCommentTemplate[]> = {
       minutesAgo: 24,
       upvotes: 4,
     },
+    {
+      author: "nino_grows",
+      body: "ჰაერის შემოსასვლელი პასიური თუა, ჯამური ფართობი გამწოვის დიამეტრზე მეტი უნდა იყოს, რომ ნაკადი არ დაიხრჩოს.",
+      minutesAgo: 10,
+      upvotes: 3,
+    },
   ],
   "diy-grow-tent": [
     {
@@ -380,6 +398,12 @@ const threadSeedComments: Record<string, SeedCommentTemplate[]> = {
       minutesAgo: 18,
       upvotes: 3,
     },
+    {
+      author: "kartveli_green",
+      body: "თუ პროფესიული ასოციაციები პროცესში ჩაერთვებიან, კანონიც და პრაქტიკაც უფრო სწრაფად დალაგდება.",
+      minutesAgo: 9,
+      upvotes: 2,
+    },
   ],
   "led-light-market-tbilisi": [
     {
@@ -421,6 +445,88 @@ const threadSeedComments: Record<string, SeedCommentTemplate[]> = {
       body: "ასეთი თემები კარგია, community-ს vibe-ს ინარჩუნებს. ვინც წერს, მუსიკაც მიაყოლეთ.",
       minutesAgo: 13,
       upvotes: 3,
+    },
+  ],
+  "best-strains-georgia-climate": [
+    {
+      author: "nino_grows",
+      body: "დამწყებისთვის საქართველოში მე heat-tolerant და ოდნავ მოკლე ციკლის ჯიშებს ვურჩევდი, ზაფხულის სტრესს უკეთ უძლებს.",
+      minutesAgo: 57,
+      upvotes: 4,
+    },
+    {
+      author: "seedhunter_ge",
+      body: "მთიან რეგიონში ტემპერატურის რყევა დიდია, ამიტომ სტაბილური გენეტიკა მართლა გადამწყვეტია.",
+      minutesAgo: 22,
+      upvotes: 3,
+    },
+  ],
+  "cbd-medical-reports-2026": [
+    {
+      author: "medina_ka",
+      body: "კარგი იქნებოდა პირველ პოსტში კვლევები თემებად დაალაგო: ძილი, ტკივილი, შფოთვა. ასე კითხვაც მარტივია.",
+      minutesAgo: 63,
+      upvotes: 4,
+    },
+    {
+      author: "growdoc_ge",
+      body: "ვისაც დრო ექნება, short summary-ც დაამატოს თითო კვლევას - ბევრს full paper-ის წაკითხვის დრო არ აქვს.",
+      minutesAgo: 28,
+      upvotes: 3,
+    },
+  ],
+  "real-cbd-cases-georgia": [
+    {
+      author: "kartveli_green",
+      body: "თუ ვინმე რეალურ გამოცდილებას აზიარებს, დოზა და ფორმატი (ზეთი/კაფსულა) ერთად მიუთითოს, თორემ შედარება რთულია.",
+      minutesAgo: 49,
+      upvotes: 4,
+    },
+    {
+      author: "nino_grows",
+      body: "დიახ, და გვერდითი ეფექტებიც აუცილებლად იწეროს. ეგ ინფორმაცია სხვებისთვის ძალიან პრაქტიკულია.",
+      minutesAgo: 17,
+      upvotes: 3,
+    },
+  ],
+  "--nqbq7x": [
+    {
+      author: "seedhunter_ge",
+      body: "ოფიციალურად სანდო წყარო რომ გქონდეს, ქართულ თემებში გამოცდილების პოსტები გადაამოწმე და უხარისხო თესლს ერიდე.",
+      minutesAgo: 44,
+      upvotes: 3,
+    },
+    {
+      author: "kartveli_green",
+      body: "პირველ შეკვეთაზე მცირე რაოდენობით დაიწყე, რომ გენეტიკა და ხარისხი ჯერ დატესტო და მერე გააფართოვო.",
+      minutesAgo: 19,
+      upvotes: 2,
+    },
+    {
+      author: "nino_grows",
+      body: "რევიუების გარდა, ჩანასახების პროცენტიც ჰკითხე გამყიდველს - ეგ ბევრს გეტყვის რა ხარისხს იღებ.",
+      minutesAgo: 8,
+      upvotes: 2,
+    },
+  ],
+  "what-should-new-growers-avoid-legally-3rjzy4": [
+    {
+      author: "lawwatch_ge",
+      body: "Biggest mistake is assuming old forum advice is still valid. Always verify latest local law updates before acting.",
+      minutesAgo: 37,
+      upvotes: 4,
+    },
+    {
+      author: "casewatch",
+      body: "Avoid sharing identifiable details publicly. Even harmless context can expose you if combined across posts.",
+      minutesAgo: 15,
+      upvotes: 3,
+    },
+    {
+      author: "medina_ka",
+      body: "Keep discussions educational and safety-focused. When in doubt, check official legal sources first.",
+      minutesAgo: 6,
+      upvotes: 2,
     },
   ],
 };
@@ -582,6 +688,33 @@ function normalizeUsername(name: string) {
     .slice(0, 28);
 }
 
+async function seedCommentsForThread(threadId: string, threadSlug: string) {
+  const seedComments = threadSeedComments[threadSlug] ?? [];
+  for (const seedComment of seedComments) {
+    const commentUser = await upsertForumUser(seedComment.author);
+    const existingComment = await db.forumComment.findFirst({
+      where: {
+        threadId,
+        authorId: commentUser.id,
+        body: seedComment.body,
+      },
+      select: { id: true },
+    });
+    if (existingComment) {
+      continue;
+    }
+
+    await db.forumComment.create({
+      data: {
+        threadId,
+        authorId: commentUser.id,
+        body: seedComment.body,
+        createdAt: new Date(Date.now() - seedComment.minutesAgo * 60_000),
+      },
+    });
+  }
+}
+
 async function ensureForumSeedData() {
   if (!hasDatabase) {
     return;
@@ -625,32 +758,17 @@ async function ensureForumSeedData() {
               isPinned: sourceThread.isPinned ?? false,
             },
           });
-
-          const seedComments = threadSeedComments[sourceThread.slug] ?? [];
-          for (const seedComment of seedComments) {
-            const commentUser = await upsertForumUser(seedComment.author);
-            const existingComment = await db.forumComment.findFirst({
-              where: {
-                threadId: thread.id,
-                authorId: commentUser.id,
-                body: seedComment.body,
-              },
-              select: { id: true },
-            });
-            if (existingComment) {
-              continue;
-            }
-
-            await db.forumComment.create({
-              data: {
-                threadId: thread.id,
-                authorId: commentUser.id,
-                body: seedComment.body,
-                createdAt: new Date(Date.now() - seedComment.minutesAgo * 60_000),
-              },
-            });
-          }
+          await seedCommentsForThread(thread.id, sourceThread.slug);
         }
+      }
+
+      // Also seed comments for existing DB threads not present in static topic/thread fixtures.
+      const additionalSeedableThreads = await db.forumThread.findMany({
+        where: { slug: { in: Object.keys(threadSeedComments) } },
+        select: { id: true, slug: true },
+      });
+      for (const thread of additionalSeedableThreads) {
+        await seedCommentsForThread(thread.id, thread.slug);
       }
     })();
   }
