@@ -7,31 +7,97 @@ async function getDynamicSlugs() {
   if (!process.env.DATABASE_URL) {
     return {
       diarySlugs: mockDiaries.map((entry) => entry.slug),
-      forumSlugs: mockForumTopics.map((entry) => entry.slug),
+      diaryWeeks: mockDiaries.flatMap((entry) =>
+        entry.weeks.map((week) => ({
+          diarySlug: entry.slug,
+          weekNumber: week.weekNumber,
+        })),
+      ),
+      forumTopicSlugs: mockForumTopics.map((entry) => entry.slug),
+      forumThreads: mockForumTopics.flatMap((entry) =>
+        entry.threads.map((thread) => ({
+          topicSlug: entry.slug,
+          threadSlug: thread.slug,
+        })),
+      ),
+      forumComments: [] as Array<{ topicSlug: string; threadSlug: string; commentId: string }>,
     };
   }
 
   try {
     const { db } = await import("@/lib/db");
     const [diaryRows, topicRows] = await Promise.all([
-      db.diary.findMany({ select: { slug: true }, orderBy: { createdAt: "desc" } }),
-      db.forumTopic.findMany({ select: { slug: true }, orderBy: { sortOrder: "asc" } }),
+      db.diary.findMany({
+        select: {
+          slug: true,
+          weeks: { where: { isHidden: false }, select: { weekNumber: true } },
+        },
+        orderBy: { createdAt: "desc" },
+      }),
+      db.forumTopic.findMany({
+        select: {
+          slug: true,
+          threads: {
+            where: { isHidden: false },
+            select: {
+              slug: true,
+              comments: { where: { isHidden: false }, select: { id: true } },
+            },
+          },
+        },
+        orderBy: { sortOrder: "asc" },
+      }),
     ]);
 
     return {
       diarySlugs: diaryRows.map((entry) => entry.slug),
-      forumSlugs: topicRows.map((entry) => entry.slug),
+      diaryWeeks: diaryRows.flatMap((entry) =>
+        entry.weeks.map((week) => ({
+          diarySlug: entry.slug,
+          weekNumber: week.weekNumber,
+        })),
+      ),
+      forumTopicSlugs: topicRows.map((entry) => entry.slug),
+      forumThreads: topicRows.flatMap((entry) =>
+        entry.threads.map((thread) => ({
+          topicSlug: entry.slug,
+          threadSlug: thread.slug,
+        })),
+      ),
+      forumComments: topicRows.flatMap((entry) =>
+        entry.threads.flatMap((thread) =>
+          thread.comments.map((comment) => ({
+            topicSlug: entry.slug,
+            threadSlug: thread.slug,
+            commentId: comment.id,
+          })),
+        ),
+      ),
     };
   } catch {
     return {
       diarySlugs: mockDiaries.map((entry) => entry.slug),
-      forumSlugs: mockForumTopics.map((entry) => entry.slug),
+      diaryWeeks: mockDiaries.flatMap((entry) =>
+        entry.weeks.map((week) => ({
+          diarySlug: entry.slug,
+          weekNumber: week.weekNumber,
+        })),
+      ),
+      forumTopicSlugs: mockForumTopics.map((entry) => entry.slug),
+      forumThreads: mockForumTopics.flatMap((entry) =>
+        entry.threads.map((thread) => ({
+          topicSlug: entry.slug,
+          threadSlug: thread.slug,
+        })),
+      ),
+      forumComments: [] as Array<{ topicSlug: string; threadSlug: string; commentId: string }>,
     };
   }
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const { diarySlugs, forumSlugs } = await getDynamicSlugs();
+  const { diarySlugs, diaryWeeks, forumTopicSlugs, forumThreads, forumComments } =
+    await getDynamicSlugs();
   const cannapediaSlugs = await listCannapediaArticleSlugs();
 
   const staticRoutes = [
@@ -73,13 +139,52 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   );
 
-  const localizedForum = locales.flatMap((locale) =>
-    forumSlugs.map((slug) => ({
+  const localizedDiaryWeeks = locales.flatMap((locale) =>
+    diaryWeeks.map(({ diarySlug, weekNumber }) => ({
+      url: `${siteUrl}/${locale}/diaries/${diarySlug}/weeks/${weekNumber}`,
+      lastModified: new Date(),
+      alternates: {
+        languages: Object.fromEntries(
+          locales.map((entry) => [entry, `${siteUrl}/${entry}/diaries/${diarySlug}/weeks/${weekNumber}`]),
+        ),
+      },
+    })),
+  );
+
+  const localizedForumTopics = locales.flatMap((locale) =>
+    forumTopicSlugs.map((slug) => ({
       url: `${siteUrl}/${locale}/forum/${slug}`,
       lastModified: new Date(),
       alternates: {
         languages: Object.fromEntries(
           locales.map((entry) => [entry, `${siteUrl}/${entry}/forum/${slug}`]),
+        ),
+      },
+    })),
+  );
+
+  const localizedForumThreads = locales.flatMap((locale) =>
+    forumThreads.map(({ topicSlug, threadSlug }) => ({
+      url: `${siteUrl}/${locale}/forum/${topicSlug}/${threadSlug}`,
+      lastModified: new Date(),
+      alternates: {
+        languages: Object.fromEntries(
+          locales.map((entry) => [entry, `${siteUrl}/${entry}/forum/${topicSlug}/${threadSlug}`]),
+        ),
+      },
+    })),
+  );
+
+  const localizedForumComments = locales.flatMap((locale) =>
+    forumComments.map(({ topicSlug, threadSlug, commentId }) => ({
+      url: `${siteUrl}/${locale}/forum/${topicSlug}/${threadSlug}/comments/${commentId}`,
+      lastModified: new Date(),
+      alternates: {
+        languages: Object.fromEntries(
+          locales.map((entry) => [
+            entry,
+            `${siteUrl}/${entry}/forum/${topicSlug}/${threadSlug}/comments/${commentId}`,
+          ]),
         ),
       },
     })),
@@ -100,7 +205,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...localizedStatic,
     ...localizedDiaries,
-    ...localizedForum,
+    ...localizedDiaryWeeks,
+    ...localizedForumTopics,
+    ...localizedForumThreads,
+    ...localizedForumComments,
     ...localizedCannapedia,
   ];
 }

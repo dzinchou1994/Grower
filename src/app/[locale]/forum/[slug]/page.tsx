@@ -190,9 +190,12 @@ export default async function ForumTopicPage({ params }: PageProps) {
                         {thread.isPinned && (
                           <span className="shrink-0 text-xs text-lime-300">📌</span>
                         )}
-                        <h3 className="line-clamp-1 text-sm font-semibold text-white sm:text-lg">
+                        <Link
+                          href={getLocalizedPath(typedLocale, `/forum/${topic.slug}/${thread.slug}`)}
+                          className="line-clamp-1 text-sm font-semibold text-white transition hover:text-lime-300 sm:text-lg"
+                        >
                           {thread.title}
-                        </h3>
+                        </Link>
                         {thread.isTranslated ? (
                           <span className="inline-flex rounded-full border border-lime-400/35 bg-lime-400/10 px-1.5 py-0.5 text-[10px] text-lime-300">
                             Translated
@@ -260,16 +263,27 @@ export default async function ForumTopicPage({ params }: PageProps) {
                               showPrefix={false}
                               className="inline-flex items-center gap-2 text-[10px] text-slate-500 transition hover:text-lime-300 sm:text-xs"
                             />
-                            {sessionUser ? (
-                              <ForumItemActions
-                                locale={typedLocale}
-                                canDelete={sessionUser.username.toLowerCase() === comment.author.toLowerCase()}
-                                deleteEndpoint={`/api/forum/comments/${comment.id}`}
-                                reportTargetType="COMMENT"
-                                reportTargetId={comment.id}
-                                className=""
-                              />
-                            ) : null}
+                            <div className="flex items-center gap-2">
+                              <Link
+                                href={getLocalizedPath(
+                                  typedLocale,
+                                  `/forum/${topic.slug}/${thread.slug}/comments/${comment.id}`,
+                                )}
+                                className="text-[10px] text-slate-400 transition hover:text-lime-300 sm:text-xs"
+                              >
+                                permalink
+                              </Link>
+                              {sessionUser ? (
+                                <ForumItemActions
+                                  locale={typedLocale}
+                                  canDelete={sessionUser.username.toLowerCase() === comment.author.toLowerCase()}
+                                  deleteEndpoint={`/api/forum/comments/${comment.id}`}
+                                  reportTargetType="COMMENT"
+                                  reportTargetId={comment.id}
+                                  className=""
+                                />
+                              ) : null}
+                            </div>
                           </div>
                           <p className="mt-1 text-xs text-slate-300 sm:text-sm">{comment.body}</p>
                           <div className="mt-1.5 flex justify-end">

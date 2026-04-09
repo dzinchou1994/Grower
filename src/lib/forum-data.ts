@@ -665,6 +665,203 @@ export async function getForumTopicBySlug(
   return getForumTopicBySlugFromMemory(slug);
 }
 
+export type ForumThreadPageData = {
+  topic: Pick<ForumTopicRecord, "slug" | "title" | "description" | "icon" | "isTranslated">;
+  thread: ForumThreadRecord;
+};
+
+export type ForumCommentPageData = {
+  topic: Pick<ForumTopicRecord, "slug" | "title" | "icon">;
+  thread: Pick<ForumThreadRecord, "slug" | "title" | "author" | "authorImage" | "isTranslated">;
+  comment: ForumComment;
+};
+
+export async function getForumThreadBySlug(
+  threadSlug: string,
+  locale?: Locale,
+  currentUserId?: string,
+): Promise<ForumThreadPageData | null> {
+  if (hasDatabase) {
+    await ensureForumSeedData();
+    const thread = await db.forumThread.findUnique({
+      where: { slug: threadSlug },
+      include: {
+        topic: { select: { slug: true, title: true, description: true } },
+        author: { select: { username: true, image: true } },
+        votes: { select: { userId: true, value: true } },
+        comments: {
+          where: { isHidden: false },
+          orderBy: { createdAt: "desc" },
+          take: 200,
+          include: {
+            author: { select: { username: true, image: true } },
+            votes: { select: { userId: true, value: true } },
+          },
+        },
+        _count: { select: { comments: true, likes: true } },
+      },
+    });
+
+    if (!thread) {
+      return null;
+    }
+
+    const mappedThread = mapThreadRecord(thread, currentUserId, locale);
+    const [translatedTopicTitle, translatedTopicDescription, translatedThreadTitle, translatedThreadBody] =
+      await Promise.all([
+        autoTranslateText(thread.topic.title, locale ?? "ka"),
+        autoTranslateText(thread.topic.description ?? "", locale ?? "ka"),
+        autoTranslateText(mappedThread.title, locale ?? "ka"),
+        autoTranslateText(mappedThread.body ?? "", locale ?? "ka"),
+      ]);
+    const translatedComments = await Promise.all(
+      mappedThread.comments.map(async (comment) => {
+        const translatedBody = await autoTranslateText(comment.body, locale ?? "ka");
+        return {
+          ...comment,
+          body: translatedBody.text,
+          isTranslated: translatedBody.translated,
+        };
+      }),
+    );
+
+    return {
+      topic: {
+        slug: thread.topic.slug,
+        title: translatedTopicTitle.text,
+        description: translatedTopicDescription.text,
+        icon: topicIconBySlug.get(thread.topic.slug) ?? "💬",
+        isTranslated: translatedTopicTitle.translated,
+      },
+      thread: {
+        ...mappedThread,
+        title: translatedThreadTitle.text,
+        body: translatedThreadBody.text,
+        isTranslated: translatedThreadTitle.translated,
+        bodyTranslated: translatedThreadBody.translated,
+        comments: translatedComments,
+      },
+    };
+  }
+
+  const topics = await listForumTopics(undefined, locale, currentUserId);
+  for (const topic of topics) {
+    const matchedThread = topic.threads.find((thread) => thread.slug === threadSlug);
+    if (!matchedThread) {
+      continue;
+    }
+
+    return {
+      topic: {
+        slug: topic.slug,
+        title: topic.title,
+        description: topic.description,
+        icon: topic.icon,
+        isTranslated: topic.isTranslated,
+      },
+      thread: matchedThread,
+    };
+  }
+
+  return null;
+}
+
+export async function getForumCommentById(
+  commentId: string,
+  locale?: Locale,
+  currentUserId?: string,
+): Promise<ForumCommentPageData | null> {
+  if (hasDatabase) {
+    await ensureForumSeedData();
+    const comment = await db.forumComment.findUnique({
+      where: { id: commentId },
+      include: {
+        author: { select: { username: true, image: true } },
+        votes: { select: { userId: true, value: true } },
+        thread: {
+          select: {
+            slug: true,
+            title: true,
+            author: { select: { username: true, image: true } },
+            topic: { select: { slug: true, title: true } },
+          },
+        },
+      },
+    });
+
+    if (!comment || !comment.thread) {
+      return null;
+    }
+
+    const commentVotes = comment.votes ?? [];
+    const [translatedTopicTitle, translatedThreadTitle, translatedCommentBody] = await Promise.all([
+      autoTranslateText(comment.thread.topic.title, locale ?? "ka"),
+      autoTranslateText(comment.thread.title, locale ?? "ka"),
+      autoTranslateText(comment.body, locale ?? "ka"),
+    ]);
+
+    return {
+      topic: {
+        slug: comment.thread.topic.slug,
+        title: translatedTopicTitle.text,
+        icon: topicIconBySlug.get(comment.thread.topic.slug) ?? "💬",
+      },
+      thread: {
+        slug: comment.thread.slug,
+        title: translatedThreadTitle.text,
+        author: comment.thread.author.username,
+        authorImage:
+          comment.thread.author.image ??
+          getDeterministicAvatarImage(comment.thread.author.username),
+        isTranslated: translatedThreadTitle.translated,
+      },
+      comment: {
+        id: comment.id,
+        author: comment.author?.username ?? "user",
+        authorImage:
+          comment.author?.image ??
+          getDeterministicAvatarImage(comment.author?.username ?? "user"),
+        body: translatedCommentBody.text,
+        isTranslated: translatedCommentBody.translated,
+        createdAt: comment.createdAt.toISOString(),
+        upvotes: commentVotes.filter((vote) => vote.value === 1).length,
+        downvotes: commentVotes.filter((vote) => vote.value === -1).length,
+        userVote: currentUserId
+          ? (commentVotes.find((vote) => vote.userId === currentUserId)?.value ?? 0)
+          : 0,
+      },
+    };
+  }
+
+  const topics = await listForumTopics(undefined, locale, currentUserId);
+  for (const topic of topics) {
+    for (const thread of topic.threads) {
+      const matchedComment = thread.comments.find((comment) => comment.id === commentId);
+      if (!matchedComment) {
+        continue;
+      }
+
+      return {
+        topic: {
+          slug: topic.slug,
+          title: topic.title,
+          icon: topic.icon,
+        },
+        thread: {
+          slug: thread.slug,
+          title: thread.title,
+          author: thread.author,
+          authorImage: thread.authorImage,
+          isTranslated: thread.isTranslated,
+        },
+        comment: matchedComment,
+      };
+    }
+  }
+
+  return null;
+}
+
 export async function createForumThread(input: {
   topicSlug: string;
   title: string;

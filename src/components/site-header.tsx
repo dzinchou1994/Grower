@@ -151,7 +151,7 @@ export function SiteHeader({
               </p>
               <span
                 suppressHydrationWarning
-                className="flex h-2.5 w-3.5 overflow-hidden rounded-[1.5px] border border-lime-400/25 shadow-sm shadow-black/30 transition-all duration-200 group-hover:border-lime-300/40 group-hover:shadow-lime-500/30"
+                className="flex h-3 w-4 overflow-hidden rounded-[1.5px] border border-lime-400/25 shadow-sm shadow-black/30 transition-all duration-200 group-hover:border-lime-300/40 group-hover:shadow-lime-500/30"
               >
                 <svg
                   suppressHydrationWarning

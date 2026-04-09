@@ -152,9 +152,12 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                   <p className="text-[10px] uppercase tracking-[0.2em] text-lime-300 sm:text-xs sm:tracking-[0.25em]">
                     კვირა {week.weekNumber}
                   </p>
-                  <h3 className="mt-1.5 text-base font-semibold text-white sm:mt-2 sm:text-xl">
+                  <Link
+                    href={getLocalizedPath(typedLocale, `/diaries/${diary.slug}/weeks/${week.weekNumber}`)}
+                    className="mt-1.5 inline-block text-base font-semibold text-white transition hover:text-lime-300 sm:mt-2 sm:text-xl"
+                  >
                     {week.title}
-                  </h3>
+                  </Link>
                 </div>
                 <div className="flex flex-wrap gap-1.5 text-[10px] text-slate-300 sm:gap-2 sm:text-xs">
                   <span className="rounded-full bg-white/6 px-2.5 py-1 sm:px-3">

@@ -106,7 +106,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
           </div>
 
           {/* Stats */}
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:mt-8 sm:grid-cols-4 sm:gap-4">
+          <div className="mt-6 grid grid-cols-4 gap-2 sm:mt-8 sm:gap-4">
             <StatCard label={dict.home.stats.forumTopics} value={stats.forumTopics} />
             <StatCard label={dict.home.stats.forumThreads} value={stats.forumThreads} />
             <StatCard label={dict.home.stats.forumReplies} value={stats.forumReplies} />
@@ -318,9 +318,11 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
 
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-4 backdrop-blur-sm sm:rounded-3xl sm:p-5">
-      <p className="text-xl font-semibold text-white sm:text-3xl">{value}</p>
-      <p className="mt-1 text-[10px] text-slate-300 sm:mt-2 sm:text-sm">{label}</p>
+    <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-2.5 text-center backdrop-blur-sm sm:rounded-3xl sm:p-5 sm:text-left">
+      <p className="text-base font-semibold text-white sm:text-3xl">{value}</p>
+      <p className="mt-1 text-[9px] leading-tight text-slate-300 sm:mt-2 sm:text-sm sm:leading-normal">
+        {label}
+      </p>
     </div>
   );
 }
