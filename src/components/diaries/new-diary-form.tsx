@@ -9,7 +9,7 @@ import {
   DiaryWateringType,
 } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { diaryExploreMediumKeys } from "@/lib/diary-explore-params";
 import { getDiaryLabels } from "@/lib/diary-labels";
 import { DiarySetupFields, type DiarySetupDict } from "@/components/diaries/diary-setup-fields";
@@ -92,6 +92,17 @@ export function NewDiaryForm({
   const [coverFiles, setCoverFiles] = useState<File[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+
+  const coverPreviewUrls = useMemo(
+    () => coverFiles.map((file) => URL.createObjectURL(file)),
+    [coverFiles],
+  );
+
+  useEffect(() => {
+    return () => {
+      coverPreviewUrls.forEach((u) => URL.revokeObjectURL(u));
+    };
+  }, [coverPreviewUrls]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -324,7 +335,7 @@ export function NewDiaryForm({
 
       <DiarySetupFields value={setup} onChange={setSetup} setupDict={setupDict} />
 
-      <label className="sm:col-span-2">
+      <div className="sm:col-span-2">
         <span className={labelClassName}>{fieldDict.coverImage}</span>
         <p className="mb-2 text-xs text-slate-500">{exploreDict.coverLastPhotoHint}</p>
         <p className="mb-2 text-xs text-slate-500">{exploreDict.uploadHint}</p>
@@ -335,7 +346,23 @@ export function NewDiaryForm({
           onChange={(e) => setCoverFiles(Array.from(e.target.files ?? []))}
           className="w-full text-sm text-slate-300 file:mr-4 file:cursor-pointer file:rounded-full file:border-0 file:bg-lime-400 file:px-5 file:py-2.5 file:text-sm file:font-semibold file:text-slate-950 file:shadow-md file:shadow-lime-500/20 file:transition hover:file:bg-lime-300"
         />
-      </label>
+        {coverPreviewUrls.length > 0 ? (
+          <ul className="mt-4 flex flex-wrap gap-3" aria-label="Cover preview">
+            {coverPreviewUrls.map((url, i) => (
+              <li
+                key={`${coverFiles[i]?.name ?? "f"}-${coverFiles[i]?.size ?? 0}-${i}`}
+                className="relative h-24 w-24 overflow-hidden rounded-xl border border-white/[0.1] bg-black/50 shadow-lg shadow-black/30 sm:h-28 sm:w-28"
+              >
+                <img
+                  src={url}
+                  alt={coverFiles[i]?.name ? `Preview: ${coverFiles[i]!.name}` : ""}
+                  className="h-full w-full object-cover"
+                />
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </div>
 
       <label className="sm:col-span-2">
         <span className={labelClassName}>{fieldDict.description}</span>
