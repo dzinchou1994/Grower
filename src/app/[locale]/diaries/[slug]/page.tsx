@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ChevronDown, Layers } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
@@ -83,12 +84,12 @@ export default async function DiaryDetailPage({ params }: PageProps) {
     getLocalizedPath(typedLocale, `/diaries/${diary.slug}/weeks/${weekNumber}`);
 
   return (
-    <div className="flex flex-col gap-5 sm:gap-6">
-      <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/6 p-5 sm:rounded-[2rem] sm:p-8">
-        <CannabisLeaf className="pointer-events-none absolute -right-6 -top-6 h-40 w-40 rotate-12 text-lime-400/[0.04] sm:h-52 sm:w-52" />
-        <div className="relative flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between lg:gap-6">
+    <div className="flex flex-col gap-6 sm:gap-8">
+      <section className="relative overflow-hidden rounded-2xl border border-white/[0.07] bg-gradient-to-b from-slate-950/40 to-transparent p-5 sm:rounded-3xl sm:p-8">
+        <CannabisLeaf className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rotate-12 text-lime-400/[0.035] sm:h-40 sm:w-40" />
+        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
           {diary.coverImageUrl ? (
-            <div className="relative aspect-video w-full max-w-xl overflow-hidden rounded-2xl border border-white/10 lg:max-w-md">
+            <div className="relative aspect-video w-full max-w-xl overflow-hidden rounded-2xl ring-1 ring-white/[0.06] lg:max-w-md">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={diary.coverImageUrl}
@@ -98,89 +99,191 @@ export default async function DiaryDetailPage({ params }: PageProps) {
             </div>
           ) : null}
           <div className="max-w-3xl flex-1">
-            <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-lime-300 sm:text-xs sm:tracking-[0.25em]">
-              <CannabisLeaf className="h-3.5 w-3.5" />
+            <div className="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.18em] text-lime-400/80 sm:text-[11px]">
+              <CannabisLeaf className="h-3 w-3 opacity-80" />
               {diaryEnvironmentLabels[diary.environment]} · {dict.diaries.diaryType}
             </div>
-            <h1 className="mt-2 text-xl font-semibold text-white sm:mt-3 sm:text-3xl lg:text-5xl">
+            <h1 className="mt-3 text-2xl font-semibold tracking-tight text-white sm:mt-4 sm:text-4xl lg:text-5xl">
               {diary.title}
             </h1>
-            <p className="mt-2 text-sm text-slate-400">
-              {diary.strain}
-              {extraStrains > 0
-                ? ` · ${explore.strainsMore.replace("{count}", String(extraStrains))}`
-                : ""}{" "}
-              · {rel}
+            <p className="mt-2 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-sm text-slate-500">
+              <span>
+                {diary.strain}
+                {extraStrains > 0
+                  ? ` · ${explore.strainsMore.replace("{count}", String(extraStrains))}`
+                  : ""}
+              </span>
+              <span className="text-slate-600" aria-hidden>
+                ·
+              </span>
+              <Link
+                href={getLocalizedPath(typedLocale, `/u/${diary.author.username}`)}
+                className="font-medium text-slate-400 underline-offset-2 transition hover:text-lime-300 hover:underline"
+              >
+                @{diary.author.username}
+              </Link>
+              <span className="text-slate-600" aria-hidden>
+                ·
+              </span>
+              <span>{rel}</span>
             </p>
             {diary.description ? (
-              <p className="mt-3 text-sm leading-relaxed text-slate-300 sm:mt-4 sm:text-base sm:leading-7">
+              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-400 sm:text-base sm:leading-7">
                 {diary.description}
               </p>
             ) : null}
           </div>
 
-          <div className="rounded-2xl border border-lime-400/15 bg-slate-950/70 p-4 sm:rounded-3xl sm:p-5 lg:w-[300px]">
-            <p className="text-xs text-slate-400 sm:text-sm">{dict.diaries.overview}</p>
-            <div className="mt-3 space-y-2 text-xs text-slate-300 sm:mt-4 sm:space-y-3 sm:text-sm">
-              <p>
-                <span className="text-slate-500">{dict.diaries.strain}:</span> {diary.strain}
-              </p>
-              <p>
-                <span className="text-slate-500">{dict.diaries.fields.germinationMethod}:</span>{" "}
-                {diaryGerminationLabels[diary.germinationMethod]}
-              </p>
-              <p>
-                <span className="text-slate-500">{dict.diaries.fields.watering}:</span>{" "}
-                {diaryWateringLabels[diary.watering]}
-              </p>
-              <p>
-                <span className="text-slate-500">{dict.diaries.fields.medium}:</span>{" "}
-                {diaryMediumLabels[diary.medium]}
-              </p>
-              <div className="pt-1">
-                <p className="text-slate-500">{dict.diaries.author}</p>
-                <Link
-                  href={getLocalizedPath(typedLocale, `/u/${diary.author.username}`)}
-                  className="mt-1.5 flex items-center gap-2.5 rounded-xl py-1 transition hover:bg-white/6"
-                >
-                  <UserAvatar
-                    username={diary.author.username}
-                    image={diary.author.image}
-                    size="lg"
-                  />
-                  <span className="text-base font-semibold text-white sm:text-lg">
+          <>
+            {/* Mobile: compact collapsible overview — saves vertical space */}
+            <details className="group rounded-2xl border border-white/[0.07] bg-gradient-to-br from-white/[0.04] to-transparent shadow-[0_8px_32px_-20px_rgba(0,0,0,0.5)] backdrop-blur-sm lg:hidden open:border-lime-400/20 open:shadow-[0_12px_40px_-16px_rgba(74,222,128,0.08)]">
+              <summary className="flex cursor-pointer list-none items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-white/[0.03] [&::-webkit-details-marker]:hidden">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-lime-400/25 via-emerald-500/10 to-slate-900/50 shadow-[inset_0_1px_0_0_rgba(190,242,100,0.15)] ring-1 ring-lime-400/25">
+                  <Layers className="h-5 w-5 text-lime-200/90" strokeWidth={1.75} aria-hidden />
+                </span>
+                <div className="min-w-0 flex-1 text-left">
+                  <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-lime-400/70">
+                    {dict.diaries.overview}
+                  </p>
+                  <p className="mt-0.5 truncate text-[15px] font-semibold tracking-tight text-white">
+                    {diary.strain}
+                  </p>
+                  <p className="mt-0.5 truncate text-[11px] font-medium text-slate-400">
                     @{diary.author.username}
-                  </span>
+                  </p>
+                </div>
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/[0.1] bg-black/30 text-slate-400 transition group-open:border-lime-400/25 group-open:bg-lime-400/10 group-open:text-lime-200">
+                  <ChevronDown
+                    className="h-4 w-4 transition duration-300 group-open:rotate-180"
+                    strokeWidth={2.25}
+                    aria-hidden
+                  />
+                </span>
+              </summary>
+              <div className="border-t border-white/[0.05] px-3.5 pb-3.5 pt-2">
+                <div className="grid grid-cols-2 gap-x-3 gap-y-2 text-[11px] leading-snug text-slate-300">
+                  <p>
+                    <span className="block text-[9px] uppercase tracking-wide text-slate-500">
+                      {dict.diaries.fields.germinationMethod}
+                    </span>
+                    {diaryGerminationLabels[diary.germinationMethod]}
+                  </p>
+                  <p>
+                    <span className="block text-[9px] uppercase tracking-wide text-slate-500">
+                      {dict.diaries.fields.watering}
+                    </span>
+                    {diaryWateringLabels[diary.watering]}
+                  </p>
+                  <p className="col-span-2">
+                    <span className="block text-[9px] uppercase tracking-wide text-slate-500">
+                      {dict.diaries.fields.medium}
+                    </span>
+                    {diaryMediumLabels[diary.medium]}
+                  </p>
+                </div>
+                <div className="mt-3 border-t border-white/[0.05] pt-3">
+                  <p className="text-[9px] font-medium uppercase tracking-[0.14em] text-slate-500">
+                    {dict.diaries.author}
+                  </p>
+                  <Link
+                    href={getLocalizedPath(typedLocale, `/u/${diary.author.username}`)}
+                    className="mt-1.5 flex items-center gap-2 rounded-lg py-0.5 transition hover:bg-white/[0.04]"
+                  >
+                    <UserAvatar
+                      username={diary.author.username}
+                      image={diary.author.image}
+                      size="md"
+                    />
+                    <span className="text-sm font-semibold text-white">@{diary.author.username}</span>
+                  </Link>
+                </div>
+                <div className="mt-3 flex flex-row gap-2">
+                  <Link
+                    href={getLocalizedPath(typedLocale, "/diaries")}
+                    className="flex-1 rounded-full border border-white/[0.08] px-3 py-2 text-center text-[11px] font-medium text-slate-300 transition hover:border-white/15 hover:bg-white/[0.04] hover:text-white"
+                  >
+                    {dict.diaries.backToDiaries}
+                  </Link>
+                  {isAuthor ? (
+                    <Link
+                      href={getLocalizedPath(typedLocale, `/diaries/${diary.slug}/weeks/new`)}
+                      className="flex-1 rounded-full bg-lime-400/90 px-3 py-2 text-center text-[11px] font-semibold text-slate-950 transition hover:bg-lime-300"
+                    >
+                      {dict.diaries.addWeeklyUpdate}
+                    </Link>
+                  ) : null}
+                </div>
+              </div>
+            </details>
+
+            {/* Desktop: always-visible sidebar */}
+            <div className="hidden rounded-2xl border border-white/[0.06] bg-slate-950/30 p-4 sm:p-5 lg:block lg:w-[280px] lg:shrink-0">
+              <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-slate-500 sm:text-xs">
+                {dict.diaries.overview}
+              </p>
+              <div className="mt-3 space-y-2 text-xs text-slate-300 sm:mt-4 sm:space-y-3 sm:text-sm">
+                <p>
+                  <span className="text-slate-500">{dict.diaries.strain}:</span> {diary.strain}
+                </p>
+                <p>
+                  <span className="text-slate-500">{dict.diaries.fields.germinationMethod}:</span>{" "}
+                  {diaryGerminationLabels[diary.germinationMethod]}
+                </p>
+                <p>
+                  <span className="text-slate-500">{dict.diaries.fields.watering}:</span>{" "}
+                  {diaryWateringLabels[diary.watering]}
+                </p>
+                <p>
+                  <span className="text-slate-500">{dict.diaries.fields.medium}:</span>{" "}
+                  {diaryMediumLabels[diary.medium]}
+                </p>
+                <div className="pt-1">
+                  <p className="text-slate-500">{dict.diaries.author}</p>
+                  <Link
+                    href={getLocalizedPath(typedLocale, `/u/${diary.author.username}`)}
+                    className="mt-1.5 flex items-center gap-2.5 rounded-xl py-1 transition hover:bg-white/6"
+                  >
+                    <UserAvatar
+                      username={diary.author.username}
+                      image={diary.author.image}
+                      size="lg"
+                    />
+                    <span className="text-base font-semibold text-white sm:text-lg">
+                      @{diary.author.username}
+                    </span>
+                  </Link>
+                </div>
+              </div>
+              <div className="mt-4 flex flex-col gap-2 sm:mt-5 sm:gap-2.5">
+                <Link
+                  href={getLocalizedPath(typedLocale, "/diaries")}
+                  className="rounded-full border border-white/[0.08] px-4 py-2 text-center text-xs font-medium text-slate-300 transition hover:border-white/15 hover:bg-white/[0.04] hover:text-white sm:text-sm"
+                >
+                  {dict.diaries.backToDiaries}
                 </Link>
+                {isAuthor ? (
+                  <Link
+                    href={getLocalizedPath(typedLocale, `/diaries/${diary.slug}/weeks/new`)}
+                    className="rounded-full bg-lime-400/90 px-4 py-2 text-center text-xs font-semibold text-slate-950 transition hover:bg-lime-300 sm:text-sm"
+                  >
+                    {dict.diaries.addWeeklyUpdate}
+                  </Link>
+                ) : null}
               </div>
             </div>
-            <div className="mt-4 flex flex-col gap-2 sm:mt-6 sm:gap-3">
-              <Link
-                href={getLocalizedPath(typedLocale, "/diaries")}
-                className="rounded-full border border-white/10 px-4 py-2 text-center text-xs font-medium text-white transition hover:bg-white/8 sm:text-sm"
-              >
-                {dict.diaries.backToDiaries}
-              </Link>
-              {isAuthor ? (
-                <Link
-                  href={getLocalizedPath(typedLocale, `/diaries/${diary.slug}/weeks/new`)}
-                  className="rounded-full bg-lime-400 px-4 py-2 text-center text-xs font-semibold text-slate-950 transition hover:bg-lime-300 sm:text-sm"
-                >
-                  {dict.diaries.addWeeklyUpdate}
-                </Link>
-              ) : null}
-            </div>
-          </div>
+          </>
         </div>
       </section>
 
       <DiarySetupDisplay setup={diary.setup} labels={dict.diaries.setup} />
 
-      <section className="rounded-2xl border border-white/10 bg-slate-950/50 p-5 sm:rounded-[2rem] sm:p-8">
-        <h2 className="text-lg font-semibold text-white">{dict.diaries.diaryDiscussionTitle}</h2>
-        <div className="mt-4 space-y-4">
+      <section className="rounded-2xl border border-white/[0.06] bg-slate-950/25 p-5 sm:rounded-3xl sm:p-7">
+        <h2 className="text-base font-semibold tracking-tight text-white sm:text-lg">
+          {dict.diaries.diaryDiscussionTitle}
+        </h2>
+        <div className="mt-4 space-y-3 sm:space-y-4">
           {diary.diaryComments.map((c) => (
-            <div key={c.id} className="rounded-xl border border-white/8 bg-white/4 p-4">
+            <div key={c.id} className="rounded-xl border border-white/[0.05] bg-white/[0.02] p-3.5 sm:p-4">
               <div className="flex gap-3">
                 <Link
                   href={getLocalizedPath(typedLocale, `/u/${c.author.username}`)}
@@ -211,7 +314,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
           ))}
         </div>
 
-        <div className="mt-6 border-t border-white/10 pt-6">
+        <div className="mt-6 border-t border-white/[0.06] pt-5">
           <DiaryCommentForm
             diarySlug={diary.slug}
             postComment={explore.postComment}
@@ -224,17 +327,17 @@ export default async function DiaryDetailPage({ params }: PageProps) {
       </section>
 
       {latest ? (
-        <section className="rounded-2xl border border-lime-400/20 bg-lime-400/[0.06] p-5 sm:rounded-[2rem] sm:p-8">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-lime-300">
+        <section className="rounded-2xl border border-lime-400/15 bg-lime-400/[0.03] p-5 sm:rounded-3xl sm:p-7">
+          <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-lime-400/70">
             {explore.latestWeekBadge}
           </p>
-          <h2 className="mt-2 text-xl font-semibold text-white sm:text-3xl">
+          <h2 className="mt-2 text-lg font-semibold tracking-tight text-white sm:text-2xl">
             <Link
               href={getLocalizedPath(
                 typedLocale,
                 `/diaries/${diary.slug}/weeks/${latest.weekNumber}`,
               )}
-              className="transition hover:text-lime-300"
+              className="transition hover:text-lime-300/95"
             >
               Week {latest.weekNumber}
               {latest.title ? `: ${latest.title}` : ""}
@@ -268,20 +371,22 @@ export default async function DiaryDetailPage({ params }: PageProps) {
         </section>
       ) : null}
 
-      <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-8">
-        <div className="flex items-start justify-between gap-3 sm:items-end">
+      <section className="rounded-2xl border border-white/[0.06] bg-transparent p-5 sm:rounded-3xl sm:p-6">
+        <div className="flex items-start justify-between gap-3 border-b border-white/[0.06] pb-4 sm:items-end sm:pb-5">
           <div>
-            <p className="text-xs text-slate-400 sm:text-sm">{dict.diaries.timelineBadge}</p>
-            <h2 className="mt-1 text-lg font-semibold text-white sm:text-2xl">
+            <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500 sm:text-xs">
+              {dict.diaries.timelineBadge}
+            </p>
+            <h2 className="mt-1 text-lg font-semibold tracking-tight text-white sm:text-xl">
               {dict.diaries.timelineTitle}
             </h2>
           </div>
-          <span className="shrink-0 rounded-full bg-lime-400/10 px-3 py-1.5 text-[10px] font-medium text-lime-300 sm:px-4 sm:py-2 sm:text-xs">
+          <span className="shrink-0 rounded-full border border-white/[0.06] bg-white/[0.03] px-3 py-1 text-[10px] font-medium tabular-nums text-slate-400 sm:text-xs">
             {diary.weeks.length} {dict.diaries.updatesCount}
           </span>
         </div>
 
-        <div className="mt-5 space-y-3 sm:mt-8 sm:space-y-4">
+        <div className="mt-5 space-y-2 sm:mt-6 sm:space-y-2.5">
           {diary.weeks.length === 0 ? (
             <p className="text-sm text-slate-500">{explore.empty}</p>
           ) : (
@@ -290,34 +395,31 @@ export default async function DiaryDetailPage({ params }: PageProps) {
               const preview = week.images.slice(0, 3);
               const extraImg = week.images.length - preview.length;
               return (
-                <article
+                <Link
                   key={week.id}
-                  className="rounded-2xl border border-white/8 bg-white/4 p-4 sm:rounded-[1.75rem] sm:p-6"
+                  href={href}
+                  className="group block rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 transition hover:border-lime-400/20 hover:bg-white/[0.04] sm:rounded-2xl sm:p-5"
                 >
                   <div className="flex flex-col gap-4 sm:flex-row sm:gap-5">
                     {preview.length > 0 ? (
                       <div className="flex shrink-0 flex-wrap gap-2">
                         {preview.map((im) => (
-                          <Link
+                          <div
                             key={im.id}
-                            href={href}
-                            className="group relative h-16 w-16 overflow-hidden rounded-xl border border-white/10 sm:h-[4.5rem] sm:w-[4.5rem]"
+                            className="relative h-16 w-16 overflow-hidden rounded-xl ring-1 ring-white/[0.06] sm:h-[4.5rem] sm:w-[4.5rem]"
                           >
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={im.imageUrl}
                               alt=""
-                              className="h-full w-full object-cover transition group-hover:opacity-90"
+                              className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
                             />
-                          </Link>
+                          </div>
                         ))}
                         {extraImg > 0 ? (
-                          <Link
-                            href={href}
-                            className="flex h-16 w-16 items-center justify-center rounded-xl border border-white/10 bg-white/8 text-xs font-medium text-lime-200 transition hover:bg-white/12 sm:h-[4.5rem] sm:w-[4.5rem]"
-                          >
+                          <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-white/[0.04] text-xs font-medium text-slate-400 ring-1 ring-white/[0.06] sm:h-[4.5rem] sm:w-[4.5rem]">
                             +{extraImg}
-                          </Link>
+                          </div>
                         ) : null}
                       </div>
                     ) : null}
@@ -325,42 +427,39 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                         <div className="min-w-0 flex-1">
-                          <p className="text-[10px] uppercase tracking-[0.2em] text-lime-300 sm:text-xs sm:tracking-[0.25em]">
+                          <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-lime-400/70 sm:text-[11px]">
                             Week {week.weekNumber}
                           </p>
-                          <Link
-                            href={href}
-                            className="mt-1.5 inline-block text-base font-semibold text-white transition hover:text-lime-300 sm:mt-2 sm:text-xl"
-                          >
+                          <p className="mt-1.5 text-base font-semibold text-white transition group-hover:text-lime-200/95 sm:mt-1.5 sm:text-lg">
                             {week.title || `Week ${week.weekNumber}`}
-                          </Link>
+                          </p>
                         </div>
-                        <div className="flex flex-wrap gap-1.5 text-[10px] text-slate-300 sm:gap-2 sm:text-xs">
-                          <span className="rounded-full bg-white/6 px-2.5 py-1 sm:px-3">
+                        <div className="flex flex-wrap gap-1.5 text-[10px] text-slate-500 sm:gap-2 sm:text-[11px]">
+                          <span className="rounded-full border border-white/[0.05] bg-white/[0.03] px-2 py-0.5 sm:px-2.5 sm:py-1">
                             {week.images.length} {dict.diaries.images}
                           </span>
-                          <span className="rounded-full bg-white/6 px-2.5 py-1 sm:px-3">
+                          <span className="rounded-full border border-white/[0.05] bg-white/[0.03] px-2 py-0.5 sm:px-2.5 sm:py-1">
                             {week.likeCount} {dict.diaries.likes}
                           </span>
-                          <span className="rounded-full bg-white/6 px-2.5 py-1 sm:px-3">
+                          <span className="rounded-full border border-white/[0.05] bg-white/[0.03] px-2 py-0.5 sm:px-2.5 sm:py-1">
                             {week.commentCount} {dict.diaries.comments}
                           </span>
                         </div>
                       </div>
 
-                      <p className="mt-3 line-clamp-3 text-xs leading-relaxed text-slate-400 sm:mt-4 sm:text-sm sm:leading-7">
+                      <p className="mt-3 line-clamp-3 text-xs leading-relaxed text-slate-500 sm:text-sm sm:leading-relaxed">
                         {week.description}
                       </p>
 
-                      <Link
-                        href={href}
-                        className="mt-3 inline-flex text-xs font-medium text-lime-300/95 hover:text-lime-200 sm:text-sm"
-                      >
+                      <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-medium text-lime-400/80 transition group-hover:text-lime-300 sm:text-xs">
                         {dict.diaries.viewWeek}
-                      </Link>
+                        <span aria-hidden className="translate-x-0 transition group-hover:translate-x-0.5">
+                          →
+                        </span>
+                      </span>
                     </div>
                   </div>
-                </article>
+                </Link>
               );
             })
           )}
