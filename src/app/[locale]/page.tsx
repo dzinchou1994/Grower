@@ -117,7 +117,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
               href={getLocalizedPath(typedLocale, sessionUser ? "/account" : "/auth/register")}
               className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-lime-400 px-3 py-1.5 text-[11px] font-semibold text-slate-950 shadow-sm shadow-lime-500/15 transition hover:bg-lime-300 sm:px-5 sm:py-2 sm:text-sm"
             >
-              {sessionUser ? dict.nav.account : dict.home.joinCta}
+              {dict.home.joinCta}
             </Link>
             <Link
               href={getLocalizedPath(typedLocale, "/forum")}
@@ -231,62 +231,101 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
         </div>
       </section>
 
-      {/* Diary promo — grow journals */}
-      <section className="defer-render relative overflow-hidden rounded-2xl border border-white/[0.08] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] sm:rounded-[2rem]">
-        <div className="pointer-events-none absolute inset-0 bg-[#050a0f]" aria-hidden />
-        <div
-          className="pointer-events-none absolute -left-1/4 top-0 h-[120%] w-[70%] rounded-full bg-lime-500/[0.13] blur-[100px] lg:bg-lime-500/[0.08] lg:blur-[120px]"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute -right-1/4 bottom-0 h-[90%] w-[55%] rounded-full bg-emerald-600/[0.14] blur-[90px] lg:bg-emerald-600/[0.09] lg:blur-[100px]"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(132,204,22,0.09)_0%,transparent_42%,rgba(15,23,42,0.55)_100%)] lg:bg-[linear-gradient(125deg,rgba(132,204,22,0.05)_0%,transparent_50%,rgba(15,23,42,0.45)_100%)]"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.4] [background-image:radial-gradient(rgba(255,255,255,0.1)_1px,transparent_1px)] [background-size:13px_13px] mix-blend-overlay lg:opacity-[0.22]"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-lime-400/50 to-transparent"
-          aria-hidden
-        />
-
-        <div className="relative z-10 flex w-full flex-col gap-6 p-5 sm:gap-6 sm:p-6 lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:py-4">
-          <div className="min-w-0 flex-1">
-            <div className="inline-flex items-center gap-2 rounded-full border border-lime-400/30 bg-lime-400/[0.09] px-3 py-1.5 text-[11px] font-medium text-lime-100 shadow-[0_0_22px_-6px_rgba(163,230,53,0.45)] backdrop-blur-sm sm:text-xs lg:py-1 lg:pl-2.5 lg:pr-2.5 lg:text-[10px] lg:shadow-[0_0_12px_-4px_rgba(163,230,53,0.25)]">
-              <BookOpenIcon className="h-3.5 w-3.5 text-lime-300 sm:h-4 sm:w-4 lg:h-3.5 lg:w-3.5" />
-              {dict.home.diaryPromo}
-            </div>
-            <h2 className="mt-4 text-[1.35rem] font-bold leading-[1.15] tracking-tight text-white sm:mt-5 sm:text-2xl lg:mt-2.5 lg:text-xl lg:font-semibold lg:leading-snug xl:text-2xl">
-              {dict.home.diaryPromoTitle}
-            </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-300/95 sm:mt-4 sm:text-[15px] sm:leading-7 lg:mt-2 lg:text-sm lg:leading-6">
-              {dict.home.diaryPromoDescription}
-            </p>
+      {/* Grow diaries — flagship feature (gradient frame + mesh + structure, no blur glows) */}
+      <section className="defer-render relative rounded-2xl p-[1px] shadow-[0_28px_70px_-32px_rgba(0,0,0,0.75)] sm:rounded-[2rem] bg-gradient-to-br from-lime-400/45 via-emerald-800/30 to-slate-950">
+        <div className="relative overflow-hidden rounded-[calc(1rem-1px)] bg-[#020617] sm:rounded-[calc(2rem-1px)]">
+          <div
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_80%_at_15%_-20%,rgba(34,197,94,0.2),transparent_52%),radial-gradient(ellipse_70%_55%_at_92%_105%,rgba(16,185,129,0.14),transparent_55%),linear-gradient(185deg,rgba(15,23,42,0.55),rgba(2,6,23,0.92))]"
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.45] [background-image:linear-gradient(rgba(255,255,255,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:22px_22px]"
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.14] [background:repeating-linear-gradient(-38deg,transparent,transparent_11px,rgba(132,204,22,0.045)_11px,rgba(132,204,22,0.045)_12px)]"
+            aria-hidden
+          />
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-[3px] overflow-hidden bg-slate-950/80" aria-hidden>
+            <div className="h-full w-full animate-shimmer bg-gradient-to-r from-transparent via-lime-300/85 to-transparent bg-[length:200%_100%] motion-reduce:animate-none" />
           </div>
+          <div
+            className="pointer-events-none absolute left-3 top-3 z-[2] h-9 w-9 border-l-2 border-t-2 border-lime-400/45 sm:left-6 sm:top-6"
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute bottom-3 right-3 z-[2] h-9 w-9 border-b-2 border-r-2 border-emerald-400/35 sm:bottom-6 sm:right-6"
+            aria-hidden
+          />
 
-          <Link
-            href={getLocalizedPath(typedLocale, "/diaries/new")}
-            className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-lime-400 px-5 py-3.5 text-sm font-semibold text-slate-950 shadow-[0_6px_28px_-6px_rgba(163,230,53,0.55)] transition duration-200 hover:-translate-y-0.5 hover:bg-lime-300 hover:shadow-[0_10px_36px_-6px_rgba(163,230,53,0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-200/90 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050a0f] active:translate-y-0 sm:w-auto sm:rounded-full sm:px-7 sm:py-3.5 lg:py-2.5 lg:pl-6 lg:pr-5 lg:text-sm lg:hover:translate-y-0 lg:hover:shadow-[0_4px_20px_-6px_rgba(163,230,53,0.45)]"
-          >
-            {dict.home.startDiary}
-            <svg
-              className="h-4 w-4 shrink-0 opacity-90"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+          <div className="relative z-10 flex w-full flex-col gap-8 p-5 sm:gap-8 sm:p-7 lg:flex-row lg:items-center lg:justify-between lg:gap-12 lg:py-3">
+            <div className="min-w-0 flex-1">
+              <div className="inline-flex items-center gap-2 rounded-full border border-lime-400/35 bg-lime-400/[0.08] px-3 py-1.5 text-[11px] font-semibold text-lime-100 sm:px-3.5 sm:py-2 sm:text-xs">
+                <BookOpenIcon className="h-3.5 w-3.5 text-lime-300 sm:h-4 sm:w-4" />
+                {dict.home.diaryPromo}
+              </div>
+              <h2 className="mt-4 text-[1.5rem] font-bold leading-[1.15] tracking-tight text-white sm:mt-5 sm:text-[1.85rem] sm:leading-tight lg:text-3xl xl:text-[2.125rem]">
+                {dict.home.diaryPromoTitle}
+              </h2>
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-300 sm:mt-4 sm:text-[15px] sm:leading-7 lg:text-base lg:leading-7">
+                {dict.home.diaryPromoDescription}
+              </p>
+              <Link
+                href={getLocalizedPath(typedLocale, "/diaries/new")}
+                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-lime-400 px-5 py-3.5 text-sm font-semibold text-slate-950 shadow-[0_4px_0_0_rgba(21,128,61,0.4)] transition duration-200 hover:-translate-y-0.5 hover:bg-lime-300 hover:shadow-[0_6px_0_0_rgba(21,128,61,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-200/90 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020617] active:translate-y-0 sm:w-auto sm:rounded-full sm:px-8 sm:py-3.5 lg:mt-7"
+              >
+                {dict.home.startDiary}
+                <svg
+                  className="h-4 w-4 shrink-0 opacity-90"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden
+                >
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </Link>
+            </div>
+
+            <div
+              className="relative hidden w-full max-w-[300px] shrink-0 select-none lg:block"
               aria-hidden
             >
-              <path d="M5 12h14M13 6l6 6-6 6" />
-            </svg>
-          </Link>
+              <div className="animate-float motion-reduce:animate-none">
+                <div className="relative overflow-hidden rounded-2xl border border-white/[0.14] bg-gradient-to-br from-white/[0.1] via-slate-900/20 to-emerald-950/40 p-5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)]">
+                  <div className="mb-4 flex gap-1">
+                    {["W1", "W2", "W3", "W4", "W5"].map((w, i) => (
+                      <span
+                        key={w}
+                        className={`rounded-md px-2 py-1 text-[10px] font-semibold tabular-nums ${
+                          i === 2
+                            ? "bg-lime-400 text-slate-950 shadow-sm"
+                            : "bg-white/[0.07] text-slate-500"
+                        }`}
+                      >
+                        {w}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="space-y-2">
+                    <div className="h-2.5 w-[78%] rounded-full bg-white/[0.12]" />
+                    <div className="h-2.5 w-full rounded-full bg-white/[0.06]" />
+                    <div className="h-2.5 w-[88%] rounded-full bg-white/[0.05]" />
+                  </div>
+                  <div className="mt-4 flex gap-3">
+                    <div className="h-16 w-16 shrink-0 rounded-xl border border-lime-400/30 bg-gradient-to-br from-lime-400/30 via-emerald-900/30 to-slate-900/80" />
+                    <div className="flex min-w-0 flex-1 flex-col justify-center gap-2 pt-0.5">
+                      <div className="h-2 w-full rounded-full bg-white/[0.1]" />
+                      <div className="h-2 w-[72%] rounded-full bg-white/[0.06]" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
