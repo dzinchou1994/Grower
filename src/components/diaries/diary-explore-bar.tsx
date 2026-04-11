@@ -447,8 +447,8 @@ export function DiaryExploreBar(props: Props) {
     <section className="rounded-2xl border border-white/10 bg-slate-950/50 p-3 sm:p-4 lg:rounded-[1.35rem] lg:p-5">
       <QuickFilterStrip {...props} />
 
-      {/* Mobile / tablet: collapsible advanced filters */}
-      <details className="mt-3 border-t border-white/[0.06] pt-3 open:[&_summary_.chevron-btn]:rotate-180 lg:hidden">
+      {/* Advanced filters — collapsible on all breakpoints (avoids overwhelming desktop) */}
+      <details className="mt-3 border-t border-white/[0.06] pt-3 open:[&_summary_.chevron-btn]:rotate-180">
         <summary className="flex cursor-pointer list-none items-center gap-3 rounded-2xl border border-white/[0.09] bg-gradient-to-br from-slate-900/90 via-slate-950/95 to-slate-950 px-3 py-3 text-left shadow-[0_8px_32px_-12px_rgba(0,0,0,0.65)] ring-1 ring-inset ring-white/[0.04] transition hover:border-lime-400/15 hover:ring-lime-400/10 [&::-webkit-details-marker]:hidden">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-lime-400/20 via-emerald-500/10 to-slate-900/80 shadow-[inset_0_1px_0_0_rgba(190,242,100,0.12)] ring-1 ring-lime-400/25">
             <SlidersHorizontal className="h-5 w-5 text-lime-200" strokeWidth={2} aria-hidden />
@@ -479,7 +479,7 @@ export function DiaryExploreBar(props: Props) {
             </Link>
           </div>
         ) : null}
-        <div className="mt-3 max-h-[min(55vh,22rem)] min-h-0 w-full min-w-0 overflow-y-auto overflow-x-hidden overscroll-contain rounded-xl border border-white/[0.06] bg-black/20 p-3 pr-2 shadow-inner">
+        <div className="mt-3 max-h-[min(55vh,22rem)] min-h-0 w-full min-w-0 overflow-y-auto overflow-x-hidden overscroll-contain rounded-xl border border-white/[0.06] bg-black/20 p-3 pr-2 shadow-inner lg:max-h-none lg:overflow-y-visible lg:overflow-x-visible">
           <FilterSections
             basePath={basePath}
             sort={sort}
@@ -489,30 +489,6 @@ export function DiaryExploreBar(props: Props) {
           />
         </div>
       </details>
-
-      {/* Desktop: advanced filters */}
-      <div className="mt-4 hidden border-t border-white/[0.06] pt-4 lg:block">
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <span className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500">
-            {dict.filtersTitle}
-          </span>
-          {activeCount > 0 ? (
-            <Link
-              href={clearAllHref}
-              className="text-[11px] font-medium text-lime-300/90 hover:text-lime-200"
-            >
-              {dict.clearFilters}
-            </Link>
-          ) : null}
-        </div>
-        <FilterSections
-          basePath={basePath}
-          sort={sort}
-          filters={filters}
-          page={page}
-          dict={dict}
-        />
-      </div>
     </section>
   );
 }
