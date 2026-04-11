@@ -7,7 +7,7 @@ import {
   type Locale,
 } from "@/lib/i18n";
 import { getTopUsers, listForumTopics } from "@/lib/forum-data";
-import { BookOpenIcon, CannabisLeaf, CannabisLeafOutline } from "@/components/icons";
+import { BookOpenIcon } from "@/components/icons";
 import { UserAvatar } from "@/components/user-avatar";
 import { getUsernameAccentClassByXp } from "@/lib/leveling";
 import type { Metadata } from "next";
@@ -299,8 +299,6 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
           aria-hidden
         />
 
-        <CannabisLeaf className="animate-float pointer-events-none absolute -right-6 top-6 h-36 w-36 rotate-[16deg] text-lime-400/[0.07] sm:right-2 sm:top-10 sm:h-48 sm:w-48 lg:right-[10%] lg:top-1/2 lg:h-56 lg:w-56 lg:-translate-y-1/2 lg:rotate-[10deg]" />
-
         <div className="relative z-10 flex flex-col gap-6 p-5 sm:gap-8 sm:p-8 lg:flex-row lg:items-center lg:gap-10 lg:p-10">
           <div className="min-w-0 flex-1">
             <div className="inline-flex items-center gap-2 rounded-full border border-lime-400/30 bg-lime-400/[0.09] px-3 py-1.5 text-[11px] font-medium text-lime-100 shadow-[0_0_22px_-6px_rgba(163,230,53,0.45)] backdrop-blur-sm sm:text-xs">
@@ -336,7 +334,6 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
               href={getLocalizedPath(typedLocale, "/diaries/new")}
               className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-lime-400 px-5 py-3.5 text-sm font-semibold text-slate-950 shadow-[0_6px_28px_-6px_rgba(163,230,53,0.55)] transition duration-200 hover:-translate-y-0.5 hover:bg-lime-300 hover:shadow-[0_10px_36px_-6px_rgba(163,230,53,0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-200/90 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050a0f] active:translate-y-0 sm:w-auto sm:rounded-full sm:px-7 sm:py-3.5"
             >
-              <CannabisLeafOutline className="h-4 w-4 shrink-0" />
               {dict.home.startDiary}
               <svg
                 className="h-4 w-4 shrink-0 opacity-90"
