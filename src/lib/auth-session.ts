@@ -1,5 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
+import { cache } from "react";
 
 export type SessionUser = {
   userId: string;
@@ -74,11 +75,14 @@ export function verifySessionToken(token: string | undefined | null): SessionUse
   }
 }
 
-export async function getServerSessionUser(): Promise<SessionUser | null> {
+async function readServerSessionUser(): Promise<SessionUser | null> {
   const cookieStore = await cookies();
   const token = cookieStore.get(SESSION_COOKIE)?.value;
   return verifySessionToken(token);
 }
+
+/** Deduplicates session reads within a single request (layout + page + RSC trees). */
+export const getServerSessionUser = cache(readServerSessionUser);
 
 export function getSessionCookieName() {
   return SESSION_COOKIE;

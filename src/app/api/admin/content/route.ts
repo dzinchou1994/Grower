@@ -28,6 +28,7 @@ function revalidateForumListCaches() {
   revalidateTag("forum-topics-ka", "max");
   revalidateTag("forum-topics-en", "max");
   revalidateTag("forum-topics-ru", "max");
+  revalidateTag("forum-top-users-10", "max");
 }
 
 export async function GET(request: Request) {

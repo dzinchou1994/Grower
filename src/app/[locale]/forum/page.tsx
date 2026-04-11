@@ -131,21 +131,31 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
         {forumTopicList.map((topic) => (
           <article
             key={topic.slug}
-            className="rounded-2xl border border-white/10 bg-slate-950/65 p-5 transition hover:border-lime-400/30 hover:bg-slate-900 sm:rounded-[2rem] sm:p-6"
+            className="relative overflow-hidden rounded-2xl border border-white/10 bg-slate-950/65 p-5 transition hover:border-lime-400/30 hover:bg-slate-900 sm:rounded-[2rem] sm:p-6"
           >
-            <div className="flex items-start gap-3 sm:gap-4">
+            <Link
+              href={getLocalizedPath(typedLocale, `/forum/${topic.slug}`)}
+              className="absolute inset-0 z-[1] rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-400/50 focus-visible:ring-inset sm:rounded-[2rem]"
+              aria-labelledby={`forum-topic-title-${topic.slug}`}
+            >
+              <span className="sr-only">
+                {topic.title} — {topic.description}
+              </span>
+            </Link>
+
+            <div className="relative z-[2] flex items-start gap-3 pointer-events-none sm:gap-4">
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-lime-400/10 text-xl sm:h-14 sm:w-14 sm:rounded-2xl sm:text-2xl">
                 {topic.icon}
               </span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <Link
-                      href={getLocalizedPath(typedLocale, `/forum/${topic.slug}`)}
-                      className="text-lg font-semibold text-white transition hover:text-lime-300 sm:text-2xl"
+                    <h2
+                      id={`forum-topic-title-${topic.slug}`}
+                      className="text-lg font-semibold text-white sm:text-2xl"
                     >
                       {topic.title}
-                    </Link>
+                    </h2>
                     {topic.isTranslated ? (
                       <span className="mt-1 inline-flex rounded-full border border-lime-400/35 bg-lime-400/10 px-2 py-0.5 text-[10px] text-lime-300">
                         Translated
@@ -162,12 +172,12 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
               </div>
             </div>
 
-            <div className="mt-4 grid gap-2.5 sm:mt-5 sm:gap-3">
+            <div className="relative z-[3] mt-4 grid gap-2.5 sm:mt-5 sm:gap-3">
               {topic.threads.slice(0, 2).map((thread) => (
                 <Link
                   key={thread.slug}
                   href={getLocalizedPath(typedLocale, `/forum/${topic.slug}/${thread.slug}`)}
-                  className="flex items-center justify-between gap-3 rounded-2xl border border-white/8 bg-white/4 px-4 py-3 text-sm text-slate-300 sm:rounded-3xl"
+                  className="flex items-center justify-between gap-3 rounded-2xl border border-white/8 bg-white/4 px-4 py-3 text-sm text-slate-300 transition hover:border-white/15 hover:bg-white/8 sm:rounded-3xl"
                 >
                   <span className="flex min-w-0 items-center gap-2">
                     <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-white/15 bg-gradient-to-br from-slate-800 to-slate-950 text-base">

@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n";
+import { unstable_cache } from "next/cache";
 import { db } from "@/lib/db";
 
 export type CannapediaArticle = {
@@ -747,6 +748,43 @@ export async function listCannapediaArticleSummaries(includeDraft = false) {
     return listArticleSummariesFromMemory();
   }
 }
+
+/** Invalidate via `revalidateTag` when admin edits Cannapedia in the dashboard. */
+export const CANNAPEDIA_EXPLORER_TAG = "cannapedia-explorer";
+
+async function fetchCannapediaExplorerBundle(): Promise<{
+  categories: PublicCannapediaCategory[];
+  articles: PublicCannapediaArticleSummary[];
+}> {
+  try {
+    if (!hasDatabase) {
+      return {
+        categories: listCategoriesFromMemory(),
+        articles: listArticleSummariesFromMemory(),
+      };
+    }
+    const [categories, articles] = await Promise.all([
+      listCategoriesFromDatabase(),
+      listArticleSummariesFromDatabase(false),
+    ]);
+    return { categories, articles };
+  } catch {
+    return {
+      categories: listCategoriesFromMemory(),
+      articles: listArticleSummariesFromMemory(),
+    };
+  }
+}
+
+/**
+ * Cached explorer payload — avoids repeated DB reads on every Cannapedia index navigation.
+ * Admin mutations should call `revalidateTag(CANNAPEDIA_EXPLORER_TAG)`.
+ */
+export const getCannapediaExplorerBundleCached = unstable_cache(
+  fetchCannapediaExplorerBundle,
+  ["cannapedia-explorer-bundle-v1"],
+  { revalidate: 120, tags: [CANNAPEDIA_EXPLORER_TAG] },
+);
 
 export async function listCannapediaArticleSlugs() {
   if (!hasDatabase) {

@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { z } from "zod";
 import {
   adminErrorResponse,
   requireAdmin,
 } from "@/lib/admin-authz";
 import { writeAuditLog } from "@/lib/audit-log";
+import { CANNAPEDIA_EXPLORER_TAG } from "@/lib/cannapedia-data";
 import { db } from "@/lib/db";
 
 const localeTextSchema = z.object({
@@ -141,6 +143,7 @@ export async function POST(request: Request) {
         after: created,
       });
 
+      revalidateTag(CANNAPEDIA_EXPLORER_TAG, "max");
       return NextResponse.json({ ok: true, category: created });
     }
 
@@ -172,6 +175,7 @@ export async function POST(request: Request) {
       after: created,
     });
 
+    revalidateTag(CANNAPEDIA_EXPLORER_TAG, "max");
     return NextResponse.json({ ok: true, article: created });
   } catch (error) {
     if (isMissingCannapediaTable(error)) {
@@ -228,6 +232,7 @@ export async function PATCH(request: Request) {
         after: updated,
       });
 
+      revalidateTag(CANNAPEDIA_EXPLORER_TAG, "max");
       return NextResponse.json({ ok: true, category: updated });
     }
 
@@ -268,6 +273,7 @@ export async function PATCH(request: Request) {
       after: updated,
     });
 
+    revalidateTag(CANNAPEDIA_EXPLORER_TAG, "max");
     return NextResponse.json({ ok: true, article: updated });
   } catch (error) {
     if (isMissingCannapediaTable(error)) {

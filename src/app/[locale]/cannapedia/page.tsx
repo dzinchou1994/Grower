@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CannapediaExplorer } from "@/components/cannapedia-explorer";
 import { CannabisLeaf } from "@/components/icons";
-import {
-  getCannapediaCategories,
-  listCannapediaArticleSummaries,
-} from "@/lib/cannapedia-data";
+import { getCannapediaExplorerBundleCached } from "@/lib/cannapedia-data";
 import {
   isValidLocale,
   type Locale,
@@ -95,10 +92,13 @@ export default async function CannapediaPage({ params, searchParams }: PageProps
 
   const typedLocale = locale as Locale;
   const copy = cannapediaCopy(typedLocale);
-  const [categories, articles] = await Promise.all([
-    getCannapediaCategories(typedLocale),
-    listCannapediaArticleSummaries(false),
-  ]);
+  const { categories: categoryRows, articles } = await getCannapediaExplorerBundleCached();
+  const categories = categoryRows.map((entry) => ({
+    id: entry.id,
+    slug: entry.slug,
+    icon: entry.icon,
+    name: entry.names[typedLocale],
+  }));
   const activeCategorySlug = category?.trim().toLowerCase() || "";
 
   return (
