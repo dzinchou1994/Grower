@@ -136,6 +136,8 @@ const translations = {
         badge: "დღიურის შექმნა",
         title: "დაიწყე ახალი მცენარის ჟურნალის წარმოება",
         description: "ახალი მცენარის დღიურის შექმნა — სათაური, ჯიში, გარემო და ფოტოები.",
+        helpHintBefore: "კითხვების შემთხვევაში",
+        helpHintLink: "მოგვწერეთ",
       },
       newWeek: {
         badge: "კვირის განახლება",
@@ -377,6 +379,8 @@ const translations = {
         badge: "Create diary",
         title: "Start a new plant journal",
         description: "Create a new grow diary — title, strain, environment, and photos.",
+        helpHintBefore: "If you have questions,",
+        helpHintLink: "contact us",
       },
       newWeek: {
         badge: "Weekly update",
@@ -618,6 +622,8 @@ const translations = {
         badge: "Создание diary",
         title: "Начните новый журнал растения",
         description: "Создание нового дневника растения — название, сорт, среда и фото.",
+        helpHintBefore: "По вопросам",
+        helpHintLink: "напишите нам",
       },
       newWeek: {
         badge: "Недельное обновление",

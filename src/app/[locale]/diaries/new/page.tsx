@@ -91,6 +91,15 @@ export default async function NewDiaryPage({ params }: PageProps) {
             <h1 className="mt-4 text-2xl font-semibold tracking-tight text-white sm:text-3xl sm:leading-tight">
               {dict.diaries.newDiary.title}
             </h1>
+            <p className="mt-3 max-w-xl text-[12px] leading-relaxed text-slate-500 sm:text-[13px]">
+              {dict.diaries.newDiary.helpHintBefore}{" "}
+              <Link
+                href={getLocalizedPath(typedLocale, "/contact")}
+                className="text-slate-400 underline decoration-white/15 underline-offset-[3px] transition hover:text-lime-300/95 hover:decoration-lime-400/35"
+              >
+                {dict.diaries.newDiary.helpHintLink}
+              </Link>
+            </p>
           </header>
 
           <NewDiaryForm
