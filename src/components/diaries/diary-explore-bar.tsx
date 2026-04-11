@@ -161,7 +161,7 @@ function ChipLink({
       href={href}
       className={`shrink-0 rounded-lg border px-2 py-1 text-[10px] font-medium leading-tight transition sm:rounded-full sm:px-3 sm:py-1.5 sm:text-xs ${
         active
-          ? "border-lime-400/40 bg-lime-400/10 text-lime-50"
+          ? "border-yellow-400/40 bg-yellow-400/10 text-yellow-50"
           : "border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/18 hover:bg-white/[0.07] hover:text-slate-200"
       } ${className}`}
     >
@@ -323,7 +323,7 @@ export function DiarySortBar({
                 href={href}
                 className={`relative whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-medium transition-[color,background-color,box-shadow] sm:px-4 sm:py-2 sm:text-xs ${
                   active
-                    ? "bg-lime-400/[0.12] text-lime-200 shadow-[inset_0_1px_0_0_rgba(190,242,100,0.08)]"
+                    ? "bg-yellow-400/[0.12] text-yellow-200 shadow-[inset_0_1px_0_0_rgba(250,204,21,0.08)]"
                     : "text-slate-500 hover:text-slate-300"
                 }`}
               >
@@ -448,9 +448,9 @@ export function DiaryExploreBar(props: Props) {
 
       {/* Advanced filters — collapsible on all breakpoints (avoids overwhelming desktop) */}
       <details className="mt-3 border-t border-white/[0.06] pt-3 open:[&_summary_.chevron-btn]:rotate-180">
-        <summary className="flex cursor-pointer list-none items-center gap-3 rounded-2xl border border-white/[0.09] bg-gradient-to-br from-slate-900/90 via-slate-950/95 to-slate-950 px-3 py-3 text-left shadow-[0_8px_32px_-12px_rgba(0,0,0,0.65)] ring-1 ring-inset ring-white/[0.04] transition hover:border-lime-400/15 hover:ring-lime-400/10 [&::-webkit-details-marker]:hidden">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-lime-400/20 via-emerald-500/10 to-slate-900/80 shadow-[inset_0_1px_0_0_rgba(190,242,100,0.12)] ring-1 ring-lime-400/25">
-            <SlidersHorizontal className="h-5 w-5 text-lime-200" strokeWidth={2} aria-hidden />
+        <summary className="flex cursor-pointer list-none items-center gap-3 rounded-2xl border border-white/[0.09] bg-gradient-to-br from-slate-900/90 via-slate-950/95 to-slate-950 px-3 py-3 text-left shadow-[0_8px_32px_-12px_rgba(0,0,0,0.65)] ring-1 ring-inset ring-white/[0.04] transition hover:border-yellow-400/15 hover:ring-yellow-400/10 [&::-webkit-details-marker]:hidden">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-yellow-400/20 via-amber-500/10 to-slate-900/80 shadow-[inset_0_1px_0_0_rgba(250,204,21,0.12)] ring-1 ring-yellow-400/25">
+            <SlidersHorizontal className="h-5 w-5 text-yellow-200" strokeWidth={2} aria-hidden />
           </span>
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
@@ -458,7 +458,7 @@ export function DiaryExploreBar(props: Props) {
                 {dict.filtersTitle}
               </span>
               {activeCount > 0 ? (
-                <span className="inline-flex min-w-[1.25rem] items-center justify-center rounded-full bg-lime-400/20 px-2 py-0.5 text-[11px] font-bold tabular-nums text-lime-100 ring-1 ring-lime-400/35">
+                <span className="inline-flex min-w-[1.25rem] items-center justify-center rounded-full bg-yellow-400/20 px-2 py-0.5 text-[11px] font-bold tabular-nums text-yellow-100 ring-1 ring-yellow-400/35">
                   {activeCount}
                 </span>
               ) : null}
@@ -472,7 +472,7 @@ export function DiaryExploreBar(props: Props) {
           <div className="mt-2 flex justify-end px-0.5">
             <Link
               href={clearAllHref}
-              className="rounded-full px-2 py-1 text-[11px] font-medium text-lime-300/95 underline-offset-2 hover:text-lime-200 hover:underline"
+              className="rounded-full px-2 py-1 text-[11px] font-medium text-yellow-300/95 underline-offset-2 hover:text-yellow-200 hover:underline"
             >
               {dict.clearFilters}
             </Link>

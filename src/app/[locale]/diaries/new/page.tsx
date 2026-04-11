@@ -49,7 +49,7 @@ export default async function NewDiaryPage({ params }: PageProps) {
     <div className="relative mx-auto w-full max-w-3xl">
       <Link
         href={getLocalizedPath(typedLocale, "/diaries")}
-        className="group mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-sm text-slate-400 transition hover:border-lime-400/25 hover:bg-white/[0.05] hover:text-lime-200"
+        className="group mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-sm text-slate-400 transition hover:border-yellow-400/25 hover:bg-white/[0.05] hover:text-yellow-200"
       >
         <svg
           className="h-4 w-4 transition group-hover:-translate-x-0.5"
@@ -67,11 +67,11 @@ export default async function NewDiaryPage({ params }: PageProps) {
       <article className="relative overflow-hidden rounded-[1.75rem] border border-white/[0.07] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] sm:rounded-[2rem]">
         <div className="pointer-events-none absolute inset-0 bg-[#050a0f]" aria-hidden />
         <div
-          className="pointer-events-none absolute -right-24 top-0 h-72 w-72 rounded-full bg-lime-500/[0.11] blur-[100px]"
+          className="pointer-events-none absolute -right-24 top-0 h-72 w-72 rounded-full bg-yellow-500/[0.11] blur-[100px]"
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute -bottom-16 -left-20 h-56 w-56 rounded-full bg-emerald-600/[0.09] blur-[90px]"
+          className="pointer-events-none absolute -bottom-16 -left-20 h-56 w-56 rounded-full bg-amber-600/[0.09] blur-[90px]"
           aria-hidden
         />
         <div
@@ -79,13 +79,13 @@ export default async function NewDiaryPage({ params }: PageProps) {
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-lime-400/35 to-transparent"
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-yellow-400/35 to-transparent"
           aria-hidden
         />
 
         <div className="relative px-5 py-8 sm:px-8 sm:py-10">
           <header className="mb-8 border-b border-white/[0.06] pb-8 sm:mb-10 sm:pb-10">
-            <p className="inline-flex items-center rounded-full border border-lime-400/25 bg-lime-400/[0.07] px-3 py-1 text-[11px] font-medium tracking-wide text-lime-100/95">
+            <p className="inline-flex items-center rounded-full border border-yellow-400/25 bg-yellow-400/[0.07] px-3 py-1 text-[11px] font-medium tracking-wide text-yellow-100/95">
               {dict.diaries.newDiary.badge}
             </p>
             <h1 className="mt-4 text-2xl font-semibold tracking-tight text-white sm:text-3xl sm:leading-tight">
@@ -95,7 +95,7 @@ export default async function NewDiaryPage({ params }: PageProps) {
               {dict.diaries.newDiary.helpHintBefore}{" "}
               <Link
                 href={getLocalizedPath(typedLocale, "/contact")}
-                className="text-slate-400 underline decoration-white/15 underline-offset-[3px] transition hover:text-lime-300/95 hover:decoration-lime-400/35"
+                className="text-slate-400 underline decoration-white/15 underline-offset-[3px] transition hover:text-yellow-300/95 hover:decoration-yellow-400/35"
               >
                 {dict.diaries.newDiary.helpHintLink}
               </Link>

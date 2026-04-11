@@ -55,7 +55,7 @@ export default async function NewWeekPage({ params }: PageProps) {
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-6">
       <section className="rounded-[2rem] border border-white/10 bg-white/6 p-6 sm:p-8">
-        <p className="text-sm text-lime-300">{dict.diaries.newWeek.badge}</p>
+        <p className="text-sm text-yellow-300">{dict.diaries.newWeek.badge}</p>
         <h1 className="mt-2 text-3xl font-semibold text-white sm:text-5xl">
           {dict.diaries.newWeek.titlePrefix} {diary.title}
         </h1>
@@ -64,7 +64,7 @@ export default async function NewWeekPage({ params }: PageProps) {
         </p>
         <Link
           href={getLocalizedPath(typedLocale, `/diaries/${slug}`)}
-          className="mt-4 inline-block text-sm text-lime-300 hover:text-lime-200"
+          className="mt-4 inline-block text-sm text-yellow-300 hover:text-yellow-200"
         >
           ← {dict.diaries.backToDiaries}
         </Link>

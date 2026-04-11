@@ -205,7 +205,7 @@ export function NewWeekForm({
           accept="image/jpeg,image/png,image/webp,image/gif"
           multiple
           onChange={(e) => setFiles(Array.from(e.target.files ?? []))}
-          className="w-full text-sm text-slate-200 file:mr-4 file:rounded-full file:border-0 file:bg-lime-400 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-slate-950 hover:file:bg-lime-300"
+          className="w-full text-sm text-slate-200 file:mr-4 file:rounded-full file:border-0 file:bg-yellow-400 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-slate-950 hover:file:bg-yellow-300"
         />
       </label>
 
@@ -225,7 +225,7 @@ export function NewWeekForm({
         <button
           type="submit"
           disabled={pending}
-          className="rounded-full bg-lime-400 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-lime-300 disabled:cursor-not-allowed disabled:opacity-60"
+          className="rounded-full bg-yellow-400 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-yellow-300 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {pending ? exploreDict.posting : exploreDict.submitWeek}
         </button>

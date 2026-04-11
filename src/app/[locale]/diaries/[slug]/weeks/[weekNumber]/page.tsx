@@ -99,12 +99,12 @@ export default async function DiaryWeekPage({ params }: PageProps) {
       <div className="rounded-2xl border border-white/10 bg-slate-950/65 p-5 sm:rounded-[2rem] sm:p-8">
         <Link
           href={getLocalizedPath(typedLocale, `/diaries/${diary.slug}`)}
-          className="text-xs text-lime-300 transition hover:text-lime-200 sm:text-sm"
+          className="text-xs text-yellow-300 transition hover:text-yellow-200 sm:text-sm"
         >
           ← {dict.diaries.backToDiaries}
         </Link>
 
-        <div className="mt-4 flex items-center gap-2 text-xs text-lime-300 sm:text-sm">
+        <div className="mt-4 flex items-center gap-2 text-xs text-yellow-300 sm:text-sm">
           <CannabisLeaf className="h-4 w-4 shrink-0" />
           {diary.title}
         </div>
@@ -171,7 +171,7 @@ export default async function DiaryWeekPage({ params }: PageProps) {
                   <p className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-xs text-slate-500">
                     <Link
                       href={getLocalizedPath(typedLocale, `/u/${c.author.username}`)}
-                      className="text-sm font-semibold text-white hover:text-lime-300"
+                      className="text-sm font-semibold text-white hover:text-yellow-300"
                     >
                       @{c.author.username}
                     </Link>

@@ -21,10 +21,10 @@ import {
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
 
 const inputClassName =
-  "w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-500 shadow-sm shadow-black/20 transition focus:border-lime-400/40 focus:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-lime-400/15";
+  "w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-500 shadow-sm shadow-black/20 transition focus:border-yellow-400/40 focus:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-yellow-400/15";
 
 const selectClassName =
-  "w-full cursor-pointer rounded-xl border border-white/[0.08] bg-[#0a121a] px-4 py-3 text-sm text-white shadow-sm shadow-black/20 transition focus:border-lime-400/40 focus:outline-none focus:ring-2 focus:ring-lime-400/15";
+  "w-full cursor-pointer rounded-xl border border-white/[0.08] bg-[#0a121a] px-4 py-3 text-sm text-white shadow-sm shadow-black/20 transition focus:border-yellow-400/40 focus:outline-none focus:ring-2 focus:ring-yellow-400/15";
 
 const labelClassName = "mb-2 block text-xs font-medium text-slate-400";
 
@@ -247,7 +247,7 @@ export function NewDiaryForm({
           <button
             type="button"
             onClick={() => setStrains([...strains, { name: "", breeder: "" }])}
-            className="text-sm font-medium text-lime-300/90 transition hover:text-lime-200"
+            className="text-sm font-medium text-yellow-300/90 transition hover:text-yellow-200"
           >
             + {exploreDict.addStrain}
           </button>
@@ -356,7 +356,7 @@ export function NewDiaryForm({
           accept="image/jpeg,image/png,image/webp,image/gif"
           multiple
           onChange={(e) => setCoverFiles(Array.from(e.target.files ?? []))}
-          className="w-full text-sm text-slate-300 file:mr-4 file:cursor-pointer file:rounded-full file:border-0 file:bg-lime-400 file:px-5 file:py-2.5 file:text-sm file:font-semibold file:text-slate-950 file:shadow-md file:shadow-lime-500/20 file:transition hover:file:bg-lime-300"
+          className="w-full text-sm text-slate-300 file:mr-4 file:cursor-pointer file:rounded-full file:border-0 file:bg-yellow-400 file:px-5 file:py-2.5 file:text-sm file:font-semibold file:text-slate-950 file:shadow-md file:shadow-yellow-500/20 file:transition hover:file:bg-yellow-300"
         />
         {coverPreviewUrls.length > 0 ? (
           <ul className="mt-4 flex flex-wrap gap-3" aria-label="Cover preview">
@@ -373,7 +373,7 @@ export function NewDiaryForm({
                 <button
                   type="button"
                   onClick={() => removeCoverAt(i)}
-                  className="absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-full border border-white/15 bg-black/70 text-white shadow-md backdrop-blur-sm transition hover:border-rose-400/40 hover:bg-rose-500/90 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-400/50"
+                  className="absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-full border border-white/15 bg-black/70 text-white shadow-md backdrop-blur-sm transition hover:border-rose-400/40 hover:bg-rose-500/90 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400/50"
                   aria-label={exploreDict.removeStrain}
                 >
                   <svg
@@ -409,7 +409,7 @@ export function NewDiaryForm({
         <button
           type="submit"
           disabled={pending}
-          className="w-full max-w-md rounded-full bg-lime-400 px-8 py-3.5 text-sm font-semibold text-slate-950 shadow-[0_4px_24px_-4px_rgba(163,230,53,0.45)] transition hover:bg-lime-300 hover:shadow-[0_8px_32px_-4px_rgba(163,230,53,0.4)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:min-w-[14rem]"
+          className="w-full max-w-md rounded-full bg-yellow-400 px-8 py-3.5 text-sm font-semibold text-slate-950 shadow-[0_4px_24px_-4px_rgba(250,204,21,0.45)] transition hover:bg-yellow-300 hover:shadow-[0_8px_32px_-4px_rgba(250,204,21,0.4)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:min-w-[14rem]"
         >
           {pending ? exploreDict.posting : exploreDict.submitCreate}
         </button>

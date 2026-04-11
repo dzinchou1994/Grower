@@ -90,8 +90,8 @@ export default async function DiariesPage({ params, searchParams }: PageProps) {
   return (
     <div className="flex flex-col gap-5 sm:gap-6">
       <section className="rounded-2xl border border-white/10 bg-slate-950/50 p-5 sm:rounded-[2rem] sm:p-8">
-        <div className="flex items-center gap-2 text-xs font-medium text-lime-400 sm:text-sm">
-          <CannabisLeaf className="h-4 w-4 shrink-0 text-lime-300" />
+        <div className="flex items-center gap-2 text-xs font-medium text-yellow-400 sm:text-sm">
+          <CannabisLeaf className="h-4 w-4 shrink-0 text-yellow-300" />
           {dict.diaries.badge}
         </div>
         <h1 className="mt-2 text-lg font-semibold text-white sm:text-2xl lg:text-3xl">
@@ -101,10 +101,10 @@ export default async function DiariesPage({ params, searchParams }: PageProps) {
         {sessionUser ? (
           <Link
             href={getLocalizedPath(typedLocale, "/diaries/new")}
-            className="btn-lime-sheen group mt-5 inline-flex items-center gap-2 rounded-full border border-lime-300/45 bg-gradient-to-b from-lime-400/[0.22] to-lime-500/[0.08] px-4 py-2.5 text-sm font-semibold text-lime-50 ring-1 ring-lime-400/25 transition hover:border-lime-200/55 hover:from-lime-300/30 hover:to-lime-400/15 hover:shadow-[0_0_28px_-6px_rgba(190,242,100,0.55)] hover:ring-lime-300/35 sm:mt-6 sm:px-5 sm:py-3"
+            className="btn-diary-sheen group mt-5 inline-flex items-center gap-2 rounded-full border border-yellow-300/45 bg-gradient-to-b from-yellow-400/[0.22] to-yellow-500/[0.08] px-4 py-2.5 text-sm font-semibold text-yellow-50 ring-1 ring-yellow-400/25 transition hover:border-yellow-200/55 hover:from-yellow-300/30 hover:to-yellow-400/15 hover:shadow-[0_0_28px_-6px_rgba(250,204,21,0.55)] hover:ring-yellow-300/35 sm:mt-6 sm:px-5 sm:py-3"
           >
             <span className="relative z-[1] inline-flex items-center gap-2">
-              <CannabisLeafOutline className="h-4 w-4 text-lime-100/95 drop-shadow-[0_0_8px_rgba(190,242,100,0.35)] transition group-hover:text-white" />
+              <CannabisLeafOutline className="h-4 w-4 text-yellow-100/95 drop-shadow-[0_0_8px_rgba(250,204,21,0.35)] transition group-hover:text-white" />
               {dict.diaries.createDiary}
             </span>
           </Link>

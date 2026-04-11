@@ -3,6 +3,7 @@ import { formatDistanceToNow } from "date-fns";
 import type { Locale as DateFnsLocale } from "date-fns";
 import { Clock, Heart, MessageCircle } from "lucide-react";
 import type { DiaryListItem } from "@/lib/diary-data";
+import { formatDistanceDisplayKa } from "@/lib/format-distance-ka";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
 
 export type DiaryExploreCardCopy = {
@@ -29,10 +30,13 @@ export function DiaryExploreCard({
   imageSizes = "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw",
 }: Props) {
   const extraStrains = Math.max(0, diary.strains.length - 1);
-  const rel = formatDistanceToNow(diary.updatedAt, {
-    addSuffix: true,
-    locale: dateFnsLocale,
-  });
+  const rel = formatDistanceDisplayKa(
+    formatDistanceToNow(diary.updatedAt, {
+      addSuffix: true,
+      locale: dateFnsLocale,
+    }),
+    typedLocale,
+  );
   const diaryHref = getLocalizedPath(typedLocale, `/diaries/${diary.slug}`);
   const preview = diary.previewImageUrls[0];
   const metaRow = (
@@ -55,7 +59,7 @@ export function DiaryExploreCard({
       </span>
       <span className="inline-flex items-center gap-1" title={`${diary.totalLikes} ${explore.likes}`}>
         <Heart
-          className={`h-3.5 w-3.5 shrink-0 ${preview ? "text-rose-300/95" : "text-rose-400/90"}`}
+          className={`h-3.5 w-3.5 shrink-0 ${preview ? "text-white/55" : "text-slate-400"}`}
           strokeWidth={2}
           aria-hidden
         />
@@ -80,7 +84,7 @@ export function DiaryExploreCard({
     <article className="h-full min-h-0">
       <Link
         href={diaryHref}
-        className="group flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-white/10 bg-slate-950/65 text-left shadow-[0_12px_40px_-16px_rgba(0,0,0,0.65)] transition hover:border-lime-400/35 hover:shadow-[0_16px_44px_-12px_rgba(0,0,0,0.55)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-400/50 sm:rounded-2xl"
+        className="group flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-white/10 bg-slate-950/65 text-left shadow-[0_12px_40px_-16px_rgba(0,0,0,0.65)] transition hover:border-yellow-400/35 hover:shadow-[0_16px_44px_-12px_rgba(0,0,0,0.55)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-400/50 sm:rounded-2xl"
       >
         {preview ? (
           <div className="relative aspect-[3/4] w-full min-h-[13rem] overflow-hidden sm:aspect-[4/5] sm:min-h-[15rem]">
@@ -101,7 +105,7 @@ export function DiaryExploreCard({
               {explore.relativeWeeks.replace("{n}", String(diary.weekCount))}
             </span>
             <div className="absolute inset-x-0 bottom-0 z-[2] flex min-h-0 flex-col p-3 sm:p-4">
-              <p className="line-clamp-2 text-[9px] font-medium uppercase leading-tight tracking-[0.12em] text-lime-200 [text-shadow:0_1px_2px_rgba(0,0,0,1)] sm:text-[10px] sm:tracking-[0.18em]">
+              <p className="line-clamp-2 text-[9px] font-medium uppercase leading-tight tracking-[0.12em] text-yellow-200 [text-shadow:0_1px_2px_rgba(0,0,0,1)] sm:text-[10px] sm:tracking-[0.18em]">
                 {diary.strain}
                 {extraStrains > 0
                   ? ` · ${explore.strainsMore.replace("{count}", String(extraStrains))}`
@@ -118,7 +122,7 @@ export function DiaryExploreCard({
           <div className="flex min-h-0 flex-1 flex-col p-3 sm:p-5 lg:p-3.5">
             <div className="flex items-start justify-between gap-1.5 sm:gap-3">
               <div className="min-w-0 flex-1">
-                <p className="line-clamp-2 text-[9px] uppercase leading-tight tracking-[0.12em] text-lime-300/95 sm:text-[10px] sm:tracking-[0.2em] lg:line-clamp-1 lg:text-[9px]">
+                <p className="line-clamp-2 text-[9px] uppercase leading-tight tracking-[0.12em] text-yellow-300/95 sm:text-[10px] sm:tracking-[0.2em] lg:line-clamp-1 lg:text-[9px]">
                   {diary.strain}
                   {extraStrains > 0
                     ? ` · ${explore.strainsMore.replace("{count}", String(extraStrains))}`

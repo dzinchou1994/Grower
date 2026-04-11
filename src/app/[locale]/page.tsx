@@ -97,7 +97,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
             </p>
           </div>
 
-          <div className="-mx-1 flex max-w-full flex-nowrap items-center gap-1.5 overflow-x-auto px-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:gap-2 sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
+          <div className="flex max-w-full min-w-0 flex-nowrap items-center gap-2 overflow-x-auto overflow-y-visible py-0.5 pl-0 pr-3 [-ms-overflow-style:none] [scrollbar-width:none] sm:gap-2 sm:overflow-visible sm:pr-0 [&::-webkit-scrollbar]:hidden">
             <Link
               href={getLocalizedPath(typedLocale, sessionUser ? "/account" : "/auth/register")}
               className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-lime-400 px-3 py-1.5 text-[11px] font-semibold text-slate-950 shadow-sm shadow-lime-500/15 transition hover:bg-lime-300 sm:px-5 sm:py-2 sm:text-sm"
@@ -112,7 +112,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
             </Link>
             <Link
               href={getLocalizedPath(typedLocale, "/diaries")}
-              className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-full border border-white/[0.1] bg-white/[0.05] px-3 py-1.5 text-[11px] font-medium text-slate-200/95 backdrop-blur-sm transition hover:border-lime-400/25 hover:bg-white/[0.1] hover:text-white sm:px-5 sm:py-2 sm:text-sm"
+              className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-yellow-400 px-3 py-1.5 text-[11px] font-semibold text-slate-950 shadow-sm shadow-yellow-500/20 transition hover:bg-yellow-300 sm:px-5 sm:py-2 sm:text-sm"
             >
               {dict.home.secondaryCta}
             </Link>

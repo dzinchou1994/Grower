@@ -78,7 +78,7 @@ export function DiaryWeekCommentForm({
       <button
         type="submit"
         disabled={pending}
-        className="rounded-full border border-lime-400/40 bg-lime-400/15 px-4 py-2 text-xs font-semibold text-lime-100 hover:bg-lime-400/25 disabled:opacity-50"
+        className="rounded-full border border-yellow-400/40 bg-yellow-400/15 px-4 py-2 text-xs font-semibold text-yellow-100 hover:bg-yellow-400/25 disabled:opacity-50"
       >
         {pending ? posting : postComment}
       </button>

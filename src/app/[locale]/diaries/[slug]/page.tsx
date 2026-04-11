@@ -9,6 +9,7 @@ import { DiarySetupDisplay } from "@/components/diaries/diary-setup-display";
 import { CannabisLeaf } from "@/components/icons";
 import { UserAvatar } from "@/components/user-avatar";
 import { getPublicDiaryBySlug } from "@/lib/diary-data";
+import { formatDistanceDisplayKa } from "@/lib/format-distance-ka";
 import { getDiaryLabels } from "@/lib/diary-labels";
 import { DiarySharePanel } from "@/components/diary-share-panel";
 import { diaryOpenGraphMetadata } from "@/lib/diary-open-graph";
@@ -84,7 +85,10 @@ export default async function DiaryDetailPage({ params }: PageProps) {
   const isAuthor = Boolean(sessionUser && sessionUser.userId === diary.authorId);
   const enumLabels = getDiaryLabels(typedLocale);
   const dfLocale = dateLocales[typedLocale];
-  const rel = formatDistanceToNow(diary.updatedAt, { addSuffix: true, locale: dfLocale });
+  const rel = formatDistanceDisplayKa(
+    formatDistanceToNow(diary.updatedAt, { addSuffix: true, locale: dfLocale }),
+    typedLocale,
+  );
 
   const latest = diary.latestWeek;
   const earlierWeeks = diary.weeks
@@ -99,10 +103,10 @@ export default async function DiaryDetailPage({ params }: PageProps) {
   return (
     <div className="flex flex-col gap-6 sm:gap-8">
       <section className="relative overflow-hidden rounded-2xl border border-white/[0.07] bg-gradient-to-b from-slate-950/40 to-transparent p-5 sm:rounded-3xl sm:p-8">
-        <CannabisLeaf className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rotate-12 text-lime-400/[0.035] sm:h-40 sm:w-40" />
+        <CannabisLeaf className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rotate-12 text-yellow-400/[0.035] sm:h-40 sm:w-40" />
         <Link
           href={getLocalizedPath(typedLocale, "/diaries")}
-          className="absolute left-5 top-5 z-20 inline-flex max-w-[calc(100%-1rem)] items-center justify-center gap-1.5 rounded-full border border-white/[0.12] bg-slate-950/85 px-3 py-1.5 text-[11px] font-medium text-lime-200/95 shadow-sm backdrop-blur-sm transition hover:border-lime-400/30 hover:bg-lime-400/10 hover:text-white sm:left-8 sm:top-8 sm:text-xs lg:hidden"
+          className="absolute left-5 top-5 z-20 inline-flex max-w-[calc(100%-1rem)] items-center justify-center gap-1.5 rounded-full border border-white/[0.12] bg-slate-950/85 px-3 py-1.5 text-[11px] font-medium text-yellow-200/95 shadow-sm backdrop-blur-sm transition hover:border-yellow-400/30 hover:bg-yellow-400/10 hover:text-white sm:left-8 sm:top-8 sm:text-xs lg:hidden"
         >
           <ArrowLeft className="h-3.5 w-3.5 shrink-0 opacity-90" strokeWidth={2.25} aria-hidden />
           {dict.diaries.backToDiariesShort}
@@ -119,7 +123,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
             </div>
           ) : null}
           <div className="max-w-3xl flex-1">
-            <div className="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.18em] text-lime-400/80 sm:text-[11px]">
+            <div className="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.18em] text-yellow-400/80 sm:text-[11px]">
               <CannabisLeaf className="h-3 w-3 opacity-80" />
               {enumLabels.environment[diary.environment]} · {dict.diaries.diaryType}
             </div>
@@ -138,7 +142,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
               </span>
               <Link
                 href={getLocalizedPath(typedLocale, `/u/${diary.author.username}`)}
-                className="font-medium text-slate-400 underline-offset-2 transition hover:text-lime-300 hover:underline"
+                className="font-medium text-slate-400 underline-offset-2 transition hover:text-yellow-300 hover:underline"
               >
                 @{diary.author.username}
               </Link>
@@ -164,13 +168,13 @@ export default async function DiaryDetailPage({ params }: PageProps) {
 
           <>
             {/* Mobile: compact collapsible overview — saves vertical space */}
-            <details className="group rounded-2xl border border-white/[0.07] bg-gradient-to-br from-white/[0.04] to-transparent shadow-[0_8px_32px_-20px_rgba(0,0,0,0.5)] backdrop-blur-sm lg:hidden open:border-lime-400/20 open:shadow-[0_12px_40px_-16px_rgba(74,222,128,0.08)]">
+            <details className="group rounded-2xl border border-white/[0.07] bg-gradient-to-br from-white/[0.04] to-transparent shadow-[0_8px_32px_-20px_rgba(0,0,0,0.5)] backdrop-blur-sm lg:hidden open:border-yellow-400/20 open:shadow-[0_12px_40px_-16px_rgba(250,204,21,0.08)]">
               <summary className="flex cursor-pointer list-none items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-white/[0.03] [&::-webkit-details-marker]:hidden">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-lime-400/25 via-emerald-500/10 to-slate-900/50 shadow-[inset_0_1px_0_0_rgba(190,242,100,0.15)] ring-1 ring-lime-400/25">
-                  <Layers className="h-5 w-5 text-lime-200/90" strokeWidth={1.75} aria-hidden />
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400/25 via-amber-500/10 to-slate-900/50 shadow-[inset_0_1px_0_0_rgba(250,204,21,0.15)] ring-1 ring-yellow-400/25">
+                  <Layers className="h-5 w-5 text-yellow-200/90" strokeWidth={1.75} aria-hidden />
                 </span>
                 <div className="min-w-0 flex-1 text-left">
-                  <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-lime-400/70">
+                  <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-yellow-400/70">
                     {dict.diaries.overview}
                   </p>
                   <p className="mt-0.5 truncate text-[15px] font-semibold tracking-tight text-white">
@@ -180,7 +184,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                     @{diary.author.username}
                   </p>
                 </div>
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/[0.1] bg-black/30 text-slate-400 transition group-open:border-lime-400/25 group-open:bg-lime-400/10 group-open:text-lime-200">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/[0.1] bg-black/30 text-slate-400 transition group-open:border-yellow-400/25 group-open:bg-yellow-400/10 group-open:text-yellow-200">
                   <ChevronDown
                     className="h-4 w-4 transition duration-300 group-open:rotate-180"
                     strokeWidth={2.25}
@@ -235,7 +239,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                   {isAuthor ? (
                     <Link
                       href={getLocalizedPath(typedLocale, `/diaries/${diary.slug}/weeks/new`)}
-                      className="flex-1 rounded-full bg-lime-400/90 px-3 py-2 text-center text-[11px] font-semibold text-slate-950 transition hover:bg-lime-300"
+                      className="flex-1 rounded-full bg-yellow-400/90 px-3 py-2 text-center text-[11px] font-semibold text-slate-950 transition hover:bg-yellow-300"
                     >
                       {dict.diaries.addWeeklyUpdate}
                     </Link>
@@ -292,7 +296,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                 {isAuthor ? (
                   <Link
                     href={getLocalizedPath(typedLocale, `/diaries/${diary.slug}/weeks/new`)}
-                    className="rounded-full bg-lime-400/90 px-4 py-2 text-center text-xs font-semibold text-slate-950 transition hover:bg-lime-300 sm:text-sm"
+                    className="rounded-full bg-yellow-400/90 px-4 py-2 text-center text-xs font-semibold text-slate-950 transition hover:bg-yellow-300 sm:text-sm"
                   >
                     {dict.diaries.addWeeklyUpdate}
                   </Link>
@@ -306,8 +310,8 @@ export default async function DiaryDetailPage({ params }: PageProps) {
       <DiarySetupDisplay setup={diary.setup} labels={dict.diaries.setup} />
 
       {latest ? (
-        <section className="rounded-2xl border border-lime-400/15 bg-lime-400/[0.03] p-5 sm:rounded-3xl sm:p-7">
-          <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-lime-400/70">
+        <section className="rounded-2xl border border-yellow-400/15 bg-yellow-400/[0.03] p-5 sm:rounded-3xl sm:p-7">
+          <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-yellow-400/70">
             {explore.latestWeekBadge}
           </p>
           <h2 className="mt-2 text-lg font-semibold tracking-tight text-white sm:text-2xl">
@@ -316,7 +320,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                 typedLocale,
                 `/diaries/${diary.slug}/weeks/${latest.weekNumber}`,
               )}
-              className="transition hover:text-lime-300/95"
+              className="transition hover:text-yellow-300/95"
             >
               {explore.weekHeading.replace("{n}", String(latest.weekNumber))}
               {latest.title ? `: ${latest.title}` : ""}
@@ -331,7 +335,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                 <Link
                   key={im.id}
                   href={weekHref(latest.weekNumber)}
-                  className="relative aspect-square overflow-hidden rounded-xl border border-white/10 transition hover:border-lime-400/30"
+                  className="relative aspect-square overflow-hidden rounded-xl border border-white/10 transition hover:border-yellow-400/30"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={im.imageUrl} alt="" className="h-full w-full object-cover" />
@@ -377,7 +381,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                 <Link
                   key={week.id}
                   href={href}
-                  className="group block rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 transition hover:border-lime-400/20 hover:bg-white/[0.04] sm:rounded-2xl sm:p-5"
+                  className="group block rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 transition hover:border-yellow-400/20 hover:bg-white/[0.04] sm:rounded-2xl sm:p-5"
                 >
                   <div className="flex flex-col gap-4 sm:flex-row sm:gap-5">
                     {preview.length > 0 ? (
@@ -406,10 +410,10 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                         <div className="min-w-0 flex-1">
-                          <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-lime-400/70 sm:text-[11px]">
+                          <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-yellow-400/70 sm:text-[11px]">
                             {explore.weekHeading.replace("{n}", String(week.weekNumber))}
                           </p>
-                          <p className="mt-1.5 text-base font-semibold text-white transition group-hover:text-lime-200/95 sm:mt-1.5 sm:text-lg">
+                          <p className="mt-1.5 text-base font-semibold text-white transition group-hover:text-yellow-200/95 sm:mt-1.5 sm:text-lg">
                             {week.title ||
                               explore.weekHeading.replace("{n}", String(week.weekNumber))}
                           </p>
@@ -431,7 +435,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                         {week.description}
                       </p>
 
-                      <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-medium text-lime-400/80 transition group-hover:text-lime-300 sm:text-xs">
+                      <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-medium text-yellow-400/80 transition group-hover:text-yellow-300 sm:text-xs">
                         {dict.diaries.viewWeek}
                         <span aria-hidden className="translate-x-0 transition group-hover:translate-x-0.5">
                           →
@@ -465,7 +469,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                   <p className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-xs text-slate-500">
                     <Link
                       href={getLocalizedPath(typedLocale, `/u/${c.author.username}`)}
-                      className="text-sm font-semibold text-white hover:text-lime-300"
+                      className="text-sm font-semibold text-white hover:text-yellow-300"
                     >
                       @{c.author.username}
                     </Link>
