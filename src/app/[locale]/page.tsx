@@ -131,12 +131,6 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
             >
               {dict.home.secondaryCta}
             </Link>
-            <Link
-              href={getLocalizedPath(typedLocale, "/cannapedia")}
-              className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-full border border-white/[0.1] bg-white/[0.05] px-3 py-1.5 text-[11px] font-medium text-slate-200/95 backdrop-blur-sm transition hover:border-lime-400/25 hover:bg-white/[0.1] hover:text-white sm:px-5 sm:py-2 sm:text-sm"
-            >
-              {dict.home.tertiaryCta}
-            </Link>
           </div>
         </div>
       </section>
