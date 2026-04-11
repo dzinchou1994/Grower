@@ -111,23 +111,29 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
             </p>
           </div>
 
-          {/* CTAs */}
-          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+          {/* CTAs — one row on mobile: nowrap + horizontal scroll if needed */}
+          <div className="-mx-1 flex max-w-full flex-nowrap items-stretch gap-1 overflow-x-auto px-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:gap-2 sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
             <Link
               href={getLocalizedPath(typedLocale, sessionUser ? "/account" : "/auth/register")}
-              className="inline-flex items-center justify-center rounded-lg bg-lime-400 px-3.5 py-1.5 text-[12px] font-semibold text-slate-950 transition hover:bg-lime-300 sm:px-4 sm:py-2 sm:text-sm"
+              className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-lg bg-lime-400 px-2.5 py-1.5 text-[11px] font-semibold text-slate-950 transition hover:bg-lime-300 sm:px-4 sm:py-2 sm:text-sm"
             >
               {sessionUser ? dict.nav.account : dict.home.joinCta}
             </Link>
             <Link
               href={getLocalizedPath(typedLocale, "/forum")}
-              className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[12px] font-medium text-slate-200 transition hover:border-lime-400/20 hover:bg-white/[0.08] hover:text-lime-200 sm:px-4 sm:py-2 sm:text-sm"
+              className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[11px] font-medium text-slate-200 transition hover:border-lime-400/20 hover:bg-white/[0.08] hover:text-lime-200 sm:px-4 sm:py-2 sm:text-sm"
             >
               {dict.home.primaryCta}
             </Link>
             <Link
+              href={getLocalizedPath(typedLocale, "/diaries")}
+              className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[11px] font-medium text-slate-200 transition hover:border-lime-400/20 hover:bg-white/[0.08] hover:text-lime-200 sm:px-4 sm:py-2 sm:text-sm"
+            >
+              {dict.home.secondaryCta}
+            </Link>
+            <Link
               href={getLocalizedPath(typedLocale, "/cannapedia")}
-              className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[12px] font-medium text-slate-200 transition hover:border-lime-400/20 hover:bg-white/[0.08] hover:text-lime-200 sm:px-4 sm:py-2 sm:text-sm"
+              className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[11px] font-medium text-slate-200 transition hover:border-lime-400/20 hover:bg-white/[0.08] hover:text-lime-200 sm:px-4 sm:py-2 sm:text-sm"
             >
               {dict.home.tertiaryCta}
             </Link>
