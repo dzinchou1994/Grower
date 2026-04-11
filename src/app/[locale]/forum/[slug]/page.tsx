@@ -223,7 +223,7 @@ export default async function ForumTopicPage({ params }: PageProps) {
                   </div>
 
                   {thread.body ? (
-                    <p className="mt-3 w-full min-w-0 text-xs leading-relaxed text-slate-300 sm:text-sm">
+                    <p className="mt-3 w-full min-w-0 text-[13px] leading-relaxed text-slate-300 sm:text-[15px]">
                       {thread.body}
                       {thread.bodyTranslated ? (
                         <span className="ml-2 inline-flex rounded-full border border-lime-400/35 bg-lime-400/10 px-1.5 py-0.5 text-[10px] text-lime-300">
