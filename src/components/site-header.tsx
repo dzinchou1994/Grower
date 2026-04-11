@@ -347,22 +347,26 @@ export function SiteHeader({
         createPortal(
           <div className="lg:hidden">
             <div
-              className="fixed inset-0 z-[70] bg-slate-950/70"
+              className="fixed inset-0 z-[70] bg-[#020617]/65 backdrop-blur-[3px]"
               onClick={() => setMobileMenuOpen(false)}
               aria-hidden
             />
             <aside
-              className="fixed right-0 top-0 z-[75] flex h-dvh w-[86%] max-w-sm flex-col overflow-y-auto overscroll-contain border-l border-white/10 bg-gradient-to-b from-[#0a1629]/98 to-[#08111f]/98 p-4 shadow-2xl shadow-black/60 backdrop-blur-md"
+              className="fixed right-0 top-0 z-[75] flex h-dvh w-[min(88vw,20rem)] flex-col overflow-y-auto overscroll-contain border-l border-white/[0.07] bg-[#080d14]/[0.97] shadow-[-16px_0_48px_-8px_rgba(0,0,0,0.55)] backdrop-blur-2xl"
               role="dialog"
               aria-modal="true"
               aria-label={ui.navigation}
             >
-              <div className="flex shrink-0 items-center justify-between">
-                <p className="text-sm font-semibold tracking-wide text-white">{ui.navigation}</p>
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-lime-400/35 to-transparent" />
+
+              <div className="flex shrink-0 items-center justify-between border-b border-white/[0.06] px-5 pb-4 pt-6">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+                  {ui.navigation}
+                </p>
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white"
+                  className="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 transition hover:bg-white/[0.06] hover:text-white"
                   aria-label={ui.closeMenu}
                 >
                   <svg
@@ -374,106 +378,116 @@ export function SiteHeader({
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
+                      strokeWidth={1.75}
                       d="M6 18L18 6M6 6l12 12"
                     />
                   </svg>
                 </button>
               </div>
 
-              {initialUser ? (
-                <div className="mt-4 shrink-0 rounded-2xl border border-white/10 bg-white/5 p-3">
-                  <p className="text-xs text-slate-400">{ui.signedIn}</p>
-                  <div className="mt-2 flex items-center gap-2">
-                    <UserAvatar
-                      username={initialUser.username}
-                      image={initialUser.image}
-                      size="md"
-                    />
-                    <p className="text-sm font-medium text-white">@{initialUser.username}</p>
-                  </div>
-                </div>
-              ) : null}
-
-              <nav className="mt-4 flex flex-col gap-2">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={getLocalizedPath(locale, item.href)}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`rounded-2xl border px-4 py-3 text-base font-medium transition ${
-                      pathname === getLocalizedPath(locale, item.href)
-                        ? "border-lime-400/40 bg-lime-400/15 text-lime-200"
-                        : "border-white/10 bg-white/5 text-slate-100 hover:bg-white/10"
-                    }`}
-                  >
-                    <span className="inline-flex items-center gap-2">
-                      <span className="text-sm">
-                        <NavIcon icon={item.icon} />
-                      </span>
-                      {item.label}
-                    </span>
-                  </Link>
-                ))}
-              </nav>
-
-              <div className="mt-4 shrink-0 rounded-2xl border border-white/10 bg-white/5 p-3">
-                <div className="flex items-start gap-2">
-                  <div className="min-w-0 flex-1">
-                    <p className="mb-2 text-[11px] uppercase tracking-[0.16em] text-slate-400">
-                      {ui.language}
-                    </p>
-                    <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-slate-900/50 p-1 text-xs text-slate-300">
-                      {languageSwitcherLocales.map((entry) => (
-                        <Link
-                          key={entry}
-                          href={replaceLocaleInPath(pathname, entry)}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className={`rounded-full px-2.5 py-1.5 font-medium transition ${
-                            entry === locale
-                              ? "bg-lime-400 text-slate-950"
-                              : "hover:bg-white/10 hover:text-white"
-                          }`}
-                        >
-                          <span className="inline-flex items-center gap-1">
-                            <span aria-hidden>{localeButtonFlag[entry]}</span>
-                            <span>{localeButtonLabel[entry]}</span>
-                          </span>
-                        </Link>
-                      ))}
+              <div className="flex flex-1 flex-col px-3 pb-6 pt-2">
+                {initialUser ? (
+                  <div className="mx-2 mt-3 shrink-0 rounded-xl bg-white/[0.03] px-3 py-3">
+                    <p className="text-[10px] font-medium uppercase tracking-wider text-slate-500">{ui.signedIn}</p>
+                    <div className="mt-2.5 flex items-center gap-3">
+                      <UserAvatar
+                        username={initialUser.username}
+                        image={initialUser.image}
+                        size="md"
+                      />
+                      <p className="truncate text-[15px] font-medium tracking-tight text-slate-100">
+                        @{initialUser.username}
+                      </p>
                     </div>
                   </div>
+                ) : null}
 
+                <nav className="mt-4 flex flex-col gap-0.5">
+                  {navigation.map((item) => {
+                    const active = pathname === getLocalizedPath(locale, item.href);
+                    return (
+                      <Link
+                        key={item.href}
+                        href={getLocalizedPath(locale, item.href)}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`group flex items-center gap-3 rounded-xl border-l-2 py-3 pl-3 pr-3 text-[15px] font-medium tracking-tight transition ${
+                          active
+                            ? "border-lime-400 bg-white/[0.05] text-white"
+                            : "border-transparent text-slate-400 hover:bg-white/[0.035] hover:text-slate-100"
+                        }`}
+                      >
+                        <span
+                          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition ${
+                            active
+                              ? "bg-lime-400/12 text-lime-200"
+                              : "bg-white/[0.04] text-slate-500 group-hover:text-slate-300"
+                          }`}
+                        >
+                          <NavIcon icon={item.icon} />
+                        </span>
+                        <span>{item.label}</span>
+                      </Link>
+                    );
+                  })}
+                </nav>
+
+                <div className="mx-2 mt-6 shrink-0">
+                  <p className="mb-2 px-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                    {ui.language}
+                  </p>
+                  <div className="inline-flex rounded-full border border-white/[0.06] bg-white/[0.02] p-0.5">
+                    {languageSwitcherLocales.map((entry) => (
+                      <Link
+                        key={entry}
+                        href={replaceLocaleInPath(pathname, entry)}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`rounded-full px-3 py-2 text-xs font-medium transition ${
+                          entry === locale
+                            ? "bg-white/[0.1] text-white shadow-sm shadow-black/20"
+                            : "text-slate-500 hover:text-slate-200"
+                        }`}
+                      >
+                        <span className="inline-flex items-center gap-1.5">
+                          <span aria-hidden className="opacity-90">
+                            {localeButtonFlag[entry]}
+                          </span>
+                          <span>{localeButtonLabel[entry]}</span>
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-auto flex shrink-0 flex-col gap-2 pt-8">
+                  {!initialUser ? (
+                    <>
+                      <Link
+                        href={getLocalizedPath(locale, "/auth/login")}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="mx-2 rounded-xl py-3 text-center text-[15px] font-medium text-slate-300 transition hover:bg-white/[0.04] hover:text-white"
+                      >
+                        {ui.login}
+                      </Link>
+                      <Link
+                        href={getLocalizedPath(locale, "/auth/register")}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="mx-2 rounded-full bg-lime-400 py-3.5 text-center text-[15px] font-semibold text-slate-950 shadow-[0_4px_20px_-4px_rgba(163,230,53,0.45)] transition hover:bg-lime-300"
+                      >
+                        {ui.register}
+                      </Link>
+                    </>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      disabled={isLoggingOut}
+                      className="mx-2 rounded-xl border border-white/[0.08] bg-transparent py-3 text-[15px] font-medium text-slate-400 transition hover:border-white/15 hover:bg-white/[0.03] hover:text-slate-200 disabled:opacity-60"
+                    >
+                      {isLoggingOut ? ui.loggingOut : ui.logout}
+                    </button>
+                  )}
                 </div>
               </div>
-
-              {!initialUser ? (
-                <div className="mt-4 grid shrink-0 gap-2">
-                  <Link
-                    href={getLocalizedPath(locale, "/auth/login")}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center text-base font-medium text-slate-100 transition hover:bg-white/10"
-                  >
-                    {ui.login}
-                  </Link>
-                  <Link
-                    href={getLocalizedPath(locale, "/auth/register")}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="rounded-xl bg-lime-400 px-4 py-3 text-center text-base font-semibold text-slate-950 transition hover:bg-lime-300"
-                  >
-                    {ui.register}
-                  </Link>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  disabled={isLoggingOut}
-                  className="mt-4 w-full shrink-0 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-base font-medium text-slate-100 transition hover:bg-white/10 disabled:opacity-60"
-                >
-                  {isLoggingOut ? ui.loggingOut : ui.logout}
-                </button>
-              )}
             </aside>
           </div>,
           document.body,
