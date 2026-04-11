@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ChevronDown, Layers } from "lucide-react";
+import { ArrowLeft, ChevronDown, Layers } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
@@ -87,7 +87,14 @@ export default async function DiaryDetailPage({ params }: PageProps) {
     <div className="flex flex-col gap-6 sm:gap-8">
       <section className="relative overflow-hidden rounded-2xl border border-white/[0.07] bg-gradient-to-b from-slate-950/40 to-transparent p-5 sm:rounded-3xl sm:p-8">
         <CannabisLeaf className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rotate-12 text-lime-400/[0.035] sm:h-40 sm:w-40" />
-        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
+        <Link
+          href={getLocalizedPath(typedLocale, "/diaries")}
+          className="absolute left-5 top-5 z-20 inline-flex max-w-[calc(100%-1rem)] items-center justify-center gap-1.5 rounded-full border border-white/[0.12] bg-slate-950/85 px-3 py-1.5 text-[11px] font-medium text-lime-200/95 shadow-sm backdrop-blur-sm transition hover:border-lime-400/30 hover:bg-lime-400/10 hover:text-white sm:left-8 sm:top-8 sm:text-xs lg:hidden"
+        >
+          <ArrowLeft className="h-3.5 w-3.5 shrink-0 opacity-90" strokeWidth={2.25} aria-hidden />
+          {dict.diaries.backToDiariesShort}
+        </Link>
+        <div className="relative flex flex-col gap-6 pt-9 sm:pt-10 lg:flex-row lg:items-start lg:justify-between lg:gap-8 lg:pt-0">
           {diary.coverImageUrl ? (
             <div className="relative aspect-video w-full max-w-xl overflow-hidden rounded-2xl ring-1 ring-white/[0.06] lg:max-w-md">
               {/* eslint-disable-next-line @next/next/no-img-element */}
