@@ -17,6 +17,7 @@ import {
   isValidLocale,
   type Locale,
 } from "@/lib/i18n";
+import { withTimeout } from "@/lib/async-timeout";
 import { getPageMetadataWithSeo } from "@/lib/seo-settings";
 import { getServerSessionUser } from "@/lib/auth-session";
 
@@ -61,21 +62,64 @@ export default async function DiariesPage({ params, searchParams }: PageProps) {
   const basePath = getLocalizedPath(typedLocale, "/diaries");
   const parsed = parseDiaryExploreSearchParams(sp);
 
-  const [{ items, total, page, pageSize }, filterCounts, sessionUser] = await Promise.all([
-    listPublicDiaries({
-      page: parsed.page,
-      sort: parsed.sort,
-      filters: parsed.filters,
-    }),
-    getPublicDiaryFilterCounts(),
-    getServerSessionUser(),
-  ]);
+  let items: Awaited<ReturnType<typeof listPublicDiaries>>["items"];
+  let total: number;
+  let page: number;
+  let pageSize: number;
+  let filterCounts: Awaited<ReturnType<typeof getPublicDiaryFilterCounts>>;
+  let sessionUser: Awaited<ReturnType<typeof getServerSessionUser>>;
+  let loadError = false;
+
+  try {
+    const bundle = await withTimeout(
+      Promise.all([
+        listPublicDiaries({
+          page: parsed.page,
+          sort: parsed.sort,
+          filters: parsed.filters,
+        }),
+        getPublicDiaryFilterCounts(),
+        getServerSessionUser(),
+      ]),
+      25_000,
+    );
+    ({ items, total, page, pageSize } = bundle[0]);
+    filterCounts = bundle[1];
+    sessionUser = bundle[2];
+  } catch {
+    loadError = true;
+    items = [];
+    total = 0;
+    page = parsed.page;
+    pageSize = 12;
+    filterCounts = {
+      total: 0,
+      growing: 0,
+      harvested: 0,
+      autoFlower: 0,
+      photoPeriod: 0,
+      indoor: 0,
+      outdoor: 0,
+      greenhouse: 0,
+    };
+    sessionUser = await getServerSessionUser();
+  }
+
   const dfLocale = dateLocales[typedLocale];
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
   return (
     <div className="flex flex-col gap-5 sm:gap-6">
+      {loadError ? (
+        <div
+          role="alert"
+          className="rounded-2xl border border-rose-500/35 bg-rose-950/35 px-4 py-3 text-sm text-rose-100 sm:rounded-[2rem] sm:px-6 sm:py-4"
+        >
+          <p className="font-semibold text-white">{dict.diaries.loadErrorTitle}</p>
+          <p className="mt-1.5 leading-relaxed text-rose-100/90">{dict.diaries.loadErrorHint}</p>
+        </div>
+      ) : null}
       <section className="rounded-2xl border border-white/10 bg-slate-950/50 p-5 sm:rounded-[2rem] sm:p-8">
         <div className="flex items-center gap-2 text-xs font-medium text-lime-400 sm:text-sm">
           <CannabisLeaf className="h-4 w-4 shrink-0 text-lime-300" />

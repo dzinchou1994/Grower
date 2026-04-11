@@ -128,6 +128,9 @@ const translations = {
       comments: "კომენტარი",
       viewWeek: "კვირის სრულად ნახვა",
       diaryDiscussionTitle: "დღიურის განხილვა",
+      loadErrorTitle: "დღიურები ვერ ჩაიტვირთა",
+      loadErrorHint:
+        "შეამოწმეთ, ჩართულია თუ არა PostgreSQL და სწორია თუ არა DATABASE_URL (.env). ტერმინალში ნახეთ სერვერის შეცდომები.",
       newDiary: {
         badge: "დღიურის შექმნა",
         title: "დაიწყე ახალი მცენარის ჟურნალი",
@@ -357,6 +360,9 @@ const translations = {
       comments: "comments",
       viewWeek: "View week & photos",
       diaryDiscussionTitle: "Diary discussion",
+      loadErrorTitle: "Could not load diaries",
+      loadErrorHint:
+        "Check that PostgreSQL is running and DATABASE_URL in .env is correct. Watch the dev server terminal for errors.",
       newDiary: {
         badge: "Create diary",
         title: "Start a new plant journal",
@@ -586,6 +592,9 @@ const translations = {
       comments: "комментариев",
       viewWeek: "Неделя и фото",
       diaryDiscussionTitle: "Обсуждение дневника",
+      loadErrorTitle: "Не удалось загрузить дневники",
+      loadErrorHint:
+        "Проверьте, что PostgreSQL запущен и DATABASE_URL в .env верный. Смотрите ошибки в терминале dev-сервера.",
       newDiary: {
         badge: "Создание diary",
         title: "Начните новый журнал растения",

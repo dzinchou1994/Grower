@@ -17,7 +17,19 @@ function normalizeConnectionString(value: string | undefined) {
   );
 }
 
-const connectionString = normalizeConnectionString(process.env.DATABASE_URL);
+/** Avoid hanging forever when Postgres is down or host is wrong (libpq connect_timeout, seconds). */
+function ensureConnectTimeout(url: string, seconds: number) {
+  if (/\bconnect_timeout=/.test(url)) {
+    return url;
+  }
+  const joiner = url.includes("?") ? "&" : "?";
+  return `${url}${joiner}connect_timeout=${seconds}`;
+}
+
+const connectionString = (() => {
+  const raw = normalizeConnectionString(process.env.DATABASE_URL);
+  return raw ? ensureConnectTimeout(raw, 12) : undefined;
+})();
 
 function createPrismaClient() {
   return new PrismaClient({

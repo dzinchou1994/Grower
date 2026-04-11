@@ -192,27 +192,49 @@ async function fetchStrainsForDiaryIds(diaryIds: string[]): Promise<Map<string, 
   return map;
 }
 
+function mapDiaryAggregateRows(
+  rows: Array<{
+    diaryId: string;
+    weekCount: bigint;
+    totalLikes: bigint;
+    totalComments: bigint;
+  }>,
+): Map<string, { weekCount: number; totalLikes: number; totalComments: number }> {
+  const map = new Map<
+    string,
+    { weekCount: number; totalLikes: number; totalComments: number }
+  >();
+  for (const r of rows) {
+    map.set(r.diaryId, {
+      weekCount: Number(r.weekCount),
+      totalLikes: Number(r.totalLikes),
+      totalComments: Number(r.totalComments),
+    });
+  }
+  return map;
+}
+
 /** Week/like/comment totals for explore cards — raw SQL so we don't rely on `_count` fields the client may omit. */
 async function fetchDiaryListAggregates(
   diaryIds: string[],
 ): Promise<
   Map<string, { weekCount: number; totalLikes: number; totalComments: number }>
 > {
-  const map = new Map<
-    string,
-    { weekCount: number; totalLikes: number; totalComments: number }
-  >();
   if (diaryIds.length === 0) {
-    return map;
+    return new Map();
   }
-  const rows = await db.$queryRaw<
-    Array<{
-      diaryId: string;
-      weekCount: bigint;
-      totalLikes: bigint;
-      totalComments: bigint;
-    }>
-  >(Prisma.sql`
+
+  const idList = Prisma.join(diaryIds.map((id) => Prisma.sql`${id}`));
+
+  try {
+    const rows = await db.$queryRaw<
+      Array<{
+        diaryId: string;
+        weekCount: bigint;
+        totalLikes: bigint;
+        totalComments: bigint;
+      }>
+    >(Prisma.sql`
     SELECT d.id AS "diaryId",
       (SELECT COUNT(*)::bigint FROM "DiaryWeek" dw
         WHERE dw."diaryId" = d.id AND dw."isHidden" = false) AS "weekCount",
@@ -228,16 +250,39 @@ async function fetchDiaryListAggregates(
           WHERE dc."diaryId" = d.id AND dc."isHidden" = false)
       ) AS "totalComments"
     FROM "Diary" d
-    WHERE d.id IN (${Prisma.join(diaryIds.map((id) => Prisma.sql`${id}`))})
+    WHERE d.id IN (${idList})
   `);
-  for (const r of rows) {
-    map.set(r.diaryId, {
-      weekCount: Number(r.weekCount),
-      totalLikes: Number(r.totalLikes),
-      totalComments: Number(r.totalComments),
-    });
+    return mapDiaryAggregateRows(rows);
+  } catch (e) {
+    // DB without DiaryComment migration yet — week-level counts only.
+    if (process.env.NODE_ENV === "development") {
+      console.warn(
+        "[diaries] aggregate with DiaryComment failed; using week comments only. Run: npx prisma migrate deploy",
+        e,
+      );
+    }
+    const rows = await db.$queryRaw<
+      Array<{
+        diaryId: string;
+        weekCount: bigint;
+        totalLikes: bigint;
+        totalComments: bigint;
+      }>
+    >(Prisma.sql`
+    SELECT d.id AS "diaryId",
+      (SELECT COUNT(*)::bigint FROM "DiaryWeek" dw
+        WHERE dw."diaryId" = d.id AND dw."isHidden" = false) AS "weekCount",
+      (SELECT COUNT(*)::bigint FROM "Like" l
+        INNER JOIN "DiaryWeek" dw ON dw.id = l."diaryWeekId"
+        WHERE dw."diaryId" = d.id AND dw."isHidden" = false) AS "totalLikes",
+      (SELECT COUNT(*)::bigint FROM "DiaryWeekComment" c
+        INNER JOIN "DiaryWeek" dw ON dw.id = c."diaryWeekId"
+        WHERE dw."diaryId" = d.id AND dw."isHidden" = false AND c."isHidden" = false) AS "totalComments"
+    FROM "Diary" d
+    WHERE d.id IN (${idList})
+  `);
+    return mapDiaryAggregateRows(rows);
   }
-  return map;
 }
 
 /** First image URL from each diary's latest non-hidden week (listing cards only need one). */
