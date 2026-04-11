@@ -161,7 +161,7 @@ export function ForumSearchInput({
           aria-expanded={open}
           aria-controls={listId}
           aria-autocomplete="list"
-          className="w-full rounded-xl border border-white/10 bg-slate-900/80 px-3 py-2 text-sm text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2"
+          className="w-full rounded-xl border border-white/10 bg-slate-900/80 px-2.5 py-1.5 text-xs text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2 sm:px-3 sm:py-2"
         />
 
         {open && value.trim().length >= 2 ? (
@@ -250,7 +250,7 @@ export function ForumSearchInput({
 
       <button
         type="submit"
-        className="shrink-0 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
+        className="shrink-0 rounded-full border border-white/15 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-white/10 sm:px-4 sm:py-2 sm:text-sm"
       >
         {searchLabel}
       </button>

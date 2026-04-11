@@ -114,17 +114,17 @@ const translations = {
     sponsors: {
       metaTitle: "სპონსორობა - GROWER.GE",
       metaDescription: "სპონსორობა Grower.ge-ს - ქართული გროვერების პლატფორმა.",
-      badge: "ᲡᲞᲝᲜᲡᲝᲠᲝᲑᲐ",
+      badge: "SPONSORSHIP",
       headline: "ᲒᲠᲝᲕᲔᲠᲘ ᲔᲫᲔᲑᲡ ᲡᲞᲝᲜᲡᲝᲠᲡ",
-      subhead: "ᲔᲠᲗᲐᲓ ᲕᲐᲨᲔᲜᲔᲑᲗ ᲡᲐᲖᲝᲒᲐᲓᲝᲔᲑᲐᲡ",
+      subhead: "ᲔᲠᲗᲐᲓ ᲣᲤᲠᲝ ᲫᲚᲘᲔᲠᲔᲑᲘᲕᲐᲠᲗ",
       lead:
-        "ჩვენ პატარა, მაგრამ ცხელი ქომუნითი ვართ - ფორუმი, დღიურები და ცოდნის გაზიარება ერთ სივრცეში.",
+        "ჩვენ პატარა, მაგრამ ინოვაციური ქომუნითი ვართ - ფორუმი, დღიურები და ცოდნის გაზიარება ერთ სივრცეში. ვაშენებთ თანამედროვე ტექნოლოგიებზე.",
       whyTitle: "ᲠᲐᲢᲝᲛ ᲛᲮᲐᲠᲓᲐᲭᲔᲠᲐ?",
       whyP1: "სერვერები, განვითარება და სიჩქარე - ეს ყველაფერი სპონსორის დახმარებით უფრო მარტივია.",
-      whyP2: "მეგა-ბრენდი არ ვართ - პატარა გუნდი ვართ; მხარდაჭერა ჩანს.",
+      whyP2: "მეგა-ბრენდი არ ვართ - პატარა გუნდი ვართ.",
       offerTitle: "ᲠᲐᲡ ᲕᲗᲐᲕᲐᲖᲝᲑᲗ",
       offerP1:
-        "პარტნიორს ვანათლებთ საზოგადოებაში: ლოგო და ბმული ფუტერში ან ცალკე ბლოკში, ერთიანი ტონი და წინასწარ შეთანხმებული პირობები. შესაძლებელია ერთობლივი ფორმატები - მაგალითად, დღიურების გათამაშებები და საზოგადოებრივი აქტივობები ფორუმში, სეზონური კამპანიები და სხვა ინიციატივები, რომლებიც ერთვება ჩვენს აუდიტორიასა და თქვენს მიზნებს.",
+        "ლოგო და ბმული ფუტერში ან ცალკე ბლოკში, ერთიანი ტონი და წინასწარ შეთანხმებული ვიზუალი. შესაძლებელია ერთობლივი ფორმატები - მაგალითად, დღიურების გათამაშებები და საზოგადოებრივი აქტივობები ფორუმში, სეზონური კამპანიები და სხვა ინიციატივები, რომლებიც ემთხვევა ჩვენს აუდიტორიასა და თქვენს მიზნებს.",
       offerP2:
         "ვეძებთ პასუხისმგებელ პარტნიორებს - არა მძიმე, მასობრივ რეკლამას, არამედ გრძელვადიან, გამჭვირვალე თანამშრომლობას, რომელიც ხელს უწყობს ქომუნითის ნდობასა და ზრდას.",
       ctaTelegram: "Telegram",
@@ -394,9 +394,9 @@ const translations = {
         "Grower.ge is the Georgian cannabis grower community. We are looking for sponsors to grow the platform and serve the community better.",
       badge: "SPONSORSHIP",
       headline: "Grower is seeking sponsors",
-      subhead: "Let’s build the community together",
+      subhead: "Together we grow stronger",
       lead:
-        "We are a small but passionate crew - forum, diaries, and shared know‑how in one place. If you want support to feel clear, friendly, and app‑polished, let’s talk.",
+        "We are a small but innovative community - forum, diaries, and shared know‑how in one place. We build on modern technology.",
       whyTitle: "Why sponsor?",
       whyP1:
         "Sponsorship helps us cover hosting, shipping features, and keeping the platform fast, safe, and human.",
@@ -404,7 +404,7 @@ const translations = {
         "We are not a corporate mega‑brand - we are a startup‑spirited project where every contribution is visible and appreciated.",
       offerTitle: "What partners get",
       offerP1:
-        "Visible presence for partners: logo and link in the footer or a dedicated block, a consistent tone, and terms agreed up front. We can co‑create formats together - for example grow diary giveaways, community activities on the forum, seasonal campaigns, and other initiatives that fit our audience and your goals.",
+        "Logo and link in the footer or a dedicated block, a consistent tone, and a pre-agreed visual treatment. We can co‑create formats together - for example grow diary giveaways, community activities on the forum, seasonal campaigns, and other initiatives that align with our audience and your goals.",
       offerP2:
         "We look for responsible partners - not intrusive mass advertising, but long‑term, transparent collaboration that helps the community grow with trust.",
       ctaTelegram: "Telegram",
@@ -674,9 +674,9 @@ const translations = {
         "Grower.ge - сообщество гроверов в Грузии. Ищем спонсоров, чтобы развивать платформу и лучше служить сообществу.",
       badge: "СПОНСОРСТВО",
       headline: "Grower ищет спонсоров",
-      subhead: "Вместе развиваем сообщество",
+      subhead: "Вместе мы сильнее",
       lead:
-        "Мы небольшая, но горячая команда - форум, дневники и обмен опытом в одном месте. Если хочется поддержку в духе дружелюбного современного приложения - давайте обсудим.",
+        "Мы небольшая, но инновационная команда - форум, дневники и обмен опытом в одном месте. Строим на современных технологиях.",
       whyTitle: "Зачем спонсорство?",
       whyP1:
         "Спонсорство помогает с серверами, разработкой и тем, чтобы платформа оставалась быстрой, безопасной и «человечной».",
@@ -684,7 +684,7 @@ const translations = {
         "Мы не корпоративный мегабренд - проект со стартап‑духом, где каждая поддержка заметна.",
       offerTitle: "Что получает партнёр",
       offerP1:
-        "Заметное присутствие: логотип и ссылка в футере или отдельном блоке, единый тон и заранее согласованные условия. Возможны совместные форматы - например, розыгрыши вокруг дневников выращивания, активности на форуме, сезонные кампании и другие инициативы, которые подходят аудитории и вашим задачам.",
+        "Логотип и ссылка в футере или отдельном блоке, единый тон и заранее согласованная визуальная подача. Возможны совместные форматы - например, розыгрыши вокруг дневников выращивания, активности на форуме, сезонные кампании и другие инициативы, которые соответствуют аудитории и вашим целям.",
       offerP2:
         "Нам нужны ответственные партнёры - не навязчивая массовая реклама, а долгоспрочное, прозрачное сотрудничество и рост доверия в сообществе.",
       ctaTelegram: "Telegram",

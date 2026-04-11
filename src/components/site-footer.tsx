@@ -1,8 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CannabisLeaf } from "@/components/icons";
 
 type SponsorTeaser = {
   title: string;
@@ -95,11 +95,17 @@ export function SiteFooter({ sponsorTeaser }: { sponsorTeaser: SponsorTeaser }) 
 
         <Link
           href={sponsorTeaser.href}
-          className="group mt-3 w-full max-w-md rounded-2xl p-[1px] shadow-[0_14px_40px_-22px_rgba(132,204,22,0.45)] transition hover:shadow-[0_18px_48px_-20px_rgba(251,191,36,0.35)] sm:rounded-[1.35rem] bg-gradient-to-br from-lime-400/50 via-amber-500/25 to-slate-900/80"
+          className="group mt-3 w-full max-w-md rounded-2xl p-[1px] shadow-[0_8px_28px_-20px_rgba(132,204,22,0.22)] transition hover:shadow-[0_10px_32px_-18px_rgba(251,191,36,0.18)] sm:rounded-[1.35rem] bg-gradient-to-br from-lime-400/50 via-amber-500/25 to-slate-900/80"
         >
           <div className="flex items-center gap-3 rounded-[calc(1rem-1px)] bg-[#050b14]/95 px-3.5 py-3 backdrop-blur-sm sm:gap-4 sm:rounded-[calc(1.35rem-1px)] sm:px-4 sm:py-3.5">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-lime-400/25 bg-lime-400/[0.08] text-lime-300 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
-              <CannabisLeaf className="h-5 w-5" />
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-lime-400/25 bg-lime-400/[0.08] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
+              <Image
+                src="/logo.svg"
+                alt="Grower logo"
+                width={36}
+                height={36}
+                className="h-9 w-9 object-contain saturate-150 drop-shadow-[0_0_10px_rgba(132,204,22,0.45)] transition-all duration-300 group-hover:drop-shadow-[0_0_14px_rgba(163,230,53,0.6)]"
+              />
             </span>
             <span className="min-w-0 flex-1 text-left">
               <span className="block text-[11px] font-semibold leading-tight text-white sm:text-xs">

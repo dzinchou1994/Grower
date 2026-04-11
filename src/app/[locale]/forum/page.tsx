@@ -51,7 +51,7 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
   const ui =
     typedLocale === "ka"
       ? {
-          searchPlaceholder: "მოძებნე თემები, დისკუსიები ან ავტორები...",
+          searchPlaceholder: "თემა, კომენტარი ან ავტორი…",
           search: "ძებნა",
           noMatches: "შენს ძებნაზე შედეგი ვერ მოიძებნა.",
           suggestThreads: "თემები",
@@ -61,7 +61,7 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
         }
       : typedLocale === "ru"
         ? {
-            searchPlaceholder: "Ищите темы, обсуждения или авторов...",
+            searchPlaceholder: "Тема, тред или автор…",
             search: "Поиск",
             noMatches: "По вашему запросу ничего не найдено.",
             suggestThreads: "Темы",
@@ -70,7 +70,7 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
             suggestEmpty: "Подсказок не найдено.",
           }
         : {
-            searchPlaceholder: "Search topics, threads or authors...",
+            searchPlaceholder: "Topic, thread or author…",
             search: "Search",
             noMatches: "No matches found for your search.",
             suggestThreads: "Threads",
@@ -93,14 +93,14 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
         <div className="relative z-[1]">
           <div className="flex flex-col gap-3 sm:gap-4">
             <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
-              <div className="inline-flex min-w-0 items-center gap-2 text-xs text-lime-300 sm:text-sm">
+              <div className="inline-flex min-w-0 items-center gap-2.5 text-sm font-semibold tracking-wide text-lime-300 sm:gap-3 sm:text-base">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/logo.svg"
                   alt="Grower Georgia flag logo"
                   width={16}
                   height={16}
-                  className="h-4 w-4 shrink-0"
+                  className="h-5 w-5 shrink-0 sm:h-6 sm:w-6"
                 />
                 {dict.forum.badge}
               </div>
@@ -113,9 +113,7 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
                 heroCompact
               />
             </div>
-            <h1 className="text-xl font-semibold text-white sm:text-3xl lg:text-4xl">
-              {dict.forum.title}
-            </h1>
+            <h1 className="sr-only">{dict.forum.title}</h1>
             <p className="max-w-3xl text-xs leading-relaxed text-slate-300 sm:text-sm sm:leading-6">
               {dict.forum.description}
             </p>
