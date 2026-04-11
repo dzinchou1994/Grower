@@ -10,11 +10,10 @@ function normalizeConnectionString(value: string | undefined) {
     return undefined;
   }
 
-  // pg-connection-string warns that legacy SSL aliases will change semantics.
-  return value.replace(
-    /sslmode=(prefer|require|verify-ca)\b/g,
-    "sslmode=verify-full",
-  );
+  // Neon / most hosted Postgres: `sslmode=require` is correct for serverless.
+  // Do not rewrite `require` → `verify-full`: that can break TLS on Vercel + Neon pooler
+  // while the same DATABASE_URL works locally.
+  return value.replace(/\bsslmode=prefer\b/g, "sslmode=require");
 }
 
 /** Avoid hanging forever when Postgres is down or host is wrong (libpq connect_timeout, seconds). */

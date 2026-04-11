@@ -131,7 +131,7 @@ const translations = {
       diaryDiscussionTitle: "დღიურის განხილვა",
       loadErrorTitle: "დღიურები ვერ ჩაიტვირთა",
       loadErrorHint:
-        "დარწმუნდით, რომ PostgreSQL ხელმისაწვდომია და `DATABASE_URL` სწორია: ლოკალურად — `.env`; ჰოსტინგზე (მაგ. Vercel) — Project → Settings → Environment Variables (Production). ბაზაზე უნდა გაშვებული იყოს `prisma migrate deploy`. დეტალური შეცდომა — ჰოსტინგის ლოგებში (Vercel: Functions / Runtime Logs); ლოკალურად — dev სერვერის ტერმინალი.",
+        "ლოკალურად და ჰოსტინგზე ერთი და იგივე კოდია — თუ აქ ჩავარდა, ხშირია დროებითი ქსელის/ბაზის დატვირთვა, SSL ან Vercel-ის ცივი სტარტი, არა აუცილებლად არასწორი `DATABASE_URL`. გადაამოწმეთ Vercel → Deployment → Runtime Logs (ზუსტი შეცდომა იქ ჩანს). დარწმუნდით, რომ Production-ში `DATABASE_URL` დაყენებულია (იგივე Neon connection string, რაც ლოკალურ `.env`-ში).",
       newDiary: {
         badge: "დღიურის შექმნა",
         title: "დაიწყე ახალი მცენარის ჟურნალი",
@@ -372,7 +372,7 @@ const translations = {
       diaryDiscussionTitle: "Diary discussion",
       loadErrorTitle: "Could not load diaries",
       loadErrorHint:
-        "Ensure PostgreSQL is reachable and `DATABASE_URL` is correct: locally in `.env`; on hosting (e.g. Vercel) under Project → Settings → Environment Variables for Production. Run `prisma migrate deploy` against that database. See the real error in your host logs (Vercel: Functions / Runtime Logs) or the local dev terminal.",
+        "Same code runs locally and on the host — a failure here is often a transient DB/network issue, cold start, or TLS, not necessarily a wrong `DATABASE_URL`. Open Vercel → your deployment → Runtime Logs for the exact error. Confirm `DATABASE_URL` is set for Production (e.g. Neon pooler URL).",
       newDiary: {
         badge: "Create diary",
         title: "Start a new plant journal",
@@ -613,7 +613,7 @@ const translations = {
       diaryDiscussionTitle: "Обсуждение дневника",
       loadErrorTitle: "Не удалось загрузить дневники",
       loadErrorHint:
-        "Убедитесь, что PostgreSQL доступен и `DATABASE_URL` верен: локально в `.env`; на хостинге (напр. Vercel) — Project → Settings → Environment Variables (Production). К БД нужно применить миграции (`prisma migrate deploy`). Подробности ошибки — в логах хостинга (Vercel: Functions / Runtime Logs) или в терминале dev-сервера.",
+        "Код один и тот же локально и на сервере — сбой часто из‑за сети, холодного старта или TLS, а не из‑за неверного URL. Точная ошибка в Vercel → Deployment → Runtime Logs. Проверьте, что для Production задан `DATABASE_URL` (например Neon).",
       newDiary: {
         badge: "Создание diary",
         title: "Начните новый журнал растения",
