@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { NewDiaryForm } from "@/components/diaries/new-diary-form";
 import { getServerSessionUser } from "@/lib/auth-session";
@@ -46,6 +47,13 @@ export default async function NewDiaryPage({ params }: PageProps) {
 
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-6">
+      <Link
+        href={getLocalizedPath(typedLocale, "/diaries")}
+        className="inline-flex w-fit text-sm text-lime-300 transition hover:text-lime-200"
+      >
+        ← {dict.diaries.backToDiariesShort}
+      </Link>
+
       <section className="rounded-[2rem] border border-white/10 bg-white/6 p-6 sm:p-8">
         <p className="text-sm text-lime-300">{dict.diaries.newDiary.badge}</p>
         <h1 className="mt-2 text-3xl font-semibold text-white sm:text-5xl">

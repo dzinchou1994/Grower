@@ -86,7 +86,8 @@ export default async function DiariesPage({ params, searchParams }: PageProps) {
     ({ items, total, page, pageSize } = bundle[0]);
     filterCounts = bundle[1];
     sessionUser = bundle[2];
-  } catch {
+  } catch (err) {
+    console.error("[diaries] list / filter counts failed:", err);
     loadError = true;
     items = [];
     total = 0;

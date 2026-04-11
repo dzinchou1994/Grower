@@ -131,7 +131,7 @@ const translations = {
       diaryDiscussionTitle: "დღიურის განხილვა",
       loadErrorTitle: "დღიურები ვერ ჩაიტვირთა",
       loadErrorHint:
-        "შეამოწმეთ, ჩართულია თუ არა PostgreSQL და სწორია თუ არა DATABASE_URL (.env). ტერმინალში ნახეთ სერვერის შეცდომები.",
+        "დარწმუნდით, რომ PostgreSQL ხელმისაწვდომია და `DATABASE_URL` სწორია: ლოკალურად — `.env`; ჰოსტინგზე (მაგ. Vercel) — Project → Settings → Environment Variables (Production). ბაზაზე უნდა გაშვებული იყოს `prisma migrate deploy`. დეტალური შეცდომა — ჰოსტინგის ლოგებში (Vercel: Functions / Runtime Logs); ლოკალურად — dev სერვერის ტერმინალი.",
       newDiary: {
         badge: "დღიურის შექმნა",
         title: "დაიწყე ახალი მცენარის ჟურნალი",
@@ -372,7 +372,7 @@ const translations = {
       diaryDiscussionTitle: "Diary discussion",
       loadErrorTitle: "Could not load diaries",
       loadErrorHint:
-        "Check that PostgreSQL is running and DATABASE_URL in .env is correct. Watch the dev server terminal for errors.",
+        "Ensure PostgreSQL is reachable and `DATABASE_URL` is correct: locally in `.env`; on hosting (e.g. Vercel) under Project → Settings → Environment Variables for Production. Run `prisma migrate deploy` against that database. See the real error in your host logs (Vercel: Functions / Runtime Logs) or the local dev terminal.",
       newDiary: {
         badge: "Create diary",
         title: "Start a new plant journal",
@@ -613,7 +613,7 @@ const translations = {
       diaryDiscussionTitle: "Обсуждение дневника",
       loadErrorTitle: "Не удалось загрузить дневники",
       loadErrorHint:
-        "Проверьте, что PostgreSQL запущен и DATABASE_URL в .env верный. Смотрите ошибки в терминале dev-сервера.",
+        "Убедитесь, что PostgreSQL доступен и `DATABASE_URL` верен: локально в `.env`; на хостинге (напр. Vercel) — Project → Settings → Environment Variables (Production). К БД нужно применить миграции (`prisma migrate deploy`). Подробности ошибки — в логах хостинга (Vercel: Functions / Runtime Logs) или в терминале dev-сервера.",
       newDiary: {
         badge: "Создание diary",
         title: "Начните новый журнал растения",
