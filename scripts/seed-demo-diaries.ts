@@ -311,7 +311,7 @@ async function main() {
         flowerType: "AUTOFLOWER",
         germinationMethod: "OTHER" as DiaryGerminationMethod,
         watering: "DRIP" as DiaryWateringType,
-        medium: "COCO_COIR" as DiarySubstrateMedium,
+        medium: "COCO" as DiarySubstrateMedium,
         description:
           "Fictional demo diary: greenhouse coco with drip, HPS finish. Original content for showcase only.",
         coverImageUrl: weekImage("gdemo-b-cover"),

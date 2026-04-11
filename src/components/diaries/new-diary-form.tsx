@@ -24,7 +24,6 @@ type FieldDict = {
   strain: string;
   environment: string;
   coverImage: string;
-  extraImageUrls: string;
   description: string;
   germinationMethod: string;
   watering: string;
@@ -38,7 +37,6 @@ type PlaceholderDict = {
   strain: string;
   environment: string;
   diaryDescription: string;
-  extraImageUrls: string;
 };
 
 type ExploreDict = {
@@ -48,7 +46,6 @@ type ExploreDict = {
   submitCreate: string;
   posting: string;
   uploadHint: string;
-  extraUrlsHint: string;
   uploadFailed: string;
   coverLastPhotoHint: string;
   strainRequired: string;
@@ -84,7 +81,6 @@ export function NewDiaryForm({
   const [medium, setMedium] = useState<DiarySubstrateMedium>("SOIL");
   const [description, setDescription] = useState("");
   const [coverFiles, setCoverFiles] = useState<File[]>([]);
-  const [coverExtraUrls, setCoverExtraUrls] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
@@ -121,13 +117,8 @@ export function NewDiaryForm({
         }
       }
 
-      const urlLines = coverExtraUrls
-        .split("\n")
-        .map((l) => l.trim())
-        .filter(Boolean);
-      const coverSequence = [...uploadedCoverUrls, ...urlLines];
       const coverImageUrl =
-        coverSequence.length > 0 ? coverSequence[coverSequence.length - 1]! : null;
+        uploadedCoverUrls.length > 0 ? uploadedCoverUrls[uploadedCoverUrls.length - 1]! : null;
 
       const setupPayload = toDiarySetupPayload(setup);
       const res = await fetch("/api/diaries", {
@@ -334,18 +325,6 @@ export function NewDiaryForm({
           multiple
           onChange={(e) => setCoverFiles(Array.from(e.target.files ?? []))}
           className="w-full text-sm text-slate-200 file:mr-4 file:rounded-full file:border-0 file:bg-lime-400 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-slate-950 hover:file:bg-lime-300"
-        />
-      </label>
-
-      <label className="sm:col-span-2">
-        <span className="mb-2 block text-sm font-medium text-slate-300">{fieldDict.extraImageUrls}</span>
-        <p className="mb-2 text-xs text-slate-500">{exploreDict.extraUrlsHint}</p>
-        <textarea
-          value={coverExtraUrls}
-          onChange={(e) => setCoverExtraUrls(e.target.value)}
-          rows={3}
-          className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500"
-          placeholder={placeholderDict.extraImageUrls}
         />
       </label>
 

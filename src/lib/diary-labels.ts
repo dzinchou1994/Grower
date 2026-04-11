@@ -71,7 +71,8 @@ const diaryMediumLabelsEn: Record<DiarySubstrateMedium, string> = {
   PERLITE: "Perlite",
   VERMICULITE: "Vermiculite",
   EXPANDED_CLAY: "Expanded clay",
-  COCO_COIR: "Coco coir",
+  COCO: "Coconut",
+  PEAT: "Peat",
   MINERAL_WOOL: "Mineral wool",
   OTHER: "Other",
 };
@@ -81,7 +82,8 @@ const diaryMediumLabelsKa: Record<DiarySubstrateMedium, string> = {
   PERLITE: "პერლიტი",
   VERMICULITE: "ვერმიკულიტი",
   EXPANDED_CLAY: "კერამზიტი / გაფართოებული თიხა",
-  COCO_COIR: "კოკოს ხურჯი",
+  COCO: "ქოქოსი",
+  PEAT: "ტორფი",
   MINERAL_WOOL: "მინერალური ბამბა",
   OTHER: "სხვა",
 };
@@ -91,7 +93,8 @@ const diaryMediumLabelsRu: Record<DiarySubstrateMedium, string> = {
   PERLITE: "Перлит",
   VERMICULITE: "Вермикулит",
   EXPANDED_CLAY: "Керамзит",
-  COCO_COIR: "Кокосовый субстрат",
+  COCO: "Кокос",
+  PEAT: "Торф",
   MINERAL_WOOL: "Минеральная вата",
   OTHER: "Другое",
 };
@@ -103,8 +106,8 @@ const diaryEnvironmentLabelsEn: Record<DiaryEnvironment, string> = {
 };
 
 const diaryEnvironmentLabelsKa: Record<DiaryEnvironment, string> = {
-  INDOOR: "შიდა",
-  OUTDOOR: "გარე",
+  INDOOR: "სახლში",
+  OUTDOOR: "გარეთ",
   GREENHOUSE: "სათბური",
 };
 

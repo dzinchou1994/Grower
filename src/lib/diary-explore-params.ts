@@ -23,7 +23,8 @@ const MEDIUM: readonly DiarySubstrateMedium[] = [
   "PERLITE",
   "VERMICULITE",
   "EXPANDED_CLAY",
-  "COCO_COIR",
+  "COCO",
+  "PEAT",
   "MINERAL_WOOL",
   "OTHER",
 ];

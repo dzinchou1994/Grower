@@ -163,7 +163,7 @@ const translations = {
       placeholders: {
         diaryTitle: "ჩემი პირველი მოყვანა",
         strain: "მაგ: Auto Northern Lights",
-        environment: "შიდა / გარე / სათბური",
+        environment: "სახლში / გარეთ / სათბური",
         diaryDescription: "მოკლე აღწერა: გარემო, მედიუმი, განათება და მიზნები.",
         weekNumber: "შემდეგი ნომერი ავტომატურად შეთავაზდება",
         weekTitle: "არასავალდებულო მოკლე სათაური",
@@ -200,7 +200,7 @@ const translations = {
         imageRequired: "აირჩიე მინიმუმ ერთი ფოტოს ფაილი ან დაამატე მინიმუმ ერთი სურათის URL.",
         uploadFailed: "ფოტოს ატვირთვა ვერ მოხერხდა.",
         coverLastPhotoHint:
-          "გარეკანის სურათად აირჩევა ბოლო ატვირთული ფაილი ან ბოლო ბმული (თუ გამოიყენებ ორივეს — ჯერ ფაილები, შემდეგ URL-ები).",
+          "გარეკანის სურათად აირჩევა ბოლო ატვირთული ფაილი (რამდენიმეს თუ აირჩევ — ბოლო ფაილი).",
         suggestedNextWeek: "შემდეგი კვირის შეთავაზება",
         latestWeekBadge: "ბოლო განახლება",
         earlierWeeks: "ადრეული კვირები",
@@ -441,7 +441,7 @@ const translations = {
         imageRequired: "Add at least one photo (upload) or image URL.",
         uploadFailed: "Could not upload image.",
         coverLastPhotoHint:
-          "The cover uses the last uploaded file, or the last image URL in the box below (files first, then pasted URLs).",
+          "The cover image is the last file you select (if you upload several, the last one is used).",
         suggestedNextWeek: "Suggested next week",
         latestWeekBadge: "Latest update",
         earlierWeeks: "Earlier weeks",
@@ -682,7 +682,7 @@ const translations = {
         imageRequired: "Добавьте минимум одно фото (файл) или URL изображения.",
         uploadFailed: "Не удалось загрузить изображение.",
         coverLastPhotoHint:
-          "Обложкой станет последний загруженный файл или последняя ссылка в поле ниже (сначала файлы, затем URL).",
+          "Обложкой будет последний загруженный файл (если выбрать несколько — используется последний).",
         suggestedNextWeek: "Следующая неделя",
         latestWeekBadge: "Последнее обновление",
         earlierWeeks: "Прошлые недели",
