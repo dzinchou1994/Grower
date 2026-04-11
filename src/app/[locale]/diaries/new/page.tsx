@@ -91,9 +91,6 @@ export default async function NewDiaryPage({ params }: PageProps) {
             <h1 className="mt-4 text-2xl font-semibold tracking-tight text-white sm:text-3xl sm:leading-tight">
               {dict.diaries.newDiary.title}
             </h1>
-            <p className="mt-2 max-w-lg text-sm leading-relaxed text-slate-400 sm:text-[15px]">
-              {dict.diaries.newDiary.description}
-            </p>
           </header>
 
           <NewDiaryForm
