@@ -110,9 +110,14 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
   return (
     <div className="flex flex-col gap-5 sm:gap-8">
       <section className="defer-render flex flex-col gap-5 lg:grid lg:grid-cols-[1fr_1fr] lg:items-stretch lg:gap-6">
-        <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-slate-950/55 p-5 sm:rounded-[2rem] sm:p-6">
-          <div className="flex items-start justify-between gap-3 sm:items-center">
-            <div>
+        <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-950/55 p-5 sm:rounded-[2rem] sm:p-6">
+          <Link
+            href={getLocalizedPath(typedLocale, "/forum")}
+            className="absolute inset-0 z-0 rounded-2xl sm:rounded-[2rem]"
+            aria-label={`${dict.home.forumHighlightTitle} — ${dict.home.viewAllTopics}`}
+          />
+          <div className="relative z-10 flex items-start justify-between gap-3 sm:items-center">
+            <div className="min-w-0 pointer-events-none">
               <p className="text-xs text-slate-400 sm:text-sm">{dict.home.forumHighlight}</p>
               <h2 className="mt-1 text-lg font-semibold text-white sm:text-2xl">
                 {dict.home.forumHighlightTitle}
@@ -120,18 +125,18 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
             </div>
             <Link
               href={getLocalizedPath(typedLocale, "/forum")}
-              className="shrink-0 text-xs font-medium text-lime-300 hover:text-lime-200 sm:text-sm"
+              className="shrink-0 text-xs font-medium text-lime-300 hover:text-lime-200 sm:text-sm pointer-events-auto"
             >
               {dict.home.viewAllTopics}
             </Link>
           </div>
 
-          <div className="mt-5 flex-1 space-y-3 sm:mt-6 sm:space-y-4">
+          <div className="relative z-10 mt-5 flex-1 space-y-3 sm:mt-6 sm:space-y-4">
             {homeForumTopics.map((topic) => (
               <Link
                 key={topic.slug}
                 href={getLocalizedPath(typedLocale, `/forum/${topic.slug}`)}
-                className="flex items-start gap-3 rounded-2xl border border-white/8 bg-white/4 p-4 transition hover:border-lime-400/30 hover:bg-white/6 sm:rounded-3xl sm:p-5"
+                className="relative z-10 flex items-start gap-3 rounded-2xl border border-white/8 bg-white/4 p-4 transition hover:border-lime-400/30 hover:bg-white/6 sm:rounded-3xl sm:p-5"
               >
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-800 text-lg sm:h-12 sm:w-12 sm:text-xl">
                   {topic.icon}
@@ -148,9 +153,14 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-slate-950/55 p-5 sm:rounded-[2rem] sm:p-6">
-          <div className="flex items-start justify-between gap-3 sm:items-center">
-            <div>
+        <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-950/55 p-5 sm:rounded-[2rem] sm:p-6">
+          <Link
+            href={getLocalizedPath(typedLocale, "/forum")}
+            className="absolute inset-0 z-0 rounded-2xl sm:rounded-[2rem]"
+            aria-label={`${dict.forum.latestConversations} — ${dict.home.viewAllThreads}`}
+          />
+          <div className="relative z-10 flex items-start justify-between gap-3 sm:items-center">
+            <div className="min-w-0 pointer-events-none">
               <p className="text-xs text-slate-400 sm:text-sm">{dict.home.latestThreads}</p>
               <h2 className="mt-1 text-lg font-semibold text-white sm:text-2xl">
                 {dict.forum.latestConversations}
@@ -158,18 +168,18 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
             </div>
             <Link
               href={getLocalizedPath(typedLocale, "/forum")}
-              className="shrink-0 text-xs font-medium text-lime-300 hover:text-lime-200 sm:text-sm"
+              className="shrink-0 text-xs font-medium text-lime-300 hover:text-lime-200 sm:text-sm pointer-events-auto"
             >
               {dict.home.viewAllThreads}
             </Link>
           </div>
 
-          <div className="mt-5 flex-1 space-y-3 sm:mt-6 sm:space-y-4">
+          <div className="relative z-10 mt-5 flex-1 space-y-3 sm:mt-6 sm:space-y-4">
             {allThreads.map((thread) => (
               <Link
                 key={thread.slug}
                 href={getLocalizedPath(typedLocale, `/forum/${thread.topicSlug}`)}
-                className="block rounded-2xl border border-white/8 bg-slate-950/60 p-4 transition hover:border-lime-400/30 hover:bg-slate-900/70 sm:rounded-3xl sm:p-5"
+                className="relative z-10 block rounded-2xl border border-white/8 bg-slate-950/60 p-4 transition hover:border-lime-400/30 hover:bg-slate-900/70 sm:rounded-3xl sm:p-5"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
