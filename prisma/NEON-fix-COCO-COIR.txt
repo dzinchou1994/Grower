@@ -15,7 +15,9 @@ If `prisma migrate deploy` fails with P1002 (advisory lock timeout):
      cd /path/to/web
      DATABASE_URL="postgresql://USER:PASS@ep-xxxx.region.aws.neon.tech/neondb?sslmode=require" npx prisma migrate deploy
 
-  (Replace with your Direct string; same user/password as pooled, different hostname.)
+  (Replace with your Direct string from Neon; same user/password as pooled, hostname without -pooler.)
+
+  prisma.config.ts preserves DATABASE_URL from the shell — it will NOT be overwritten by .env / .env.local anymore.
 
   Or paste and run in Neon **SQL Editor** (no Prisma needed):
      prisma/migrations/20260413210000_diary_medium_coco_peat/migration.sql
