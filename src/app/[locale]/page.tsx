@@ -339,38 +339,36 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
         <div className="absolute -left-20 -top-20 h-56 w-56 rounded-full bg-lime-400/[0.07] blur-3xl" />
         <Link
           href={getLocalizedPath(typedLocale, "/manifesto")}
-          className="group relative block"
+          className="group relative block w-full"
         >
-          <div className="relative flex flex-col gap-2.5 p-4 sm:gap-3 sm:p-6 lg:p-7">
-            <div className="w-full max-w-xl lg:max-w-2xl">
-              <div className="flex items-start">
-                <h2 className="inline-flex items-center gap-2 text-[15px] font-semibold leading-snug text-white sm:text-lg">
-                  {dict.home.manifesto.headline}
-                  <svg
-                    className="h-[1.05em] w-[1.05em] shrink-0 text-lime-200"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={1.9}
-                    aria-hidden="true"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h10" />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 7 5.8 11.2a1.5 1.5 0 0 0 1.2 2.4h4a1.5 1.5 0 0 0 1.2-2.4L9 7Zm6 0-3.2 4.2a1.5 1.5 0 0 0 1.2 2.4h4a1.5 1.5 0 0 0 1.2-2.4L15 7Z"
-                    />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 20h6" />
-                  </svg>
-                </h2>
-              </div>
-              <p className="mt-1.5 line-clamp-2 text-[11px] leading-relaxed text-slate-400 sm:text-[13px] sm:leading-6">
+          <div className="relative flex w-full flex-col gap-3 p-4 sm:gap-4 sm:p-6 lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:p-7">
+            <div className="min-w-0 flex-1">
+              <h2 className="inline-flex flex-wrap items-center gap-2 text-[15px] font-semibold leading-snug text-white sm:text-lg lg:text-xl">
+                {dict.home.manifesto.headline}
+                <svg
+                  className="h-[1.05em] w-[1.05em] shrink-0 text-lime-200"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.9}
+                  aria-hidden="true"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h10" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 7 5.8 11.2a1.5 1.5 0 0 0 1.2 2.4h4a1.5 1.5 0 0 0 1.2-2.4L9 7Zm6 0-3.2 4.2a1.5 1.5 0 0 0 1.2 2.4h4a1.5 1.5 0 0 0 1.2-2.4L15 7Z"
+                  />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 20h6" />
+                </svg>
+              </h2>
+              <p className="mt-2 line-clamp-2 text-[11px] leading-relaxed text-slate-400 sm:text-[13px] sm:leading-6 lg:mt-2.5 lg:line-clamp-none lg:text-[13px] lg:leading-7">
                 {dict.home.manifesto.text}
               </p>
             </div>
-            <div>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.06] px-2.5 py-1 text-[11px] font-medium text-slate-200 transition group-hover:bg-lime-400/15 group-hover:text-lime-200 sm:text-xs">
+            <div className="shrink-0 lg:self-center">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.06] px-2.5 py-1 text-[11px] font-medium text-slate-200 transition group-hover:bg-lime-400/15 group-hover:text-lime-200 sm:px-3 sm:py-1.5 sm:text-xs lg:px-4 lg:py-2">
                 {dict.home.manifesto.cta}
                 <svg className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
               </span>
