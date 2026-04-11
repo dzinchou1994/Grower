@@ -111,6 +111,28 @@ const translations = {
         p3: "გაუძელი. გაიზარდე. გაუზიარე. 🌿",
       },
     },
+    sponsors: {
+      metaTitle: "სპონსორობა - GROWER.GE",
+      metaDescription: "სპონსორობა Grower.ge-ს - ქართული გროვერების პლატფორმა.",
+      badge: "ᲡᲞᲝᲜᲡᲝᲠᲝᲑᲐ",
+      headline: "ᲒᲠᲝᲕᲔᲠᲘ ᲔᲫᲔᲑᲡ ᲡᲞᲝᲜᲡᲝᲠᲡ",
+      subhead: "ᲔᲠᲗᲐᲓ ᲕᲐᲨᲔᲜᲔᲑᲗ ᲡᲐᲖᲝᲒᲐᲓᲝᲔᲑᲐᲡ",
+      lead:
+        "ჩვენ პატარა, მაგრამ ცხელი ქომუნითი ვართ - ფორუმი, დღიურები და ცოდნის გაზიარება ერთ სივრცეში.",
+      whyTitle: "ᲠᲐᲢᲝᲛ ᲛᲮᲐᲠᲓᲐᲭᲔᲠᲐ?",
+      whyP1: "სერვერები, განვითარება და სიჩქარე - ეს ყველაფერი სპონსორის დახმარებით უფრო მარტივია.",
+      whyP2: "მეგა-ბრენდი არ ვართ - პატარა გუნდი ვართ; მხარდაჭერა ჩანს.",
+      offerTitle: "ᲠᲐᲡ ᲕᲗᲐᲕᲐᲖᲝᲑᲗ",
+      offerP1:
+        "პარტნიორს ვანათლებთ საზოგადოებაში: ლოგო და ბმული ფუტერში ან ცალკე ბლოკში, ერთიანი ტონი და წინასწარ შეთანხმებული პირობები. შესაძლებელია ერთობლივი ფორმატები - მაგალითად, დღიურების გათამაშებები და საზოგადოებრივი აქტივობები ფორუმში, სეზონური კამპანიები და სხვა ინიციატივები, რომლებიც ერთვება ჩვენს აუდიტორიასა და თქვენს მიზნებს.",
+      offerP2:
+        "ვეძებთ პასუხისმგებელ პარტნიორებს - არა მძიმე, მასობრივ რეკლამას, არამედ გრძელვადიან, გამჭვირვალე თანამშრომლობას, რომელიც ხელს უწყობს ქომუნითის ნდობასა და ზრდას.",
+      ctaTelegram: "Telegram",
+      ctaEmail: "ელფოსტა",
+      backHome: "მთავარზე დაბრუნება",
+      footerTeaserTitle: "ᲒᲠᲝᲕᲔᲠᲘ ᲔᲫᲔᲑᲡ ᲡᲞᲝᲜᲡᲝᲠᲡ",
+      footerTeaserHint: "დააჭირე სრულად",
+    },
     diaries: {
       badge: "მოყვანის დღიურები",
       title: "კანაფის დღიურები",
@@ -366,6 +388,31 @@ const translations = {
         p3: "Endure. Grow. Share. 🌿",
       },
     },
+    sponsors: {
+      metaTitle: "Sponsorship - GROWER.GE",
+      metaDescription:
+        "Grower.ge is the Georgian cannabis grower community. We are looking for sponsors to grow the platform and serve the community better.",
+      badge: "SPONSORSHIP",
+      headline: "Grower is seeking sponsors",
+      subhead: "Let’s build the community together",
+      lead:
+        "We are a small but passionate crew - forum, diaries, and shared know‑how in one place. If you want support to feel clear, friendly, and app‑polished, let’s talk.",
+      whyTitle: "Why sponsor?",
+      whyP1:
+        "Sponsorship helps us cover hosting, shipping features, and keeping the platform fast, safe, and human.",
+      whyP2:
+        "We are not a corporate mega‑brand - we are a startup‑spirited project where every contribution is visible and appreciated.",
+      offerTitle: "What partners get",
+      offerP1:
+        "Visible presence for partners: logo and link in the footer or a dedicated block, a consistent tone, and terms agreed up front. We can co‑create formats together - for example grow diary giveaways, community activities on the forum, seasonal campaigns, and other initiatives that fit our audience and your goals.",
+      offerP2:
+        "We look for responsible partners - not intrusive mass advertising, but long‑term, transparent collaboration that helps the community grow with trust.",
+      ctaTelegram: "Telegram",
+      ctaEmail: "Email",
+      backHome: "Back to home",
+      footerTeaserTitle: "Grower seeks sponsors",
+      footerTeaserHint: "Tap for details",
+    },
     diaries: {
       badge: "Grow Diaries",
       title: "Cannabis grow diaries",
@@ -620,6 +667,31 @@ const translations = {
         p2: "Грузия тоже когда-нибудь пойдёт по этому пути. Мы здесь, чтобы приблизить этот день - а до тех пор, поддерживать друг друга.",
         p3: "Выстоять. Вырастить. Поделиться. 🌿",
       },
+    },
+    sponsors: {
+      metaTitle: "Спонсорство - GROWER.GE",
+      metaDescription:
+        "Grower.ge - сообщество гроверов в Грузии. Ищем спонсоров, чтобы развивать платформу и лучше служить сообществу.",
+      badge: "СПОНСОРСТВО",
+      headline: "Grower ищет спонсоров",
+      subhead: "Вместе развиваем сообщество",
+      lead:
+        "Мы небольшая, но горячая команда - форум, дневники и обмен опытом в одном месте. Если хочется поддержку в духе дружелюбного современного приложения - давайте обсудим.",
+      whyTitle: "Зачем спонсорство?",
+      whyP1:
+        "Спонсорство помогает с серверами, разработкой и тем, чтобы платформа оставалась быстрой, безопасной и «человечной».",
+      whyP2:
+        "Мы не корпоративный мегабренд - проект со стартап‑духом, где каждая поддержка заметна.",
+      offerTitle: "Что получает партнёр",
+      offerP1:
+        "Заметное присутствие: логотип и ссылка в футере или отдельном блоке, единый тон и заранее согласованные условия. Возможны совместные форматы - например, розыгрыши вокруг дневников выращивания, активности на форуме, сезонные кампании и другие инициативы, которые подходят аудитории и вашим задачам.",
+      offerP2:
+        "Нам нужны ответственные партнёры - не навязчивая массовая реклама, а долгоспрочное, прозрачное сотрудничество и рост доверия в сообществе.",
+      ctaTelegram: "Telegram",
+      ctaEmail: "Email",
+      backHome: "На главную",
+      footerTeaserTitle: "Grower ищет спонсоров",
+      footerTeaserHint: "Подробнее",
     },
     diaries: {
       badge: "Гроу-дневники",

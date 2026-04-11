@@ -119,6 +119,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/cannapedia",
     "/news",
     "/manifesto",
+    "/sponsors",
     "/about",
     "/privacy",
     "/terms",

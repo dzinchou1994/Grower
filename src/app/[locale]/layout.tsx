@@ -101,7 +101,13 @@ export default async function LocaleLayout({
             <div className="h-px w-full max-w-[140px] bg-gradient-to-l from-transparent via-white/12 to-lime-400/20" />
           </div>
         </div>
-        <SiteFooter />
+        <SiteFooter
+          sponsorTeaser={{
+            title: dict.sponsors.footerTeaserTitle,
+            hint: dict.sponsors.footerTeaserHint,
+            href: `/${locale}/sponsors`,
+          }}
+        />
       </div>
       <Script
         src="https://counter.top.ge/counter.js"

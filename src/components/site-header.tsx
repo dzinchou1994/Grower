@@ -1,5 +1,6 @@
 "use client";
 
+import { Noto_Sans_Georgian } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -8,6 +9,13 @@ import { createPortal } from "react-dom";
 import { UserAvatar } from "@/components/user-avatar";
 import type { SessionUser } from "@/lib/auth-session";
 import { getLocalizedPath, locales, type Locale } from "@/lib/i18n-routing";
+
+/** Mtavruli in the logo; Trebuchet has no Georgian — without this, browsers show Mkhedruli. */
+const logoGeorgianCaps = Noto_Sans_Georgian({
+  subsets: ["georgian"],
+  weight: ["600"],
+  display: "swap",
+});
 
 type SiteHeaderDictionary = {
   nav: {
@@ -184,7 +192,11 @@ export function SiteHeader({
             >
               <span className="block">
                 <span>GROW</span>
-                <span className="relative top-[0.6px] ml-[0.5px] text-[1.08em] tracking-[0.01em]">ᲔᲠᲘ</span>
+                <span
+                  className={`relative top-[0.6px] ml-[0.5px] text-[1.08em] tracking-[0.01em] ${logoGeorgianCaps.className}`}
+                >
+                  ᲔᲠᲘ
+                </span>
               </span>
             </p>
           </div>
