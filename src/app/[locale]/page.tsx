@@ -253,8 +253,8 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
           aria-hidden
         />
 
-        <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-6 p-5 sm:gap-8 sm:p-8 lg:flex-row lg:items-center lg:justify-between lg:gap-6 lg:px-8 lg:py-4 xl:gap-8 xl:px-10 xl:py-5">
-          <div className="min-w-0 flex-1 lg:max-w-[min(100%,38rem)]">
+        <div className="relative z-10 flex w-full flex-col gap-6 p-5 sm:gap-6 sm:p-6 lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:py-4">
+          <div className="min-w-0 flex-1">
             <div className="inline-flex items-center gap-2 rounded-full border border-lime-400/30 bg-lime-400/[0.09] px-3 py-1.5 text-[11px] font-medium text-lime-100 shadow-[0_0_22px_-6px_rgba(163,230,53,0.45)] backdrop-blur-sm sm:text-xs lg:py-1 lg:pl-2.5 lg:pr-2.5 lg:text-[10px] lg:shadow-[0_0_12px_-4px_rgba(163,230,53,0.25)]">
               <BookOpenIcon className="h-3.5 w-3.5 text-lime-300 sm:h-4 sm:w-4 lg:h-3.5 lg:w-3.5" />
               {dict.home.diaryPromo}
@@ -262,7 +262,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
             <h2 className="mt-4 text-[1.35rem] font-bold leading-[1.15] tracking-tight text-white sm:mt-5 sm:text-2xl lg:mt-2.5 lg:text-xl lg:font-semibold lg:leading-snug xl:text-2xl">
               {dict.home.diaryPromoTitle}
             </h2>
-            <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-300/95 sm:mt-4 sm:text-[15px] sm:leading-7 lg:mt-2 lg:max-w-lg lg:text-sm lg:leading-6">
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-300/95 sm:mt-4 sm:text-[15px] sm:leading-7 lg:mt-2 lg:text-sm lg:leading-6">
               {dict.home.diaryPromoDescription}
             </p>
           </div>
