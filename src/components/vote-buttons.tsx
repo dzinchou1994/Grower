@@ -87,16 +87,16 @@ export function VoteButtons({
       <div className="inline-flex items-center gap-1 rounded-full border border-white/12 bg-slate-900/55 px-1 py-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-sm">
         <button
           type="button"
-          onClick={() => handleVote(1)}
+          onClick={() => handleVote(-1)}
           disabled={isPending}
           className={`flex h-7 w-7 items-center justify-center rounded-full text-[11px] transition ${
-            userVote === 1
-              ? "bg-lime-400/20 text-lime-300 ring-1 ring-lime-300/35"
-              : "text-slate-400 hover:bg-white/10 hover:text-lime-300"
+            userVote === -1
+              ? "bg-red-400/20 text-red-400 ring-1 ring-red-300/35"
+              : "text-slate-400 hover:bg-white/10 hover:text-red-400"
           } disabled:opacity-50`}
-          aria-label="Like"
+          aria-label="Dislike"
         >
-          <IconThumbUp className="h-3.5 w-3.5" />
+          <IconThumbDown className="h-3.5 w-3.5" />
         </button>
         <span
           className={`min-w-[30px] text-center text-[11px] font-semibold tabular-nums ${
@@ -111,16 +111,16 @@ export function VoteButtons({
         </span>
         <button
           type="button"
-          onClick={() => handleVote(-1)}
+          onClick={() => handleVote(1)}
           disabled={isPending}
           className={`flex h-7 w-7 items-center justify-center rounded-full text-[11px] transition ${
-            userVote === -1
-              ? "bg-red-400/20 text-red-400 ring-1 ring-red-300/35"
-              : "text-slate-400 hover:bg-white/10 hover:text-red-400"
+            userVote === 1
+              ? "bg-lime-400/20 text-lime-300 ring-1 ring-lime-300/35"
+              : "text-slate-400 hover:bg-white/10 hover:text-lime-300"
           } disabled:opacity-50`}
-          aria-label="Dislike"
+          aria-label="Like"
         >
-          <IconThumbDown className="h-3.5 w-3.5" />
+          <IconThumbUp className="h-3.5 w-3.5" />
         </button>
       </div>
     );

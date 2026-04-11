@@ -299,8 +299,8 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
       </section>
 
       <section className="defer-render relative overflow-hidden rounded-2xl border border-white/[0.06] sm:rounded-[2rem]">
-        <div className="absolute inset-0 bg-gradient-to-r from-lime-950/50 via-slate-950/80 to-slate-950/90" />
-        <div className="absolute -left-20 -top-20 h-56 w-56 rounded-full bg-lime-400/[0.07] blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-t from-lime-950/50 via-slate-950/80 to-slate-950/90" />
+        <div className="absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-lime-400/[0.07] blur-3xl" />
         <Link
           href={getLocalizedPath(typedLocale, "/manifesto")}
           className="group relative block w-full"

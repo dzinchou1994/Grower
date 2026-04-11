@@ -276,7 +276,7 @@ export default async function ForumTopicPage({ params }: PageProps) {
                               className="shrink-0"
                             />
                           </div>
-                          <p className="mt-1 text-xs text-slate-300 sm:text-sm">{comment.body}</p>
+                          <p className="mt-1 text-[13px] leading-relaxed text-slate-300 sm:text-[15px]">{comment.body}</p>
                           <div className="mt-1.5 flex justify-end">
                             <VoteButtons
                               commentId={comment.id}
