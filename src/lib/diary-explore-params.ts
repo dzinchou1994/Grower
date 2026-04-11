@@ -18,7 +18,9 @@ const GERMINATION: readonly DiaryGerminationMethod[] = [
   "OTHER",
 ];
 const WATERING: readonly DiaryWateringType[] = ["MANUAL", "DRIP", "HYDROPONICS", "AEROPONICS"];
-const MEDIUM: readonly DiarySubstrateMedium[] = [
+
+/** Substrate chips + new diary form (no legacy-only value). */
+export const diaryExploreMediumKeys: readonly DiarySubstrateMedium[] = [
   "SOIL",
   "PERLITE",
   "VERMICULITE",
@@ -28,6 +30,13 @@ const MEDIUM: readonly DiarySubstrateMedium[] = [
   "MINERAL_WOOL",
   "OTHER",
 ];
+
+/** @deprecated use diaryExploreMediumKeys */
+const MEDIUM = diaryExploreMediumKeys;
+
+/** URL/query parsing: allow `medium=COCO_COIR` for legacy diaries still in the DB. */
+const MEDIUM_PARSE_KEYS: readonly DiarySubstrateMedium[] = [...diaryExploreMediumKeys, "COCO_COIR"];
+
 const ENVIRONMENT: readonly DiaryEnvironment[] = ["INDOOR", "OUTDOOR", "GREENHOUSE"];
 
 const PHASE: readonly DiaryGrowPhase[] = ["GROWING", "HARVESTED"];
@@ -35,7 +44,7 @@ const FLOWER: readonly DiaryFlowerType[] = ["AUTOFLOWER", "PHOTOPERIOD"];
 
 const GERMINATION_SET = new Set<string>(GERMINATION);
 const WATERING_SET = new Set<string>(WATERING);
-const MEDIUM_SET = new Set<string>(MEDIUM);
+const MEDIUM_SET = new Set<string>(MEDIUM_PARSE_KEYS);
 const ENVIRONMENT_SET = new Set<string>(ENVIRONMENT);
 const PHASE_SET = new Set<string>(PHASE);
 const FLOWER_SET = new Set<string>(FLOWER);

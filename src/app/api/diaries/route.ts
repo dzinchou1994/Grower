@@ -46,7 +46,10 @@ const createDiarySchema = z.object({
   flowerType: z.nativeEnum(DiaryFlowerType).optional(),
   germinationMethod: z.nativeEnum(DiaryGerminationMethod).optional(),
   watering: z.nativeEnum(DiaryWateringType).optional(),
-  medium: z.nativeEnum(DiarySubstrateMedium).optional(),
+  medium: z
+    .nativeEnum(DiarySubstrateMedium)
+    .optional()
+    .refine((m) => m !== "COCO_COIR", "Use COCO or PEAT instead of legacy COCO_COIR."),
   description: z.string().trim().max(5000).optional().nullable(),
   coverImageUrl: z.string().trim().url().max(500).optional().nullable().or(z.literal("")),
   status: z.nativeEnum(DiaryStatus).optional(),

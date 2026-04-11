@@ -25,7 +25,10 @@ const patchSchema = z.object({
   environment: z.nativeEnum(DiaryEnvironment).optional(),
   germinationMethod: z.nativeEnum(DiaryGerminationMethod).optional(),
   watering: z.nativeEnum(DiaryWateringType).optional(),
-  medium: z.nativeEnum(DiarySubstrateMedium).optional(),
+  medium: z
+    .nativeEnum(DiarySubstrateMedium)
+    .optional()
+    .refine((m) => m === undefined || m !== "COCO_COIR", "Use COCO or PEAT instead of legacy COCO_COIR."),
   description: z.string().trim().max(5000).optional().nullable(),
   coverImageUrl: z.string().trim().url().max(500).optional().nullable().or(z.literal("")),
   setup: diarySetupPayloadSchema,

@@ -58,6 +58,7 @@ enum DiarySubstrateMedium {
   EXPANDED_CLAY
   COCO
   PEAT
+  COCO_COIR
   MINERAL_WOOL
   OTHER
 }

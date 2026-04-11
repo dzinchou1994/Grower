@@ -9,6 +9,7 @@ import {
   DiaryWateringType,
 } from "@prisma/client";
 import type { DiarySortKey, ListDiariesFilters, PublicDiaryFilterCounts } from "@/lib/diary-data";
+import { diaryExploreMediumKeys } from "@/lib/diary-explore-params";
 import { getDiaryLabels } from "@/lib/diary-labels";
 import type { Locale } from "@/lib/i18n";
 
@@ -388,7 +389,7 @@ function FilterSections({
         >
           {dict.all}
         </ChipLink>
-        {(Object.keys(L.medium) as DiarySubstrateMedium[]).map((key) => (
+        {diaryExploreMediumKeys.map((key) => (
           <ChipLink
             key={key}
             href={buildQuery(basePath, sort, filters, page, { medium: key, page: 1 })}

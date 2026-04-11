@@ -73,6 +73,7 @@ const diaryMediumLabelsEn: Record<DiarySubstrateMedium, string> = {
   EXPANDED_CLAY: "Expanded clay",
   COCO: "Coconut",
   PEAT: "Peat",
+  COCO_COIR: "Coconut (legacy)",
   MINERAL_WOOL: "Mineral wool",
   OTHER: "Other",
 };
@@ -84,6 +85,7 @@ const diaryMediumLabelsKa: Record<DiarySubstrateMedium, string> = {
   EXPANDED_CLAY: "კერამზიტი / გაფართოებული თიხა",
   COCO: "ქოქოსი",
   PEAT: "ტორფი",
+  COCO_COIR: "ქოქოსი (ძველი ჩანაწერი)",
   MINERAL_WOOL: "მინერალური ბამბა",
   OTHER: "სხვა",
 };
@@ -95,6 +97,7 @@ const diaryMediumLabelsRu: Record<DiarySubstrateMedium, string> = {
   EXPANDED_CLAY: "Керамзит",
   COCO: "Кокос",
   PEAT: "Торф",
+  COCO_COIR: "Кокос (старая запись)",
   MINERAL_WOOL: "Минеральная вата",
   OTHER: "Другое",
 };

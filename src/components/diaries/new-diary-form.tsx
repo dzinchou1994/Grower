@@ -10,6 +10,7 @@ import {
 } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { diaryExploreMediumKeys } from "@/lib/diary-explore-params";
 import { getDiaryLabels } from "@/lib/diary-labels";
 import { DiarySetupFields, type DiarySetupDict } from "@/components/diaries/diary-setup-fields";
 import {
@@ -290,7 +291,7 @@ export function NewDiaryForm({
           onChange={(e) => setMedium(e.target.value as DiarySubstrateMedium)}
           className="w-full rounded-2xl border border-white/10 bg-slate-950 px-4 py-3 text-sm text-white"
         >
-          {(Object.keys(labels.medium) as DiarySubstrateMedium[]).map((k) => (
+          {diaryExploreMediumKeys.map((k) => (
             <option key={k} value={k}>
               {labels.medium[k]}
             </option>
