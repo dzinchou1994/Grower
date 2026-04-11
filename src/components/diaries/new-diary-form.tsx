@@ -20,6 +20,14 @@ import {
 } from "@/lib/diary-setup";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
 
+const inputClassName =
+  "w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-500 shadow-sm shadow-black/20 transition focus:border-lime-400/40 focus:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-lime-400/15";
+
+const selectClassName =
+  "w-full cursor-pointer rounded-xl border border-white/[0.08] bg-[#0a121a] px-4 py-3 text-sm text-white shadow-sm shadow-black/20 transition focus:border-lime-400/40 focus:outline-none focus:ring-2 focus:ring-lime-400/15";
+
+const labelClassName = "mb-2 block text-xs font-medium text-slate-400";
+
 type FieldDict = {
   diaryTitle: string;
   strain: string;
@@ -160,26 +168,26 @@ export function NewDiaryForm({
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-5 sm:grid-cols-2">
+    <form onSubmit={onSubmit} className="grid gap-6 sm:grid-cols-2 sm:gap-7">
       {error ? (
-        <div className="sm:col-span-2 rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-100">
+        <div className="sm:col-span-2 rounded-xl border border-rose-500/30 bg-rose-500/[0.08] px-4 py-3 text-sm text-rose-100">
           {error}
         </div>
       ) : null}
 
       <label className="sm:col-span-2">
-        <span className="mb-2 block text-sm font-medium text-slate-300">{fieldDict.diaryTitle}</span>
+        <span className={labelClassName}>{fieldDict.diaryTitle}</span>
         <input
           required
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500"
+          className={inputClassName}
           placeholder={placeholderDict.diaryTitle}
         />
       </label>
 
-      <div className="sm:col-span-2 space-y-3">
-        <span className="block text-sm font-medium text-slate-300">{fieldDict.strain}</span>
+      <div className="sm:col-span-2 space-y-4 rounded-2xl border border-white/[0.06] bg-black/25 p-4 sm:p-5">
+        <span className="block text-xs font-medium text-slate-400">{fieldDict.strain}</span>
         {strains.map((row, i) => (
           <div key={i} className="flex flex-col gap-2 sm:flex-row sm:items-end">
             <input
@@ -189,7 +197,7 @@ export function NewDiaryForm({
                 next[i] = { ...next[i]!, name: e.target.value };
                 setStrains(next);
               }}
-              className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500"
+              className={`flex-1 ${inputClassName}`}
               placeholder={placeholderDict.strain}
             />
             <input
@@ -199,14 +207,14 @@ export function NewDiaryForm({
                 next[i] = { ...next[i]!, breeder: e.target.value };
                 setStrains(next);
               }}
-              className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500"
+              className={`flex-1 ${inputClassName}`}
               placeholder={exploreDict.breederOptional}
             />
             {strains.length > 1 ? (
               <button
                 type="button"
                 onClick={() => setStrains(strains.filter((_, j) => j !== i))}
-                className="rounded-full border border-white/15 px-3 py-2 text-xs text-slate-300 hover:bg-white/10"
+                className="shrink-0 rounded-full border border-white/[0.1] px-3 py-2 text-xs text-slate-400 transition hover:border-white/20 hover:bg-white/[0.06] hover:text-slate-200"
               >
                 {exploreDict.removeStrain}
               </button>
@@ -217,7 +225,7 @@ export function NewDiaryForm({
           <button
             type="button"
             onClick={() => setStrains([...strains, { name: "", breeder: "" }])}
-            className="text-sm text-lime-300 hover:text-lime-200"
+            className="text-sm font-medium text-lime-300/90 transition hover:text-lime-200"
           >
             + {exploreDict.addStrain}
           </button>
@@ -225,11 +233,11 @@ export function NewDiaryForm({
       </div>
 
       <label>
-        <span className="mb-2 block text-sm font-medium text-slate-300">{fieldDict.growPhase}</span>
+        <span className={labelClassName}>{fieldDict.growPhase}</span>
         <select
           value={growPhase}
           onChange={(e) => setGrowPhase(e.target.value as DiaryGrowPhase)}
-          className="w-full rounded-2xl border border-white/10 bg-slate-950 px-4 py-3 text-sm text-white"
+          className={selectClassName}
         >
           {(Object.keys(labels.growPhase) as DiaryGrowPhase[]).map((k) => (
             <option key={k} value={k}>
@@ -240,11 +248,11 @@ export function NewDiaryForm({
       </label>
 
       <label>
-        <span className="mb-2 block text-sm font-medium text-slate-300">{fieldDict.flowerType}</span>
+        <span className={labelClassName}>{fieldDict.flowerType}</span>
         <select
           value={flowerType}
           onChange={(e) => setFlowerType(e.target.value as DiaryFlowerType)}
-          className="w-full rounded-2xl border border-white/10 bg-slate-950 px-4 py-3 text-sm text-white"
+          className={selectClassName}
         >
           {(Object.keys(labels.flowerType) as DiaryFlowerType[]).map((k) => (
             <option key={k} value={k}>
@@ -255,11 +263,11 @@ export function NewDiaryForm({
       </label>
 
       <label className="sm:col-span-2">
-        <span className="mb-2 block text-sm font-medium text-slate-300">{fieldDict.environment}</span>
+        <span className={labelClassName}>{fieldDict.environment}</span>
         <select
           value={environment}
           onChange={(e) => setEnvironment(e.target.value as DiaryEnvironment)}
-          className="w-full rounded-2xl border border-white/10 bg-slate-950 px-4 py-3 text-sm text-white sm:max-w-md"
+          className={`${selectClassName} sm:max-w-md`}
         >
           {(Object.keys(labels.environment) as DiaryEnvironment[]).map((k) => (
             <option key={k} value={k}>
@@ -270,11 +278,11 @@ export function NewDiaryForm({
       </label>
 
       <label>
-        <span className="mb-2 block text-sm font-medium text-slate-300">{fieldDict.watering}</span>
+        <span className={labelClassName}>{fieldDict.watering}</span>
         <select
           value={watering}
           onChange={(e) => setWatering(e.target.value as DiaryWateringType)}
-          className="w-full rounded-2xl border border-white/10 bg-slate-950 px-4 py-3 text-sm text-white"
+          className={selectClassName}
         >
           {(Object.keys(labels.watering) as DiaryWateringType[]).map((k) => (
             <option key={k} value={k}>
@@ -285,11 +293,11 @@ export function NewDiaryForm({
       </label>
 
       <label>
-        <span className="mb-2 block text-sm font-medium text-slate-300">{fieldDict.medium}</span>
+        <span className={labelClassName}>{fieldDict.medium}</span>
         <select
           value={medium}
           onChange={(e) => setMedium(e.target.value as DiarySubstrateMedium)}
-          className="w-full rounded-2xl border border-white/10 bg-slate-950 px-4 py-3 text-sm text-white"
+          className={selectClassName}
         >
           {diaryExploreMediumKeys.map((k) => (
             <option key={k} value={k}>
@@ -300,11 +308,11 @@ export function NewDiaryForm({
       </label>
 
       <label className="sm:col-span-2">
-        <span className="mb-2 block text-sm font-medium text-slate-300">{fieldDict.germinationMethod}</span>
+        <span className={labelClassName}>{fieldDict.germinationMethod}</span>
         <select
           value={germinationMethod}
           onChange={(e) => setGerminationMethod(e.target.value as DiaryGerminationMethod)}
-          className="w-full rounded-2xl border border-white/10 bg-slate-950 px-4 py-3 text-sm text-white sm:max-w-md"
+          className={`${selectClassName} sm:max-w-md`}
         >
           {(Object.keys(labels.germination) as DiaryGerminationMethod[]).map((k) => (
             <option key={k} value={k}>
@@ -317,7 +325,7 @@ export function NewDiaryForm({
       <DiarySetupFields value={setup} onChange={setSetup} setupDict={setupDict} />
 
       <label className="sm:col-span-2">
-        <span className="mb-2 block text-sm font-medium text-slate-300">{fieldDict.coverImage}</span>
+        <span className={labelClassName}>{fieldDict.coverImage}</span>
         <p className="mb-2 text-xs text-slate-500">{exploreDict.coverLastPhotoHint}</p>
         <p className="mb-2 text-xs text-slate-500">{exploreDict.uploadHint}</p>
         <input
@@ -325,26 +333,26 @@ export function NewDiaryForm({
           accept="image/jpeg,image/png,image/webp,image/gif"
           multiple
           onChange={(e) => setCoverFiles(Array.from(e.target.files ?? []))}
-          className="w-full text-sm text-slate-200 file:mr-4 file:rounded-full file:border-0 file:bg-lime-400 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-slate-950 hover:file:bg-lime-300"
+          className="w-full text-sm text-slate-300 file:mr-4 file:cursor-pointer file:rounded-full file:border-0 file:bg-lime-400 file:px-5 file:py-2.5 file:text-sm file:font-semibold file:text-slate-950 file:shadow-md file:shadow-lime-500/20 file:transition hover:file:bg-lime-300"
         />
       </label>
 
       <label className="sm:col-span-2">
-        <span className="mb-2 block text-sm font-medium text-slate-300">{fieldDict.description}</span>
+        <span className={labelClassName}>{fieldDict.description}</span>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={4}
-          className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500"
+          className={`min-h-[7rem] resize-y ${inputClassName}`}
           placeholder={placeholderDict.diaryDescription}
         />
       </label>
 
-      <div className="sm:col-span-2">
+      <div className="sm:col-span-2 flex justify-center border-t border-white/[0.06] pt-8">
         <button
           type="submit"
           disabled={pending}
-          className="rounded-full bg-lime-400 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-lime-300 disabled:cursor-not-allowed disabled:opacity-60"
+          className="w-full max-w-md rounded-full bg-lime-400 px-8 py-3.5 text-sm font-semibold text-slate-950 shadow-[0_4px_24px_-4px_rgba(163,230,53,0.45)] transition hover:bg-lime-300 hover:shadow-[0_8px_32px_-4px_rgba(163,230,53,0.4)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:min-w-[14rem]"
         >
           {pending ? exploreDict.posting : exploreDict.submitCreate}
         </button>

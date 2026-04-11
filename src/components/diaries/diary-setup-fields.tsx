@@ -21,8 +21,11 @@ export type DiarySetupDict = {
   fertilizerPlaceholder: string;
 };
 
+const setupInputClass =
+  "w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 transition focus:border-lime-400/40 focus:outline-none focus:ring-2 focus:ring-lime-400/15";
+
 const addRowButtonClass =
-  "inline-flex w-fit items-center rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm font-medium text-lime-300 transition hover:border-lime-400/25 hover:bg-white/[0.06]";
+  "inline-flex w-fit items-center rounded-xl border border-white/[0.1] bg-white/[0.04] px-3 py-2 text-sm font-medium text-lime-300/95 transition hover:border-lime-400/30 hover:bg-white/[0.07] hover:text-lime-200";
 
 function StringListBlock({
   label,
@@ -55,7 +58,7 @@ function StringListBlock({
                   next[i] = e.target.value;
                   onChange(next);
                 }}
-                className="min-w-0 flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-500"
+                className={`min-w-0 flex-1 ${setupInputClass}`}
                 placeholder={placeholder}
               />
               <button
@@ -64,7 +67,7 @@ function StringListBlock({
                   const next = items.filter((_, j) => j !== i);
                   onChange(next);
                 }}
-                className="shrink-0 rounded-full border border-white/15 px-3 py-2 text-xs text-slate-300 hover:bg-white/10"
+                className="shrink-0 rounded-full border border-white/[0.1] px-3 py-2 text-xs text-slate-400 transition hover:border-white/20 hover:bg-white/[0.06] hover:text-slate-200"
               >
                 {removeLabel}
               </button>
@@ -97,12 +100,12 @@ export function DiarySetupFields({
   }
 
   return (
-    <div className="sm:col-span-2 space-y-5 rounded-2xl border border-white/8 bg-white/[0.03] p-5 sm:p-6">
+    <div className="sm:col-span-2 space-y-5 rounded-2xl border border-white/[0.06] bg-black/25 p-5 sm:p-6">
       <div>
-        <h2 className="text-base font-semibold uppercase tracking-[0.14em] text-white sm:text-lg sm:tracking-[0.16em]">
+        <h2 className="text-sm font-semibold tracking-tight text-white sm:text-base">
           {setupDict.sectionTitle}
         </h2>
-        <p className="mt-1 text-xs text-slate-500">{setupDict.hint}</p>
+        <p className="mt-1.5 text-xs leading-relaxed text-slate-500">{setupDict.hint}</p>
       </div>
 
       <StringListBlock
@@ -158,7 +161,7 @@ export function DiarySetupFields({
                       next[i] = { ...next[i]!, name: e.target.value, percent: null };
                       onChange({ ...value, substrates: next });
                     }}
-                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-500"
+                    className={setupInputClass}
                     placeholder={setupDict.substrateManufacturerPlaceholder}
                   />
                 </label>
@@ -168,7 +171,7 @@ export function DiarySetupFields({
                     const filtered = value.substrates.filter((_, j) => j !== i);
                     onChange({ ...value, substrates: filtered });
                   }}
-                  className="shrink-0 rounded-full border border-white/15 px-3 py-2 text-xs text-slate-300 hover:bg-white/10 sm:mt-5"
+                  className="shrink-0 rounded-full border border-white/[0.1] px-3 py-2 text-xs text-slate-400 transition hover:border-white/20 hover:bg-white/[0.06] hover:text-slate-200 sm:mt-5"
                 >
                   {setupDict.remove}
                 </button>
