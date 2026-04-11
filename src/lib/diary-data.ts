@@ -17,6 +17,7 @@ import {
 } from "@/lib/diary-setup";
 import { db } from "@/lib/db";
 import { revalidateTag, unstable_cache } from "next/cache";
+import { cache } from "react";
 
 const DEFAULT_PAGE_SIZE = 12;
 const MAX_PAGE_SIZE = 50;
@@ -563,47 +564,71 @@ export type DiaryDetailPublic = {
   updatedAt: Date;
 };
 
-export async function getPublicDiaryBySlug(
+const diaryDetailWeekInclude = {
+  where: { isHidden: false },
+  orderBy: { weekNumber: "asc" as const },
+  include: {
+    images: { orderBy: { sortOrder: "asc" as const } },
+    comments: {
+      where: { isHidden: false },
+      orderBy: { createdAt: "asc" as const },
+      take: 200,
+      select: {
+        id: true,
+        body: true,
+        createdAt: true,
+        author: { select: { username: true, image: true } },
+      },
+    },
+    _count: {
+      select: { likes: true, comments: true },
+    },
+  },
+} as const;
+
+async function fetchDiaryDetailRow(
   slug: string,
-): Promise<DiaryDetailPublic | null> {
-  const row = await db.diary.findFirst({
+  includeDiaryComments: boolean,
+) {
+  return db.diary.findFirst({
     where: publicDiaryWhere({ slug }),
     include: {
       author: { select: { id: true, username: true, image: true, bio: true } },
-      diaryComments: {
-        where: { isHidden: false },
-        orderBy: { createdAt: "asc" },
-        take: 200,
-        select: {
-          id: true,
-          body: true,
-          createdAt: true,
-          author: { select: { username: true, image: true } },
-        },
-      },
-      weeks: {
-        where: { isHidden: false },
-        orderBy: { weekNumber: "asc" },
-        include: {
-          images: { orderBy: { sortOrder: "asc" } },
-          comments: {
-            where: { isHidden: false },
-            orderBy: { createdAt: "asc" },
-            take: 200,
-            select: {
-              id: true,
-              body: true,
-              createdAt: true,
-              author: { select: { username: true, image: true } },
+      ...(includeDiaryComments
+        ? {
+            diaryComments: {
+              where: { isHidden: false },
+              orderBy: { createdAt: "asc" },
+              take: 200,
+              select: {
+                id: true,
+                body: true,
+                createdAt: true,
+                author: { select: { username: true, image: true } },
+              },
             },
-          },
-          _count: {
-            select: { likes: true, comments: true },
-          },
-        },
-      },
+          }
+        : {}),
+      weeks: diaryDetailWeekInclude,
     },
   });
+}
+
+async function getPublicDiaryBySlugUncached(
+  slug: string,
+): Promise<DiaryDetailPublic | null> {
+  let row: Awaited<ReturnType<typeof fetchDiaryDetailRow>>;
+  try {
+    row = await fetchDiaryDetailRow(slug, true);
+  } catch (e) {
+    if (process.env.NODE_ENV === "development") {
+      console.warn(
+        "[diaries] getPublicDiaryBySlug with diaryComments failed; retrying without. Run: npx prisma migrate deploy",
+        e,
+      );
+    }
+    row = await fetchDiaryDetailRow(slug, false);
+  }
 
   if (!row) {
     return null;
@@ -645,7 +670,15 @@ export async function getPublicDiaryBySlug(
   const { strain, strains } = mapStrains(strainRows, row.strain);
   const setup = parseDiarySetup(row.setup);
 
-  const diaryComments: WeekCommentPublic[] = row.diaryComments.map((c) => ({
+  const rawDc = row as unknown as {
+    diaryComments?: Array<{
+      id: string;
+      body: string;
+      createdAt: Date;
+      author: { username: string; image: string | null };
+    }>;
+  };
+  const diaryComments: WeekCommentPublic[] = (rawDc.diaryComments ?? []).map((c) => ({
     id: c.id,
     body: c.body,
     createdAt: c.createdAt,
@@ -681,6 +714,9 @@ export async function getPublicDiaryBySlug(
     updatedAt: row.updatedAt,
   };
 }
+
+/** Dedupes within the same request (e.g. metadata + page). */
+export const getPublicDiaryBySlug = cache(getPublicDiaryBySlugUncached);
 
 export async function getDiaryWeekPublic(
   diarySlug: string,
