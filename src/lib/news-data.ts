@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { db } from "@/lib/db";
 import type { Locale } from "@/lib/i18n";
 import { autoTranslateText } from "@/lib/auto-translate";
@@ -406,18 +407,20 @@ export async function listNewsSlugs(): Promise<string[]> {
   return items.map((entry) => entry.slug);
 }
 
-export async function getNewsBySlug(slug: string): Promise<NewsArticleRecord | null> {
-  const hasTables = await ensureNewsTables();
-  if (!hasTables) {
-    return listPublishedNewsFromMemory().find((entry) => entry.slug === slug) ?? null;
-  }
-  await ensureNewsSeedData();
-  const row = await (db as any).newsArticle.findUnique({
-    where: { slug },
-  });
-  if (!row || !row.isPublished) return null;
-  return mapNewsArticle(row);
-}
+export const getNewsBySlug = cache(
+  async (slug: string): Promise<NewsArticleRecord | null> => {
+    const hasTables = await ensureNewsTables();
+    if (!hasTables) {
+      return listPublishedNewsFromMemory().find((entry) => entry.slug === slug) ?? null;
+    }
+    await ensureNewsSeedData();
+    const row = await (db as any).newsArticle.findUnique({
+      where: { slug },
+    });
+    if (!row || !row.isPublished) return null;
+    return mapNewsArticle(row);
+  },
+);
 
 export async function submitNews(input: {
   title: string;

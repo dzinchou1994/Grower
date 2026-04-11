@@ -27,7 +27,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
   }
 
-  const threadData = await getForumThreadBySlug(threadSlug, locale);
+  const typedLocale = locale as Locale;
+  const sessionUser = await getServerSessionUser();
+  const threadData = await getForumThreadBySlug(threadSlug, typedLocale, sessionUser?.userId);
   if (!threadData || threadData.topic.slug !== slug) {
     return {};
   }

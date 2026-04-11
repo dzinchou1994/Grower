@@ -43,7 +43,9 @@ export async function autoTranslateText(
       "https://translate.googleapis.com/translate_a/single" +
       `?client=gtx&sl=auto&tl=${encodeURIComponent(targetLocale)}` +
       `&dt=t&q=${encodeURIComponent(source)}`;
-    const response = await fetch(url, { cache: "no-store" });
+    const response = await fetch(url, {
+      next: { revalidate: 86_400 },
+    });
     if (!response.ok) {
       const fallback = { text: source, translated: false };
       translateCache.set(cacheKey, fallback);

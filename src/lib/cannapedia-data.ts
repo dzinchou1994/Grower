@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n";
+import { cache } from "react";
 import { unstable_cache } from "next/cache";
 import { db } from "@/lib/db";
 
@@ -804,7 +805,7 @@ export async function listCannapediaArticleSlugs() {
   }
 }
 
-export async function getCannapediaArticleBySlug(slug: string) {
+export const getCannapediaArticleBySlug = cache(async (slug: string) => {
   if (!hasDatabase) {
     const entry = cannapediaArticles.find((article) => article.slug === slug);
     if (!entry) return null;
@@ -884,5 +885,5 @@ export async function getCannapediaArticleBySlug(slug: string) {
       isPublished: true,
     } satisfies PublicCannapediaArticle;
   }
-}
+});
 

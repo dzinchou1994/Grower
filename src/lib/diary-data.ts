@@ -722,46 +722,48 @@ async function fetchDiaryWeekCommentsForPublic(weekId: string): Promise<WeekComm
   }));
 }
 
-export async function getDiaryWeekPublic(
-  diarySlug: string,
-  weekNumber: number,
-): Promise<{
-  diary: Pick<
-    DiaryDetailPublic,
-    | "slug"
-    | "title"
-    | "strain"
-    | "strains"
-    | "author"
-    | "authorId"
-    | "environment"
-    | "coverImageUrl"
-  >;
-  week: DiaryWeekPublic;
-} | null> {
-  const diary = await getPublicDiaryBySlug(diarySlug);
-  if (!diary) {
-    return null;
-  }
-  const week = diary.weeks.find((w) => w.weekNumber === weekNumber);
-  if (!week) {
-    return null;
-  }
-  const comments = await fetchDiaryWeekCommentsForPublic(week.id);
-  return {
-    diary: {
-      slug: diary.slug,
-      title: diary.title,
-      strain: diary.strain,
-      strains: diary.strains,
-      author: diary.author,
-      authorId: diary.authorId,
-      environment: diary.environment,
-      coverImageUrl: diary.coverImageUrl,
-    },
-    week: { ...week, comments },
-  };
-}
+export const getDiaryWeekPublic = cache(
+  async (
+    diarySlug: string,
+    weekNumber: number,
+  ): Promise<{
+    diary: Pick<
+      DiaryDetailPublic,
+      | "slug"
+      | "title"
+      | "strain"
+      | "strains"
+      | "author"
+      | "authorId"
+      | "environment"
+      | "coverImageUrl"
+    >;
+    week: DiaryWeekPublic;
+  } | null> => {
+    const diary = await getPublicDiaryBySlug(diarySlug);
+    if (!diary) {
+      return null;
+    }
+    const week = diary.weeks.find((w) => w.weekNumber === weekNumber);
+    if (!week) {
+      return null;
+    }
+    const comments = await fetchDiaryWeekCommentsForPublic(week.id);
+    return {
+      diary: {
+        slug: diary.slug,
+        title: diary.title,
+        strain: diary.strain,
+        strains: diary.strains,
+        author: diary.author,
+        authorId: diary.authorId,
+        environment: diary.environment,
+        coverImageUrl: diary.coverImageUrl,
+      },
+      week: { ...week, comments },
+    };
+  },
+);
 
 export async function createDiary(input: {
   authorId: string;

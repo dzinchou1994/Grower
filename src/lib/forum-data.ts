@@ -6,6 +6,7 @@ import {
   differenceInSeconds,
   differenceInYears,
 } from "date-fns";
+import { cache } from "react";
 import { unstable_cache } from "next/cache";
 import { db } from "@/lib/db";
 import { getDeterministicAvatarImage } from "@/lib/avatar-options";
@@ -842,11 +843,18 @@ async function translateForumThreadRecord(
     return thread;
   }
 
-  const [translatedTitle, translatedBody, translatedComments] = await Promise.all([
+  const [translatedTitle, translatedBody] = await Promise.all([
     autoTranslateText(thread.title, locale),
     autoTranslateText(thread.body ?? "", locale),
-    Promise.all(
-      thread.comments.map(async (comment) => {
+  ]);
+
+  /** Avoid hundreds of simultaneous translate requests on long threads. */
+  const translatedComments: ForumComment[] = [];
+  const commentChunkSize = 16;
+  for (let i = 0; i < thread.comments.length; i += commentChunkSize) {
+    const chunk = thread.comments.slice(i, i + commentChunkSize);
+    const part = await Promise.all(
+      chunk.map(async (comment) => {
         const translatedCommentBody = await autoTranslateText(comment.body, locale);
         return {
           ...comment,
@@ -854,8 +862,9 @@ async function translateForumThreadRecord(
           isTranslated: translatedCommentBody.translated,
         } satisfies ForumComment;
       }),
-    ),
-  ]);
+    );
+    translatedComments.push(...part);
+  }
 
   return {
     ...thread,
@@ -1259,17 +1268,19 @@ export async function listForumTopics(
   return listForumTopicsFromMemory(query, locale);
 }
 
-export async function getForumTopicBySlug(
-  slug: string,
-  locale?: Locale,
-  currentUserId?: string,
-): Promise<ForumTopicRecord | null> {
-  if (hasDatabase) {
-    return getForumTopicBySlugFromDatabase(slug, locale, currentUserId);
-  }
+export const getForumTopicBySlug = cache(
+  async (
+    slug: string,
+    locale?: Locale,
+    currentUserId?: string,
+  ): Promise<ForumTopicRecord | null> => {
+    if (hasDatabase) {
+      return getForumTopicBySlugFromDatabase(slug, locale, currentUserId);
+    }
 
-  return getForumTopicBySlugFromMemory(slug, locale);
-}
+    return getForumTopicBySlugFromMemory(slug, locale);
+  },
+);
 
 export type ForumThreadPageData = {
   topic: Pick<ForumTopicRecord, "slug" | "title" | "description" | "icon" | "isTranslated">;
@@ -1282,11 +1293,12 @@ export type ForumCommentPageData = {
   comment: ForumComment;
 };
 
-export async function getForumThreadBySlug(
-  threadSlug: string,
-  locale?: Locale,
-  currentUserId?: string,
-): Promise<ForumThreadPageData | null> {
+export const getForumThreadBySlug = cache(
+  async (
+    threadSlug: string,
+    locale?: Locale,
+    currentUserId?: string,
+  ): Promise<ForumThreadPageData | null> => {
   if (hasDatabase) {
     const thread = await db.forumThread.findUnique({
       where: { slug: threadSlug },
@@ -1360,13 +1372,15 @@ export async function getForumThreadBySlug(
   }
 
   return null;
-}
+  }
+);
 
-export async function getForumCommentById(
-  commentId: string,
-  locale?: Locale,
-  currentUserId?: string,
-): Promise<ForumCommentPageData | null> {
+export const getForumCommentById = cache(
+  async (
+    commentId: string,
+    locale?: Locale,
+    currentUserId?: string,
+  ): Promise<ForumCommentPageData | null> => {
   if (hasDatabase) {
     const comment = await db.forumComment.findUnique({
       where: { id: commentId },
@@ -1461,7 +1475,8 @@ export async function getForumCommentById(
   }
 
   return null;
-}
+  }
+);
 
 export async function createForumThread(input: {
   topicSlug: string;

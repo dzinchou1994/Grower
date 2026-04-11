@@ -52,7 +52,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
   }
 
-  const topic = await getForumTopicBySlug(slug);
+  const typedLocale = locale as Locale;
+  const sessionUser = await getServerSessionUser();
+  const topic = await getForumTopicBySlug(slug, typedLocale, sessionUser?.userId);
 
   if (!topic) {
     return {};

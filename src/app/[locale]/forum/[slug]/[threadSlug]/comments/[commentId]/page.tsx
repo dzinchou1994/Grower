@@ -19,7 +19,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
   }
 
-  const data = await getForumCommentById(commentId, locale);
+  const typedLocale = locale as Locale;
+  const sessionUser = await getServerSessionUser();
+  const data = await getForumCommentById(commentId, typedLocale, sessionUser?.userId);
   if (!data || data.topic.slug !== slug || data.thread.slug !== threadSlug) {
     return {};
   }
