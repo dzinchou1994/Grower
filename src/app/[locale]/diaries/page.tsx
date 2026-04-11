@@ -5,7 +5,7 @@ import { formatDistanceToNow } from "date-fns";
 import { enUS, ka, ru } from "date-fns/locale";
 import { Clock, Heart, MessageCircle } from "lucide-react";
 import { CannabisLeaf, CannabisLeafOutline } from "@/components/icons";
-import { DiaryExploreBar } from "@/components/diaries/diary-explore-bar";
+import { DiaryExploreBar, DiarySortBar } from "@/components/diaries/diary-explore-bar";
 import { getPublicDiaryFilterCounts, listPublicDiaries } from "@/lib/diary-data";
 import {
   parseDiaryExploreSearchParams,
@@ -154,6 +154,14 @@ export default async function DiariesPage({ params, searchParams }: PageProps) {
         page={parsed.page}
         dict={explore}
         counts={filterCounts}
+      />
+
+      <DiarySortBar
+        basePath={basePath}
+        sort={parsed.sort}
+        filters={parsed.filters}
+        page={parsed.page}
+        dict={explore}
       />
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">

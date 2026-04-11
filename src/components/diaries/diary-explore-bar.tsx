@@ -203,7 +203,7 @@ function QuickFilterStrip(props: Props) {
   );
 
   return (
-    <div className="mt-3 w-full min-w-0 border-t border-white/[0.06] pt-3 lg:mt-4 lg:pt-4">
+    <div className="w-full min-w-0">
       <p className="mb-2 text-[9px] font-medium uppercase tracking-[0.16em] text-slate-500 sm:text-[10px]">
         {dict.quickFiltersLabel}
       </p>
@@ -285,6 +285,56 @@ function QuickFilterStrip(props: Props) {
             {c(counts.greenhouse)}
           </span>
         </ChipLink>
+      </div>
+    </div>
+  );
+}
+
+/** Sort — minimal segmented control between filter bar and diary grid. */
+export function DiarySortBar({
+  basePath,
+  sort,
+  filters,
+  page,
+  dict,
+}: Pick<Props, "basePath" | "sort" | "filters" | "page"> & {
+  dict: ExploreDict;
+}) {
+  const sortOptions: { key: DiarySortKey; label: string }[] = [
+    { key: "updated", label: dict.sortUpdated },
+    { key: "created", label: dict.sortCreated },
+    { key: "likes", label: dict.sortLikes },
+  ];
+
+  return (
+    <div
+      role="group"
+      aria-label={dict.sortLabel}
+      className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+    >
+      <span className="shrink-0 text-[10px] font-medium uppercase tracking-[0.2em] text-slate-500">
+        {dict.sortLabel}
+      </span>
+      <div className="min-w-0 overflow-x-auto [-webkit-overflow-scrolling:touch] [scrollbar-width:none] sm:overflow-visible [&::-webkit-scrollbar]:hidden">
+        <div className="inline-flex rounded-full p-0.5 ring-1 ring-white/[0.06] bg-slate-950/40 backdrop-blur-sm">
+          {sortOptions.map((opt) => {
+            const href = buildQuery(basePath, sort, filters, page, { sort: opt.key, page: 1 });
+            const active = sort === opt.key;
+            return (
+              <Link
+                key={opt.key}
+                href={href}
+                className={`relative whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-medium transition-[color,background-color,box-shadow] sm:px-4 sm:py-2 sm:text-xs ${
+                  active
+                    ? "bg-lime-400/[0.12] text-lime-200 shadow-[inset_0_1px_0_0_rgba(190,242,100,0.08)]"
+                    : "text-slate-500 hover:text-slate-300"
+                }`}
+              >
+                {opt.label}
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
@@ -373,11 +423,6 @@ function FilterSections({
 
 export function DiaryExploreBar(props: Props) {
   const { basePath, sort, filters, page, dict } = props;
-  const sortOptions: { key: DiarySortKey; label: string }[] = [
-    { key: "updated", label: dict.sortUpdated },
-    { key: "created", label: dict.sortCreated },
-    { key: "likes", label: dict.sortLikes },
-  ];
 
   const activeCount = [
     filters.germinationMethod,
@@ -400,25 +445,6 @@ export function DiaryExploreBar(props: Props) {
 
   return (
     <section className="rounded-2xl border border-white/10 bg-slate-950/50 p-3 sm:p-4 lg:rounded-[1.35rem] lg:p-5">
-      {/* Sort — compact horizontal scroll on small screens */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-        <span className="shrink-0 text-[9px] font-medium uppercase tracking-[0.18em] text-slate-500 sm:text-[10px] sm:tracking-[0.2em]">
-          {dict.sortLabel}
-        </span>
-        <div className="-mx-1 flex min-w-0 flex-1 snap-x snap-mandatory gap-1.5 overflow-x-auto px-1 pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:snap-none sm:flex-wrap sm:overflow-x-visible sm:pb-0 [&::-webkit-scrollbar]:hidden">
-          {sortOptions.map((opt) => (
-            <ChipLink
-              key={opt.key}
-              href={buildQuery(basePath, sort, filters, page, { sort: opt.key, page: 1 })}
-              active={sort === opt.key}
-              className="snap-start"
-            >
-              {opt.label}
-            </ChipLink>
-          ))}
-        </div>
-      </div>
-
       <QuickFilterStrip {...props} />
 
       {/* Mobile / tablet: collapsible advanced filters */}
