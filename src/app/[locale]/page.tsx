@@ -112,7 +112,7 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
           {/* CTAs */}
           <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             <Link
-              href={getLocalizedPath(typedLocale, "/account")}
+              href={getLocalizedPath(typedLocale, "/auth/register")}
               className="inline-flex items-center justify-center rounded-lg bg-lime-400 px-3.5 py-1.5 text-[12px] font-semibold text-slate-950 transition hover:bg-lime-300 sm:px-4 sm:py-2 sm:text-sm"
             >
               {dict.home.joinCta}
