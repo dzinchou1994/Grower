@@ -28,7 +28,7 @@ export function ForumCommentForm({
           requestFailed: "მოთხოვნა ვერ შესრულდა. სცადე თავიდან.",
           loginToComment: "კომენტარის დასატოვებლად საჭიროა ავტორიზაცია.",
           openLogin: "შესვლა",
-          placeholder: "კომენტარი...",
+          placeholder: "დაწერე კომენტარი",
           posting: "იტვირთება...",
           addComment: "დაკომენტარება",
         }
@@ -39,7 +39,7 @@ export function ForumCommentForm({
             requestFailed: "Ошибка запроса. Попробуйте снова.",
             loginToComment: "Чтобы комментировать, нужно войти.",
             openLogin: "Войти",
-            placeholder: "Комментарий...",
+            placeholder: "Напишите комментарий",
             posting: "Публикация...",
             addComment: "Комментировать",
           }
@@ -49,7 +49,7 @@ export function ForumCommentForm({
             requestFailed: "Request failed. Try again.",
             loginToComment: "Login to comment.",
             openLogin: "Open login",
-            placeholder: "Add comment...",
+            placeholder: "Write a comment",
             posting: "Posting...",
             addComment: "Add comment",
           };
@@ -129,7 +129,7 @@ export function ForumCommentForm({
           placeholder={t.placeholder}
           rows={2}
           onInput={(event) => autoResizeTextarea(event.currentTarget)}
-          className="min-h-[40px] resize-none overflow-hidden rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2 sm:text-sm"
+          className="min-h-[40px] resize-none overflow-hidden rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-[10px] leading-snug text-white placeholder:text-[6.5px] placeholder:leading-tight placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2 sm:text-[11px] sm:placeholder:text-[7.5px]"
           required
           disabled={!isAuthenticated}
         />

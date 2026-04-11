@@ -88,10 +88,10 @@ export default async function ForumTopicPage({ params }: PageProps) {
 
   const newThreadCta =
     typedLocale === "ka"
-      ? "ახალი თემის დაწყება"
+      ? "ახალი საუბრის წამოწყება"
       : typedLocale === "ru"
-        ? "Создать новую тему"
-        : "Start new thread";
+        ? "Начать новую беседу"
+        : "Start a new conversation";
 
   return (
     <div className="flex flex-col gap-5 sm:gap-6">
