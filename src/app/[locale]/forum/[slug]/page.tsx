@@ -13,7 +13,6 @@ import {
   type Locale,
 } from "@/lib/i18n";
 import { getForumTopicBySlug } from "@/lib/forum-data";
-import { CannabisLeaf } from "@/components/icons";
 import { VoteButtons } from "@/components/vote-buttons";
 import { UserQuickProfileTrigger } from "@/components/user-quick-profile-trigger";
 import { ForumItemActions } from "@/components/forum-item-actions";
@@ -111,8 +110,7 @@ export default async function ForumTopicPage({ params }: PageProps) {
         />
       </div>
 
-      <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/6 p-5 sm:rounded-[2rem] sm:p-8">
-        <CannabisLeaf className="pointer-events-none absolute -right-6 -top-6 h-40 w-40 rotate-12 text-lime-400/[0.04] sm:h-52 sm:w-52" />
+      <section className="relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.03] p-5 backdrop-blur-sm sm:rounded-[2rem] sm:p-8">
         <div className="relative flex items-center gap-3">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-lime-400/10 text-xl sm:h-14 sm:w-14 sm:rounded-2xl sm:text-2xl">
             {topic.icon}

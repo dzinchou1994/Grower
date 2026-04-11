@@ -259,7 +259,7 @@ export function ForumThreadComposer({
       <section
         className={
           heroCompact
-            ? "w-fit max-w-[min(100%,18rem)] shrink-0 rounded-xl border border-white/10 bg-white/[0.06] p-2 shadow-sm sm:rounded-2xl sm:p-2.5"
+            ? "w-fit max-w-[min(100%,18rem)] shrink-0"
             : "rounded-2xl border border-white/10 bg-transparent p-5 sm:rounded-[2rem] sm:p-6"
         }
       >

@@ -85,8 +85,12 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/6 p-5 sm:rounded-[2rem] sm:p-8">
-        <div className="relative">
+      <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-slate-950/55 p-5 shadow-lg shadow-black/30 backdrop-blur-md sm:rounded-[2rem] sm:p-8">
+        <div
+          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent"
+          aria-hidden
+        />
+        <div className="relative z-[1]">
           <div className="flex flex-col gap-3 sm:gap-4">
             <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
               <div className="inline-flex min-w-0 items-center gap-2 text-xs text-lime-300 sm:text-sm">

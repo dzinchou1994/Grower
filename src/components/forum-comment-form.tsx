@@ -19,6 +19,7 @@ export function ForumCommentForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [body, setBody] = useState("");
   const bodyRef = useRef<HTMLTextAreaElement | null>(null);
   const t =
     locale === "ka"
@@ -81,6 +82,7 @@ export function ForumCommentForm({
       }
 
       form.reset();
+      setBody("");
       if (bodyRef.current) {
         bodyRef.current.style.height = "auto";
       }
@@ -102,6 +104,9 @@ export function ForumCommentForm({
     textarea.style.height = "auto";
     textarea.style.height = `${textarea.scrollHeight}px`;
   }
+
+  const showSubmitButton =
+    isAuthenticated && (body.trim().length > 0 || isSubmitting);
 
   return (
     <form
@@ -126,11 +131,15 @@ export function ForumCommentForm({
         <textarea
           ref={bodyRef}
           name="body"
+          value={body}
           placeholder={t.placeholder}
           rows={2}
-          onInput={(event) => autoResizeTextarea(event.currentTarget)}
-          className="min-h-[40px] resize-none overflow-hidden rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-[10px] leading-snug text-white placeholder:text-[6.5px] placeholder:leading-tight placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2 sm:text-[11px] sm:placeholder:text-[7.5px]"
-          required
+          onChange={(event) => {
+            setBody(event.target.value);
+            autoResizeTextarea(event.currentTarget);
+          }}
+          className="min-h-[40px] resize-none overflow-hidden rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-[10px] leading-snug text-white placeholder:text-[13px] placeholder:leading-snug placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2 sm:text-[11px] sm:placeholder:text-[15px]"
+          required={showSubmitButton}
           disabled={!isAuthenticated}
         />
       </div>
@@ -138,13 +147,15 @@ export function ForumCommentForm({
       {error ? <p className="text-xs text-red-300">{error}</p> : null}
       {success ? <p className="text-xs text-lime-300">{success}</p> : null}
 
-      <button
-        type="submit"
-        disabled={isSubmitting || !isAuthenticated}
-        className="inline-flex w-fit rounded-full border border-lime-400/30 px-2.5 py-1 text-[10px] font-medium text-lime-300 transition hover:bg-lime-400/10 disabled:cursor-not-allowed disabled:opacity-60"
-      >
-        {isSubmitting ? t.posting : t.addComment}
-      </button>
+      {showSubmitButton ? (
+        <button
+          type="submit"
+          disabled={isSubmitting || !isAuthenticated}
+          className="inline-flex w-fit rounded-full border border-lime-400/30 px-2.5 py-1 text-[10px] font-medium text-lime-300 transition hover:bg-lime-400/10 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {isSubmitting ? t.posting : t.addComment}
+        </button>
+      ) : null}
     </form>
   );
 }
