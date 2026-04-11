@@ -10,11 +10,14 @@ import { CannabisLeaf } from "@/components/icons";
 import { UserAvatar } from "@/components/user-avatar";
 import { getPublicDiaryBySlug } from "@/lib/diary-data";
 import { getDiaryLabels } from "@/lib/diary-labels";
+import { DiarySharePanel } from "@/components/diary-share-panel";
+import { diaryOpenGraphMetadata } from "@/lib/diary-open-graph";
 import {
   getAlternates,
   getLocalizedContent,
   getLocalizedPath,
   isValidLocale,
+  siteUrl,
   type Locale,
 } from "@/lib/i18n";
 import { getServerSessionUser } from "@/lib/auth-session";
@@ -44,10 +47,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
   }
 
+  const title = `Grower | ${diary.title}`;
+  const description = diary.description?.slice(0, 160) ?? diary.title;
+
   return {
-    title: `Grower | ${diary.title}`,
-    description: diary.description?.slice(0, 160) ?? diary.title,
+    title,
+    description,
     alternates: getAlternates(`/diaries/${slug}`, locale),
+    ...diaryOpenGraphMetadata({
+      locale: locale as Locale,
+      path: `/diaries/${slug}`,
+      title,
+      description,
+      imageCandidates: [diary.coverImageUrl, diary.latestWeek?.images[0]?.imageUrl],
+    }),
   };
 }
 
@@ -139,6 +152,14 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                 {diary.description}
               </p>
             ) : null}
+            <div className="mt-3">
+              <DiarySharePanel
+                url={`${siteUrl}${getLocalizedPath(typedLocale, `/diaries/${diary.slug}`)}`}
+                title={diary.title}
+                text={diary.description ?? diary.title}
+                labels={dict.diaries.share}
+              />
+            </div>
           </div>
 
           <>

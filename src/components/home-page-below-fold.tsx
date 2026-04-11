@@ -1,9 +1,15 @@
 import Link from "next/link";
+import { enUS, ka, ru } from "date-fns/locale";
 import { BookOpenIcon } from "@/components/icons";
+import { DiaryExploreCard } from "@/components/diaries/diary-explore-card";
 import { UserAvatar } from "@/components/user-avatar";
+import type { DiaryListItem } from "@/lib/diary-data";
+import { listPublicDiaries } from "@/lib/diary-data";
 import { getTopUsers, listForumTopics } from "@/lib/forum-data";
 import { getLocalizedContent, getLocalizedPath, type Locale } from "@/lib/i18n";
 import { getUsernameAccentClassByXp } from "@/lib/leveling";
+
+const dateLocales = { en: enUS, ka, ru } as const;
 
 export function HomePageBelowFoldSkeleton() {
   return (
@@ -34,6 +40,20 @@ export function HomePageBelowFoldSkeleton() {
         <div className="mt-3 h-20 max-w-2xl rounded bg-white/5" />
       </div>
       <div className="animate-pulse rounded-2xl border border-white/10 bg-slate-950/40 p-5 sm:rounded-[2rem] sm:p-6">
+        <div className="h-4 w-44 rounded bg-white/10" />
+        <div className="mt-3 h-7 w-64 rounded bg-white/10" />
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:mt-6 sm:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className="overflow-hidden rounded-xl border border-white/10 bg-slate-950/40 sm:rounded-2xl"
+            >
+              <div className="aspect-[3/4] min-h-[10rem] bg-white/5 sm:aspect-[4/5] sm:min-h-[12rem]" />
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="animate-pulse rounded-2xl border border-white/10 bg-slate-950/40 p-5 sm:rounded-[2rem] sm:p-6">
         <div className="h-4 w-36 rounded bg-white/10" />
         <div className="mt-3 h-7 w-52 rounded bg-white/10" />
         <div className="mt-5 grid grid-cols-2 gap-2 sm:gap-3">
@@ -42,9 +62,15 @@ export function HomePageBelowFoldSkeleton() {
           ))}
         </div>
       </div>
-      <div className="animate-pulse rounded-2xl border border-white/10 bg-slate-950/40 p-6 sm:rounded-[2rem]">
-        <div className="h-6 w-full max-w-lg rounded bg-white/10" />
-        <div className="mt-3 h-10 w-full max-w-2xl rounded bg-white/5" />
+      <div className="animate-pulse rounded-2xl bg-gradient-to-br from-emerald-400/25 via-slate-800/30 to-slate-950 p-[1px] sm:rounded-[2rem]">
+        <div className="rounded-[calc(1rem-1px)] bg-slate-950/95 p-5 sm:rounded-[calc(2rem-1px)] sm:p-7">
+          <div className="h-6 w-40 rounded-full bg-white/10" />
+          <div className="mt-4 h-7 max-w-lg rounded-lg bg-white/10" />
+          <div className="mt-3 h-9 max-w-2xl rounded bg-white/5" />
+          <div className="mt-6 flex justify-center sm:justify-end">
+            <div className="h-10 w-44 rounded-full bg-white/10" />
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -53,10 +79,22 @@ export function HomePageBelowFoldSkeleton() {
 export async function HomePageBelowFold({ locale }: { locale: Locale }) {
   const typedLocale = locale;
   const { dict } = getLocalizedContent(typedLocale);
-  const [forumTopicList, topUsers] = await Promise.all([
+  const [forumTopicList, topUsers, recentDiariesResult] = await Promise.all([
     listForumTopics(undefined, typedLocale),
     getTopUsers(10),
+    listPublicDiaries({ page: 1, pageSize: 6, sort: "updated" }).catch(
+      (): { items: DiaryListItem[] } => ({ items: [] }),
+    ),
   ]);
+
+  const recentDiaries = recentDiariesResult.items;
+  const dfLocale = dateLocales[typedLocale];
+  const diaryCardExplore = {
+    relativeWeeks: dict.diaries.explore.relativeWeeks,
+    strainsMore: dict.diaries.explore.strainsMore,
+    likes: dict.diaries.likes,
+    comments: dict.diaries.comments,
+  };
 
   const allThreads = forumTopicList
     .flatMap((topic) =>
@@ -255,6 +293,37 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
         </div>
       </section>
 
+      {recentDiaries.length > 0 ? (
+        <section className="defer-render rounded-2xl border border-white/10 bg-slate-950/55 p-5 sm:rounded-[2rem] sm:p-6">
+          <div className="flex items-start justify-between gap-3 sm:items-center">
+            <div>
+              <p className="text-xs text-slate-400 sm:text-sm">{dict.home.recentDiariesHighlight}</p>
+              <h2 className="mt-1 text-lg font-semibold text-white sm:text-2xl">
+                {dict.home.recentDiariesTitle}
+              </h2>
+            </div>
+            <Link
+              href={getLocalizedPath(typedLocale, "/diaries")}
+              className="shrink-0 text-xs font-medium text-lime-300 hover:text-lime-200 sm:text-sm"
+            >
+              {dict.home.viewAllDiaries}
+            </Link>
+          </div>
+          <div className="mt-5 grid grid-cols-2 gap-3 sm:mt-6 sm:grid-cols-3">
+            {recentDiaries.map((diary) => (
+              <DiaryExploreCard
+                key={diary.id}
+                diary={diary}
+                typedLocale={typedLocale}
+                dateFnsLocale={dfLocale}
+                explore={diaryCardExplore}
+                imageSizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 16vw"
+              />
+            ))}
+          </div>
+        </section>
+      ) : null}
+
       <section className="defer-render rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-6">
         <div>
           <p className="text-xs text-slate-400 sm:text-sm">{dict.home.topUsers}</p>
@@ -298,38 +367,67 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <section className="defer-render relative overflow-hidden rounded-2xl border border-white/[0.06] sm:rounded-[2rem]">
-        <div className="absolute inset-0 bg-gradient-to-t from-lime-950/50 via-slate-950/80 to-slate-950/90" />
-        <div className="absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-lime-400/[0.07] blur-3xl" />
-        <Link
-          href={getLocalizedPath(typedLocale, "/manifesto")}
-          className="group relative block w-full"
-        >
-          <div className="relative flex w-full flex-col gap-3 p-4 sm:gap-4 sm:p-6 lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:p-7">
-            <div className="min-w-0 flex-1">
-              <h2 className="text-[15px] font-semibold leading-snug text-white sm:text-lg lg:text-xl">
-                {dict.home.manifesto.headline}
-              </h2>
-              <p className="mt-2 line-clamp-2 text-[11px] leading-relaxed text-slate-400 sm:text-[13px] sm:leading-6 lg:mt-2.5 lg:line-clamp-none lg:text-[13px] lg:leading-7">
-                {dict.home.manifesto.text}
-              </p>
+      <section className="defer-render relative rounded-2xl p-[1px] shadow-[0_28px_70px_-36px_rgba(0,0,0,0.9)] sm:rounded-[2rem] bg-gradient-to-br from-lime-400/45 via-emerald-900/35 to-slate-950">
+        <div className="relative overflow-hidden rounded-[calc(1rem-1px)] bg-[#030712] sm:rounded-[calc(2rem-1px)]">
+          <div
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_85%_75%_at_12%_-18%,rgba(52,211,153,0.22),transparent_52%),radial-gradient(ellipse_65%_55%_at_96%_108%,rgba(163,230,53,0.12),transparent_56%),linear-gradient(188deg,rgba(15,23,42,0.5),rgba(3,7,18,0.96))]"
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.4] [background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:22px_22px]"
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.11] [background:repeating-linear-gradient(-40deg,transparent,transparent_12px,rgba(132,204,22,0.05)_12px,rgba(132,204,22,0.05)_13px)]"
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-lime-400/45 to-transparent"
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute left-3 top-3 z-[1] h-9 w-9 border-l-2 border-t-2 border-lime-400/40 sm:left-5 sm:top-5"
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute bottom-3 right-3 z-[1] h-9 w-9 border-b-2 border-r-2 border-emerald-500/35 sm:bottom-5 sm:right-5"
+            aria-hidden
+          />
+
+          <Link
+            href={getLocalizedPath(typedLocale, "/manifesto")}
+            className="group relative z-10 block w-full outline-none transition-[transform,box-shadow] duration-300 focus-visible:ring-2 focus-visible:ring-lime-400/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030712] sm:rounded-[calc(2rem-1px)]"
+          >
+            <div className="flex w-full flex-col gap-4 p-5 sm:gap-5 sm:p-7 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:p-8">
+              <div className="min-w-0 flex-1">
+                <div className="inline-flex max-w-full items-center rounded-full border border-lime-400/35 bg-lime-400/[0.09] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-lime-100 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] sm:px-3.5 sm:py-2 sm:text-[11px] sm:tracking-[0.18em]">
+                  {dict.home.manifesto.badge}
+                </div>
+                <h2 className="mt-4 text-lg font-bold leading-[1.2] tracking-tight text-white sm:mt-5 sm:text-[1.35rem] sm:leading-tight lg:text-2xl xl:text-[1.65rem]">
+                  {dict.home.manifesto.headline}
+                </h2>
+                <p className="mt-3 line-clamp-2 text-[12px] leading-relaxed text-slate-300/95 sm:text-[13px] sm:leading-6 lg:mt-4 lg:line-clamp-none lg:text-[14px] lg:leading-7">
+                  {dict.home.manifesto.text}
+                </p>
+              </div>
+              <div className="flex w-full shrink-0 justify-center lg:w-auto lg:justify-end lg:self-center">
+                <span className="inline-flex items-center gap-2 rounded-full border border-lime-400/30 bg-gradient-to-b from-white/[0.1] to-white/[0.03] px-4 py-2.5 text-xs font-semibold text-white shadow-[0_1px_0_0_rgba(255,255,255,0.06)_inset,0_8px_24px_-12px_rgba(0,0,0,0.5)] transition group-hover:border-lime-400/55 group-hover:from-lime-400/20 group-hover:to-emerald-950/40 group-hover:text-lime-50 sm:px-5 sm:py-3 sm:text-sm">
+                  {dict.home.manifesto.cta}
+                  <svg
+                    className="h-4 w-4 shrink-0 transition group-hover:translate-x-0.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.2}
+                    aria-hidden
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </span>
+              </div>
             </div>
-            <div className="flex w-full shrink-0 justify-center lg:w-auto lg:justify-end lg:self-center">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.06] px-2.5 py-1 text-[11px] font-medium text-slate-200 transition group-hover:bg-lime-400/15 group-hover:text-lime-200 sm:px-3 sm:py-1.5 sm:text-xs lg:px-4 lg:py-2">
-                {dict.home.manifesto.cta}
-                <svg
-                  className="h-3.5 w-3.5 transition group-hover:translate-x-0.5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2.2}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </span>
-            </div>
-          </div>
-        </Link>
+          </Link>
+        </div>
       </section>
     </div>
   );

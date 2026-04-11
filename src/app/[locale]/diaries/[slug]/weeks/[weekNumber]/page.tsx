@@ -5,11 +5,14 @@ import { notFound } from "next/navigation";
 import { CannabisLeaf } from "@/components/icons";
 import { UserAvatar } from "@/components/user-avatar";
 import { getDiaryWeekPublic } from "@/lib/diary-data";
+import { DiarySharePanel } from "@/components/diary-share-panel";
+import { diaryOpenGraphMetadata } from "@/lib/diary-open-graph";
 import {
   getAlternates,
   getLocalizedContent,
   getLocalizedPath,
   isValidLocale,
+  siteUrl,
   type Locale,
 } from "@/lib/i18n";
 import { getServerSessionUser } from "@/lib/auth-session";
@@ -49,11 +52,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const { dict } = getLocalizedContent(locale as Locale);
+  const weekHeading = dict.diaries.explore.weekHeading.replace("{n}", String(data.week.weekNumber));
+  const title = `Grower | ${data.diary.title} — ${weekHeading}`;
+  const description = data.week.description.slice(0, 160);
 
   return {
-    title: `Grower | ${data.diary.title} — ${dict.diaries.explore.weekHeading.replace("{n}", String(data.week.weekNumber))}`,
-    description: data.week.description.slice(0, 160),
+    title,
+    description,
     alternates: getAlternates(`/diaries/${slug}/weeks/${weekNumber}`, locale),
+    ...diaryOpenGraphMetadata({
+      locale: locale as Locale,
+      path: `/diaries/${slug}/weeks/${weekNumber}`,
+      title,
+      description,
+      imageCandidates: [data.week.images[0]?.imageUrl, data.diary.coverImageUrl],
+    }),
   };
 }
 
@@ -129,6 +142,15 @@ export default async function DiaryWeekPage({ params }: PageProps) {
           <span className="rounded-full bg-white/6 px-3 py-1">
             {diaryWeek.commentCount} {dict.diaries.comments}
           </span>
+        </div>
+
+        <div className="mt-3">
+          <DiarySharePanel
+            url={`${siteUrl}${getLocalizedPath(typedLocale, `/diaries/${diary.slug}/weeks/${weekNumber}`)}`}
+            title={`${diary.title} — ${explore.weekHeading.replace("{n}", String(diaryWeek.weekNumber))}${diaryWeek.title ? `: ${diaryWeek.title}` : ""}`}
+            text={diaryWeek.description}
+            labels={dict.diaries.share}
+          />
         </div>
       </div>
 
