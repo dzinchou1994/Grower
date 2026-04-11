@@ -47,7 +47,6 @@ export function SiteHeader({
     ru: "🇷🇺",
   };
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [portalReady, setPortalReady] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const scrolled = false;
 
@@ -118,10 +117,6 @@ export function SiteHeader({
       setMobileMenuOpen(false);
     }
   }
-
-  useEffect(() => {
-    setPortalReady(true);
-  }, []);
 
   useEffect(() => {
     setMobileMenuOpen(false);
@@ -345,9 +340,10 @@ export function SiteHeader({
         </div>
       </div>
 
-      {/* Mobile menu: portal to body so sticky/backdrop ancestors cannot break fixed + scroll */}
-      {portalReady &&
-        mobileMenuOpen &&
+      {/* Mobile menu: portal to body so sticky/backdrop ancestors cannot break fixed + scroll.
+          No "mounted" delay — Cursor/simple previews can lag useEffect; gate only on document. */}
+      {mobileMenuOpen &&
+        typeof document !== "undefined" &&
         createPortal(
           <div className="lg:hidden">
             <div
