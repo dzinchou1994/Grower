@@ -10,6 +10,8 @@ export function DiaryWeekCommentForm({
   commentPlaceholder,
   loginToComment,
   posting,
+  couldNotPost,
+  networkError,
   isLoggedIn,
 }: {
   diarySlug: string;
@@ -18,6 +20,8 @@ export function DiaryWeekCommentForm({
   commentPlaceholder: string;
   loginToComment: string;
   posting: string;
+  couldNotPost: string;
+  networkError: string;
   isLoggedIn: boolean;
 }) {
   const router = useRouter();
@@ -44,14 +48,14 @@ export function DiaryWeekCommentForm({
       );
       const data = (await res.json().catch(() => ({}))) as { error?: string };
       if (!res.ok) {
-        setError(data.error ?? "Could not post.");
+        setError(data.error ?? couldNotPost);
         setPending(false);
         return;
       }
       setBody("");
       router.refresh();
     } catch {
-      setError("Network error.");
+      setError(networkError);
     }
     setPending(false);
   }

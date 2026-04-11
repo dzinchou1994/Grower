@@ -1,20 +1,15 @@
 import type { Metadata } from "next";
+import nextDynamic from "next/dynamic";
 import { ArrowLeft, ChevronDown, Layers } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
 import { enUS, ka, ru } from "date-fns/locale";
-import { DiaryCommentForm } from "@/components/diaries/diary-comment-form";
 import { DiarySetupDisplay } from "@/components/diaries/diary-setup-display";
 import { CannabisLeaf } from "@/components/icons";
 import { UserAvatar } from "@/components/user-avatar";
 import { getPublicDiaryBySlug } from "@/lib/diary-data";
-import {
-  diaryEnvironmentLabels,
-  diaryGerminationLabels,
-  diaryMediumLabels,
-  diaryWateringLabels,
-} from "@/lib/diary-labels";
+import { getDiaryLabels } from "@/lib/diary-labels";
 import {
   getAlternates,
   getLocalizedContent,
@@ -23,6 +18,10 @@ import {
   type Locale,
 } from "@/lib/i18n";
 import { getServerSessionUser } from "@/lib/auth-session";
+
+const DiaryCommentForm = nextDynamic(() =>
+  import("@/components/diaries/diary-comment-form").then((m) => m.DiaryCommentForm),
+);
 
 type PageProps = {
   params: Promise<{ locale: string; slug: string }>;
@@ -70,6 +69,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
 
   const sessionUser = await getServerSessionUser();
   const isAuthor = Boolean(sessionUser && sessionUser.userId === diary.authorId);
+  const enumLabels = getDiaryLabels(typedLocale);
   const dfLocale = dateLocales[typedLocale];
   const rel = formatDistanceToNow(diary.updatedAt, { addSuffix: true, locale: dfLocale });
 
@@ -108,7 +108,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
           <div className="max-w-3xl flex-1">
             <div className="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.18em] text-lime-400/80 sm:text-[11px]">
               <CannabisLeaf className="h-3 w-3 opacity-80" />
-              {diaryEnvironmentLabels[diary.environment]} · {dict.diaries.diaryType}
+              {enumLabels.environment[diary.environment]} · {dict.diaries.diaryType}
             </div>
             <h1 className="mt-3 text-2xl font-semibold tracking-tight text-white sm:mt-4 sm:text-4xl lg:text-5xl">
               {diary.title}
@@ -173,19 +173,19 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                     <span className="block text-[9px] uppercase tracking-wide text-slate-500">
                       {dict.diaries.fields.germinationMethod}
                     </span>
-                    {diaryGerminationLabels[diary.germinationMethod]}
+                    {enumLabels.germination[diary.germinationMethod]}
                   </p>
                   <p>
                     <span className="block text-[9px] uppercase tracking-wide text-slate-500">
                       {dict.diaries.fields.watering}
                     </span>
-                    {diaryWateringLabels[diary.watering]}
+                    {enumLabels.watering[diary.watering]}
                   </p>
                   <p className="col-span-2">
                     <span className="block text-[9px] uppercase tracking-wide text-slate-500">
                       {dict.diaries.fields.medium}
                     </span>
-                    {diaryMediumLabels[diary.medium]}
+                    {enumLabels.medium[diary.medium]}
                   </p>
                 </div>
                 <div className="mt-3 border-t border-white/[0.05] pt-3">
@@ -234,15 +234,15 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                 </p>
                 <p>
                   <span className="text-slate-500">{dict.diaries.fields.germinationMethod}:</span>{" "}
-                  {diaryGerminationLabels[diary.germinationMethod]}
+                  {enumLabels.germination[diary.germinationMethod]}
                 </p>
                 <p>
                   <span className="text-slate-500">{dict.diaries.fields.watering}:</span>{" "}
-                  {diaryWateringLabels[diary.watering]}
+                  {enumLabels.watering[diary.watering]}
                 </p>
                 <p>
                   <span className="text-slate-500">{dict.diaries.fields.medium}:</span>{" "}
-                  {diaryMediumLabels[diary.medium]}
+                  {enumLabels.medium[diary.medium]}
                 </p>
                 <div className="pt-1">
                   <p className="text-slate-500">{dict.diaries.author}</p>
@@ -297,7 +297,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
               )}
               className="transition hover:text-lime-300/95"
             >
-              Week {latest.weekNumber}
+              {explore.weekHeading.replace("{n}", String(latest.weekNumber))}
               {latest.title ? `: ${latest.title}` : ""}
             </Link>
           </h2>
@@ -386,10 +386,11 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                         <div className="min-w-0 flex-1">
                           <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-lime-400/70 sm:text-[11px]">
-                            Week {week.weekNumber}
+                            {explore.weekHeading.replace("{n}", String(week.weekNumber))}
                           </p>
                           <p className="mt-1.5 text-base font-semibold text-white transition group-hover:text-lime-200/95 sm:mt-1.5 sm:text-lg">
-                            {week.title || `Week ${week.weekNumber}`}
+                            {week.title ||
+                              explore.weekHeading.replace("{n}", String(week.weekNumber))}
                           </p>
                         </div>
                         <div className="flex flex-wrap gap-1.5 text-[10px] text-slate-500 sm:gap-2 sm:text-[11px]">
@@ -468,6 +469,8 @@ export default async function DiaryDetailPage({ params }: PageProps) {
             commentPlaceholder={explore.commentPlaceholder}
             loginToComment={explore.loginToComment}
             posting={explore.posting}
+            couldNotPost={explore.couldNotPost}
+            networkError={explore.networkError}
             isLoggedIn={Boolean(sessionUser)}
           />
         </div>

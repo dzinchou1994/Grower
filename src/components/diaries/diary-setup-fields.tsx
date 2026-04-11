@@ -142,7 +142,9 @@ export function DiarySetupFields({
       />
 
       <div className="space-y-2">
-        <span className="block text-sm font-medium text-slate-300">{setupDict.substrates}</span>
+        <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400 sm:text-xs sm:tracking-[0.16em]">
+          {setupDict.substrates}
+        </span>
         {value.substrates.length > 0 ? (
           <div className="space-y-2">
             {value.substrates.map((row, i) => (

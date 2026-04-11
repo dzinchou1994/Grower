@@ -27,6 +27,9 @@ type ExploreDict = {
   extraUrlsHint: string;
   imageRequired: string;
   uploadFailed: string;
+  invalidWeekNumber: string;
+  couldNotSaveWeek: string;
+  networkError: string;
 };
 
 export function NewWeekForm({
@@ -72,7 +75,7 @@ export function NewWeekForm({
     e.preventDefault();
     setError(null);
     if (weekNumber === "" || !Number.isInteger(weekNumber) || weekNumber < 1) {
-      setError("Enter a valid week number.");
+      setError(exploreDict.invalidWeekNumber);
       return;
     }
 
@@ -129,7 +132,7 @@ export function NewWeekForm({
       });
       const data = (await res.json().catch(() => ({}))) as { error?: string };
       if (!res.ok) {
-        setError(data.error ?? "Could not save week.");
+        setError(data.error ?? exploreDict.couldNotSaveWeek);
         setPending(false);
         return;
       }
@@ -138,7 +141,7 @@ export function NewWeekForm({
       );
       router.refresh();
     } catch {
-      setError("Network error.");
+      setError(exploreDict.networkError);
     }
     setPending(false);
   }

@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { ChevronDown, Droplets, Earth, Filter, Lightbulb, Square, Wind, Wrench } from "lucide-react";
+import { ChevronDown, CookingPot, Droplets, Filter, Lightbulb, Square, Wind, Wrench } from "lucide-react";
 import type { DiarySetup } from "@/lib/diary-setup";
 import { diarySetupHasContent } from "@/lib/diary-setup";
 import type { DiarySetupDict } from "@/components/diaries/diary-setup-fields";
@@ -23,12 +23,12 @@ function ListSection({
       className="relative overflow-hidden rounded-2xl border border-white/[0.06] bg-gradient-to-br from-white/[0.04] to-transparent p-4 shadow-[0_4px_24px_-12px_rgba(0,0,0,0.45)] transition hover:border-white/[0.1] hover:shadow-[0_8px_32px_-16px_rgba(74,222,128,0.06)] sm:p-5"
     >
       <div
-        className={`pointer-events-none absolute inset-y-3 left-0 w-0.5 rounded-full bg-gradient-to-b ${accentClass} opacity-90`}
+        className={`pointer-events-none absolute inset-y-2 left-0 w-0.5 rounded-full bg-gradient-to-b ${accentClass} opacity-90`}
         aria-hidden
       />
-      <div className="flex items-start gap-3">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-lime-400/15 via-emerald-500/10 to-slate-900/40 shadow-[inset_0_1px_0_0_rgba(190,242,100,0.12)] ring-1 ring-lime-400/20">
-          <Icon className="h-5 w-5 text-lime-200/90" strokeWidth={2} aria-hidden />
+      <div className="flex items-start gap-2 sm:gap-3">
+        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-lime-400/15 via-emerald-500/10 to-slate-900/40 shadow-[inset_0_1px_0_0_rgba(190,242,100,0.12)] ring-1 ring-lime-400/20">
+          <Icon className="h-2.5 w-2.5 text-lime-200/90" strokeWidth={2} aria-hidden />
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1.5">
@@ -91,8 +91,8 @@ function SetupGrid({
         <div className="relative overflow-hidden rounded-2xl border border-lime-400/15 bg-gradient-to-br from-lime-400/[0.06] via-slate-950/40 to-transparent p-4 sm:col-span-2 sm:p-5">
           <div className="pointer-events-none absolute -right-8 top-0 h-24 w-24 rounded-full bg-lime-400/10 blur-2xl" aria-hidden />
           <div className="relative flex items-start gap-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-lime-400/25 to-emerald-900/40 ring-1 ring-lime-400/25">
-              <Earth className="h-5 w-5 text-lime-200/90" strokeWidth={2} aria-hidden />
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-lime-400/25 to-emerald-900/40 ring-1 ring-lime-400/25">
+              <CookingPot className="h-2.5 w-2.5 text-lime-200/90" strokeWidth={2} aria-hidden />
             </span>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1.5">
@@ -139,18 +139,18 @@ export function DiarySetupDisplay({
     <>
       {/* Mobile: collapsible — same interaction pattern as diary overview */}
       <details className="group relative overflow-hidden rounded-2xl border border-white/[0.07] bg-gradient-to-br from-white/[0.04] to-transparent shadow-[0_8px_32px_-20px_rgba(0,0,0,0.5)] backdrop-blur-sm lg:hidden open:border-lime-400/20 open:shadow-[0_12px_40px_-16px_rgba(74,222,128,0.08)]">
-        <summary className="flex cursor-pointer list-none items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-white/[0.03] [&::-webkit-details-marker]:hidden">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-lime-400/25 via-emerald-500/10 to-slate-900/50 shadow-[inset_0_1px_0_0_rgba(190,242,100,0.15)] ring-1 ring-lime-400/25">
-            <Wrench className="h-5 w-5 text-lime-200/90" strokeWidth={1.75} aria-hidden />
+        <summary className="flex cursor-pointer list-none items-center gap-2 rounded-xl px-3 py-3 transition hover:bg-white/[0.03] [&::-webkit-details-marker]:hidden sm:gap-3">
+          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-lime-400/25 via-emerald-500/10 to-slate-900/50 shadow-[inset_0_1px_0_0_rgba(190,242,100,0.15)] ring-1 ring-lime-400/25">
+            <Wrench className="h-2.5 w-2.5 text-lime-200/90" strokeWidth={1.75} aria-hidden />
           </span>
           <div className="min-w-0 flex-1 text-left">
             <p className="truncate text-[15px] font-semibold tracking-tight text-white sm:text-base">
               {labels.sectionTitle}
             </p>
           </div>
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/[0.1] bg-black/30 text-slate-400 transition group-open:border-lime-400/25 group-open:bg-lime-400/10 group-open:text-lime-200">
+          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-white/[0.1] bg-black/30 text-slate-400 transition group-open:border-lime-400/25 group-open:bg-lime-400/10 group-open:text-lime-200">
             <ChevronDown
-              className="h-4 w-4 transition duration-300 group-open:rotate-180"
+              className="h-2.5 w-2.5 transition duration-300 group-open:rotate-180"
               strokeWidth={2.25}
               aria-hidden
             />
@@ -182,9 +182,9 @@ export function DiarySetupDisplay({
         />
 
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-          <div className="flex items-center gap-3 sm:gap-4">
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-lime-400/25 via-emerald-500/15 to-slate-900/50 shadow-[inset_0_1px_0_0_rgba(190,242,100,0.2)] ring-1 ring-lime-400/25 sm:h-14 sm:w-14">
-              <Wrench className="h-6 w-6 text-lime-200/90 sm:h-7 sm:w-7" strokeWidth={1.75} aria-hidden />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-lime-400/25 via-emerald-500/15 to-slate-900/50 shadow-[inset_0_1px_0_0_rgba(190,242,100,0.2)] ring-1 ring-lime-400/25 sm:h-7 sm:w-7">
+              <Wrench className="h-3 w-3 text-lime-200/90 sm:h-3.5 sm:w-3.5" strokeWidth={1.75} aria-hidden />
             </span>
             <div>
               <h2 className="text-base font-semibold uppercase tracking-[0.14em] text-white sm:text-lg sm:tracking-[0.16em]">

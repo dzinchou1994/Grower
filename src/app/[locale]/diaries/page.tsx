@@ -132,10 +132,12 @@ export default async function DiariesPage({ params, searchParams }: PageProps) {
         {sessionUser ? (
           <Link
             href={getLocalizedPath(typedLocale, "/diaries/new")}
-            className="mt-5 inline-flex items-center gap-2 rounded-full border border-lime-400/40 bg-lime-400/15 px-4 py-2.5 text-sm font-semibold text-lime-100 transition hover:bg-lime-400/25 sm:mt-6 sm:px-5 sm:py-3"
+            className="btn-lime-sheen group mt-5 inline-flex items-center gap-2 rounded-full border border-lime-300/45 bg-gradient-to-b from-lime-400/[0.22] to-lime-500/[0.08] px-4 py-2.5 text-sm font-semibold text-lime-50 ring-1 ring-lime-400/25 transition hover:border-lime-200/55 hover:from-lime-300/30 hover:to-lime-400/15 hover:shadow-[0_0_28px_-6px_rgba(190,242,100,0.55)] hover:ring-lime-300/35 sm:mt-6 sm:px-5 sm:py-3"
           >
-            <CannabisLeafOutline className="h-4 w-4 text-lime-200" />
-            {dict.diaries.createDiary}
+            <span className="relative z-[1] inline-flex items-center gap-2">
+              <CannabisLeafOutline className="h-4 w-4 text-lime-100/95 drop-shadow-[0_0_8px_rgba(190,242,100,0.35)] transition group-hover:text-white" />
+              {dict.diaries.createDiary}
+            </span>
           </Link>
         ) : (
           <Link
@@ -152,6 +154,7 @@ export default async function DiariesPage({ params, searchParams }: PageProps) {
         sort={parsed.sort}
         filters={parsed.filters}
         page={parsed.page}
+        locale={typedLocale}
         dict={explore}
         counts={filterCounts}
       />

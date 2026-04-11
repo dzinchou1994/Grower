@@ -535,6 +535,7 @@ export type DiaryWeekPublic = {
   images: { id: string; imageUrl: string; sortOrder: number }[];
   likeCount: number;
   commentCount: number;
+  /** Populated on week detail; empty on diary overview (avoids loading every week’s thread). */
   comments: WeekCommentPublic[];
 };
 
@@ -569,17 +570,6 @@ const diaryDetailWeekInclude = {
   orderBy: { weekNumber: "asc" as const },
   include: {
     images: { orderBy: { sortOrder: "asc" as const } },
-    comments: {
-      where: { isHidden: false },
-      orderBy: { createdAt: "asc" as const },
-      take: 200,
-      select: {
-        id: true,
-        body: true,
-        createdAt: true,
-        author: { select: { username: true, image: true } },
-      },
-    },
     _count: {
       select: { likes: true, comments: true },
     },
@@ -654,12 +644,7 @@ async function getPublicDiaryBySlugUncached(
     })),
     likeCount: w._count.likes,
     commentCount: w._count.comments,
-    comments: w.comments.map((c) => ({
-      id: c.id,
-      body: c.body,
-      createdAt: c.createdAt,
-      author: c.author,
-    })),
+    comments: [],
   }));
 
   const latestWeek =
@@ -718,6 +703,25 @@ async function getPublicDiaryBySlugUncached(
 /** Dedupes within the same request (e.g. metadata + page). */
 export const getPublicDiaryBySlug = cache(getPublicDiaryBySlugUncached);
 
+async function fetchDiaryWeekCommentsForPublic(weekId: string): Promise<WeekCommentPublic[]> {
+  const rows = await db.diaryWeekComment.findMany({
+    where: { diaryWeekId: weekId, isHidden: false },
+    orderBy: { createdAt: "asc" },
+    select: {
+      id: true,
+      body: true,
+      createdAt: true,
+      author: { select: { username: true, image: true } },
+    },
+  });
+  return rows.map((c) => ({
+    id: c.id,
+    body: c.body,
+    createdAt: c.createdAt,
+    author: c.author,
+  }));
+}
+
 export async function getDiaryWeekPublic(
   diarySlug: string,
   weekNumber: number,
@@ -743,6 +747,7 @@ export async function getDiaryWeekPublic(
   if (!week) {
     return null;
   }
+  const comments = await fetchDiaryWeekCommentsForPublic(week.id);
   return {
     diary: {
       slug: diary.slug,
@@ -754,7 +759,7 @@ export async function getDiaryWeekPublic(
       environment: diary.environment,
       coverImageUrl: diary.coverImageUrl,
     },
-    week,
+    week: { ...week, comments },
   };
 }
 

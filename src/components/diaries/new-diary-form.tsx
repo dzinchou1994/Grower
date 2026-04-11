@@ -9,15 +9,8 @@ import {
   DiaryWateringType,
 } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import {
-  diaryEnvironmentLabels,
-  diaryFlowerTypeLabels,
-  diaryGerminationLabels,
-  diaryGrowPhaseLabels,
-  diaryMediumLabels,
-  diaryWateringLabels,
-} from "@/lib/diary-labels";
+import { useMemo, useState } from "react";
+import { getDiaryLabels } from "@/lib/diary-labels";
 import { DiarySetupFields, type DiarySetupDict } from "@/components/diaries/diary-setup-fields";
 import {
   emptyDiarySetup,
@@ -58,6 +51,10 @@ type ExploreDict = {
   extraUrlsHint: string;
   uploadFailed: string;
   coverLastPhotoHint: string;
+  strainRequired: string;
+  couldNotCreateDiary: string;
+  unexpectedResponse: string;
+  networkError: string;
 };
 
 export function NewDiaryForm({
@@ -74,6 +71,7 @@ export function NewDiaryForm({
   setupDict: DiarySetupDict;
 }) {
   const router = useRouter();
+  const labels = useMemo(() => getDiaryLabels(locale), [locale]);
   const [title, setTitle] = useState("");
   const [strains, setStrains] = useState([{ name: "", breeder: "" }]);
   const [setup, setSetup] = useState<DiarySetup>(() => emptyDiarySetup());
@@ -101,7 +99,7 @@ export function NewDiaryForm({
       }))
       .filter((s) => s.name.length > 0);
     if (strainPayload.length === 0) {
-      setError("Add at least one strain name.");
+      setError(exploreDict.strainRequired);
       setPending(false);
       return;
     }
@@ -151,7 +149,7 @@ export function NewDiaryForm({
       });
       const data = (await res.json().catch(() => ({}))) as { error?: string; slug?: string };
       if (!res.ok) {
-        setError(data.error ?? "Could not create diary.");
+        setError(data.error ?? exploreDict.couldNotCreateDiary);
         setPending(false);
         return;
       }
@@ -160,9 +158,9 @@ export function NewDiaryForm({
         router.refresh();
         return;
       }
-      setError("Unexpected response.");
+      setError(exploreDict.unexpectedResponse);
     } catch {
-      setError("Network error.");
+      setError(exploreDict.networkError);
       setPending(false);
       return;
     }
@@ -241,9 +239,9 @@ export function NewDiaryForm({
           onChange={(e) => setGrowPhase(e.target.value as DiaryGrowPhase)}
           className="w-full rounded-2xl border border-white/10 bg-slate-950 px-4 py-3 text-sm text-white"
         >
-          {(Object.keys(diaryGrowPhaseLabels) as DiaryGrowPhase[]).map((k) => (
+          {(Object.keys(labels.growPhase) as DiaryGrowPhase[]).map((k) => (
             <option key={k} value={k}>
-              {diaryGrowPhaseLabels[k]}
+              {labels.growPhase[k]}
             </option>
           ))}
         </select>
@@ -256,9 +254,9 @@ export function NewDiaryForm({
           onChange={(e) => setFlowerType(e.target.value as DiaryFlowerType)}
           className="w-full rounded-2xl border border-white/10 bg-slate-950 px-4 py-3 text-sm text-white"
         >
-          {(Object.keys(diaryFlowerTypeLabels) as DiaryFlowerType[]).map((k) => (
+          {(Object.keys(labels.flowerType) as DiaryFlowerType[]).map((k) => (
             <option key={k} value={k}>
-              {diaryFlowerTypeLabels[k]}
+              {labels.flowerType[k]}
             </option>
           ))}
         </select>
@@ -271,9 +269,9 @@ export function NewDiaryForm({
           onChange={(e) => setEnvironment(e.target.value as DiaryEnvironment)}
           className="w-full rounded-2xl border border-white/10 bg-slate-950 px-4 py-3 text-sm text-white sm:max-w-md"
         >
-          {(Object.keys(diaryEnvironmentLabels) as DiaryEnvironment[]).map((k) => (
+          {(Object.keys(labels.environment) as DiaryEnvironment[]).map((k) => (
             <option key={k} value={k}>
-              {diaryEnvironmentLabels[k]}
+              {labels.environment[k]}
             </option>
           ))}
         </select>
@@ -286,9 +284,9 @@ export function NewDiaryForm({
           onChange={(e) => setWatering(e.target.value as DiaryWateringType)}
           className="w-full rounded-2xl border border-white/10 bg-slate-950 px-4 py-3 text-sm text-white"
         >
-          {(Object.keys(diaryWateringLabels) as DiaryWateringType[]).map((k) => (
+          {(Object.keys(labels.watering) as DiaryWateringType[]).map((k) => (
             <option key={k} value={k}>
-              {diaryWateringLabels[k]}
+              {labels.watering[k]}
             </option>
           ))}
         </select>
@@ -301,9 +299,9 @@ export function NewDiaryForm({
           onChange={(e) => setMedium(e.target.value as DiarySubstrateMedium)}
           className="w-full rounded-2xl border border-white/10 bg-slate-950 px-4 py-3 text-sm text-white"
         >
-          {(Object.keys(diaryMediumLabels) as DiarySubstrateMedium[]).map((k) => (
+          {(Object.keys(labels.medium) as DiarySubstrateMedium[]).map((k) => (
             <option key={k} value={k}>
-              {diaryMediumLabels[k]}
+              {labels.medium[k]}
             </option>
           ))}
         </select>
@@ -316,9 +314,9 @@ export function NewDiaryForm({
           onChange={(e) => setGerminationMethod(e.target.value as DiaryGerminationMethod)}
           className="w-full rounded-2xl border border-white/10 bg-slate-950 px-4 py-3 text-sm text-white sm:max-w-md"
         >
-          {(Object.keys(diaryGerminationLabels) as DiaryGerminationMethod[]).map((k) => (
+          {(Object.keys(labels.germination) as DiaryGerminationMethod[]).map((k) => (
             <option key={k} value={k}>
-              {diaryGerminationLabels[k]}
+              {labels.germination[k]}
             </option>
           ))}
         </select>

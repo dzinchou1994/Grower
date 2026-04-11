@@ -9,14 +9,8 @@ import {
   DiaryWateringType,
 } from "@prisma/client";
 import type { DiarySortKey, ListDiariesFilters, PublicDiaryFilterCounts } from "@/lib/diary-data";
-import {
-  diaryEnvironmentLabels,
-  diaryFlowerTypeLabels,
-  diaryGerminationLabels,
-  diaryGrowPhaseLabels,
-  diaryMediumLabels,
-  diaryWateringLabels,
-} from "@/lib/diary-labels";
+import { getDiaryLabels } from "@/lib/diary-labels";
+import type { Locale } from "@/lib/i18n";
 
 type ExploreDict = {
   sortLabel: string;
@@ -38,6 +32,7 @@ type Props = {
   sort: DiarySortKey;
   filters: ListDiariesFilters;
   page: number;
+  locale: Locale;
   dict: ExploreDict;
   counts: PublicDiaryFilterCounts;
 };
@@ -194,7 +189,8 @@ function FilterRow({
 }
 
 function QuickFilterStrip(props: Props) {
-  const { basePath, sort, filters, page, dict, counts } = props;
+  const { basePath, sort, filters, page, dict, counts, locale } = props;
+  const L = getDiaryLabels(locale);
   const quickAllActive =
     !filters.growPhase && !filters.flowerType && !filters.environment;
 
@@ -227,7 +223,7 @@ function QuickFilterStrip(props: Props) {
           active={filters.growPhase === "GROWING"}
         >
           <span className="inline-flex items-baseline gap-1">
-            {diaryGrowPhaseLabels.GROWING}
+            {L.growPhase.GROWING}
             {c(counts.growing)}
           </span>
         </ChipLink>
@@ -236,7 +232,7 @@ function QuickFilterStrip(props: Props) {
           active={filters.growPhase === "HARVESTED"}
         >
           <span className="inline-flex items-baseline gap-1">
-            {diaryGrowPhaseLabels.HARVESTED}
+            {L.growPhase.HARVESTED}
             {c(counts.harvested)}
           </span>
         </ChipLink>
@@ -245,7 +241,7 @@ function QuickFilterStrip(props: Props) {
           active={filters.flowerType === "AUTOFLOWER"}
         >
           <span className="inline-flex items-baseline gap-1">
-            {diaryFlowerTypeLabels.AUTOFLOWER}
+            {L.flowerType.AUTOFLOWER}
             {c(counts.autoFlower)}
           </span>
         </ChipLink>
@@ -254,7 +250,7 @@ function QuickFilterStrip(props: Props) {
           active={filters.flowerType === "PHOTOPERIOD"}
         >
           <span className="inline-flex items-baseline gap-1">
-            {diaryFlowerTypeLabels.PHOTOPERIOD}
+            {L.flowerType.PHOTOPERIOD}
             {c(counts.photoPeriod)}
           </span>
         </ChipLink>
@@ -263,7 +259,7 @@ function QuickFilterStrip(props: Props) {
           active={filters.environment === "INDOOR"}
         >
           <span className="inline-flex items-baseline gap-1">
-            {diaryEnvironmentLabels.INDOOR}
+            {L.environment.INDOOR}
             {c(counts.indoor)}
           </span>
         </ChipLink>
@@ -272,7 +268,7 @@ function QuickFilterStrip(props: Props) {
           active={filters.environment === "OUTDOOR"}
         >
           <span className="inline-flex items-baseline gap-1">
-            {diaryEnvironmentLabels.OUTDOOR}
+            {L.environment.OUTDOOR}
             {c(counts.outdoor)}
           </span>
         </ChipLink>
@@ -281,7 +277,7 @@ function QuickFilterStrip(props: Props) {
           active={filters.environment === "GREENHOUSE"}
         >
           <span className="inline-flex items-baseline gap-1">
-            {diaryEnvironmentLabels.GREENHOUSE}
+            {L.environment.GREENHOUSE}
             {c(counts.greenhouse)}
           </span>
         </ChipLink>
@@ -346,7 +342,9 @@ function FilterSections({
   filters,
   page,
   dict,
+  locale,
 }: Omit<Props, "counts">) {
+  const L = getDiaryLabels(locale);
   return (
     <div className="grid gap-4 sm:grid-cols-2 sm:gap-x-5 lg:grid-cols-4 lg:gap-4">
       <FilterRow label={dict.filterGermination}>
@@ -356,13 +354,13 @@ function FilterSections({
         >
           {dict.all}
         </ChipLink>
-        {(Object.keys(diaryGerminationLabels) as DiaryGerminationMethod[]).map((key) => (
+        {(Object.keys(L.germination) as DiaryGerminationMethod[]).map((key) => (
           <ChipLink
             key={key}
             href={buildQuery(basePath, sort, filters, page, { germinationMethod: key, page: 1 })}
             active={filters.germinationMethod === key}
           >
-            {diaryGerminationLabels[key]}
+            {L.germination[key]}
           </ChipLink>
         ))}
       </FilterRow>
@@ -373,13 +371,13 @@ function FilterSections({
         >
           {dict.all}
         </ChipLink>
-        {(Object.keys(diaryWateringLabels) as DiaryWateringType[]).map((key) => (
+        {(Object.keys(L.watering) as DiaryWateringType[]).map((key) => (
           <ChipLink
             key={key}
             href={buildQuery(basePath, sort, filters, page, { watering: key, page: 1 })}
             active={filters.watering === key}
           >
-            {diaryWateringLabels[key]}
+            {L.watering[key]}
           </ChipLink>
         ))}
       </FilterRow>
@@ -390,13 +388,13 @@ function FilterSections({
         >
           {dict.all}
         </ChipLink>
-        {(Object.keys(diaryMediumLabels) as DiarySubstrateMedium[]).map((key) => (
+        {(Object.keys(L.medium) as DiarySubstrateMedium[]).map((key) => (
           <ChipLink
             key={key}
             href={buildQuery(basePath, sort, filters, page, { medium: key, page: 1 })}
             active={filters.medium === key}
           >
-            {diaryMediumLabels[key]}
+            {L.medium[key]}
           </ChipLink>
         ))}
       </FilterRow>
@@ -407,13 +405,13 @@ function FilterSections({
         >
           {dict.all}
         </ChipLink>
-        {(Object.keys(diaryEnvironmentLabels) as DiaryEnvironment[]).map((key) => (
+        {(Object.keys(L.environment) as DiaryEnvironment[]).map((key) => (
           <ChipLink
             key={key}
             href={buildQuery(basePath, sort, filters, page, { environment: key, page: 1 })}
             active={filters.environment === key}
           >
-            {diaryEnvironmentLabels[key]}
+            {L.environment[key]}
           </ChipLink>
         ))}
       </FilterRow>
@@ -486,6 +484,7 @@ export function DiaryExploreBar(props: Props) {
             filters={filters}
             page={page}
             dict={dict}
+            locale={props.locale}
           />
         </div>
       </details>

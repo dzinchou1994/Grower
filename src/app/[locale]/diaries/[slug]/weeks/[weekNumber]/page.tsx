@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import nextDynamic from "next/dynamic";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { DiaryWeekCommentForm } from "@/components/diaries/diary-week-comment-form";
 import { CannabisLeaf } from "@/components/icons";
 import { UserAvatar } from "@/components/user-avatar";
 import { getDiaryWeekPublic } from "@/lib/diary-data";
@@ -13,6 +13,10 @@ import {
   type Locale,
 } from "@/lib/i18n";
 import { getServerSessionUser } from "@/lib/auth-session";
+
+const DiaryWeekCommentForm = nextDynamic(() =>
+  import("@/components/diaries/diary-week-comment-form").then((m) => m.DiaryWeekCommentForm),
+);
 
 type PageProps = {
   params: Promise<{ locale: string; slug: string; weekNumber: string }>;
@@ -44,8 +48,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
   }
 
+  const { dict } = getLocalizedContent(locale as Locale);
+
   return {
-    title: `Grower | ${data.diary.title} - Week ${data.week.weekNumber}`,
+    title: `Grower | ${data.diary.title} — ${dict.diaries.explore.weekHeading.replace("{n}", String(data.week.weekNumber))}`,
     description: data.week.description.slice(0, 160),
     alternates: getAlternates(`/diaries/${slug}/weeks/${weekNumber}`, locale),
   };
@@ -91,7 +97,7 @@ export default async function DiaryWeekPage({ params }: PageProps) {
         </div>
 
         <h1 className="mt-2 text-2xl font-semibold text-white sm:text-4xl">
-          Week {diaryWeek.weekNumber}
+          {explore.weekHeading.replace("{n}", String(diaryWeek.weekNumber))}
           {diaryWeek.title ? `: ${diaryWeek.title}` : ""}
         </h1>
 
@@ -169,6 +175,8 @@ export default async function DiaryWeekPage({ params }: PageProps) {
             commentPlaceholder={explore.commentPlaceholder}
             loginToComment={explore.loginToComment}
             posting={explore.posting}
+            couldNotPost={explore.couldNotPost}
+            networkError={explore.networkError}
             isLoggedIn={Boolean(sessionUser)}
           />
         </div>
