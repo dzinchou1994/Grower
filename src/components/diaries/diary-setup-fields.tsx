@@ -41,7 +41,9 @@ function StringListBlock({
 }) {
   return (
     <div className="space-y-2">
-      <span className="block text-sm font-medium text-slate-300">{label}</span>
+      <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400 sm:text-xs sm:tracking-[0.16em]">
+        {label}
+      </span>
       {items.length > 0 ? (
         <div className="space-y-2">
           {items.map((val, i) => (
@@ -97,7 +99,9 @@ export function DiarySetupFields({
   return (
     <div className="sm:col-span-2 space-y-5 rounded-2xl border border-white/8 bg-white/[0.03] p-5 sm:p-6">
       <div>
-        <h2 className="text-lg font-semibold text-white">{setupDict.sectionTitle}</h2>
+        <h2 className="text-base font-semibold uppercase tracking-[0.14em] text-white sm:text-lg sm:tracking-[0.16em]">
+          {setupDict.sectionTitle}
+        </h2>
         <p className="mt-1 text-xs text-slate-500">{setupDict.hint}</p>
       </div>
 

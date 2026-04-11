@@ -284,55 +284,6 @@ export default async function DiaryDetailPage({ params }: PageProps) {
 
       <DiarySetupDisplay setup={diary.setup} labels={dict.diaries.setup} />
 
-      <section className="rounded-2xl border border-white/[0.06] bg-slate-950/25 p-5 sm:rounded-3xl sm:p-7">
-        <h2 className="text-base font-semibold tracking-tight text-white sm:text-lg">
-          {dict.diaries.diaryDiscussionTitle}
-        </h2>
-        <div className="mt-4 space-y-3 sm:space-y-4">
-          {diary.diaryComments.map((c) => (
-            <div key={c.id} className="rounded-xl border border-white/[0.05] bg-white/[0.02] p-3.5 sm:p-4">
-              <div className="flex gap-3">
-                <Link
-                  href={getLocalizedPath(typedLocale, `/u/${c.author.username}`)}
-                  className="shrink-0 self-start pt-0.5 transition hover:opacity-90"
-                  aria-label={`@${c.author.username}`}
-                >
-                  <UserAvatar username={c.author.username} image={c.author.image} size="md" />
-                </Link>
-                <div className="min-w-0 flex-1">
-                  <p className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-xs text-slate-500">
-                    <Link
-                      href={getLocalizedPath(typedLocale, `/u/${c.author.username}`)}
-                      className="text-sm font-semibold text-white hover:text-lime-300"
-                    >
-                      @{c.author.username}
-                    </Link>
-                    <span>
-                      ·{" "}
-                      {c.createdAt.toLocaleString(
-                        typedLocale === "en" ? "en-US" : typedLocale === "ru" ? "ru-RU" : "ka-GE",
-                      )}
-                    </span>
-                  </p>
-                  <p className="mt-2 whitespace-pre-wrap text-sm text-slate-200">{c.body}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-6 border-t border-white/[0.06] pt-5">
-          <DiaryCommentForm
-            diarySlug={diary.slug}
-            postComment={explore.postComment}
-            commentPlaceholder={explore.commentPlaceholder}
-            loginToComment={explore.loginToComment}
-            posting={explore.posting}
-            isLoggedIn={Boolean(sessionUser)}
-          />
-        </div>
-      </section>
-
       {latest ? (
         <section className="rounded-2xl border border-lime-400/15 bg-lime-400/[0.03] p-5 sm:rounded-3xl sm:p-7">
           <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-lime-400/70">
@@ -384,7 +335,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
             <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500 sm:text-xs">
               {dict.diaries.timelineBadge}
             </p>
-            <h2 className="mt-1 text-lg font-semibold tracking-tight text-white sm:text-xl">
+            <h2 className="mt-1 text-base font-semibold uppercase tracking-[0.14em] text-white sm:text-lg sm:tracking-[0.16em]">
               {dict.diaries.timelineTitle}
             </h2>
           </div>
@@ -470,6 +421,55 @@ export default async function DiaryDetailPage({ params }: PageProps) {
               );
             })
           )}
+        </div>
+      </section>
+
+      <section className="rounded-2xl border border-white/[0.06] bg-slate-950/25 p-5 sm:rounded-3xl sm:p-7">
+        <h2 className="text-base font-semibold tracking-tight text-white sm:text-lg">
+          {dict.diaries.diaryDiscussionTitle}
+        </h2>
+        <div className="mt-4 space-y-3 sm:space-y-4">
+          {diary.diaryComments.map((c) => (
+            <div key={c.id} className="rounded-xl border border-white/[0.05] bg-white/[0.02] p-3.5 sm:p-4">
+              <div className="flex gap-3">
+                <Link
+                  href={getLocalizedPath(typedLocale, `/u/${c.author.username}`)}
+                  className="shrink-0 self-start pt-0.5 transition hover:opacity-90"
+                  aria-label={`@${c.author.username}`}
+                >
+                  <UserAvatar username={c.author.username} image={c.author.image} size="md" />
+                </Link>
+                <div className="min-w-0 flex-1">
+                  <p className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-xs text-slate-500">
+                    <Link
+                      href={getLocalizedPath(typedLocale, `/u/${c.author.username}`)}
+                      className="text-sm font-semibold text-white hover:text-lime-300"
+                    >
+                      @{c.author.username}
+                    </Link>
+                    <span>
+                      ·{" "}
+                      {c.createdAt.toLocaleString(
+                        typedLocale === "en" ? "en-US" : typedLocale === "ru" ? "ru-RU" : "ka-GE",
+                      )}
+                    </span>
+                  </p>
+                  <p className="mt-2 whitespace-pre-wrap text-sm text-slate-200">{c.body}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-6 border-t border-white/[0.06] pt-5">
+          <DiaryCommentForm
+            diarySlug={diary.slug}
+            postComment={explore.postComment}
+            commentPlaceholder={explore.commentPlaceholder}
+            loginToComment={explore.loginToComment}
+            posting={explore.posting}
+            isLoggedIn={Boolean(sessionUser)}
+          />
         </div>
       </section>
     </div>
