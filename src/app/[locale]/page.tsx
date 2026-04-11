@@ -343,25 +343,8 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
         >
           <div className="relative flex w-full flex-col gap-3 p-4 sm:gap-4 sm:p-6 lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:p-7">
             <div className="min-w-0 flex-1">
-              <h2 className="inline-flex flex-wrap items-center gap-2 text-[15px] font-semibold leading-snug text-white sm:text-lg lg:text-xl">
+              <h2 className="text-[15px] font-semibold leading-snug text-white sm:text-lg lg:text-xl">
                 {dict.home.manifesto.headline}
-                <svg
-                  className="h-[1.05em] w-[1.05em] shrink-0 text-lime-200"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={1.9}
-                  aria-hidden="true"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h10" />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 7 5.8 11.2a1.5 1.5 0 0 0 1.2 2.4h4a1.5 1.5 0 0 0 1.2-2.4L9 7Zm6 0-3.2 4.2a1.5 1.5 0 0 0 1.2 2.4h4a1.5 1.5 0 0 0 1.2-2.4L15 7Z"
-                  />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 20h6" />
-                </svg>
               </h2>
               <p className="mt-2 line-clamp-2 text-[11px] leading-relaxed text-slate-400 sm:text-[13px] sm:leading-6 lg:mt-2.5 lg:line-clamp-none lg:text-[13px] lg:leading-7">
                 {dict.home.manifesto.text}
