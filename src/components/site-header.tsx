@@ -188,10 +188,10 @@ export function SiteHeader({
           />
           <div className="hidden min-[400px]:flex min-[400px]:items-center">
             <p
-              className={`font-['Trebuchet_MS'] text-left text-[10px] font-semibold uppercase leading-[1.05] tracking-[0.06em] text-slate-200 transition-all duration-300 group-hover:text-lime-200 ${scrolled ? "text-[9px]" : "text-[10px]"}`}
+              className={`font-['Trebuchet_MS'] text-left text-[10px] font-semibold leading-[1.05] tracking-[0.06em] text-slate-200 transition-all duration-300 group-hover:text-lime-200 ${scrolled ? "text-[9px]" : "text-[10px]"}`}
             >
               <span className="block">
-                <span>GROW</span>
+                <span className="uppercase">GROW</span>
                 <span
                   className={`relative top-[0.6px] ml-[0.5px] text-[1.08em] tracking-[0.01em] ${logoGeorgianCaps.className}`}
                 >
