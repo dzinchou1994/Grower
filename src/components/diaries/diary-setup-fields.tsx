@@ -162,7 +162,7 @@ export function DiarySetupFields({
           onChange={(list) => setList("airFilters", list)}
         />
 
-        <div className="flex flex-col rounded-xl border border-white/[0.08] bg-gradient-to-b from-white/[0.04] to-white/[0.01] p-4 shadow-sm shadow-black/30 ring-1 ring-white/[0.04] sm:col-span-2">
+        <div className="flex min-h-0 flex-col rounded-xl border border-white/[0.08] bg-gradient-to-b from-white/[0.04] to-white/[0.01] p-4 shadow-sm shadow-black/30 ring-1 ring-white/[0.04]">
           <h3 className="text-left text-xs font-semibold leading-snug text-slate-200">{setupDict.substrates}</h3>
           {value.substrates.length > 0 ? (
             <div className="mt-3 space-y-2">
@@ -215,16 +215,14 @@ export function DiarySetupFields({
           </div>
         </div>
 
-        <div className="sm:col-span-2">
-          <StringListBlock
-            label={setupDict.fertilizers}
-            items={value.fertilizers}
-            placeholder={setupDict.fertilizerPlaceholder}
-            addLabel={setupDict.add}
-            removeLabel={setupDict.remove}
-            onChange={(list) => setList("fertilizers", list)}
-          />
-        </div>
+        <StringListBlock
+          label={setupDict.fertilizers}
+          items={value.fertilizers}
+          placeholder={setupDict.fertilizerPlaceholder}
+          addLabel={setupDict.add}
+          removeLabel={setupDict.remove}
+          onChange={(list) => setList("fertilizers", list)}
+        />
       </div>
     </div>
   );
