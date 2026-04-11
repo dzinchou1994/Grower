@@ -9,7 +9,7 @@ import {
   DiaryWateringType,
 } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { diaryExploreMediumKeys } from "@/lib/diary-explore-params";
 import { getDiaryLabels } from "@/lib/diary-labels";
 import { DiarySetupFields, type DiarySetupDict } from "@/components/diaries/diary-setup-fields";
@@ -90,8 +90,19 @@ export function NewDiaryForm({
   const [medium, setMedium] = useState<DiarySubstrateMedium>("SOIL");
   const [description, setDescription] = useState("");
   const [coverFiles, setCoverFiles] = useState<File[]>([]);
+  const coverFileInputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+
+  function removeCoverAt(index: number) {
+    setCoverFiles((prev) => {
+      const next = prev.filter((_, j) => j !== index);
+      if (next.length === 0 && coverFileInputRef.current) {
+        coverFileInputRef.current.value = "";
+      }
+      return next;
+    });
+  }
 
   const coverPreviewUrls = useMemo(
     () => coverFiles.map((file) => URL.createObjectURL(file)),
@@ -340,6 +351,7 @@ export function NewDiaryForm({
         <p className="mb-2 text-xs text-slate-500">{exploreDict.coverLastPhotoHint}</p>
         <p className="mb-2 text-xs text-slate-500">{exploreDict.uploadHint}</p>
         <input
+          ref={coverFileInputRef}
           type="file"
           accept="image/jpeg,image/png,image/webp,image/gif"
           multiple
@@ -351,13 +363,31 @@ export function NewDiaryForm({
             {coverPreviewUrls.map((url, i) => (
               <li
                 key={`${coverFiles[i]?.name ?? "f"}-${coverFiles[i]?.size ?? 0}-${i}`}
-                className="relative h-24 w-24 overflow-hidden rounded-xl border border-white/[0.1] bg-black/50 shadow-lg shadow-black/30 sm:h-28 sm:w-28"
+                className="group relative h-24 w-24 overflow-hidden rounded-xl border border-white/[0.1] bg-black/50 shadow-lg shadow-black/30 sm:h-28 sm:w-28"
               >
                 <img
                   src={url}
                   alt={coverFiles[i]?.name ? `Preview: ${coverFiles[i]!.name}` : ""}
                   className="h-full w-full object-cover"
                 />
+                <button
+                  type="button"
+                  onClick={() => removeCoverAt(i)}
+                  className="absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-full border border-white/15 bg-black/70 text-white shadow-md backdrop-blur-sm transition hover:border-rose-400/40 hover:bg-rose-500/90 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-400/50"
+                  aria-label={exploreDict.removeStrain}
+                >
+                  <svg
+                    className="h-3.5 w-3.5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2.2}
+                    strokeLinecap="round"
+                    aria-hidden
+                  >
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </button>
               </li>
             ))}
           </ul>
