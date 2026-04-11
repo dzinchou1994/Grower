@@ -134,7 +134,7 @@ const translations = {
         "ხშირად დროებითი ქსელი ან ბაზაა — არა ყოველთვის `DATABASE_URL`. ზუსტი მიზეზი: Vercel → Deployment → Runtime Logs. Production-ში `DATABASE_URL` (Neon) უნდა იყოს ჩართული.",
       newDiary: {
         badge: "დღიურის შექმნა",
-        title: "დაიწყე ახალი მცენარის ჟურნალი",
+        title: "დაიწყე ახალი მცენარის ჟურნალის წარმოება",
         description: "ახალი მცენარის დღიურის შექმნა — სათაური, ჯიში, გარემო და ფოტოები.",
       },
       newWeek: {
