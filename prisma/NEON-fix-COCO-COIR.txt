@@ -1,0 +1,20 @@
+Fix for Vercel / production error:
+  Value 'COCO_COIR' not found in enum 'DiarySubstrateMedium' (Prisma P2023)
+
+Cause: the code expects enum values COCO + PEAT (no COCO_COIR), but Neon still has old rows / old enum labels until this migration runs.
+
+Do ONE of:
+
+  A) From your machine (recommended)
+     DATABASE_URL="postgresql://…neon…" npx prisma migrate deploy
+
+     Use the same Neon URL as in Vercel → Production → DATABASE_URL (pooler is OK).
+
+  B) Neon Dashboard → SQL Editor
+     Paste and run the full contents of:
+       prisma/migrations/20260413210000_diary_medium_coco_peat/migration.sql
+
+After that, redeploy is not required; the next request should work.
+
+---
+ka: თუ ლოგში P2023 / COCO_COIR — ზემოთ A ან B ერთხელ გაუშვით Neon-ის ბაზაზე.

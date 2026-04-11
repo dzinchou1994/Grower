@@ -131,7 +131,7 @@ const translations = {
       diaryDiscussionTitle: "დღიურის განხილვა",
       loadErrorTitle: "დღიურები ვერ ჩაიტვირთა",
       loadErrorHint:
-        "ლოკალურად და ჰოსტინგზე ერთი და იგივე კოდია — თუ აქ ჩავარდა, ხშირია დროებითი ქსელის/ბაზის დატვირთვა, SSL ან Vercel-ის ცივი სტარტი, არა აუცილებლად არასწორი `DATABASE_URL`. გადაამოწმეთ Vercel → Deployment → Runtime Logs (ზუსტი შეცდომა იქ ჩანს). დარწმუნდით, რომ Production-ში `DATABASE_URL` დაყენებულია (იგივე Neon connection string, რაც ლოკალურ `.env`-ში).",
+        "ხშირად დროებითი ქსელი ან ბაზაა — არა ყოველთვის `DATABASE_URL`. ზუსტი მიზეზი: Vercel → Deployment → Runtime Logs. Production-ში `DATABASE_URL` (Neon) უნდა იყოს ჩართული.",
       newDiary: {
         badge: "დღიურის შექმნა",
         title: "დაიწყე ახალი მცენარის ჟურნალი",
@@ -372,7 +372,7 @@ const translations = {
       diaryDiscussionTitle: "Diary discussion",
       loadErrorTitle: "Could not load diaries",
       loadErrorHint:
-        "Same code runs locally and on the host — a failure here is often a transient DB/network issue, cold start, or TLS, not necessarily a wrong `DATABASE_URL`. Open Vercel → your deployment → Runtime Logs for the exact error. Confirm `DATABASE_URL` is set for Production (e.g. Neon pooler URL).",
+        "Often a temporary network/DB blip — not always a bad `DATABASE_URL`. See the exact error in Vercel → Deployment → Runtime Logs. Ensure Production has `DATABASE_URL` (Neon).",
       newDiary: {
         badge: "Create diary",
         title: "Start a new plant journal",
@@ -613,7 +613,7 @@ const translations = {
       diaryDiscussionTitle: "Обсуждение дневника",
       loadErrorTitle: "Не удалось загрузить дневники",
       loadErrorHint:
-        "Код один и тот же локально и на сервере — сбой часто из‑за сети, холодного старта или TLS, а не из‑за неверного URL. Точная ошибка в Vercel → Deployment → Runtime Logs. Проверьте, что для Production задан `DATABASE_URL` (например Neon).",
+        "Часто временная сеть или БД — не обязательно неверный `DATABASE_URL`. Точная ошибка: Vercel → Deployment → Runtime Logs. В Production должен быть `DATABASE_URL` (Neon).",
       newDiary: {
         badge: "Создание diary",
         title: "Начните новый журнал растения",
