@@ -27,6 +27,7 @@ async function getDynamicSlugs() {
     const { db } = await import("@/lib/db");
     const [diaryRows, topicRows] = await Promise.all([
       db.diary.findMany({
+        where: { isHidden: false, status: "PUBLISHED" },
         select: {
           slug: true,
           weeks: { where: { isHidden: false }, select: { weekNumber: true } },

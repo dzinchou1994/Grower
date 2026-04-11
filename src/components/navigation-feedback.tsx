@@ -21,6 +21,13 @@ export function NavigationFeedback() {
     setIsNavigating(false);
   }, [pathname, searchParams]);
 
+  /** Failsafe: if the route never commits (hung RSC / error), do not leave the overlay up forever. */
+  useEffect(() => {
+    if (!isNavigating) return;
+    const t = window.setTimeout(() => setIsNavigating(false), 25_000);
+    return () => window.clearTimeout(t);
+  }, [isNavigating]);
+
   useEffect(() => {
     function onClick(event: MouseEvent) {
       const target = event.target as HTMLElement | null;

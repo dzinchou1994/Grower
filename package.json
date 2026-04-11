@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "prisma generate",
     "dev": "next dev",
     "build": "prisma generate && next build",
     "analyze": "ANALYZE=true next build",
@@ -14,6 +15,7 @@
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:seed:forum": "tsx scripts/seed-forum.ts",
+    "db:seed:diaries": "tsx scripts/seed-demo-diaries.ts",
     "perf:baseline": "npm run build && node scripts/perf/collect-build-stats.mjs",
     "perf:budget": "npm run build && node scripts/perf/check-bundle-budget.mjs"
   },
@@ -21,6 +23,7 @@
     "@auth/prisma-adapter": "^2.11.1",
     "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^7.7.0",
+    "@vercel/blob": "^0.27.3",
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",

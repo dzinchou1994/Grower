@@ -18,10 +18,47 @@ enum DiaryEnvironment {
   GREENHOUSE
 }
 
+/** Active grow vs finished run — used for explore filters. */
+enum DiaryGrowPhase {
+  GROWING
+  HARVESTED
+}
+
+enum DiaryFlowerType {
+  AUTOFLOWER
+  PHOTOPERIOD
+}
+
 enum DiaryStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
+}
+
+enum DiaryGerminationMethod {
+  PAPER_TOWEL
+  GLASS_OF_WATER
+  ROCKWOOL_CUBE
+  PEAT_PELLET
+  DIRECTLY_IN_SUBSTRATE
+  OTHER
+}
+
+enum DiaryWateringType {
+  MANUAL
+  DRIP
+  HYDROPONICS
+  AEROPONICS
+}
+
+enum DiarySubstrateMedium {
+  SOIL
+  PERLITE
+  VERMICULITE
+  EXPANDED_CLAY
+  COCO_COIR
+  MINERAL_WOOL
+  OTHER
 }
 
 enum ReportTargetType {
@@ -120,26 +157,57 @@ model User {
   reviewedNews     NewsArticle[]      @relation("NewsReviewer")
   newsSubmissions  NewsSubmission[]   @relation("NewsSubmitter")
   reviewedSubmissions NewsSubmission[] @relation("NewsSubmissionReviewer")
+  diaryWeekComments DiaryWeekComment[]
+  diaryComments     DiaryComment[]
 }
 
 model Diary {
-  id            String           @id @default(cuid())
-  slug          String           @unique
-  title         String
-  strain        String
-  environment   DiaryEnvironment
-  description   String?
-  coverImageUrl String?
-  status        DiaryStatus      @default(PUBLISHED)
-  isFeatured    Boolean          @default(false)
-  isHidden      Boolean          @default(false)
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-  authorId      String
-  author        User             @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  weeks         DiaryWeek[]
+  id                  String                 @id @default(cuid())
+  slug                String                 @unique
+  title               String
+  /** Legacy primary strain label; kept in sync with first `strains` entry when present. */
+  strain              String
+  environment         DiaryEnvironment
+  /** Veg/flower run vs jars / done. */
+  growPhase           DiaryGrowPhase         @default(GROWING)
+  /** Autoflower vs photoperiod genetics. */
+  flowerType          DiaryFlowerType        @default(PHOTOPERIOD)
+  germinationMethod   DiaryGerminationMethod @default(OTHER)
+  watering            DiaryWateringType      @default(MANUAL)
+  medium              DiarySubstrateMedium   @default(SOIL)
+  description         String?
+  coverImageUrl       String?
+  /** Optional grow setup: tents, lights, ventilation, substrates, etc. (JSON). */
+  setup               Json?
+  status              DiaryStatus            @default(PUBLISHED)
+  isFeatured          Boolean                @default(false)
+  isHidden            Boolean                @default(false)
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @updatedAt
+  authorId            String
+  author              User                   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  weeks               DiaryWeek[]
+  strains             DiaryStrain[]
+  diaryComments       DiaryComment[]
 
   @@index([authorId, createdAt])
+  @@index([status, isHidden, updatedAt])
+  @@index([germinationMethod])
+  @@index([watering])
+  @@index([medium])
+  @@index([growPhase])
+  @@index([flowerType])
+}
+
+model DiaryStrain {
+  id        String @id @default(cuid())
+  diaryId   String
+  name      String
+  breeder   String?
+  sortOrder Int    @default(0)
+  diary     Diary  @relation(fields: [diaryId], references: [id], onDelete: Cascade)
+
+  @@index([diaryId, sortOrder])
 }
 
 model DiaryWeek {
@@ -155,6 +223,7 @@ model DiaryWeek {
   images      DiaryWeekImage[]
   likes       Like[]
   reports     Report[]
+  comments    DiaryWeekComment[]
 
   @@unique([diaryId, weekNumber])
   @@index([diaryId, createdAt])
@@ -166,6 +235,35 @@ model DiaryWeekImage {
   imageUrl    String
   sortOrder   Int       @default(0)
   diaryWeek   DiaryWeek @relation(fields: [diaryWeekId], references: [id], onDelete: Cascade)
+}
+
+model DiaryWeekComment {
+  id          String    @id @default(cuid())
+  diaryWeekId String
+  authorId    String
+  body        String
+  isHidden    Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  diaryWeek   DiaryWeek @relation(fields: [diaryWeekId], references: [id], onDelete: Cascade)
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([diaryWeekId, createdAt])
+}
+
+/** Comments on the diary as a whole (not tied to a specific week). */
+model DiaryComment {
+  id        String   @id @default(cuid())
+  diaryId   String
+  authorId  String
+  body      String
+  isHidden  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  diary     Diary    @relation(fields: [diaryId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([diaryId, createdAt])
 }
 
 model ForumTopic {

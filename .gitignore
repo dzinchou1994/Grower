@@ -24,6 +24,10 @@
 .DS_Store
 *.pem
 
+# Local diary week uploads (dev only; production uses Vercel Blob)
+public/uploads/diary-weeks/*
+!public/uploads/diary-weeks/.gitkeep
+
 # debug
 npm-debug.log*
 yarn-debug.log*

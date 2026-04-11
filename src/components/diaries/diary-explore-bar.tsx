@@ -1,0 +1,492 @@
+import Link from "next/link";
+import { ChevronDown, SlidersHorizontal } from "lucide-react";
+import {
+  DiaryEnvironment,
+  DiaryFlowerType,
+  DiaryGerminationMethod,
+  DiaryGrowPhase,
+  DiarySubstrateMedium,
+  DiaryWateringType,
+} from "@prisma/client";
+import type { DiarySortKey, ListDiariesFilters, PublicDiaryFilterCounts } from "@/lib/diary-data";
+import {
+  diaryEnvironmentLabels,
+  diaryFlowerTypeLabels,
+  diaryGerminationLabels,
+  diaryGrowPhaseLabels,
+  diaryMediumLabels,
+  diaryWateringLabels,
+} from "@/lib/diary-labels";
+
+type ExploreDict = {
+  sortLabel: string;
+  sortUpdated: string;
+  sortCreated: string;
+  sortLikes: string;
+  filtersTitle: string;
+  clearFilters: string;
+  quickFiltersLabel: string;
+  filterGermination: string;
+  filterWatering: string;
+  filterMedium: string;
+  filterEnvironment: string;
+  all: string;
+};
+
+type Props = {
+  basePath: string;
+  sort: DiarySortKey;
+  filters: ListDiariesFilters;
+  page: number;
+  dict: ExploreDict;
+  counts: PublicDiaryFilterCounts;
+};
+
+function buildQuery(
+  basePath: string,
+  sort: DiarySortKey,
+  filters: ListDiariesFilters,
+  page: number,
+  patch: Partial<{
+    sort: DiarySortKey | null;
+    germinationMethod: DiaryGerminationMethod | null;
+    watering: DiaryWateringType | null;
+    medium: DiarySubstrateMedium | null;
+    environment: DiaryEnvironment | null;
+    growPhase: DiaryGrowPhase | null;
+    flowerType: DiaryFlowerType | null;
+    page: number | null;
+  }>,
+) {
+  const nextSort: DiarySortKey =
+    patch.sort !== undefined ? (patch.sort ?? "updated") : sort;
+  const nextFilters = { ...filters };
+  if (patch.germinationMethod !== undefined) {
+    if (patch.germinationMethod === null) {
+      delete nextFilters.germinationMethod;
+    } else {
+      nextFilters.germinationMethod = patch.germinationMethod;
+    }
+  }
+  if (patch.watering !== undefined) {
+    if (patch.watering === null) {
+      delete nextFilters.watering;
+    } else {
+      nextFilters.watering = patch.watering;
+    }
+  }
+  if (patch.medium !== undefined) {
+    if (patch.medium === null) {
+      delete nextFilters.medium;
+    } else {
+      nextFilters.medium = patch.medium;
+    }
+  }
+  if (patch.environment !== undefined) {
+    if (patch.environment === null) {
+      delete nextFilters.environment;
+    } else {
+      nextFilters.environment = patch.environment;
+    }
+  }
+  if (patch.growPhase !== undefined) {
+    if (patch.growPhase === null) {
+      delete nextFilters.growPhase;
+    } else {
+      nextFilters.growPhase = patch.growPhase;
+    }
+  }
+  if (patch.flowerType !== undefined) {
+    if (patch.flowerType === null) {
+      delete nextFilters.flowerType;
+    } else {
+      nextFilters.flowerType = patch.flowerType;
+    }
+  }
+
+  const filterTouched =
+    patch.sort !== undefined ||
+    patch.germinationMethod !== undefined ||
+    patch.watering !== undefined ||
+    patch.medium !== undefined ||
+    patch.environment !== undefined ||
+    patch.growPhase !== undefined ||
+    patch.flowerType !== undefined;
+
+  let nextPage = page;
+  if (patch.page !== undefined) {
+    nextPage = patch.page === null ? 1 : patch.page;
+  } else if (filterTouched) {
+    nextPage = 1;
+  }
+
+  const p = new URLSearchParams();
+  if (nextSort !== "updated") {
+    p.set("sort", nextSort);
+  }
+  if (nextFilters.germinationMethod) {
+    p.set("germinationMethod", nextFilters.germinationMethod);
+  }
+  if (nextFilters.watering) {
+    p.set("watering", nextFilters.watering);
+  }
+  if (nextFilters.medium) {
+    p.set("medium", nextFilters.medium);
+  }
+  if (nextFilters.environment) {
+    p.set("environment", nextFilters.environment);
+  }
+  if (nextFilters.growPhase) {
+    p.set("growPhase", nextFilters.growPhase);
+  }
+  if (nextFilters.flowerType) {
+    p.set("flowerType", nextFilters.flowerType);
+  }
+  if (nextPage > 1) {
+    p.set("page", String(nextPage));
+  }
+  const qs = p.toString();
+  return qs ? `${basePath}?${qs}` : basePath;
+}
+
+function ChipLink({
+  href,
+  active,
+  children,
+  className = "",
+}: {
+  href: string;
+  active: boolean;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className={`shrink-0 rounded-lg border px-2 py-1 text-[10px] font-medium leading-tight transition sm:rounded-full sm:px-3 sm:py-1.5 sm:text-xs ${
+        active
+          ? "border-lime-400/40 bg-lime-400/10 text-lime-50"
+          : "border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/18 hover:bg-white/[0.07] hover:text-slate-200"
+      } ${className}`}
+    >
+      {children}
+    </Link>
+  );
+}
+
+function FilterRow({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="min-w-0 w-full">
+      <p className="mb-1 text-[9px] font-medium uppercase tracking-[0.14em] text-slate-500 sm:mb-1.5 sm:text-[10px] sm:tracking-[0.15em]">
+        {label}
+      </p>
+      <div className="-mx-1 flex w-full min-w-0 flex-nowrap gap-1 overflow-x-auto overflow-y-visible px-1 py-0.5 [-webkit-overflow-scrolling:touch] pb-2 touch-pan-x [scrollbar-width:thin] [scrollbar-color:rgba(148,163,184,0.35)_transparent] sm:mx-0 sm:max-h-[7.5rem] sm:flex-wrap sm:overflow-x-visible sm:overflow-y-auto sm:pb-0 sm:pr-1">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function QuickFilterStrip(props: Props) {
+  const { basePath, sort, filters, page, dict, counts } = props;
+  const quickAllActive =
+    !filters.growPhase && !filters.flowerType && !filters.environment;
+
+  const c = (n: number) => (
+    <span className="ml-0.5 tabular-nums text-slate-500">{n}</span>
+  );
+
+  return (
+    <div className="mt-3 w-full min-w-0 border-t border-white/[0.06] pt-3 lg:mt-4 lg:pt-4">
+      <p className="mb-2 text-[9px] font-medium uppercase tracking-[0.16em] text-slate-500 sm:text-[10px]">
+        {dict.quickFiltersLabel}
+      </p>
+      <div className="-mx-1 flex w-full min-w-0 flex-nowrap gap-1.5 overflow-x-auto overflow-y-visible px-1 pb-1 [-webkit-overflow-scrolling:touch] touch-pan-x [scrollbar-width:thin] [scrollbar-color:rgba(148,163,184,0.4)_transparent]">
+        <ChipLink
+          href={buildQuery(basePath, sort, filters, page, {
+            growPhase: null,
+            flowerType: null,
+            environment: null,
+            page: 1,
+          })}
+          active={quickAllActive}
+        >
+          <span className="inline-flex items-baseline gap-1">
+            {dict.all}
+            {c(counts.total)}
+          </span>
+        </ChipLink>
+        <ChipLink
+          href={buildQuery(basePath, sort, filters, page, { growPhase: "GROWING", page: 1 })}
+          active={filters.growPhase === "GROWING"}
+        >
+          <span className="inline-flex items-baseline gap-1">
+            {diaryGrowPhaseLabels.GROWING}
+            {c(counts.growing)}
+          </span>
+        </ChipLink>
+        <ChipLink
+          href={buildQuery(basePath, sort, filters, page, { growPhase: "HARVESTED", page: 1 })}
+          active={filters.growPhase === "HARVESTED"}
+        >
+          <span className="inline-flex items-baseline gap-1">
+            {diaryGrowPhaseLabels.HARVESTED}
+            {c(counts.harvested)}
+          </span>
+        </ChipLink>
+        <ChipLink
+          href={buildQuery(basePath, sort, filters, page, { flowerType: "AUTOFLOWER", page: 1 })}
+          active={filters.flowerType === "AUTOFLOWER"}
+        >
+          <span className="inline-flex items-baseline gap-1">
+            {diaryFlowerTypeLabels.AUTOFLOWER}
+            {c(counts.autoFlower)}
+          </span>
+        </ChipLink>
+        <ChipLink
+          href={buildQuery(basePath, sort, filters, page, { flowerType: "PHOTOPERIOD", page: 1 })}
+          active={filters.flowerType === "PHOTOPERIOD"}
+        >
+          <span className="inline-flex items-baseline gap-1">
+            {diaryFlowerTypeLabels.PHOTOPERIOD}
+            {c(counts.photoPeriod)}
+          </span>
+        </ChipLink>
+        <ChipLink
+          href={buildQuery(basePath, sort, filters, page, { environment: "INDOOR", page: 1 })}
+          active={filters.environment === "INDOOR"}
+        >
+          <span className="inline-flex items-baseline gap-1">
+            {diaryEnvironmentLabels.INDOOR}
+            {c(counts.indoor)}
+          </span>
+        </ChipLink>
+        <ChipLink
+          href={buildQuery(basePath, sort, filters, page, { environment: "OUTDOOR", page: 1 })}
+          active={filters.environment === "OUTDOOR"}
+        >
+          <span className="inline-flex items-baseline gap-1">
+            {diaryEnvironmentLabels.OUTDOOR}
+            {c(counts.outdoor)}
+          </span>
+        </ChipLink>
+        <ChipLink
+          href={buildQuery(basePath, sort, filters, page, { environment: "GREENHOUSE", page: 1 })}
+          active={filters.environment === "GREENHOUSE"}
+        >
+          <span className="inline-flex items-baseline gap-1">
+            {diaryEnvironmentLabels.GREENHOUSE}
+            {c(counts.greenhouse)}
+          </span>
+        </ChipLink>
+      </div>
+    </div>
+  );
+}
+
+function FilterSections({
+  basePath,
+  sort,
+  filters,
+  page,
+  dict,
+}: Omit<Props, "counts">) {
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 sm:gap-x-5 lg:grid-cols-4 lg:gap-4">
+      <FilterRow label={dict.filterGermination}>
+        <ChipLink
+          href={buildQuery(basePath, sort, filters, page, { germinationMethod: null, page: 1 })}
+          active={!filters.germinationMethod}
+        >
+          {dict.all}
+        </ChipLink>
+        {(Object.keys(diaryGerminationLabels) as DiaryGerminationMethod[]).map((key) => (
+          <ChipLink
+            key={key}
+            href={buildQuery(basePath, sort, filters, page, { germinationMethod: key, page: 1 })}
+            active={filters.germinationMethod === key}
+          >
+            {diaryGerminationLabels[key]}
+          </ChipLink>
+        ))}
+      </FilterRow>
+      <FilterRow label={dict.filterWatering}>
+        <ChipLink
+          href={buildQuery(basePath, sort, filters, page, { watering: null, page: 1 })}
+          active={!filters.watering}
+        >
+          {dict.all}
+        </ChipLink>
+        {(Object.keys(diaryWateringLabels) as DiaryWateringType[]).map((key) => (
+          <ChipLink
+            key={key}
+            href={buildQuery(basePath, sort, filters, page, { watering: key, page: 1 })}
+            active={filters.watering === key}
+          >
+            {diaryWateringLabels[key]}
+          </ChipLink>
+        ))}
+      </FilterRow>
+      <FilterRow label={dict.filterMedium}>
+        <ChipLink
+          href={buildQuery(basePath, sort, filters, page, { medium: null, page: 1 })}
+          active={!filters.medium}
+        >
+          {dict.all}
+        </ChipLink>
+        {(Object.keys(diaryMediumLabels) as DiarySubstrateMedium[]).map((key) => (
+          <ChipLink
+            key={key}
+            href={buildQuery(basePath, sort, filters, page, { medium: key, page: 1 })}
+            active={filters.medium === key}
+          >
+            {diaryMediumLabels[key]}
+          </ChipLink>
+        ))}
+      </FilterRow>
+      <FilterRow label={dict.filterEnvironment}>
+        <ChipLink
+          href={buildQuery(basePath, sort, filters, page, { environment: null, page: 1 })}
+          active={!filters.environment}
+        >
+          {dict.all}
+        </ChipLink>
+        {(Object.keys(diaryEnvironmentLabels) as DiaryEnvironment[]).map((key) => (
+          <ChipLink
+            key={key}
+            href={buildQuery(basePath, sort, filters, page, { environment: key, page: 1 })}
+            active={filters.environment === key}
+          >
+            {diaryEnvironmentLabels[key]}
+          </ChipLink>
+        ))}
+      </FilterRow>
+    </div>
+  );
+}
+
+export function DiaryExploreBar(props: Props) {
+  const { basePath, sort, filters, page, dict } = props;
+  const sortOptions: { key: DiarySortKey; label: string }[] = [
+    { key: "updated", label: dict.sortUpdated },
+    { key: "created", label: dict.sortCreated },
+    { key: "likes", label: dict.sortLikes },
+  ];
+
+  const activeCount = [
+    filters.germinationMethod,
+    filters.watering,
+    filters.medium,
+    filters.environment,
+    filters.growPhase,
+    filters.flowerType,
+  ].filter(Boolean).length;
+
+  const clearAllHref = buildQuery(basePath, sort, filters, page, {
+    germinationMethod: null,
+    watering: null,
+    medium: null,
+    environment: null,
+    growPhase: null,
+    flowerType: null,
+    page: 1,
+  });
+
+  return (
+    <section className="rounded-2xl border border-white/10 bg-slate-950/50 p-3 sm:p-4 lg:rounded-[1.35rem] lg:p-5">
+      {/* Sort — compact horizontal scroll on small screens */}
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+        <span className="shrink-0 text-[9px] font-medium uppercase tracking-[0.18em] text-slate-500 sm:text-[10px] sm:tracking-[0.2em]">
+          {dict.sortLabel}
+        </span>
+        <div className="-mx-1 flex min-w-0 flex-1 snap-x snap-mandatory gap-1.5 overflow-x-auto px-1 pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:snap-none sm:flex-wrap sm:overflow-x-visible sm:pb-0 [&::-webkit-scrollbar]:hidden">
+          {sortOptions.map((opt) => (
+            <ChipLink
+              key={opt.key}
+              href={buildQuery(basePath, sort, filters, page, { sort: opt.key, page: 1 })}
+              active={sort === opt.key}
+              className="snap-start"
+            >
+              {opt.label}
+            </ChipLink>
+          ))}
+        </div>
+      </div>
+
+      <QuickFilterStrip {...props} />
+
+      {/* Mobile / tablet: collapsible advanced filters */}
+      <details className="mt-3 border-t border-white/[0.06] pt-3 open:[&_summary_.chevron-btn]:rotate-180 lg:hidden">
+        <summary className="flex cursor-pointer list-none items-center gap-3 rounded-2xl border border-white/[0.09] bg-gradient-to-br from-slate-900/90 via-slate-950/95 to-slate-950 px-3 py-3 text-left shadow-[0_8px_32px_-12px_rgba(0,0,0,0.65)] ring-1 ring-inset ring-white/[0.04] transition hover:border-lime-400/15 hover:ring-lime-400/10 [&::-webkit-details-marker]:hidden">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-lime-400/20 via-emerald-500/10 to-slate-900/80 shadow-[inset_0_1px_0_0_rgba(190,242,100,0.12)] ring-1 ring-lime-400/25">
+            <SlidersHorizontal className="h-5 w-5 text-lime-200" strokeWidth={2} aria-hidden />
+          </span>
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-[15px] font-semibold tracking-tight text-white">
+                {dict.filtersTitle}
+              </span>
+              {activeCount > 0 ? (
+                <span className="inline-flex min-w-[1.25rem] items-center justify-center rounded-full bg-lime-400/20 px-2 py-0.5 text-[11px] font-bold tabular-nums text-lime-100 ring-1 ring-lime-400/35">
+                  {activeCount}
+                </span>
+              ) : null}
+            </div>
+          </div>
+          <span className="chevron-btn flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-slate-400 transition-transform duration-300 ease-out hover:bg-white/[0.09] hover:text-slate-300">
+            <ChevronDown className="h-4 w-4" strokeWidth={2.5} aria-hidden />
+          </span>
+        </summary>
+        {activeCount > 0 ? (
+          <div className="mt-2 flex justify-end px-0.5">
+            <Link
+              href={clearAllHref}
+              className="rounded-full px-2 py-1 text-[11px] font-medium text-lime-300/95 underline-offset-2 hover:text-lime-200 hover:underline"
+            >
+              {dict.clearFilters}
+            </Link>
+          </div>
+        ) : null}
+        <div className="mt-3 max-h-[min(55vh,22rem)] min-h-0 w-full min-w-0 overflow-y-auto overflow-x-hidden overscroll-contain rounded-xl border border-white/[0.06] bg-black/20 p-3 pr-2 shadow-inner">
+          <FilterSections
+            basePath={basePath}
+            sort={sort}
+            filters={filters}
+            page={page}
+            dict={dict}
+          />
+        </div>
+      </details>
+
+      {/* Desktop: advanced filters */}
+      <div className="mt-4 hidden border-t border-white/[0.06] pt-4 lg:block">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <span className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500">
+            {dict.filtersTitle}
+          </span>
+          {activeCount > 0 ? (
+            <Link
+              href={clearAllHref}
+              className="text-[11px] font-medium text-lime-300/90 hover:text-lime-200"
+            >
+              {dict.clearFilters}
+            </Link>
+          ) : null}
+        </div>
+        <FilterSections
+          basePath={basePath}
+          sort={sort}
+          filters={filters}
+          page={page}
+          dict={dict}
+        />
+      </div>
+    </section>
+  );
+}

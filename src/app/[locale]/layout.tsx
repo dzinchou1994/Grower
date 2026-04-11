@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Script from "next/script";
 import { notFound } from "next/navigation";
 import { HtmlLang } from "@/components/html-lang";
@@ -76,7 +77,9 @@ export default async function LocaleLayout({
         <div className="animate-haze absolute -right-24 top-[55%] hidden h-[360px] w-[360px] rounded-full bg-fuchsia-600/[0.032] blur-[80px] [animation-delay:4s] md:block" />
       </div>
       <AgeGate />
-      <NavigationFeedback />
+      <Suspense fallback={null}>
+        <NavigationFeedback />
+      </Suspense>
       <SiteHeader
         locale={locale as Locale}
         initialUser={sessionUser}

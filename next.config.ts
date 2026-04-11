@@ -6,6 +6,11 @@ const withBundleAnalyzer = bundleAnalyzer({
 });
 
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "6mb",
+    },
+  },
   async headers() {
     if (process.env.NODE_ENV !== "production") {
       // Avoid stale client bundles during local development hydration.

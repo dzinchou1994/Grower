@@ -19,16 +19,21 @@ function normalizeConnectionString(value: string | undefined) {
 
 const connectionString = normalizeConnectionString(process.env.DATABASE_URL);
 
+function createPrismaClient() {
+  return new PrismaClient({
+    adapter: new PrismaPg({ connectionString: connectionString! }),
+    log: process.env.NODE_ENV === "development" ? ["warn", "error"] : ["error"],
+  });
+}
+
+// Production: singleton so serverless / long-running Node reuse one pool.
+// Development: do NOT stash on `global` — after `prisma generate`, a cached client can keep an old
+// DMMF and throw (e.g. "Unknown field strains") until the dev server restarts. Not assigning here
+// avoids pinning a pre-generate client across HMR.
 const prismaInstance = connectionString
-  ? global.prisma ??
-    new PrismaClient({
-      adapter: new PrismaPg({ connectionString }),
-      log: process.env.NODE_ENV === "development" ? ["warn", "error"] : ["error"],
-    })
+  ? process.env.NODE_ENV === "production"
+    ? (global.prisma ??= createPrismaClient())
+    : createPrismaClient()
   : undefined;
 
 export const db = prismaInstance as PrismaClient;
-
-if (process.env.NODE_ENV !== "production" && prismaInstance) {
-  global.prisma = prismaInstance;
-}
