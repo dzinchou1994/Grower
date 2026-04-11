@@ -3,12 +3,29 @@ Fix for Vercel / production error:
 
 Cause: the code expects enum values COCO + PEAT (no COCO_COIR), but Neon still has old rows / old enum labels until this migration runs.
 
-Do ONE of:
+---
 
-  A) From your machine (recommended)
-     DATABASE_URL="postgresql://…neon…" npx prisma migrate deploy
+If `prisma migrate deploy` fails with P1002 (advisory lock timeout):
+  Neon’s *pooler* host (`…-pooler…`) often cannot acquire Postgres advisory locks. Use a *direct* connection for migrate only.
 
-     Use the same Neon URL as in Vercel → Production → DATABASE_URL (pooler is OK).
+  In Neon: Dashboard → your project → Connection details → copy the **Direct** connection string (host has NO `-pooler` in the name).
+
+  From your machine (use Direct URL only for this command; keep pooler URL in Vercel for the app):
+
+     cd /path/to/web
+     DATABASE_URL="postgresql://USER:PASS@ep-xxxx.region.aws.neon.tech/neondb?sslmode=require" npx prisma migrate deploy
+
+  (Replace with your Direct string; same user/password as pooled, different hostname.)
+
+  Or paste and run in Neon **SQL Editor** (no Prisma needed):
+     prisma/migrations/20260413210000_diary_medium_coco_peat/migration.sql
+
+---
+
+Otherwise do ONE of:
+
+  A) From your machine — Direct DATABASE_URL as above, then:
+     npx prisma migrate deploy
 
   B) Neon Dashboard → SQL Editor
      Paste and run the full contents of:
@@ -17,4 +34,4 @@ Do ONE of:
 After that, redeploy is not required; the next request should work.
 
 ---
-ka: თუ ლოგში P2023 / COCO_COIR — ზემოთ A ან B ერთხელ გაუშვით Neon-ის ბაზაზე.
+ka: P2023 / COCO_COIR — A ან B. P1002 lock timeout — migrate მხოლოდ **Direct** host-ით ან SQL Editor-ში იგივე migration.sql.
