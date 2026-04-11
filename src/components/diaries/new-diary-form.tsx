@@ -284,16 +284,31 @@ export function NewDiaryForm({
         </select>
       </label>
 
-      <label className="sm:col-span-2">
+      <label>
         <span className={labelClassName}>{fieldDict.environment}</span>
         <select
           value={environment}
           onChange={(e) => setEnvironment(e.target.value as DiaryEnvironment)}
-          className={`${selectClassName} sm:max-w-md`}
+          className={selectClassName}
         >
           {(Object.keys(labels.environment) as DiaryEnvironment[]).map((k) => (
             <option key={k} value={k}>
               {labels.environment[k]}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <label>
+        <span className={labelClassName}>{fieldDict.germinationMethod}</span>
+        <select
+          value={germinationMethod}
+          onChange={(e) => setGerminationMethod(e.target.value as DiaryGerminationMethod)}
+          className={selectClassName}
+        >
+          {(Object.keys(labels.germination) as DiaryGerminationMethod[]).map((k) => (
+            <option key={k} value={k}>
+              {labels.germination[k]}
             </option>
           ))}
         </select>
@@ -324,21 +339,6 @@ export function NewDiaryForm({
           {diaryExploreMediumKeys.map((k) => (
             <option key={k} value={k}>
               {labels.medium[k]}
-            </option>
-          ))}
-        </select>
-      </label>
-
-      <label className="sm:col-span-2">
-        <span className={labelClassName}>{fieldDict.germinationMethod}</span>
-        <select
-          value={germinationMethod}
-          onChange={(e) => setGerminationMethod(e.target.value as DiaryGerminationMethod)}
-          className={`${selectClassName} sm:max-w-md`}
-        >
-          {(Object.keys(labels.germination) as DiaryGerminationMethod[]).map((k) => (
-            <option key={k} value={k}>
-              {labels.germination[k]}
             </option>
           ))}
         </select>
