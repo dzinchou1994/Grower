@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { AuthRegisterForm } from "@/components/auth-register-form";
+import { getServerSessionUser } from "@/lib/auth-session";
 import { getAlternates, getLocalizedPath, isValidLocale, type Locale } from "@/lib/i18n";
 
 type PageProps = {
@@ -89,6 +90,11 @@ export default async function RegisterPage({ params }: PageProps) {
   }
 
   const typedLocale = locale as Locale;
+  const session = await getServerSessionUser();
+  if (session) {
+    redirect(getLocalizedPath(typedLocale, "/account"));
+  }
+
   const copy = getCopy(typedLocale);
 
   return (

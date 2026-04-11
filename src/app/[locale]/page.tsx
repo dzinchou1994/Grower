@@ -13,6 +13,7 @@ import { getUsernameAccentClassByXp } from "@/lib/leveling";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPageMetadataWithSeo } from "@/lib/seo-settings";
+import { getServerSessionUser } from "@/lib/auth-session";
 
 const homeHeroImageSrc = "/images/hero-cannabis.avif";
 
@@ -49,9 +50,10 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
 
   const typedLocale = locale as Locale;
   const { dict } = getLocalizedContent(typedLocale);
-  const [forumTopicList, topUsers] = await Promise.all([
+  const [forumTopicList, topUsers, sessionUser] = await Promise.all([
     listForumTopics(undefined, typedLocale),
     getTopUsers(10),
+    getServerSessionUser(),
   ]);
 
   const allThreads = forumTopicList
@@ -112,10 +114,10 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
           {/* CTAs */}
           <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             <Link
-              href={getLocalizedPath(typedLocale, "/auth/register")}
+              href={getLocalizedPath(typedLocale, sessionUser ? "/account" : "/auth/register")}
               className="inline-flex items-center justify-center rounded-lg bg-lime-400 px-3.5 py-1.5 text-[12px] font-semibold text-slate-950 transition hover:bg-lime-300 sm:px-4 sm:py-2 sm:text-sm"
             >
-              {dict.home.joinCta}
+              {sessionUser ? dict.nav.account : dict.home.joinCta}
             </Link>
             <Link
               href={getLocalizedPath(typedLocale, "/forum")}
