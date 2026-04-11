@@ -916,6 +916,269 @@ function filterThreadByQuery(thread: ForumThreadRecord, query: string) {
   );
 }
 
+function threadMatchesSearch(thread: ForumThreadRecord, query: string, slugSet: Set<string>) {
+  return slugSet.has(thread.slug) || filterThreadByQuery(thread, query);
+}
+
+const FORUM_SEARCH_MIN_QUERY_LEN = 2;
+const FORUM_SEARCH_MAX_THREAD_SUGGEST = 8;
+const FORUM_SEARCH_MAX_COMMENT_SUGGEST = 6;
+
+function snippetAroundMatch(text: string, query: string, maxLen = 96): string {
+  const t = text.trim();
+  const needle = query.trim();
+  if (!t) {
+    return "";
+  }
+  if (!needle) {
+    return t.length > maxLen ? `${t.slice(0, maxLen - 1)}…` : t;
+  }
+  const lower = t.toLowerCase();
+  const n = needle.toLowerCase();
+  const idx = lower.indexOf(n);
+  if (idx === -1) {
+    return t.length > maxLen ? `${t.slice(0, maxLen - 1)}…` : t;
+  }
+  const padStart = 28;
+  const padEnd = 56;
+  const start = Math.max(0, idx - padStart);
+  const end = Math.min(t.length, idx + needle.length + padEnd);
+  let s = `${start > 0 ? "…" : ""}${t.slice(start, end)}${end < t.length ? "…" : ""}`;
+  if (s.length > maxLen) {
+    s = `${s.slice(0, maxLen - 1)}…`;
+  }
+  return s;
+}
+
+async function getMatchingThreadSlugsFromDatabase(query: string): Promise<Set<string>> {
+  const trimmed = query.trim();
+  if (!trimmed) {
+    return new Set();
+  }
+  const pattern = { contains: trimmed, mode: "insensitive" as const };
+  const threads = await db.forumThread.findMany({
+    where: {
+      isHidden: false,
+      OR: [
+        { title: pattern },
+        { body: pattern },
+        { author: { username: pattern } },
+        { comments: { some: { isHidden: false, body: pattern } } },
+      ],
+    },
+    select: { slug: true },
+  });
+  return new Set(threads.map((row) => row.slug));
+}
+
+function getMatchingThreadSlugsFromMemory(query: string): Set<string> {
+  const trimmed = query.trim();
+  if (!trimmed) {
+    return new Set();
+  }
+  const q = trimmed.toLowerCase();
+  const slugs = new Set<string>();
+  for (const topic of getState().topics) {
+    for (const thread of topic.threads) {
+      if (thread.isHidden) {
+        continue;
+      }
+      if (filterThreadByQuery(thread, trimmed)) {
+        slugs.add(thread.slug);
+        continue;
+      }
+      for (const c of thread.comments) {
+        if (c.body.toLowerCase().includes(q)) {
+          slugs.add(thread.slug);
+          break;
+        }
+      }
+    }
+  }
+  return slugs;
+}
+
+async function getMatchingThreadSlugsForForumQuery(query: string): Promise<Set<string>> {
+  if (!query.trim()) {
+    return new Set();
+  }
+  if (hasDatabase) {
+    return getMatchingThreadSlugsFromDatabase(query);
+  }
+  return getMatchingThreadSlugsFromMemory(query);
+}
+
+export type ForumSearchSuggestionItem =
+  | {
+      kind: "thread";
+      topicSlug: string;
+      topicTitle: string;
+      threadSlug: string;
+      threadTitle: string;
+      snippet: string | null;
+    }
+  | {
+      kind: "comment";
+      topicSlug: string;
+      topicTitle: string;
+      threadSlug: string;
+      threadTitle: string;
+      commentId: string;
+      snippet: string;
+    };
+
+async function getForumSearchSuggestionsFromDatabase(q: string): Promise<ForumSearchSuggestionItem[]> {
+  const pattern = { contains: q, mode: "insensitive" as const };
+
+  const threadRows = await db.forumThread.findMany({
+    where: {
+      isHidden: false,
+      OR: [{ title: pattern }, { body: pattern }, { author: { username: pattern } }],
+    },
+    take: FORUM_SEARCH_MAX_THREAD_SUGGEST,
+    orderBy: { updatedAt: "desc" },
+    include: {
+      topic: { select: { slug: true, title: true } },
+    },
+  });
+
+  const threadItems: ForumSearchSuggestionItem[] = threadRows.map((row) => {
+    const { body: plain } = decodeThreadBody(row.body);
+    const snippet = snippetAroundMatch(plain || row.title, q);
+    return {
+      kind: "thread" as const,
+      topicSlug: row.topic.slug,
+      topicTitle: row.topic.title,
+      threadSlug: row.slug,
+      threadTitle: row.title,
+      snippet: snippet || null,
+    };
+  });
+
+  const threadSlugsFromDirect = new Set(threadRows.map((r) => r.slug));
+
+  const commentRows = await db.forumComment.findMany({
+    where: {
+      isHidden: false,
+      body: pattern,
+      thread: { isHidden: false },
+    },
+    take: 32,
+    orderBy: { createdAt: "desc" },
+    include: {
+      thread: {
+        select: {
+          slug: true,
+          title: true,
+          topic: { select: { slug: true, title: true } },
+        },
+      },
+    },
+  });
+
+  const commentItems: ForumSearchSuggestionItem[] = [];
+  const usedThreadsForCommentRows = new Set<string>();
+
+  for (const c of commentRows) {
+    if (commentItems.length >= FORUM_SEARCH_MAX_COMMENT_SUGGEST) {
+      break;
+    }
+    if (threadSlugsFromDirect.has(c.thread.slug)) {
+      continue;
+    }
+    if (usedThreadsForCommentRows.has(c.thread.slug)) {
+      continue;
+    }
+    usedThreadsForCommentRows.add(c.thread.slug);
+    commentItems.push({
+      kind: "comment",
+      topicSlug: c.thread.topic.slug,
+      topicTitle: c.thread.topic.title,
+      threadSlug: c.thread.slug,
+      threadTitle: c.thread.title,
+      commentId: c.id,
+      snippet: snippetAroundMatch(c.body, q),
+    });
+  }
+
+  return [...threadItems, ...commentItems];
+}
+
+function getForumSearchSuggestionsFromMemory(q: string): ForumSearchSuggestionItem[] {
+  const lower = q.toLowerCase();
+  const matches = (s: string) => s.toLowerCase().includes(lower);
+
+  const threadItems: ForumSearchSuggestionItem[] = [];
+  outer: for (const topic of getState().topics) {
+    for (const thread of topic.threads) {
+      if (thread.isHidden) {
+        continue;
+      }
+      if (threadItems.length >= FORUM_SEARCH_MAX_THREAD_SUGGEST) {
+        break outer;
+      }
+      if (
+        matches(thread.title) ||
+        matches(thread.body ?? "") ||
+        matches(thread.author)
+      ) {
+        threadItems.push({
+          kind: "thread",
+          topicSlug: topic.slug,
+          topicTitle: topic.title,
+          threadSlug: thread.slug,
+          threadTitle: thread.title,
+          snippet: snippetAroundMatch((thread.body ?? "") || thread.title, q) || null,
+        });
+      }
+    }
+  }
+
+  const directSlugs = new Set(threadItems.map((t) => t.threadSlug));
+
+  const commentItems: ForumSearchSuggestionItem[] = [];
+  outer2: for (const topic of getState().topics) {
+    for (const thread of topic.threads) {
+      if (thread.isHidden || directSlugs.has(thread.slug)) {
+        continue;
+      }
+      for (const comment of thread.comments) {
+        if (commentItems.length >= FORUM_SEARCH_MAX_COMMENT_SUGGEST) {
+          break outer2;
+        }
+        if (!matches(comment.body)) {
+          continue;
+        }
+        commentItems.push({
+          kind: "comment",
+          topicSlug: topic.slug,
+          topicTitle: topic.title,
+          threadSlug: thread.slug,
+          threadTitle: thread.title,
+          commentId: comment.id,
+          snippet: snippetAroundMatch(comment.body, q),
+        });
+        directSlugs.add(thread.slug);
+        break;
+      }
+    }
+  }
+
+  return [...threadItems, ...commentItems];
+}
+
+/** Typeahead + quick navigation: threads (title/body/author) first, then comment-body matches. */
+export async function getForumSearchSuggestions(query: string): Promise<ForumSearchSuggestionItem[]> {
+  const q = query.trim();
+  if (q.length < FORUM_SEARCH_MIN_QUERY_LEN) {
+    return [];
+  }
+  if (hasDatabase) {
+    return getForumSearchSuggestionsFromDatabase(q);
+  }
+  return getForumSearchSuggestionsFromMemory(q);
+}
+
 async function listForumTopicsFromDatabase(query?: string, locale?: Locale, currentUserId?: string) {
   const topics = await db.forumTopic.findMany({
     orderBy: { sortOrder: "asc" },
@@ -960,13 +1223,17 @@ async function listForumTopicsFromDatabase(query?: string, locale?: Locale, curr
   }
 
   const q = query.trim();
+  const matchingSlugs = await getMatchingThreadSlugsForForumQuery(q);
   return translatedMapped
     .map((topic) => {
       if (topicMatchesQuery(topic, q)) {
         return topic;
       }
 
-      return { ...topic, threads: topic.threads.filter((thread) => filterThreadByQuery(thread, q)) };
+      return {
+        ...topic,
+        threads: topic.threads.filter((thread) => threadMatchesSearch(thread, q, matchingSlugs)),
+      };
     })
     .filter((topic) => topic.threads.length > 0);
 }
@@ -1153,7 +1420,9 @@ async function listForumTopicsFromMemory(
     return visibleTopics;
   }
 
-  const q = query.trim().toLowerCase();
+  const trimmed = query.trim();
+  const q = trimmed.toLowerCase();
+  const matchingSlugs = getMatchingThreadSlugsFromMemory(trimmed);
 
   return visibleTopics
     .map((topic) => {
@@ -1165,7 +1434,12 @@ async function listForumTopicsFromMemory(
         return topic;
       }
 
-      return { ...topic, threads: topic.threads.filter((thread) => filterThreadByQuery(thread, q)) };
+      return {
+        ...topic,
+        threads: topic.threads.filter((thread) =>
+          threadMatchesSearch(thread, trimmed, matchingSlugs),
+        ),
+      };
     })
     .filter((topic) => topic.threads.length > 0);
 }

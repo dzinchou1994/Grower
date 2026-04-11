@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getServerSessionUser } from "@/lib/auth-session";
+import { ForumSearchInput } from "@/components/forum-search-input";
 import { ForumThreadComposer } from "@/components/forum-thread-composer";
 import {
   getLocalizedContent,
@@ -53,17 +54,29 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
           searchPlaceholder: "მოძებნე თემები, დისკუსიები ან ავტორები...",
           search: "ძებნა",
           noMatches: "შენს ძებნაზე შედეგი ვერ მოიძებნა.",
+          suggestThreads: "თემები",
+          suggestComments: "კომენტარები",
+          suggestLoading: "ძებნა…",
+          suggestEmpty: "შემოთავაზება ვერ მოიძებნა.",
         }
       : typedLocale === "ru"
         ? {
             searchPlaceholder: "Ищите темы, обсуждения или авторов...",
             search: "Поиск",
             noMatches: "По вашему запросу ничего не найдено.",
+            suggestThreads: "Темы",
+            suggestComments: "Комментарии",
+            suggestLoading: "Поиск…",
+            suggestEmpty: "Подсказок не найдено.",
           }
         : {
             searchPlaceholder: "Search topics, threads or authors...",
             search: "Search",
             noMatches: "No matches found for your search.",
+            suggestThreads: "Threads",
+            suggestComments: "Comments",
+            suggestLoading: "Searching…",
+            suggestEmpty: "No suggestions yet.",
           };
   const [forumTopicList, sessionUser] = await Promise.all([
     listForumTopics(q, typedLocale),
@@ -74,51 +87,47 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
     <div className="flex flex-col gap-6">
       <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/6 p-5 sm:rounded-[2rem] sm:p-8">
         <div className="relative">
-          <div className="inline-flex items-center gap-2 text-xs text-lime-300 sm:text-sm">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/logo.svg"
-              alt="Grower Georgia flag logo"
-              width={16}
-              height={16}
-              className="h-4 w-4 shrink-0"
-            />
-            {dict.forum.badge}
-          </div>
-          <h1 className="mt-2 text-xl font-semibold text-white sm:text-3xl lg:text-4xl">
-            {dict.forum.title}
-          </h1>
-          <p className="mt-2.5 max-w-3xl text-xs leading-relaxed text-slate-300 sm:mt-3 sm:text-sm sm:leading-6">
-            {dict.forum.description}
-          </p>
-          <div className="mt-3 sm:mt-4">
-            <ForumThreadComposer
-              topics={forumTopicList.map((topic) => ({ slug: topic.slug, title: topic.title }))}
-              isAuthenticated={Boolean(sessionUser)}
-              loginHref={getLocalizedPath(typedLocale, "/auth/login")}
+          <div className="flex flex-col gap-3 sm:gap-4">
+            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+              <div className="inline-flex min-w-0 items-center gap-2 text-xs text-lime-300 sm:text-sm">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/logo.svg"
+                  alt="Grower Georgia flag logo"
+                  width={16}
+                  height={16}
+                  className="h-4 w-4 shrink-0"
+                />
+                {dict.forum.badge}
+              </div>
+              <ForumThreadComposer
+                topics={forumTopicList.map((topic) => ({ slug: topic.slug, title: topic.title }))}
+                isAuthenticated={Boolean(sessionUser)}
+                loginHref={getLocalizedPath(typedLocale, "/auth/login")}
+                locale={typedLocale}
+                collapsible
+                heroCompact
+              />
+            </div>
+            <h1 className="text-xl font-semibold text-white sm:text-3xl lg:text-4xl">
+              {dict.forum.title}
+            </h1>
+            <p className="max-w-3xl text-xs leading-relaxed text-slate-300 sm:text-sm sm:leading-6">
+              {dict.forum.description}
+            </p>
+
+            <ForumSearchInput
               locale={typedLocale}
-              collapsible
+              defaultValue={q ?? ""}
+              placeholder={ui.searchPlaceholder}
+              searchLabel={ui.search}
+              sectionThreads={ui.suggestThreads}
+              sectionComments={ui.suggestComments}
+              loadingLabel={ui.suggestLoading}
+              emptyLabel={ui.suggestEmpty}
             />
           </div>
         </div>
-      </section>
-
-      <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-6">
-        <form className="flex flex-col gap-2 sm:flex-row" method="GET">
-          <input
-            type="text"
-            name="q"
-            defaultValue={q ?? ""}
-            placeholder={ui.searchPlaceholder}
-            className="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2"
-          />
-          <button
-            type="submit"
-            className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
-          >
-            {ui.search}
-          </button>
-        </form>
       </section>
 
       <div className="grid gap-4 sm:gap-5">
@@ -180,7 +189,7 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
                   className="flex items-center justify-between gap-3 rounded-2xl border border-white/8 bg-white/4 px-4 py-3 text-sm text-slate-300 transition hover:border-white/15 hover:bg-white/8 sm:rounded-3xl"
                 >
                   <span className="flex min-w-0 items-center gap-2">
-                    <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-white/15 bg-gradient-to-br from-slate-800 to-slate-950 text-base">
+                    <span className="inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full border border-white/15 bg-gradient-to-br from-slate-800 to-slate-950 text-[10px] leading-none">
                       {thread.threadIcon ?? "💬"}
                     </span>
                     <span className="line-clamp-1 font-medium text-white">{thread.title}</span>

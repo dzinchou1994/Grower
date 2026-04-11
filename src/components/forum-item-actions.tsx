@@ -173,23 +173,44 @@ export function ForumItemActions({
         <button
           type="button"
           onClick={() => setIsMenuOpen((prev) => !prev)}
-          className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/15 bg-white/5 text-slate-300 transition hover:bg-white/10 hover:text-white"
+          className={[
+            "relative inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md",
+            "border border-white/15 bg-gradient-to-b from-white/[0.14] to-white/[0.05]",
+            "text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_2px_6px_rgba(0,0,0,0.3)]",
+            "backdrop-blur-sm transition-all duration-200 ease-out",
+            "hover:border-white/25 hover:from-white/[0.2] hover:to-white/[0.1] hover:text-white hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_3px_10px_rgba(0,0,0,0.4)]",
+            "active:scale-[0.94]",
+            "focus:outline-none focus-visible:ring-1 focus-visible:ring-lime-400/55 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-950",
+            isMenuOpen
+              ? "border-lime-400/45 bg-gradient-to-b from-lime-400/20 to-lime-500/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_0_0_1px_rgba(163,230,53,0.35),0_3px_12px_rgba(0,0,0,0.45)]"
+              : "",
+          ].join(" ")}
           aria-haspopup="menu"
           aria-expanded={isMenuOpen}
           aria-label={t.actions}
         >
-          <svg className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-            <path d="M4 10a1.5 1.5 0 1 1 0-.001V10Zm6 0A1.5 1.5 0 1 1 10 10Zm6 0a1.5 1.5 0 1 1 0-.001V10Z" />
+          <svg
+            className="h-3 w-3 opacity-90"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="5" r="2" />
+            <circle cx="12" cy="12" r="2" />
+            <circle cx="12" cy="19" r="2" />
           </svg>
         </button>
 
         {isMenuOpen ? (
-          <div className="absolute right-0 top-7 z-20 min-w-[132px] overflow-hidden rounded-xl border border-white/10 bg-slate-950/95 p-1.5 shadow-lg shadow-black/40 backdrop-blur">
+          <div
+            className="absolute right-0 top-7 z-20 min-w-[148px] overflow-hidden rounded-2xl border border-white/12 bg-slate-950/[0.97] p-1.5 shadow-2xl shadow-black/60 ring-1 ring-white/[0.06] backdrop-blur-xl"
+            role="menu"
+          >
             {showPermalink ? (
               <Link
                 href={permalinkHref!}
                 onClick={() => setIsMenuOpen(false)}
-                className="flex w-full items-center rounded-lg px-2 py-1.5 text-left text-[11px] text-slate-200 transition hover:bg-white/10"
+                className="flex w-full items-center rounded-xl px-2.5 py-2 text-left text-[11px] text-slate-200 transition hover:bg-white/10"
               >
                 {permalinkLabel}
               </Link>
@@ -199,7 +220,7 @@ export function ForumItemActions({
                 type="button"
                 onClick={handleReport}
                 disabled={isReporting}
-                className="flex w-full items-center rounded-lg px-2 py-1.5 text-left text-[11px] text-amber-200 transition hover:bg-amber-400/10 disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex w-full items-center rounded-xl px-2.5 py-2 text-left text-[11px] text-amber-200 transition hover:bg-amber-400/10 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {t.report}
               </button>
@@ -209,7 +230,7 @@ export function ForumItemActions({
                 type="button"
                 onClick={handleDelete}
                 disabled={isDeleting}
-                className="flex w-full items-center rounded-lg px-2 py-1.5 text-left text-[11px] text-red-200 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex w-full items-center rounded-xl px-2.5 py-2 text-left text-[11px] text-red-200 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isDeleting ? t.deleting : t.delete}
               </button>
