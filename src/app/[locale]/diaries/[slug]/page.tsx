@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import nextDynamic from "next/dynamic";
 import { ArrowLeft, ChevronDown, Layers } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
@@ -8,6 +9,9 @@ import { enUS, ka, ru } from "date-fns/locale";
 import { DiarySetupDisplay } from "@/components/diaries/diary-setup-display";
 import { CannabisLeaf } from "@/components/icons";
 import { UserAvatar } from "@/components/user-avatar";
+import { getAvatarOptionByImage } from "@/lib/avatar-options";
+import { notoSansGeorgian } from "@/lib/fonts/noto-sans-georgian";
+import { hasGeorgianScript, toMtavruli } from "@/lib/georgian-mtavruli";
 import { getPublicDiaryBySlug } from "@/lib/diary-data";
 import { formatDistanceDisplayKa } from "@/lib/format-distance-ka";
 import { getDiaryLabels } from "@/lib/diary-labels";
@@ -103,6 +107,13 @@ export default async function DiaryDetailPage({ params }: PageProps) {
     .sort((a, b) => b.weekNumber - a.weekNumber);
 
   const extraStrains = Math.max(0, diary.strains.length - 1);
+  const authorAvatarOption = getAvatarOptionByImage(diary.author.image);
+  const diaryTitleUseMtavruli = typedLocale === "ka" && hasGeorgianScript(diary.title);
+  const overviewUseMtavruli =
+    typedLocale === "ka" && hasGeorgianScript(dict.diaries.overview);
+  const overviewLabelText = overviewUseMtavruli
+    ? toMtavruli(dict.diaries.overview)
+    : dict.diaries.overview;
 
   const weekHref = (weekNumber: number) =>
     getLocalizedPath(typedLocale, `/diaries/${diary.slug}/weeks/${weekNumber}`);
@@ -134,8 +145,12 @@ export default async function DiaryDetailPage({ params }: PageProps) {
               <CannabisLeaf className="h-3 w-3 opacity-80" />
               {enumLabels.environment[diary.environment]} · {dict.diaries.diaryType}
             </div>
-            <h1 className="mt-3 text-2xl font-semibold tracking-tight text-white sm:mt-4 sm:text-4xl lg:text-5xl">
-              {diary.title}
+            <h1
+              className={`mt-3 text-2xl font-semibold tracking-tight text-white sm:mt-4 sm:text-4xl lg:text-5xl ${
+                diaryTitleUseMtavruli ? notoSansGeorgian.className : "uppercase"
+              }`}
+            >
+              {diaryTitleUseMtavruli ? toMtavruli(diary.title) : diary.title}
             </h1>
             <p className="mt-2 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-sm text-slate-500">
               <span>
@@ -181,8 +196,12 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                   <Layers className="h-5 w-5 text-yellow-200/90" strokeWidth={1.75} aria-hidden />
                 </span>
                 <div className="min-w-0 flex-1 text-left">
-                  <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-yellow-400/70">
-                    {dict.diaries.overview}
+                  <p
+                    className={`text-[9px] font-semibold tracking-[0.2em] text-yellow-400/70 ${
+                      overviewUseMtavruli ? notoSansGeorgian.className : "uppercase"
+                    }`}
+                  >
+                    {overviewLabelText}
                   </p>
                   <p className="mt-0.5 truncate text-[15px] font-semibold tracking-tight text-white">
                     {diary.strain}
@@ -226,39 +245,45 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                   </p>
                   <Link
                     href={getLocalizedPath(typedLocale, `/u/${diary.author.username}`)}
-                    className="mt-1.5 flex items-center gap-2 rounded-lg py-0.5 transition hover:bg-white/[0.04]"
+                    className={`mt-1.5 flex rounded-lg py-1 transition hover:bg-white/[0.04] ${
+                      authorAvatarOption.imagePath
+                        ? "items-center gap-2.5"
+                        : "items-center px-0.5"
+                    }`}
                   >
-                    <UserAvatar
-                      username={diary.author.username}
-                      image={diary.author.image}
-                      size="md"
-                    />
-                    <span className="text-sm font-semibold text-white">@{diary.author.username}</span>
+                    {authorAvatarOption.imagePath ? (
+                      <UserAvatar
+                        username={diary.author.username}
+                        image={diary.author.image}
+                        size="sm"
+                      />
+                    ) : null}
+                    <span className="text-[13px] font-medium leading-snug text-slate-200 underline-offset-2 hover:text-yellow-200/95 hover:underline">
+                      @{diary.author.username}
+                    </span>
                   </Link>
                 </div>
-                <div className="mt-3 flex flex-row gap-2">
-                  <Link
-                    href={getLocalizedPath(typedLocale, "/diaries")}
-                    className="flex-1 rounded-full border border-white/[0.08] px-3 py-2 text-center text-[11px] font-medium text-slate-300 transition hover:border-white/15 hover:bg-white/[0.04] hover:text-white"
-                  >
-                    {dict.diaries.backToDiaries}
-                  </Link>
-                  {isAuthor ? (
+                {isAuthor ? (
+                  <div className="mt-3">
                     <Link
                       href={getLocalizedPath(typedLocale, `/diaries/${diary.slug}/weeks/new`)}
-                      className="flex-1 rounded-full bg-yellow-400/90 px-3 py-2 text-center text-[11px] font-semibold text-slate-950 transition hover:bg-yellow-300"
+                      className="block w-full rounded-full bg-yellow-400/90 px-3 py-2 text-center text-[11px] font-semibold text-slate-950 transition hover:bg-yellow-300"
                     >
                       {dict.diaries.addWeeklyUpdate}
                     </Link>
-                  ) : null}
-                </div>
+                  </div>
+                ) : null}
               </div>
             </details>
 
             {/* Desktop: always-visible sidebar */}
             <div className="hidden rounded-2xl border border-white/[0.06] bg-slate-950/30 p-4 sm:p-5 lg:block lg:w-[280px] lg:shrink-0">
-              <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-slate-500 sm:text-xs">
-                {dict.diaries.overview}
+              <p
+                className={`text-[10px] font-medium tracking-[0.14em] text-slate-500 sm:text-xs ${
+                  overviewUseMtavruli ? notoSansGeorgian.className : "uppercase"
+                }`}
+              >
+                {overviewLabelText}
               </p>
               <div className="mt-3 space-y-2 text-xs text-slate-300 sm:mt-4 sm:space-y-3 sm:text-sm">
                 <p>
@@ -314,7 +339,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
         </div>
       </section>
 
-      <DiarySetupDisplay setup={diary.setup} labels={dict.diaries.setup} />
+      <DiarySetupDisplay setup={diary.setup} labels={dict.diaries.setup} locale={typedLocale} />
 
       {latest ? (
         <section className="rounded-2xl border border-yellow-400/15 bg-yellow-400/[0.03] p-5 sm:rounded-3xl sm:p-7">
@@ -344,8 +369,16 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                   href={weekHref(latest.weekNumber)}
                   className="relative aspect-square overflow-hidden rounded-xl border border-white/10 transition hover:border-yellow-400/30"
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={im.imageUrl} alt="" className="h-full w-full object-cover" />
+                  <Image
+                    src={im.imageUrl}
+                    alt=""
+                    fill
+                    sizes="(max-width: 640px) 45vw, 200px"
+                    className="object-cover"
+                    quality={65}
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </Link>
               ))}
             </div>
@@ -398,11 +431,15 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                             key={im.id}
                             className="relative h-16 w-16 overflow-hidden rounded-xl ring-1 ring-white/[0.06] sm:h-[4.5rem] sm:w-[4.5rem]"
                           >
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
+                            <Image
                               src={im.imageUrl}
                               alt=""
-                              className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
+                              fill
+                              sizes="80px"
+                              className="object-cover transition duration-300 group-hover:scale-[1.03]"
+                              quality={60}
+                              loading="lazy"
+                              decoding="async"
                             />
                           </div>
                         ))}

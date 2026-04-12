@@ -1,4 +1,11 @@
 /**
+ * True if the string contains any Georgian script character (Mkhedruli, Mtavruli, etc.).
+ */
+export function hasGeorgianScript(input: string): boolean {
+  return /\p{Script=Georgian}/u.test(input);
+}
+
+/**
  * Mkhedruli → Mtavruli for standard letters (U+10D0–U+10FA).
  * Leaves Latin, digits, Mtavruli, punctuation unchanged.
  */

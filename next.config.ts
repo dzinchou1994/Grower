@@ -6,6 +6,19 @@ const withBundleAnalyzer = bundleAnalyzer({
 });
 
 const nextConfig: NextConfig = {
+  images: {
+    // Default is [75] only; next/image with quality={60|65} must be listed or optimization 400s.
+    qualities: [60, 65, 75],
+    remotePatterns: [
+      { protocol: "https", hostname: "upload.wikimedia.org", pathname: "/**" },
+      { protocol: "https", hostname: "images.unsplash.com", pathname: "/**" },
+      {
+        protocol: "https",
+        hostname: "*.public.blob.vercel-storage.com",
+        pathname: "/**",
+      },
+    ],
+  },
   experimental: {
     serverActions: {
       bodySizeLimit: "6mb",
