@@ -1,6 +1,6 @@
 "use client";
 
-import { Noto_Sans_Georgian } from "next/font/google";
+import { notoSansGeorgian } from "@/lib/fonts/noto-sans-georgian";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -9,13 +9,6 @@ import { createPortal } from "react-dom";
 import { UserAvatar } from "@/components/user-avatar";
 import type { SessionUser } from "@/lib/auth-session";
 import { getLocalizedPath, locales, type Locale } from "@/lib/i18n-routing";
-
-/** Mtavruli in the logo; Trebuchet has no Georgian - without this, browsers show Mkhedruli. */
-const logoGeorgianCaps = Noto_Sans_Georgian({
-  subsets: ["georgian"],
-  weight: ["600"],
-  display: "swap",
-});
 
 type SiteHeaderDictionary = {
   nav: {
@@ -193,7 +186,7 @@ export function SiteHeader({
               <span className="block">
                 <span className="uppercase">GROW</span>
                 <span
-                  className={`relative top-[0.6px] ml-[0.5px] text-[1.08em] tracking-[0.01em] ${logoGeorgianCaps.className}`}
+                  className={`relative top-[0.6px] ml-[0.5px] text-[1.08em] tracking-[0.01em] ${notoSansGeorgian.className}`}
                 >
                   ᲔᲠᲘ
                 </span>
@@ -220,7 +213,7 @@ export function SiteHeader({
                   <span className={`opacity-80 transition-all duration-300 ${scrolled ? "text-[9px]" : "text-[11px]"}`}>
                     <NavIcon icon={item.icon} />
                   </span>
-                  <span className={locale === "ka" ? logoGeorgianCaps.className : "uppercase"}>{item.label}</span>
+                  <span className={locale === "ka" ? notoSansGeorgian.className : "uppercase"}>{item.label}</span>
                 </Link>
               );
             })}
@@ -379,7 +372,7 @@ export function SiteHeader({
               <div className="flex shrink-0 items-center justify-between border-b border-white/[0.06] px-5 pb-4 pt-6">
                 <p
                   className={`text-[11px] font-semibold tracking-[0.2em] text-slate-500 ${
-                    locale === "ka" ? logoGeorgianCaps.className : "uppercase"
+                    locale === "ka" ? notoSansGeorgian.className : "uppercase"
                   }`}
                 >
                   {ui.navigation}
@@ -451,7 +444,7 @@ export function SiteHeader({
                         >
                           <NavIcon icon={item.icon} />
                         </span>
-                        <span className={locale === "ka" ? logoGeorgianCaps.className : "uppercase"}>{item.label}</span>
+                        <span className={locale === "ka" ? notoSansGeorgian.className : "uppercase"}>{item.label}</span>
                       </Link>
                     );
                   })}
@@ -460,7 +453,7 @@ export function SiteHeader({
                 <div className="mx-2 mt-6 shrink-0">
                   <p
                     className={`mb-2 px-1 text-[10px] font-semibold tracking-[0.18em] text-slate-500 ${
-                      locale === "ka" ? logoGeorgianCaps.className : "uppercase"
+                      locale === "ka" ? notoSansGeorgian.className : "uppercase"
                     }`}
                   >
                     {ui.language}

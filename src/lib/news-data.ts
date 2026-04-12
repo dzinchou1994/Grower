@@ -44,7 +44,7 @@ const seededNews: NewsSeed[] = [
   {
     slug: "georgia-expands-hemp-dialogue-2026",
     scope: "GEORGIA",
-    imageUrl: "/news/georgia-industrial-cannabis-field.png",
+    imageUrl: "/news/georgia-industrial-cannabis-field.webp",
     sourceName: "Grower Editorial",
     sourceUrl: "https://grower.ge",
     title: {
@@ -203,7 +203,7 @@ Experts predict that by 2028, 60% of European greenhouses will use some form of 
   {
     slug: "georgian-community-launches-harm-reduction-workshops",
     scope: "GEORGIA",
-    imageUrl: "/news/georgia-harm-reduction-banner.png",
+    imageUrl: "/news/georgia-harm-reduction-banner.webp",
     sourceName: "Grower Community",
     sourceUrl: "https://grower.ge",
     title: {

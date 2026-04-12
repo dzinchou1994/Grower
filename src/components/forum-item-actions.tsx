@@ -22,7 +22,7 @@ export function ForumItemActions({
   /** When true, show report (e.g. not your content). Omit to derive from `!canDelete` for backwards compatibility. */
   canReport?: boolean;
   deleteEndpoint?: string;
-  reportTargetType?: "THREAD" | "COMMENT";
+  reportTargetType?: "THREAD" | "COMMENT" | "NEWS_COMMENT" | "CANNAPEDIA_COMMENT";
   reportTargetId?: string;
   permalinkHref?: string;
   permalinkLabel?: string;

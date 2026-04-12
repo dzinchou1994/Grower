@@ -1,6 +1,6 @@
 "use client";
 
-import { Noto_Sans_Georgian } from "next/font/google";
+import { notoSansGeorgian } from "@/lib/fonts/noto-sans-georgian";
 import { BookOpen, Search } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -14,18 +14,6 @@ function kaText(locale: Locale, text: string) {
 }
 
 /** Mtavruli title line; Mkhedruli fonts often render caps wrong without Noto. */
-const cannapediaHeroTitleKa = Noto_Sans_Georgian({
-  subsets: ["georgian"],
-  weight: ["600"],
-  display: "swap",
-});
-
-const cannapediaCategoryChipKa = Noto_Sans_Georgian({
-  subsets: ["georgian"],
-  weight: ["500", "600"],
-  display: "swap",
-});
-
 type CategoryItem = {
   slug: string;
   icon: string;
@@ -165,7 +153,7 @@ function CategoryChipLink({
       </span>
       <span
         className={`line-clamp-2 w-full text-[10px] font-medium leading-tight tracking-tight sm:text-[11px] sm:leading-snug ${
-          locale === "ka" ? `${cannapediaCategoryChipKa.className} tracking-wide` : ""
+          locale === "ka" ? `${notoSansGeorgian.className} tracking-wide` : ""
         }`}
       >
         {locale === "ka" ? toMtavruli(label) : label}
@@ -264,12 +252,12 @@ export function CannapediaExplorer({
             <h1 className="min-w-0 text-xl font-semibold leading-snug tracking-wide sm:text-3xl sm:leading-tight lg:text-4xl">
               <span className="text-lime-300 uppercase">{hero.badge}</span>
               <span
-                className={`text-slate-500 ${locale === "ka" ? cannapediaHeroTitleKa.className : ""}`}
+                className={`text-slate-500 ${locale === "ka" ? notoSansGeorgian.className : ""}`}
               >
                 {hero.titleConnector}
               </span>
               <span
-                className={`text-white ${locale === "ka" ? cannapediaHeroTitleKa.className : ""}`}
+                className={`text-white ${locale === "ka" ? notoSansGeorgian.className : ""}`}
               >
                 {hero.title}
               </span>

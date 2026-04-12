@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ContentCommentsBlock } from "@/components/content-comments-block";
+import { getServerSessionUser } from "@/lib/auth-session";
+import { getContentCommentLabels } from "@/lib/content-comment-labels";
+import { listNewsCommentsBySlug } from "@/lib/content-comments-data";
 import {
   getAlternates,
   getDictionary,
@@ -17,6 +21,8 @@ const newsFallbackImageSrc = "/news/community-workshop.svg";
 type PageProps = {
   params: Promise<{ locale: string; slug: string }>;
 };
+
+export const dynamic = "force-dynamic";
 
 export async function generateStaticParams() {
   const slugs = await listNewsSlugs();
@@ -44,8 +50,15 @@ export default async function NewsArticlePage({ params }: PageProps) {
   const { locale, slug } = await params;
   if (!isValidLocale(locale)) notFound();
   const typedLocale = locale as Locale;
-  const article = await getNewsBySlug(slug);
+  const [article, sessionUser, comments] = await Promise.all([
+    getNewsBySlug(slug),
+    getServerSessionUser(),
+    listNewsCommentsBySlug(slug),
+  ]);
   if (!article) notFound();
+
+  const commentLabels = getContentCommentLabels(typedLocale);
+  const dateLocale = typedLocale === "en" ? "en-US" : typedLocale === "ru" ? "ru-RU" : "ka-GE";
 
   const backLabel =
     typedLocale === "ka" ? "უკან სიახლეებზე" : typedLocale === "ru" ? "Назад к новостям" : "Back to news";
@@ -120,6 +133,23 @@ export default async function NewsArticlePage({ params }: PageProps) {
           </a>
         ) : null}
       </section>
+
+      {process.env.DATABASE_URL ? (
+        <ContentCommentsBlock
+          locale={typedLocale}
+          comments={comments}
+          labels={commentLabels}
+          postUrl={`/api/news/${encodeURIComponent(slug)}/comments`}
+          isLoggedIn={Boolean(sessionUser)}
+          dateLocale={dateLocale}
+          kind="news"
+          sessionUser={
+            sessionUser
+              ? { userId: sessionUser.userId, role: sessionUser.role }
+              : null
+          }
+        />
+      ) : null}
     </article>
   );
 }

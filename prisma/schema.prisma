@@ -68,6 +68,8 @@ enum ReportTargetType {
   DIARY_WEEK
   THREAD
   COMMENT
+  NEWS_COMMENT
+  CANNAPEDIA_COMMENT
   USER
 }
 
@@ -161,6 +163,8 @@ model User {
   reviewedSubmissions NewsSubmission[] @relation("NewsSubmissionReviewer")
   diaryWeekComments DiaryWeekComment[]
   diaryComments     DiaryComment[]
+  newsComments      NewsComment[]
+  cannapediaArticleComments CannapediaArticleComment[]
 }
 
 model Diary {
@@ -311,8 +315,24 @@ model CannapediaArticle {
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
   category    CannapediaCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  comments    CannapediaArticleComment[]
 
   @@index([categoryId, createdAt])
+}
+
+model CannapediaArticleComment {
+  id                  String            @id @default(cuid())
+  cannapediaArticleId String
+  authorId            String
+  body                String
+  isHidden            Boolean           @default(false)
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  article             CannapediaArticle @relation(fields: [cannapediaArticleId], references: [id], onDelete: Cascade)
+  author              User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  reports             Report[]
+
+  @@index([cannapediaArticleId, createdAt])
 }
 
 model ForumThread {
@@ -411,9 +431,13 @@ model Report {
   diaryWeekId String?
   threadId    String?
   commentId   String?
+  newsCommentId String?
+  cannapediaArticleCommentId String?
   diaryWeek   DiaryWeek?       @relation(fields: [diaryWeekId], references: [id], onDelete: Cascade)
   thread      ForumThread?     @relation(fields: [threadId], references: [id], onDelete: Cascade)
   comment     ForumComment?    @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  newsComment NewsComment?     @relation(fields: [newsCommentId], references: [id], onDelete: Cascade)
+  cannapediaArticleComment CannapediaArticleComment? @relation(fields: [cannapediaArticleCommentId], references: [id], onDelete: Cascade)
 
   @@index([status, createdAt])
 }
@@ -514,9 +538,25 @@ model NewsArticle {
   reviewedBy   User?     @relation("NewsReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
   submissionId String?   @unique
   submission   NewsSubmission? @relation(fields: [submissionId], references: [id], onDelete: SetNull)
+  comments     NewsComment[]
 
   @@index([scope, createdAt])
   @@index([isPublished, createdAt])
+}
+
+model NewsComment {
+  id            String      @id @default(cuid())
+  newsArticleId String
+  authorId      String
+  body          String
+  isHidden      Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  newsArticle   NewsArticle @relation(fields: [newsArticleId], references: [id], onDelete: Cascade)
+  author        User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  reports       Report[]
+
+  @@index([newsArticleId, createdAt])
 }
 
 model NewsSubmission {

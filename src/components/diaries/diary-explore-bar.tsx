@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Noto_Sans_Georgian } from "next/font/google";
+import { notoSansGeorgian } from "@/lib/fonts/noto-sans-georgian";
 import { ChevronDown, SlidersHorizontal } from "lucide-react";
 import {
   DiaryEnvironment,
@@ -15,14 +15,8 @@ import { getDiaryLabels } from "@/lib/diary-labels";
 import { toMtavruli } from "@/lib/georgian-mtavruli";
 import type { Locale } from "@/lib/i18n";
 
-const diaryExploreCapsKa = Noto_Sans_Georgian({
-  subsets: ["georgian"],
-  weight: ["600"],
-  display: "swap",
-});
-
 function capsClass(locale: Locale) {
-  return locale === "ka" ? diaryExploreCapsKa.className : "uppercase";
+  return locale === "ka" ? notoSansGeorgian.className : "uppercase";
 }
 
 function capsText(locale: Locale, text: string) {

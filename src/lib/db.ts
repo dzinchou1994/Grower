@@ -37,14 +37,8 @@ function createPrismaClient() {
   });
 }
 
-// Production: singleton so serverless / long-running Node reuse one pool.
-// Development: do NOT stash on `global` - after `prisma generate`, a cached client can keep an old
-// DMMF and throw (e.g. "Unknown field strains") until the dev server restarts. Not assigning here
-// avoids pinning a pre-generate client across HMR.
-const prismaInstance = connectionString
-  ? process.env.NODE_ENV === "production"
-    ? (global.prisma ??= createPrismaClient())
-    : createPrismaClient()
-  : undefined;
+// Single PrismaClient per process (dev + prod) so the pool and DMMF stay consistent.
+// After `prisma generate` / migrations, restart `next dev` or redeploy so this picks up new models.
+const prismaInstance = connectionString ? (global.prisma ??= createPrismaClient()) : undefined;
 
 export const db = prismaInstance as PrismaClient;

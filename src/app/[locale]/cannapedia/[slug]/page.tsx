@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ContentCommentsBlock } from "@/components/content-comments-block";
+import { getServerSessionUser } from "@/lib/auth-session";
 import {
   getCannapediaArticleBySlug,
   listCannapediaArticleSlugs,
 } from "@/lib/cannapedia-data";
+import { getContentCommentLabels } from "@/lib/content-comment-labels";
+import { listCannapediaCommentsBySlug } from "@/lib/content-comments-data";
 import {
   getAlternates,
   getDictionary,
@@ -44,6 +48,8 @@ function articleCopy(locale: Locale) {
   };
 }
 
+export const dynamic = "force-dynamic";
+
 export async function generateStaticParams() {
   const slugs = await listCannapediaArticleSlugs();
   return slugs.map((slug) => ({ slug }));
@@ -80,12 +86,18 @@ export default async function CannapediaArticlePage({ params }: PageProps) {
   }
 
   const typedLocale = locale as Locale;
-  const article = await getCannapediaArticleBySlug(slug);
+  const [article, sessionUser, comments] = await Promise.all([
+    getCannapediaArticleBySlug(slug),
+    getServerSessionUser(),
+    listCannapediaCommentsBySlug(slug),
+  ]);
   if (!article) {
     notFound();
   }
 
   const copy = articleCopy(typedLocale);
+  const commentLabels = getContentCommentLabels(typedLocale);
+  const dateLocale = typedLocale === "en" ? "en-US" : typedLocale === "ru" ? "ru-RU" : "ka-GE";
 
   return (
     <article className="mx-auto w-full max-w-4xl">
@@ -116,6 +128,23 @@ export default async function CannapediaArticlePage({ params }: PageProps) {
           ))}
         </div>
       </div>
+
+      {process.env.DATABASE_URL ? (
+        <ContentCommentsBlock
+          locale={typedLocale}
+          comments={comments}
+          labels={commentLabels}
+          postUrl={`/api/cannapedia/${encodeURIComponent(slug)}/comments`}
+          isLoggedIn={Boolean(sessionUser)}
+          dateLocale={dateLocale}
+          kind="cannapedia"
+          sessionUser={
+            sessionUser
+              ? { userId: sessionUser.userId, role: sessionUser.role }
+              : null
+          }
+        />
+      ) : null}
     </article>
   );
 }

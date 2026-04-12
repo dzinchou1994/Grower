@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { MessagesSquare } from "lucide-react";
-import { Noto_Sans_Georgian } from "next/font/google";
+import { notoSansGeorgian } from "@/lib/fonts/noto-sans-georgian";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getServerSessionUser } from "@/lib/auth-session";
@@ -17,12 +17,6 @@ import { listForumTopics } from "@/lib/forum-data";
 import { getPageMetadataWithSeo } from "@/lib/seo-settings";
 
 /** Hero badge: Mtavruli + Noto so “caps” render like EN uppercase (system fonts often look wrong). */
-const forumHeroBadgeKa = Noto_Sans_Georgian({
-  subsets: ["georgian"],
-  weight: ["600", "700"],
-  display: "swap",
-});
-
 type PageProps = {
   params: Promise<{ locale: string }>;
   searchParams: Promise<{ q?: string }>;
@@ -122,7 +116,7 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
                 </span>
                 <span
                   className={`min-w-0 flex-1 leading-snug text-lime-300/95 sm:leading-tight ${
-                    typedLocale === "ka" ? forumHeroBadgeKa.className : ""
+                    typedLocale === "ka" ? notoSansGeorgian.className : ""
                   }`}
                 >
                   {typedLocale === "ka" ? toMtavruli(dict.forum.badge) : dict.forum.badge}

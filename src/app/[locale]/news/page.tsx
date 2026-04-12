@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Noto_Sans_Georgian } from "next/font/google";
+import { notoSansGeorgian } from "@/lib/fonts/noto-sans-georgian";
 import { Newspaper } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,12 +16,6 @@ import {
 } from "@/lib/i18n";
 
 const newsFallbackImageSrc = "/news/community-workshop.svg";
-
-const newsHeroTitleKa = Noto_Sans_Georgian({
-  subsets: ["georgian"],
-  weight: ["600"],
-  display: "swap",
-});
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -111,7 +105,7 @@ export default async function NewsPage({ params, searchParams }: PageProps) {
             </span>
             <h1
               className={`text-2xl font-semibold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl ${
-                typedLocale === "ka" ? newsHeroTitleKa.className : "uppercase"
+                typedLocale === "ka" ? notoSansGeorgian.className : "uppercase"
               }`}
             >
               {copy.title}

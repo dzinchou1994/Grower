@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Noto_Sans_Georgian } from "next/font/google";
+import { notoSansGeorgian } from "@/lib/fonts/noto-sans-georgian";
 import {
   getLocalizedPath,
   getDictionary,
@@ -31,12 +31,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 const LAW_URL =
   "https://www.matsne.gov.ge/ka/document/view/6330345?publication=0";
-
-const manifestoFutureCalloutKa = Noto_Sans_Georgian({
-  subsets: ["georgian"],
-  weight: ["700"],
-  display: "swap",
-});
 
 export default async function ManifestoPage({ params }: Props) {
   const { locale } = await params;
@@ -195,7 +189,7 @@ export default async function ManifestoPage({ params }: Props) {
           <p>{m.futureSection.p2}</p>
           <p
             className={`rounded-2xl border border-lime-400/20 bg-gradient-to-r from-lime-400/10 via-emerald-950/40 to-slate-950/80 px-4 py-5 text-center text-lg font-bold text-lime-200 sm:text-xl ${
-              typedLocale === "ka" ? manifestoFutureCalloutKa.className : "uppercase"
+              typedLocale === "ka" ? notoSansGeorgian.className : "uppercase"
             }`}
           >
             {m.futureSection.p3}
