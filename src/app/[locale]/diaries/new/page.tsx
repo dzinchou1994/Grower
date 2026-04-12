@@ -127,15 +127,15 @@ export default async function NewDiaryPage({ params }: PageProps) {
                 )`,
               }}
             >
-              <div className="relative flex flex-wrap items-center gap-x-2.5 gap-y-2 sm:gap-x-3">
+              <div className="relative flex w-full min-w-0 flex-nowrap items-center gap-x-2 sm:gap-x-2.5">
                 <h1
-                  className="relative text-2xl font-semibold leading-[1.35] tracking-[0.015em] text-yellow-50 sm:text-[1.65rem] sm:leading-snug md:text-3xl"
+                  className="relative min-w-0 shrink text-xl font-semibold leading-snug tracking-[0.015em] text-yellow-50 sm:text-[1.35rem] sm:leading-snug md:text-2xl"
                   style={{ fontFamily: "var(--font-diary-notebook), ui-serif, Georgia, serif" }}
                 >
                   {dict.diaries.newDiary.title}
                 </h1>
                 <span
-                  className="inline-flex shrink-0 items-center rounded-lg border border-white/[0.16] bg-gradient-to-b from-white/[0.14] via-white/[0.06] to-white/[0.02] px-2 py-0.5 font-sans text-[10px] font-semibold uppercase tracking-[0.26em] text-yellow-50/95 shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_0_0_1px_rgba(250,204,21,0.14),0_8px_24px_-12px_rgba(0,0,0,0.55)] backdrop-blur-sm sm:px-2.5 sm:text-[11px] sm:tracking-[0.22em]"
+                  className="inline-flex shrink-0 items-center self-center rounded-md border border-white/[0.16] bg-gradient-to-b from-white/[0.14] via-white/[0.06] to-white/[0.02] px-1.5 py-0.5 font-sans text-[9px] font-semibold uppercase tracking-[0.22em] text-yellow-50/95 shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_0_0_1px_rgba(250,204,21,0.14),0_6px_18px_-10px_rgba(0,0,0,0.55)] backdrop-blur-sm sm:px-2 sm:text-[10px] sm:tracking-[0.2em]"
                   aria-label={dict.diaries.newDiary.betaBadgeAria}
                 >
                   {dict.diaries.newDiary.betaBadge}
