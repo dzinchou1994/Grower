@@ -4,6 +4,8 @@ import type { DiarySetup } from "@/lib/diary-setup";
 
 export type DiarySetupDict = {
   sectionTitle: string;
+  /** Short label for the mobile collapsible summary (matches diary overview row). */
+  collapsibleEyebrow: string;
   hint: string;
   tents: string;
   lights: string;

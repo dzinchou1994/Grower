@@ -381,6 +381,7 @@ const translations = {
       },
       setup: {
         sectionTitle: "აღჭურვილობა და გარემო",
+        collapsibleEyebrow: "აღჭურვილობა",
         hint: "მიუწერე მოდელები (ბრენდი/სახელი). ყველა ველი არასავალდებულოა.",
         tents: "გროუბოქსი / ტენტი",
         lights: "განათება",
@@ -776,6 +777,7 @@ const translations = {
       },
       setup: {
         sectionTitle: "Grow setup & gear",
+        collapsibleEyebrow: "Grow setup",
         hint: "List brands or models you use (all optional, like GrowDiaries).",
         tents: "Grow box / tent",
         lights: "Lighting",
@@ -1170,6 +1172,7 @@ const translations = {
       },
       setup: {
         sectionTitle: "Оборудование и среда",
+        collapsibleEyebrow: "Оборудование",
         hint: "Укажите бренды и модели (всё необязательно, по аналогии с GrowDiaries).",
         tents: "Гроубокс / гроутент",
         lights: "Освещение",
