@@ -53,6 +53,7 @@ export function SiteHeader({
 
   const navigation = [
     { href: "", label: dict.nav.home, icon: "home" as const },
+    { href: "/diaries", label: dict.nav.diaries, icon: "diaries" as const },
     { href: "/forum", label: dict.nav.forum, icon: "forum" as const },
     {
       href: "/cannapedia",
@@ -60,7 +61,6 @@ export function SiteHeader({
       icon: "cannapedia" as const,
     },
     { href: "/news", label: dict.nav.news, icon: "news" as const },
-    { href: "/diaries", label: dict.nav.diaries, icon: "diaries" as const },
   ];
   const ui =
     locale === "ka"
