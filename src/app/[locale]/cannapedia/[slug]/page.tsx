@@ -12,7 +12,12 @@ import {
   isValidLocale,
   type Locale,
 } from "@/lib/i18n";
+import { georgianMtavruliToMkhedruli } from "@/lib/georgian-script";
 import { fillSeoTemplate } from "@/lib/seo-template";
+
+function kaText(locale: Locale, text: string) {
+  return locale === "ka" ? georgianMtavruliToMkhedruli(text) : text;
+}
 
 type PageProps = {
   params: Promise<{ locale: string; slug: string }>;
@@ -60,9 +65,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const typedLocale = locale as Locale;
   return {
     title: fillSeoTemplate(dict.routeMeta.templates.cannapediaArticle, {
-      title: article.title[typedLocale],
+      title: kaText(typedLocale, article.title[typedLocale]),
     }),
-    description: article.excerpt[typedLocale],
+    description: kaText(typedLocale, article.excerpt[typedLocale]),
     alternates: getAlternates(`/cannapedia/${slug}`, locale),
   };
 }
@@ -92,8 +97,14 @@ export default async function CannapediaArticlePage({ params }: PageProps) {
           ← {copy.back}
         </Link>
 
-        <h1 className="mt-2 text-2xl font-semibold text-white sm:text-4xl">
-          {article.title[typedLocale]}
+        <h1
+          className={
+            typedLocale === "ka"
+              ? "mt-2 text-2xl font-medium tracking-normal text-white sm:text-4xl"
+              : "mt-2 text-2xl font-semibold text-white sm:text-4xl"
+          }
+        >
+          {kaText(typedLocale, article.title[typedLocale])}
         </h1>
         <p className="mt-2 text-sm text-slate-400 sm:text-base">
           {article.readMinutes} {copy.min}
@@ -101,7 +112,7 @@ export default async function CannapediaArticlePage({ params }: PageProps) {
 
         <div className="mt-6 space-y-4 text-sm leading-7 text-slate-200 sm:text-base">
           {article.content[typedLocale].map((paragraph, index) => (
-            <p key={`${article.slug}-${index}`}>{paragraph}</p>
+            <p key={`${article.slug}-${index}`}>{kaText(typedLocale, paragraph)}</p>
           ))}
         </div>
       </div>

@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n";
+import { georgianMtavruliToMkhedruli } from "@/lib/georgian-script";
 
 type TranslateResult = {
   text: string;
@@ -11,9 +12,14 @@ const supportedLocale = new Set<Locale>(["ka", "en", "ru"]);
 
 function inferLanguageByScript(text: string): Locale | null {
   if (/[\u10A0-\u10FF]/.test(text)) return "ka";
+  if (/[\u1C90-\u1CBF]/.test(text)) return "ka";
   if (/[\u0400-\u04FF]/.test(text)) return "ru";
   if (/[A-Za-z]/.test(text)) return "en";
   return null;
+}
+
+function finalizeKa(text: string, locale: Locale): string {
+  return locale === "ka" ? georgianMtavruliToMkhedruli(text) : text;
 }
 
 function normalize(input: string) {
@@ -26,17 +32,26 @@ export async function autoTranslateText(
 ): Promise<TranslateResult> {
   const source = normalize(text);
   if (!source || !supportedLocale.has(targetLocale)) {
-    return { text: source, translated: false };
+    return { text: finalizeKa(source, targetLocale), translated: false };
   }
 
   const inferred = inferLanguageByScript(source);
   if (inferred && inferred === targetLocale) {
-    return { text: source, translated: false, sourceLang: inferred };
+    return {
+      text: finalizeKa(source, targetLocale),
+      translated: false,
+      sourceLang: inferred,
+    };
   }
 
   const cacheKey = `${targetLocale}::${source}`;
   const cached = translateCache.get(cacheKey);
-  if (cached) return cached;
+  if (cached) {
+    return {
+      ...cached,
+      text: finalizeKa(cached.text, targetLocale),
+    };
+  }
 
   try {
     const url =
@@ -47,7 +62,7 @@ export async function autoTranslateText(
       next: { revalidate: 86_400 },
     });
     if (!response.ok) {
-      const fallback = { text: source, translated: false };
+      const fallback: TranslateResult = { text: finalizeKa(source, targetLocale), translated: false };
       translateCache.set(cacheKey, fallback);
       return fallback;
     }
@@ -60,14 +75,14 @@ export async function autoTranslateText(
     const translated = Boolean(translatedText) && translatedText !== source;
 
     const result: TranslateResult = {
-      text: translated ? translatedText : source,
+      text: finalizeKa(translated ? translatedText : source, targetLocale),
       translated,
       sourceLang: detected,
     };
     translateCache.set(cacheKey, result);
     return result;
   } catch {
-    const fallback = { text: source, translated: false };
+    const fallback: TranslateResult = { text: finalizeKa(source, targetLocale), translated: false };
     translateCache.set(cacheKey, fallback);
     return fallback;
   }

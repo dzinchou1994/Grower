@@ -4,7 +4,13 @@ import { Noto_Sans_Georgian } from "next/font/google";
 import { BookOpen, Search } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { georgianMtavruliToMkhedruli } from "@/lib/georgian-script";
 import { getLocalizedPath, type Locale } from "@/lib/i18n-routing";
+
+/** Display + search: Google/DB sometimes store Mtavruli; normalize for ka. */
+function kaText(locale: Locale, text: string) {
+  return locale === "ka" ? georgianMtavruliToMkhedruli(text) : text;
+}
 
 /** Mtavruli title line; Mkhedruli fonts often render caps wrong without Noto. */
 const cannapediaHeroTitleKa = Noto_Sans_Georgian({
@@ -88,8 +94,8 @@ function scoreArticle(input: {
   const query = normalize(input.query);
   if (!query) return 0;
 
-  const title = normalize(input.article.title[input.locale]);
-  const excerpt = normalize(input.article.excerpt[input.locale]);
+  const title = normalize(kaText(input.locale, input.article.title[input.locale]));
+  const excerpt = normalize(kaText(input.locale, input.article.excerpt[input.locale]));
   const categoryName = normalize(input.categoryName);
   const text = `${title} ${excerpt} ${categoryName}`;
 
@@ -321,7 +327,7 @@ export function CannapediaExplorer({
                       href={getLocalizedPath(locale, `/cannapedia/${article.slug}`)}
                       className="block rounded-xl px-2 py-2 text-sm text-slate-200 transition hover:bg-white/10 hover:text-white"
                     >
-                      {article.title[locale]}
+                      {kaText(locale, article.title[locale])}
                     </Link>
                   ))}
                 </div>
@@ -357,15 +363,21 @@ export function CannapediaExplorer({
             className="rounded-2xl border border-white/10 bg-slate-950/65 p-4 transition hover:border-lime-400/30 hover:bg-slate-900 sm:rounded-3xl sm:p-5"
           >
             <div className="flex items-start justify-between gap-3">
-              <h2 className="text-base font-semibold text-white sm:text-xl">
-                {article.title[locale]}
+              <h2
+                className={
+                  locale === "ka"
+                    ? "text-base font-medium tracking-normal text-white sm:text-xl"
+                    : "text-base font-semibold text-white sm:text-xl"
+                }
+              >
+                {kaText(locale, article.title[locale])}
               </h2>
               <span className="shrink-0 rounded-full border border-white/10 px-2 py-1 text-[11px] text-slate-300">
                 {article.readMinutes} {copy.min}
               </span>
             </div>
             <p className="mt-2 text-xs leading-relaxed text-slate-400 sm:text-sm sm:leading-6">
-              {article.excerpt[locale]}
+              {kaText(locale, article.excerpt[locale])}
             </p>
             <p className="mt-3 text-xs font-medium text-lime-300 sm:text-sm">{copy.read} →</p>
           </Link>

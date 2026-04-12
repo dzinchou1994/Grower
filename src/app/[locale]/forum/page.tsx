@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Noto_Sans_Georgian } from "next/font/google";
 import { MessagesSquare } from "lucide-react";
+import { Noto_Sans_Georgian } from "next/font/google";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getServerSessionUser } from "@/lib/auth-session";
@@ -12,12 +12,14 @@ import {
   isValidLocale,
   type Locale,
 } from "@/lib/i18n";
+import { toMtavruli } from "@/lib/georgian-mtavruli";
 import { listForumTopics } from "@/lib/forum-data";
 import { getPageMetadataWithSeo } from "@/lib/seo-settings";
 
+/** Hero badge: Mtavruli + Noto so “caps” render like EN uppercase (system fonts often look wrong). */
 const forumHeroBadgeKa = Noto_Sans_Georgian({
   subsets: ["georgian"],
-  weight: ["600"],
+  weight: ["600", "700"],
   display: "swap",
 });
 
@@ -101,7 +103,13 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
         <div className="relative z-[1]">
           <div className="flex flex-col gap-3 sm:gap-4">
             <div className="flex flex-nowrap items-start justify-between gap-3 sm:gap-4">
-              <div className="inline-flex min-w-0 flex-1 items-center gap-3 text-lg font-semibold tracking-wide text-lime-300 sm:gap-3.5 sm:text-2xl">
+              <div
+                className={`inline-flex min-w-0 flex-1 items-center gap-3 text-lg text-lime-300 sm:gap-3.5 sm:text-2xl ${
+                  typedLocale === "ka"
+                    ? "font-semibold tracking-wide"
+                    : "font-semibold uppercase tracking-wide"
+                }`}
+              >
                 <span
                   className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-lime-400/[0.22] via-emerald-500/[0.08] to-slate-900/80 shadow-[0_0_0_1px_rgba(132,204,22,0.35),0_10px_28px_-12px_rgba(16,185,129,0.45),inset_0_1px_0_0_rgba(255,255,255,0.12)] sm:h-10 sm:w-10 sm:rounded-[1.1rem]"
                   aria-hidden
@@ -113,11 +121,11 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
                   />
                 </span>
                 <span
-                  className={`min-w-0 flex-1 leading-snug sm:leading-tight ${
-                    typedLocale === "ka" ? forumHeroBadgeKa.className : "uppercase"
+                  className={`min-w-0 flex-1 leading-snug text-lime-300/95 sm:leading-tight ${
+                    typedLocale === "ka" ? forumHeroBadgeKa.className : ""
                   }`}
                 >
-                  {dict.forum.badge}
+                  {typedLocale === "ka" ? toMtavruli(dict.forum.badge) : dict.forum.badge}
                 </span>
               </div>
               <div className="shrink-0 pt-0.5">

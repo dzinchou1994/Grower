@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, type ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 export const OPEN_THREAD_COMPOSER_EVENT = "grower:open-thread-composer";
 
@@ -83,6 +84,27 @@ export function ForumThreadComposer({
       setIsOpen(true);
     }
   }, [startHidden]);
+
+  const heroModalOpen = Boolean(heroCompact && collapsible && isOpen);
+
+  useEffect(() => {
+    if (!heroModalOpen || typeof document === "undefined") return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [heroModalOpen]);
+
+  useEffect(() => {
+    if (!heroModalOpen) return;
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") setIsOpen(false);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [heroModalOpen]);
+
   const threadIcons = ["💬", "🔥", "🌿", "💡", "🧪", "❓", "🛒", "😮‍💨"];
   const t =
     locale === "ka"
@@ -152,6 +174,44 @@ export function ForumThreadComposer({
           };
 
   const defaultTopic = useMemo(() => topics[0]?.slug ?? "", [topics]);
+
+  const titleClass =
+    heroCompact ? "text-sm font-semibold text-white sm:text-base" : "text-base font-semibold text-white sm:text-lg";
+
+  function wrapHeroThreadPanel(panel: ReactNode) {
+    if (heroModalOpen && typeof document !== "undefined") {
+      return createPortal(
+        <div className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto overscroll-contain px-3 py-6 sm:px-4 sm:py-10">
+          <button
+            type="button"
+            className="fixed inset-0 cursor-default bg-slate-950/86 backdrop-blur-[3px]"
+            aria-label={t.close}
+            onClick={() => setIsOpen(false)}
+          />
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="forum-new-thread-heading"
+            className="relative z-10 w-full max-w-2xl rounded-2xl border border-white/12 bg-[#050d18] p-4 shadow-[0_28px_80px_-24px_rgba(0,0,0,0.95)] sm:rounded-[1.75rem] sm:p-6"
+          >
+            {panel}
+          </div>
+        </div>,
+        document.body,
+      );
+    }
+    return (
+      <section
+        className={
+          heroCompact
+            ? "w-full min-w-0 basis-full rounded-xl border border-white/10 bg-white/[0.04] p-4 sm:rounded-2xl sm:p-5"
+            : "rounded-2xl border border-white/10 bg-transparent p-5 sm:rounded-[2rem] sm:p-6"
+        }
+      >
+        {panel}
+      </section>
+    );
+  }
 
   function autoResizeTextarea(textarea: HTMLTextAreaElement) {
     textarea.style.height = "auto";
@@ -277,58 +337,33 @@ export function ForumThreadComposer({
   const showClose = collapsible || startHidden;
 
   if (!isAuthenticated) {
-    return (
-      <section
-        className={
-          heroCompact
-            ? "w-full min-w-0 basis-full rounded-xl border border-white/10 bg-white/[0.04] p-4 sm:rounded-2xl sm:p-5"
-            : "rounded-2xl border border-white/10 bg-transparent p-5 sm:rounded-[2rem] sm:p-6"
-        }
-      >
-        <h2
-          className={
-            heroCompact ? "text-sm font-semibold text-white sm:text-base" : "text-base font-semibold text-white sm:text-lg"
-          }
-        >
+    return wrapHeroThreadPanel(
+      <>
+        <h2 id="forum-new-thread-heading" className={titleClass}>
           {t.startThread}
         </h2>
-      {showClose ? (
-        <button
-          type="button"
-          onClick={() => setIsOpen(false)}
-          className={`mt-2 ${subtleButtonClass}`}
-        >
-          {t.close}
-        </button>
-      ) : null}
-        <p className="mt-2 text-sm text-slate-300">
-          {t.authRequired}
-        </p>
-        <div className="mt-4 flex gap-2">
-          <Link
-            href={loginHref}
-            className={primaryButtonClass}
+        {showClose ? (
+          <button
+            type="button"
+            onClick={() => setIsOpen(false)}
+            className={`mt-2 ${subtleButtonClass}`}
           >
+            {t.close}
+          </button>
+        ) : null}
+        <p className="mt-2 text-sm text-slate-300">{t.authRequired}</p>
+        <div className="mt-4 flex gap-2">
+          <Link href={loginHref} className={primaryButtonClass}>
             {t.login}
           </Link>
         </div>
-      </section>
+      </>,
     );
   }
 
-  return (
-    <section
-      className={
-        heroCompact
-          ? "w-full min-w-0 basis-full rounded-xl border border-white/10 bg-white/[0.04] p-4 sm:rounded-2xl sm:p-5"
-          : "rounded-2xl border border-white/10 bg-transparent p-5 sm:rounded-[2rem] sm:p-6"
-      }
-    >
-      <h2
-        className={
-          heroCompact ? "text-sm font-semibold text-white sm:text-base" : "text-base font-semibold text-white sm:text-lg"
-        }
-      >
+  return wrapHeroThreadPanel(
+    <>
+      <h2 id="forum-new-thread-heading" className={titleClass}>
         {t.startThread}
       </h2>
       {showClose ? (
@@ -455,6 +490,6 @@ export function ForumThreadComposer({
           {isSubmitting ? t.posting : t.postThread}
         </button>
       </form>
-    </section>
+    </>,
   );
 }
