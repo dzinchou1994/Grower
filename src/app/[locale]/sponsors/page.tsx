@@ -98,12 +98,6 @@ export default async function SponsorsPage({ params }: Props) {
 
       <div className="space-y-4 sm:space-y-5">
         <section className="rounded-2xl border border-white/[0.07] bg-gradient-to-b from-slate-950/85 to-slate-950/45 p-5 shadow-[0_16px_48px_-28px_rgba(0,0,0,0.75)] sm:rounded-[1.75rem] sm:p-7">
-          <h2 className="text-lg font-semibold text-white sm:text-xl">{s.whyTitle}</h2>
-          <p className="mt-3 text-sm leading-relaxed text-slate-300 sm:text-base sm:leading-7">{s.whyP1}</p>
-          <p className="mt-3 text-sm leading-relaxed text-slate-300 sm:text-base sm:leading-7">{s.whyP2}</p>
-        </section>
-
-        <section className="rounded-2xl border border-white/[0.07] bg-gradient-to-b from-slate-950/85 to-slate-950/45 p-5 shadow-[0_16px_48px_-28px_rgba(0,0,0,0.75)] sm:rounded-[1.75rem] sm:p-7">
           <h2 className="text-lg font-semibold text-white sm:text-xl">{s.offerTitle}</h2>
           <p className="mt-3 text-sm leading-relaxed text-slate-300 sm:text-base sm:leading-7">{s.offerP1}</p>
           <p className="mt-3 text-sm leading-relaxed text-slate-300 sm:text-base sm:leading-7">{s.offerP2}</p>

@@ -237,14 +237,11 @@ const translations = {
       metaDescription:
         "დაუკავშირდი Grower.ge-ს — ფორუმი, დღიურები და კანაბის კომუნიტი; პარტნიორობა ქართული გროვერების აუდიტორიასთან.",
       badge: "SPONSORSHIP",
-      headline: "ᲒᲠᲝᲕᲔᲠᲘ ᲔᲫᲔᲑᲡ ᲡᲞᲝᲜᲡᲝᲠᲡ",
-      subhead: "ᲔᲠᲗᲐᲓ ᲣᲤᲠᲝ ᲫᲚᲘᲔᲠᲔᲑᲘᲕᲐᲠᲗ",
+      headline: "ᲒᲠᲝᲕᲔᲠᲘ ᲔᲫᲔᲑᲡ ᲡᲞᲝᲜᲡᲝᲠᲔᲑᲡ",
+      subhead: "ერთად უფრო ძლიერები ვართ",
       lead:
         "ჩვენ პატარა, მაგრამ ინოვაციური ქომუნითი ვართ - ფორუმი, დღიურები და ცოდნის გაზიარება ერთ სივრცეში. ვაშენებთ თანამედროვე ტექნოლოგიებზე.",
-      whyTitle: "ᲠᲐᲢᲝᲛ ᲛᲮᲐᲠᲓᲐᲭᲔᲠᲐ?",
-      whyP1: "სერვერები, განვითარება და სიჩქარე - ეს ყველაფერი სპონსორის დახმარებით უფრო მარტივია.",
-      whyP2: "მეგა-ბრენდი არ ვართ - პატარა გუნდი ვართ.",
-      offerTitle: "ᲠᲐᲡ ᲕᲗᲐᲕᲐᲖᲝᲑᲗ",
+      offerTitle: "ᲠᲐᲡ ᲒᲗᲐᲕᲐᲖᲝᲑᲗ",
       offerP1:
         "ლოგო და ბმული ფუტერში ან ცალკე ბლოკში, ერთიანი ტონი და წინასწარ შეთანხმებული ვიზუალი. შესაძლებელია ერთობლივი ფორმატები - მაგალითად, დღიურების გათამაშებები და საზოგადოებრივი აქტივობები ფორუმში, სეზონური კამპანიები და სხვა ინიციატივები, რომლებიც ემთხვევა ჩვენს აუდიტორიასა და თქვენს მიზნებს.",
       offerP2:
@@ -252,7 +249,7 @@ const translations = {
       ctaTelegram: "Telegram",
       ctaEmail: "ელფოსტა",
       backHome: "მთავარზე დაბრუნება",
-      footerTeaserTitle: "ᲒᲠᲝᲕᲔᲠᲘ ᲔᲫᲔᲑᲡ ᲡᲞᲝᲜᲡᲝᲠᲡ",
+      footerTeaserTitle: "ᲒᲠᲝᲕᲔᲠᲘ ᲔᲫᲔᲑᲡ ᲡᲞᲝᲜᲡᲝᲠᲔᲑᲡ",
       footerTeaserHint: "წაიკითხე სრულად",
     },
     diaries: {
@@ -635,11 +632,6 @@ const translations = {
       subhead: "Together we grow stronger",
       lead:
         "We are a small but innovative community - forum, diaries, and shared know‑how in one place. We build on modern technology.",
-      whyTitle: "Why sponsor?",
-      whyP1:
-        "Sponsorship helps us cover hosting, shipping features, and keeping the platform fast, safe, and human.",
-      whyP2:
-        "We are not a corporate mega‑brand - we are a startup‑spirited project where every contribution is visible and appreciated.",
       offerTitle: "What partners get",
       offerP1:
         "Logo and link in the footer or a dedicated block, a consistent tone, and a pre-agreed visual treatment. We can co‑create formats together - for example grow diary giveaways, community activities on the forum, seasonal campaigns, and other initiatives that align with our audience and your goals.",
@@ -1030,11 +1022,6 @@ const translations = {
       subhead: "Вместе мы сильнее",
       lead:
         "Мы небольшая, но инновационная команда - форум, дневники и обмен опытом в одном месте. Строим на современных технологиях.",
-      whyTitle: "Зачем спонсорство?",
-      whyP1:
-        "Спонсорство помогает с серверами, разработкой и тем, чтобы платформа оставалась быстрой, безопасной и «человечной».",
-      whyP2:
-        "Мы не корпоративный мегабренд - проект со стартап‑духом, где каждая поддержка заметна.",
       offerTitle: "Что получает партнёр",
       offerP1:
         "Логотип и ссылка в футере или отдельном блоке, единый тон и заранее согласованная визуальная подача. Возможны совместные форматы - например, розыгрыши вокруг дневников выращивания, активности на форуме, сезонные кампании и другие инициативы, которые соответствуют аудитории и вашим целям.",
