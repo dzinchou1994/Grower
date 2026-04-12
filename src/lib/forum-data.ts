@@ -86,7 +86,6 @@ type ForumState = {
 };
 
 const hasDatabase = Boolean(process.env.DATABASE_URL);
-const topicIconBySlug = new Map(forumTopics.map((topic) => [topic.slug, topic.icon]));
 
 /** Keeps titles/descriptions in sync with seed data when global in-memory forum state is stale (e.g. long-lived dev server). */
 function applyCanonicalTopicMeta(topic: ForumTopicRecord): ForumTopicRecord {
@@ -1209,7 +1208,7 @@ async function listForumTopicsFromDatabase(query?: string, locale?: Locale, curr
       slug: topic.slug,
       title: topic.title,
       description: topic.description ?? "",
-      icon: topicIconBySlug.get(topic.slug) ?? "💬",
+      icon: "",
       threads: topic.threads.map((t) => mapThreadRecord(t, currentUserId, locale)),
     }),
   );
@@ -1281,7 +1280,7 @@ async function getForumTopicBySlugFromDatabase(slug: string, locale?: Locale, cu
     slug: topic.slug,
     title: topic.title,
     description: topic.description ?? "",
-    icon: topicIconBySlug.get(topic.slug) ?? "💬",
+    icon: "",
     threads: topic.threads.map((t) => mapThreadRecord(t, currentUserId, locale)),
   } satisfies ForumTopicRecord);
 
@@ -1617,7 +1616,7 @@ export const getForumThreadBySlug = cache(
         slug: thread.topic.slug,
         title: translatedTopicTitle.text,
         description: translatedTopicDescription.text,
-        icon: topicIconBySlug.get(thread.topic.slug) ?? "💬",
+        icon: "",
         isTranslated: translatedTopicTitle.translated,
       },
       thread: {
@@ -1693,7 +1692,7 @@ export const getForumCommentById = cache(
       topic: {
         slug: comment.thread.topic.slug,
         title: translatedTopicTitle.text,
-        icon: topicIconBySlug.get(comment.thread.topic.slug) ?? "💬",
+        icon: "",
       },
       thread: {
         slug: comment.thread.slug,

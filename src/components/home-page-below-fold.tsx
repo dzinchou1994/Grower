@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notoSansGeorgian } from "@/lib/fonts/noto-sans-georgian";
 import { Activity, Gift } from "lucide-react";
 import { enUS, ka, ru } from "date-fns/locale";
+import { ForumTopicCategoryIcon } from "@/components/forum-topic-category-icon";
 import { BookOpenIcon } from "@/components/icons";
 import { DiaryExploreCard } from "@/components/diaries/diary-explore-card";
 import { UserAvatar } from "@/components/user-avatar";
@@ -140,8 +141,11 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
                 href={getLocalizedPath(typedLocale, `/forum/${topic.slug}`)}
                 className="relative z-10 flex items-start gap-3 rounded-2xl border border-white/8 bg-white/4 p-4 transition hover:border-lime-400/30 hover:bg-white/6 sm:rounded-3xl sm:p-5"
               >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-800 text-lg sm:h-12 sm:w-12 sm:text-xl">
-                  {topic.icon}
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-800 sm:h-12 sm:w-12">
+                  <ForumTopicCategoryIcon
+                    slug={topic.slug}
+                    className="h-5 w-5 text-lime-200/85 sm:h-6 sm:w-6"
+                  />
                 </span>
                 <div className="min-w-0 flex-1">
                   <h3 className="text-sm font-semibold text-white sm:text-base">{topic.title}</h3>

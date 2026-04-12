@@ -4,6 +4,8 @@ import { notoSansGeorgian } from "@/lib/fonts/noto-sans-georgian";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getServerSessionUser } from "@/lib/auth-session";
+import { ForumTopicCategoryIcon } from "@/components/forum-topic-category-icon";
+import { ForumThreadIconDisplay } from "@/components/forum-thread-icon-display";
 import { ForumSearchInput } from "@/components/forum-search-input";
 import { ForumThreadComposer } from "@/components/forum-thread-composer";
 import {
@@ -175,8 +177,11 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
             </Link>
 
             <div className="relative z-[2] flex items-start gap-3 pointer-events-none sm:gap-4">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-lime-400/10 text-sm leading-none sm:h-9 sm:w-9 sm:rounded-xl sm:text-base">
-                {topic.icon}
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-lime-400/10 sm:h-9 sm:w-9 sm:rounded-xl">
+                <ForumTopicCategoryIcon
+                  slug={topic.slug}
+                  className="h-[18px] w-[18px] text-lime-200/90 sm:h-5 sm:w-5"
+                />
               </span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-start justify-between gap-3">
@@ -212,7 +217,10 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
                 >
                   <span className="flex min-w-0 items-center gap-2">
                     <span className="inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full border border-white/15 bg-gradient-to-br from-slate-800 to-slate-950 text-[10px] leading-none">
-                      {thread.threadIcon ?? "💬"}
+                      <ForumThreadIconDisplay
+                        icon={thread.threadIcon}
+                        svgClassName="h-2.5 w-2.5 shrink-0 text-lime-200/90"
+                      />
                     </span>
                     <span className="line-clamp-1 font-medium text-white">{thread.title}</span>
                     {thread.isTranslated ? (

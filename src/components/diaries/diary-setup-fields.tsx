@@ -24,7 +24,7 @@ export type DiarySetupDict = {
 };
 
 const setupInputClass =
-  "w-full rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-white placeholder:text-slate-500 transition focus:border-yellow-400/40 focus:outline-none focus:ring-2 focus:ring-yellow-400/15";
+  "w-full rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-xs text-white placeholder:text-slate-500 transition focus:border-yellow-400/40 focus:outline-none focus:ring-2 focus:ring-yellow-400/15";
 
 const addButtonClass =
   "flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-white/[0.12] bg-white/[0.02] py-2.5 text-xs font-medium text-yellow-300/95 transition hover:border-yellow-400/30 hover:bg-yellow-400/[0.06] hover:text-yellow-200";

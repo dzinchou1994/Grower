@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { FormEvent, type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
+import { ForumThreadIconDisplay } from "@/components/forum-thread-icon-display";
+
 export const OPEN_THREAD_COMPOSER_EVENT = "grower:open-thread-composer";
 
 /** Primary CTA in topic hero - opens hidden {@link ForumThreadComposer} and scrolls to #new-thread */
@@ -440,7 +442,11 @@ export function ForumThreadComposer({
                     className="peer sr-only"
                   />
                   <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-slate-800 text-base transition peer-checked:border-lime-400/50 peer-checked:bg-lime-400/20 peer-checked:text-lime-200 hover:border-lime-300/30">
-                    {icon}
+                    <ForumThreadIconDisplay
+                      icon={icon}
+                      svgClassName="h-4 w-4 text-lime-200/90"
+                      emojiClassName="text-base leading-none"
+                    />
                   </span>
                 </label>
               ))}

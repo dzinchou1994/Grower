@@ -38,7 +38,7 @@ export type ForumTopic = {
   slug: string;
   title: string;
   description: string;
-  icon: string;
+  icon?: string;
   threads: ForumThread[];
 };
 
@@ -107,7 +107,6 @@ export const forumTopics: ForumTopic[] = [
     slug: "beginner-questions",
     title: "დამწყებთათვის",
     description: "პირველად იწყებ? აქ დასვი ნებისმიერი კითხვა მოყვანის, აღჭურვილობის ან ჯიშების შესახებ.",
-    icon: "🌱",
     threads: [
       {
         slug: "first-grow-what-to-buy",
@@ -148,7 +147,6 @@ export const forumTopics: ForumTopic[] = [
     slug: "grow-help",
     title: "მოყვანაში დახმარება",
     description: "პრობლემა გაქვს? კითხვა განათებაზე, საკვებზე, ვარჯიშზე ან მცენარის ჯანმრთელობაზე? დასვი აქ.",
-    icon: "💡",
     threads: [
       {
         slug: "yellow-leaves-week-3",
@@ -180,7 +178,6 @@ export const forumTopics: ForumTopic[] = [
     slug: "strains-genetics",
     title: "ჯიშები და გენეტიკა",
     description: "ისაუბრე თესლზე, გენეტიკაზე, საუკეთესო ჯიშებზე და სადაც შეიძლება შეიძინო.",
-    icon: "🧬",
     threads: [
       {
         slug: "best-strains-georgia-climate",
@@ -205,7 +202,6 @@ export const forumTopics: ForumTopic[] = [
     slug: "equipment-setup",
     title: "აღჭურვილობა",
     description: "განათება, ვენტილაცია, კარვები, ქოთნები და სხვა აღჭურვილობის განხილვა.",
-    icon: "🔧",
     threads: [
       {
         slug: "best-led-budget",
@@ -237,7 +233,6 @@ export const forumTopics: ForumTopic[] = [
     slug: "outdoor-growing",
     title: "გარე მოყვანა",
     description: "ბალკონი, ბაღი, სეზონი - გარე მოყვანის ყველა ასპექტი.",
-    icon: "🌞",
     threads: [
       {
         slug: "balcony-grow-tbilisi",
@@ -261,7 +256,6 @@ export const forumTopics: ForumTopic[] = [
     slug: "legal-discussion",
     title: "კანონმდებლობა",
     description: "დისკუსია კანონმდებლობის, ლეგალიზაციის და იურიდიული საკითხების შესახებ.",
-    icon: "⚖️",
     threads: [
       {
         slug: "current-laws-georgia",
@@ -302,7 +296,6 @@ export const forumTopics: ForumTopic[] = [
     slug: "buy-sell",
     title: "ყიდვა / გაყიდვა",
     description: "ადგილობრივი buy & sell პოსტები: აქსესუარები, აღჭურვილობა, თესლები და სხვა განცხადებები.",
-    icon: "🛒",
     threads: [
       {
         slug: "led-light-market-tbilisi",
@@ -324,9 +317,8 @@ export const forumTopics: ForumTopic[] = [
   },
   {
     slug: "free-talk",
-    title: "დაბოლილები 420",
+    title: "თავისუფალი",
     description: "თავისუფალი ჩატი, ისტორიები, ხუმრობები და ყოველდღიური 420 საუბრები საზოგადოების წევრებს შორის.",
-    icon: "😶‍🌫️",
     threads: [
       {
         slug: "stoned-night-stories",

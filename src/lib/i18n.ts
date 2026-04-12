@@ -290,7 +290,7 @@ const translations = {
         "ხშირად დროებითი ქსელი ან ბაზაა - არა ყოველთვის `DATABASE_URL`. ზუსტი მიზეზი: Vercel → Deployment → Runtime Logs. Production-ში `DATABASE_URL` (Neon) უნდა იყოს ჩართული.",
       newDiary: {
         badge: "დღიურის შექმნა",
-        title: "დაიწყე ახალი მცენარის ჟურნალის წარმოება",
+        title: "ᲨᲔᲥᲛᲔᲜᲘ ᲐᲮᲐᲚᲘ ᲛᲪᲔᲜᲐᲠᲘᲡ ᲓᲦᲘᲣᲠᲘ",
         description: "ახალი მცენარის დღიურის შექმნა - სათაური, ჯიში, გარემო და ფოტოები.",
         helpHintBefore: "კითხვების შემთხვევაში",
         helpHintLink: "მოგვწერეთ",
@@ -322,7 +322,7 @@ const translations = {
         diaryTitle: "ჩემი პირველი მოყვანა",
         strain: "მაგ: Auto Northern Lights",
         environment: "სახლში / გარეთ / სათბური",
-        diaryDescription: "მოკლე აღწერა: გარემო, მედიუმი, განათება და მიზნები.",
+        diaryDescription: "მოკლედ: გარემო, მედიუმი, მიზნები…",
         weekNumber: "შემდეგი ნომერი ავტომატურად შეთავაზდება",
         weekTitle: "არასავალდებულო მოკლე სათაური",
         weekDescription:
@@ -364,7 +364,7 @@ const translations = {
         suggestedNextWeek: "შემდეგი კვირის შეთავაზება",
         latestWeekBadge: "ბოლო განახლება",
         earlierWeeks: "ადრეული კვირები",
-        submitCreate: "დღიურის შექმნა",
+        submitCreate: "ᲓᲦᲘᲣᲠᲘᲡ ᲨᲔᲥᲛᲜᲐ",
         submitWeek: "კვირის შენახვა",
         posting: "იგზავნება...",
         weekHeading: "კვირა {n}",
@@ -713,7 +713,7 @@ const translations = {
         diaryTitle: "Gorilla Glue Grow",
         strain: "Gorilla Glue #4",
         environment: "Indoor / Outdoor",
-        diaryDescription: "Short context for setup, medium, light, and goals.",
+        diaryDescription: "Setup, medium, goals…",
         weekNumber: "Auto-suggest next number",
         weekTitle: "Optional short title",
         weekDescription:
@@ -1103,7 +1103,7 @@ const translations = {
         diaryTitle: "Gorilla Glue Grow",
         strain: "Gorilla Glue #4",
         environment: "Indoor / Outdoor",
-        diaryDescription: "Кратко о setup, medium, light и goals.",
+        diaryDescription: "Кратко: среда, субстрат, цели…",
         weekNumber: "Автоматически предложить следующий номер",
         weekTitle: "Необязательный короткий заголовок",
         weekDescription:

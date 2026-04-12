@@ -8,6 +8,7 @@ import {
   DiarySubstrateMedium,
   DiaryWateringType,
 } from "@prisma/client";
+import { ImagePlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { diaryExploreMediumKeys } from "@/lib/diary-explore-params";
@@ -18,13 +19,19 @@ import {
   toDiarySetupPayload,
   type DiarySetup,
 } from "@/lib/diary-setup";
+import {
+  clearNewDiaryDraft,
+  loadNewDiaryDraft,
+  saveNewDiaryDraft,
+  type NewDiaryDraftState,
+} from "@/lib/new-diary-draft-storage";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
 
 const inputClassName =
-  "w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-500 shadow-sm shadow-black/20 transition focus:border-yellow-400/40 focus:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-yellow-400/15";
+  "w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-xs text-white placeholder:text-slate-500 shadow-sm shadow-black/20 transition focus:border-yellow-400/40 focus:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-yellow-400/15";
 
 const selectClassName =
-  "w-full cursor-pointer rounded-xl border border-white/[0.08] bg-[#0a121a] px-4 py-3 text-sm text-white shadow-sm shadow-black/20 transition focus:border-yellow-400/40 focus:outline-none focus:ring-2 focus:ring-yellow-400/15";
+  "w-full cursor-pointer rounded-xl border border-white/[0.08] bg-[#0a121a] px-4 py-3 text-xs text-white shadow-sm shadow-black/20 transition focus:border-yellow-400/40 focus:outline-none focus:ring-2 focus:ring-yellow-400/15";
 
 const labelClassName = "mb-2 block text-xs font-medium text-slate-400";
 
@@ -96,6 +103,59 @@ export function NewDiaryForm({
   const coverFileInputId = useId();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const [draftPersistEnabled, setDraftPersistEnabled] = useState(false);
+
+  useEffect(() => {
+    const d = loadNewDiaryDraft(locale);
+    if (d) {
+      setTitle(d.title);
+      setStrains(d.strains);
+      setSetup(d.setup);
+      setEnvironment(d.environment);
+      setGrowPhase(d.growPhase);
+      setFlowerType(d.flowerType);
+      setGerminationMethod(d.germinationMethod);
+      setWatering(d.watering);
+      setMedium(d.medium);
+      setDescription(d.description);
+    }
+    setDraftPersistEnabled(true);
+  }, [locale]);
+
+  useEffect(() => {
+    if (!draftPersistEnabled) {
+      return;
+    }
+    const payload: NewDiaryDraftState = {
+      title,
+      strains,
+      setup,
+      environment,
+      growPhase,
+      flowerType,
+      germinationMethod,
+      watering,
+      medium,
+      description,
+    };
+    const id = window.setTimeout(() => {
+      saveNewDiaryDraft(locale, payload);
+    }, 450);
+    return () => window.clearTimeout(id);
+  }, [
+    draftPersistEnabled,
+    locale,
+    title,
+    strains,
+    setup,
+    environment,
+    growPhase,
+    flowerType,
+    germinationMethod,
+    watering,
+    medium,
+    description,
+  ]);
 
   function removeCoverAt(index: number) {
     setCoverFiles((prev) => {
@@ -179,6 +239,7 @@ export function NewDiaryForm({
         return;
       }
       if (data.slug) {
+        clearNewDiaryDraft(locale);
         router.push(getLocalizedPath(locale, `/diaries/${data.slug}`));
         router.refresh();
         return;
@@ -195,7 +256,7 @@ export function NewDiaryForm({
   return (
     <form onSubmit={onSubmit} className="grid gap-6 sm:grid-cols-2 sm:gap-7">
       {error ? (
-        <div className="sm:col-span-2 rounded-xl border border-rose-500/30 bg-rose-500/[0.08] px-4 py-3 text-sm text-rose-100">
+        <div className="sm:col-span-2 rounded-xl border border-rose-500/30 bg-rose-500/[0.08] px-4 py-3 text-xs text-rose-100">
           {error}
         </div>
       ) : null}
@@ -250,9 +311,10 @@ export function NewDiaryForm({
           <button
             type="button"
             onClick={() => setStrains([...strains, { name: "", breeder: "" }])}
-            className="text-sm font-medium text-yellow-300/90 transition hover:text-yellow-200"
+            className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-xl border border-yellow-400/25 bg-yellow-400/5 text-lg font-semibold leading-none text-yellow-300/95 transition hover:border-yellow-400/40 hover:bg-yellow-400/10 hover:text-yellow-200"
+            aria-label={exploreDict.addStrain}
           >
-            + {exploreDict.addStrain}
+            +
           </button>
         ) : null}
       </div>
@@ -350,42 +412,73 @@ export function NewDiaryForm({
       <DiarySetupFields value={setup} onChange={setSetup} setupDict={setupDict} />
 
       <div className="sm:col-span-2">
-        <span className={labelClassName}>{fieldDict.coverImage}</span>
-        <p className="mb-2 text-xs text-slate-500">{exploreDict.coverLastPhotoHint}</p>
-        <p className="mb-2 text-xs text-slate-500">{exploreDict.uploadHint}</p>
-        <div className="flex min-w-0 flex-wrap items-center gap-2 text-[length:calc(0.875rem/1.5)] leading-snug sm:gap-3">
-          <input
-            id={coverFileInputId}
-            ref={coverFileInputRef}
-            type="file"
-            accept="image/jpeg,image/png,image/webp,image/gif"
-            multiple
-            onChange={(e) => setCoverFiles(Array.from(e.target.files ?? []))}
-            className="sr-only"
-          />
-          <label
-            htmlFor={coverFileInputId}
-            className="inline-flex shrink-0 cursor-pointer items-center rounded-full border-0 bg-yellow-400 px-3 py-1.5 font-semibold text-slate-950 shadow-md shadow-yellow-500/20 transition hover:bg-yellow-300 sm:px-4 sm:py-2"
-          >
-            {exploreDict.chooseFiles}
-          </label>
-          <span
-            className="min-w-0 flex-1 truncate text-slate-400"
-            title={
-              coverFiles.length > 0 ? coverFiles.map((f) => f.name).join(", ") : undefined
-            }
-          >
-            {coverFiles.length === 0
-              ? exploreDict.noFileChosen
-              : coverFiles.map((f) => f.name).join(", ")}
-          </span>
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
+          <span className={labelClassName}>{fieldDict.coverImage}</span>
+          {coverFiles.length > 0 ? (
+            <span className="rounded-full border border-lime-400/25 bg-lime-400/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-lime-200/90">
+              {coverFiles.length}
+            </span>
+          ) : null}
         </div>
+
+        <div className="mb-4 rounded-xl border border-white/[0.07] bg-white/[0.02] px-3.5 py-3 sm:px-4">
+          <p className="text-[11px] leading-relaxed text-slate-400 sm:text-xs">{exploreDict.coverLastPhotoHint}</p>
+          <p className="mt-2 text-[11px] leading-relaxed text-slate-500 sm:text-xs">{exploreDict.uploadHint}</p>
+        </div>
+
+        <input
+          id={coverFileInputId}
+          ref={coverFileInputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          multiple
+          onChange={(e) => setCoverFiles(Array.from(e.target.files ?? []))}
+          className="sr-only"
+        />
+
+        <label
+          htmlFor={coverFileInputId}
+          className={`group relative flex min-h-[9.5rem] w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-4 py-8 transition sm:min-h-[11rem] sm:gap-4 sm:py-10 ${
+            coverFiles.length > 0
+              ? "border-lime-400/35 bg-gradient-to-b from-lime-400/[0.07] to-transparent"
+              : "border-white/18 bg-gradient-to-b from-white/[0.03] to-transparent hover:border-lime-400/40 hover:from-lime-400/[0.05]"
+          } focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-lime-400/35`}
+        >
+          <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-lime-400/20 via-white/[0.06] to-emerald-950/30 ring-1 ring-white/15 transition group-hover:ring-lime-400/30 sm:h-16 sm:w-16">
+            <ImagePlus className="h-7 w-7 text-lime-100/90 sm:h-8 sm:w-8" strokeWidth={1.75} aria-hidden />
+          </span>
+          <div className="max-w-md text-center">
+            <span className="block text-xs font-semibold text-white sm:text-sm">{exploreDict.chooseFiles}</span>
+            <p
+              className="mt-1.5 line-clamp-2 text-xs text-slate-500 sm:line-clamp-3"
+              title={coverFiles.length > 0 ? coverFiles.map((f) => f.name).join(", ") : undefined}
+            >
+              {coverFiles.length === 0
+                ? exploreDict.noFileChosen
+                : coverFiles.map((f) => f.name).join(", ")}
+            </p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-1.5">
+            {(["JPEG", "PNG", "WebP", "GIF"] as const).map((fmt) => (
+              <span
+                key={fmt}
+                className="rounded-lg border border-white/[0.08] bg-black/30 px-2 py-0.5 text-[10px] font-medium tracking-wide text-slate-400"
+              >
+                {fmt}
+              </span>
+            ))}
+          </div>
+        </label>
+
         {coverPreviewUrls.length > 0 ? (
-          <ul className="mt-4 flex flex-wrap gap-3" aria-label="Cover preview">
+          <ul
+            className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3"
+            aria-label="Cover preview"
+          >
             {coverPreviewUrls.map((url, i) => (
               <li
                 key={`${coverFiles[i]?.name ?? "f"}-${coverFiles[i]?.size ?? 0}-${i}`}
-                className="group relative h-24 w-24 overflow-hidden rounded-xl border border-white/[0.1] bg-black/50 shadow-lg shadow-black/30 sm:h-28 sm:w-28"
+                className="group relative aspect-square overflow-hidden rounded-2xl border border-white/[0.1] bg-black/40 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.65)] ring-1 ring-white/[0.06]"
               >
                 <img
                   src={url}
@@ -395,7 +488,7 @@ export function NewDiaryForm({
                 <button
                   type="button"
                   onClick={() => removeCoverAt(i)}
-                  className="absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-full border border-white/15 bg-black/70 text-white shadow-md backdrop-blur-sm transition hover:border-rose-400/40 hover:bg-rose-500/90 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400/50"
+                  className="absolute right-1.5 top-1.5 flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white shadow-lg backdrop-blur-md transition hover:border-rose-400/50 hover:bg-rose-600/95 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-400/50"
                   aria-label={exploreDict.removeStrain}
                 >
                   <svg

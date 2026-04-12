@@ -51,10 +51,10 @@ export default async function NewDiaryPage({ params }: PageProps) {
     <div className="relative mx-auto w-full max-w-3xl">
       <Link
         href={getLocalizedPath(typedLocale, "/diaries")}
-        className="group mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-sm text-slate-400 transition hover:border-yellow-400/25 hover:bg-white/[0.05] hover:text-yellow-200"
+        className="group mb-6 inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-2.5 py-1.5 text-xs text-slate-400 transition hover:border-yellow-400/25 hover:bg-white/[0.05] hover:text-yellow-200"
       >
         <svg
-          className="h-4 w-4 transition group-hover:-translate-x-0.5"
+          className="h-3 w-3 shrink-0 transition group-hover:-translate-x-0.5 sm:h-3.5 sm:w-3.5"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -69,7 +69,7 @@ export default async function NewDiaryPage({ params }: PageProps) {
       <article className="relative overflow-hidden rounded-[1.75rem] border border-white/[0.07] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] sm:rounded-[2rem]">
         <div className="pointer-events-none absolute inset-0 bg-[#050a0f]" aria-hidden />
         <div
-          className="pointer-events-none absolute -right-24 top-0 h-72 w-72 rounded-full bg-yellow-500/[0.11] blur-[100px]"
+          className="pointer-events-none absolute -right-24 top-0 h-72 w-72 rounded-full bg-yellow-500/[0.1] blur-[100px]"
           aria-hidden
         />
         <div
@@ -77,18 +77,57 @@ export default async function NewDiaryPage({ params }: PageProps) {
           aria-hidden
         />
         <div
+          className="pointer-events-none absolute bottom-1/4 right-0 h-64 w-64 rounded-full bg-violet-600/[0.06] blur-[85px]"
+          aria-hidden
+        />
+        <div
           className="pointer-events-none absolute inset-0 opacity-[0.25] [background-image:radial-gradient(rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:12px_12px]"
           aria-hidden
         />
+        {/* Soft organic curves — smoke / canopy suggestion */}
+        <svg
+          className="pointer-events-none absolute -bottom-8 left-1/2 h-48 w-[120%] -translate-x-1/2 opacity-[0.07] sm:h-56"
+          viewBox="0 0 800 120"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden
+        >
+          <path
+            d="M0 100C120 40 200 20 400 60C600 100 680 80 800 40V120H0V100Z"
+            fill="url(#growSmoke)"
+          />
+          <defs>
+            <linearGradient id="growSmoke" x1="0" y1="0" x2="800" y2="0" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#facc15" stopOpacity="0.35" />
+              <stop offset="0.5" stopColor="#a855f7" stopOpacity="0.28" />
+              <stop offset="1" stopColor="#f59e0b" stopOpacity="0.32" />
+            </linearGradient>
+          </defs>
+        </svg>
         <DiaryNotebookTopAccent />
 
         <div className="relative z-[1] px-5 py-8 sm:px-8 sm:py-10">
-          <header className="mb-8 border-b border-white/[0.06] pb-8 sm:mb-10 sm:pb-10">
-            <p className="inline-flex items-center rounded-sm border border-dashed border-amber-400/35 bg-amber-500/[0.06] px-2.5 py-1 font-sans text-[11px] font-medium tracking-wide text-amber-100/90">
+          <header className="mb-8 border-b border-yellow-400/30 pb-8 sm:mb-10 sm:pb-10">
+            <p className="inline-flex items-center gap-1.5 rounded-sm border border-dashed border-yellow-400 bg-yellow-400/20 px-2.5 py-1 font-sans text-[11px] font-medium tracking-wide text-yellow-50 shadow-[0_0_28px_-10px_rgba(250,204,21,0.55)]">
+              <svg
+                className="h-3.5 w-3.5 shrink-0 text-yellow-400"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.6}
+                aria-hidden
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M7 20h10" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 20v-6m0 0c-2-4-3-8 0-12 3 4 2 8 0 12"
+                />
+              </svg>
               {dict.diaries.newDiary.badge}
             </p>
             <div
-              className="relative mt-5 overflow-hidden rounded-r-lg border-l-[3px] border-rose-300/35 pl-4 sm:mt-6 sm:pl-5"
+              className="relative mt-5 overflow-hidden rounded-r-lg border-l-[3px] border-yellow-400 pl-4 sm:mt-6 sm:pl-5"
               style={{
                 backgroundImage: `repeating-linear-gradient(
                   to bottom,
@@ -99,24 +138,20 @@ export default async function NewDiaryPage({ params }: PageProps) {
                 )`,
               }}
             >
-              <div
-                className="pointer-events-none absolute inset-0 bg-gradient-to-r from-amber-500/[0.05] to-transparent"
-                aria-hidden
-              />
               <h1
-                className="relative text-2xl font-semibold leading-[1.35] tracking-[0.015em] text-amber-50/95 sm:text-[1.65rem] sm:leading-snug md:text-3xl"
+                className="relative text-2xl font-semibold leading-[1.35] tracking-[0.015em] text-yellow-50 sm:text-[1.65rem] sm:leading-snug md:text-3xl"
                 style={{ fontFamily: "var(--font-diary-notebook), ui-serif, Georgia, serif" }}
               >
                 {dict.diaries.newDiary.title}
               </h1>
               <p
-                className="relative mt-3 max-w-xl text-[12px] leading-relaxed text-amber-200/55 sm:text-[13px]"
+                className="relative mt-3 max-w-xl text-[12px] leading-relaxed text-yellow-300 sm:text-[13px]"
                 style={{ fontFamily: "var(--font-diary-notebook), ui-serif, Georgia, serif" }}
               >
                 {dict.diaries.newDiary.helpHintBefore}{" "}
                 <Link
                   href={getLocalizedPath(typedLocale, "/contact")}
-                  className="text-amber-200/80 underline decoration-amber-400/25 underline-offset-[3px] transition hover:text-amber-100 hover:decoration-amber-300/45"
+                  className="font-medium text-yellow-200 underline decoration-yellow-400/90 underline-offset-[3px] transition hover:text-yellow-50 hover:decoration-yellow-300"
                 >
                   {dict.diaries.newDiary.helpHintLink}
                 </Link>

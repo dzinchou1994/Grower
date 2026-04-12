@@ -3,6 +3,7 @@ import { notoSansGeorgian } from "@/lib/fonts/noto-sans-georgian";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getServerSessionUser } from "@/lib/auth-session";
+import { ForumTopicCategoryIcon } from "@/components/forum-topic-category-icon";
 import { ForumCommentForm } from "@/components/forum-comment-form";
 import { ForumThreadComposer, ForumTopicComposeTrigger } from "@/components/forum-thread-composer";
 import {
@@ -118,8 +119,12 @@ export default async function ForumTopicPage({ params }: PageProps) {
 
       <section className="relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.03] p-5 backdrop-blur-sm sm:rounded-[2rem] sm:p-8">
         <div className="relative flex items-center gap-3">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-lime-400/10 text-xl sm:h-14 sm:w-14 sm:rounded-2xl sm:text-2xl">
-            {topic.icon}
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-lime-400/10 sm:h-14 sm:w-14 sm:rounded-2xl">
+            <ForumTopicCategoryIcon
+              slug={topic.slug}
+              className="h-7 w-7 text-lime-200/90 sm:h-9 sm:w-9"
+              strokeWidth={1.5}
+            />
           </span>
           <div>
             <h1 className="text-xl font-semibold text-white sm:text-3xl lg:text-4xl">
