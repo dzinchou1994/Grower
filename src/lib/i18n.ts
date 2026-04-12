@@ -199,8 +199,8 @@ const translations = {
     manifesto: {
       metaTitle: "მანიფესტო · კანაფის კანონი საქართველოში | GEOCANNABIS",
       metaDescription:
-        "სისხლის სამართლის ცვლილებები, პოზიცია და ანონიმურობა — რატომ არსებობს Grower.ge (GEOCANNABIS) ქართული გროვერებისთვის.",
-      title: "მანიფესტო",
+        "სისხლის სამართლის ცვლილებები, ანონიმურობა და რატომ არსებობს Grower.ge ანუ ქართული GrowDiaries",
+      title: "GEOCANNABIS",
       subtitle:
         "ᲠᲐᲢᲝᲛ ᲐᲠᲡᲔᲑᲝᲑᲡ GROWER.GE ᲓᲐ ᲠᲘᲡᲗᲕᲘᲡ ᲕᲘᲑᲠᲫᲕᲘᲗ",
       lawSection: {
