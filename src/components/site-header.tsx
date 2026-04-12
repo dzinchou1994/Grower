@@ -290,23 +290,28 @@ export function SiteHeader({
         </div>
 
         {/* Mobile menu button */}
-        <div className="relative z-20 flex items-center gap-2 lg:hidden">
+        <div className="relative z-20 flex items-center gap-2.5 lg:hidden">
           {initialUser ? (
             <Link
               href={getLocalizedPath(locale, "/account")}
-              className={`relative z-20 inline-flex items-center rounded-full border border-white/10 bg-white/5 text-slate-100 transition-all duration-300 hover:-translate-y-0.5 hover:border-lime-400/30 hover:bg-white/10 hover:text-white hover:shadow-sm hover:shadow-lime-500/20 ${scrolled ? "p-0.5" : "gap-1 px-2 py-1 text-[11px]"}`}
+              title={`@${initialUser.username}`}
+              className={`relative z-20 inline-flex min-w-0 max-w-[min(52vw,14rem)] items-center rounded-full border border-lime-400/50 bg-slate-900/95 py-1 pl-1 pr-2.5 shadow-[0_4px_16px_-4px_rgba(0,0,0,0.55),inset_0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-sm transition-all duration-200 hover:border-lime-300/65 hover:bg-slate-900 active:scale-[0.98] ${scrolled ? "p-0.5" : "gap-2"}`}
             >
               <UserAvatar
                 username={initialUser.username}
                 image={initialUser.image}
                 size="sm"
               />
-              {!scrolled && <span>@{initialUser.username}</span>}
+              {!scrolled && (
+                <span className="min-w-0 flex-1 truncate text-[12px] font-semibold leading-normal tracking-tight text-white">
+                  @{initialUser.username}
+                </span>
+              )}
             </Link>
           ) : (
             <Link
               href={getLocalizedPath(locale, "/auth/login")}
-              className={`rounded-full border border-white/10 text-slate-200 transition-all duration-300 ${scrolled ? "px-2 py-0.5 text-[9px]" : "px-2.5 py-1 text-[11px]"}`}
+              className={`rounded-full border-2 border-lime-400/40 bg-slate-950/85 px-3.5 py-2 text-[11px] font-semibold text-lime-100 shadow-[0_4px_18px_-6px_rgba(0,0,0,0.55)] backdrop-blur-sm transition-all duration-200 hover:border-lime-300/60 hover:bg-lime-400/10 hover:text-white active:scale-[0.98] ${scrolled ? "px-2.5 py-1.5 text-[10px]" : ""}`}
             >
               {ui.login}
             </Link>
@@ -315,13 +320,13 @@ export function SiteHeader({
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`flex items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition-all duration-300 hover:bg-white/10 ${scrolled ? "h-7 w-7" : "h-9 w-9"}`}
+            className={`flex shrink-0 items-center justify-center rounded-full shadow-lg transition-all duration-200 active:scale-[0.94] ${mobileMenuOpen ? "border-2 border-lime-400/50 bg-slate-900 text-lime-300 shadow-[0_0_0_1px_rgba(132,204,22,0.2)] ring-2 ring-lime-400/25" : "border border-lime-300/30 bg-lime-400 text-slate-950 shadow-lime-500/35 hover:bg-lime-300"} ${scrolled ? "h-9 w-9" : "h-10 w-10"}`}
             aria-label="Toggle menu"
             aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? (
               <svg
-                className={`transition-all duration-300 ${scrolled ? "h-4 w-4" : "h-5 w-5"}`}
+                className={`${scrolled ? "h-4 w-4" : "h-[18px] w-[18px]"}`}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -329,13 +334,13 @@ export function SiteHeader({
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
+                  strokeWidth={2.25}
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
             ) : (
               <svg
-                className={`transition-all duration-300 ${scrolled ? "h-4 w-4" : "h-5 w-5"}`}
+                className={`${scrolled ? "h-4 w-4" : "h-[18px] w-[18px]"}`}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -343,8 +348,8 @@ export function SiteHeader({
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
+                  strokeWidth={2.25}
+                  d="M4 7h16M4 12h16M4 17h16"
                 />
               </svg>
             )}

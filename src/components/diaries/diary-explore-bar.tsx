@@ -161,7 +161,7 @@ function ChipLink({
       href={href}
       className={`shrink-0 rounded-lg border px-2 py-1 text-[10px] font-medium leading-tight transition sm:rounded-full sm:px-3 sm:py-1.5 sm:text-xs ${
         active
-          ? "border-yellow-400/40 bg-yellow-400/10 text-yellow-50"
+          ? "border-yellow-400/35 bg-yellow-500/[0.14] text-yellow-100 shadow-[inset_0_1px_0_0_rgba(250,204,21,0.07)] [&_span.tabular-nums]:text-yellow-200/75"
           : "border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/18 hover:bg-white/[0.07] hover:text-slate-200"
       } ${className}`}
     >
@@ -321,10 +321,10 @@ export function DiarySortBar({
               <Link
                 key={opt.key}
                 href={href}
-                className={`relative whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-medium transition-[color,background-color,box-shadow] sm:px-4 sm:py-2 sm:text-xs ${
+                className={`relative whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-semibold transition-[color,background-color,box-shadow,ring-color] sm:px-4 sm:py-2 sm:text-xs ${
                   active
-                    ? "bg-yellow-400/[0.12] text-yellow-200 shadow-[inset_0_1px_0_0_rgba(250,204,21,0.08)]"
-                    : "text-slate-500 hover:text-slate-300"
+                    ? "bg-yellow-500/[0.16] text-yellow-100 ring-1 ring-yellow-400/20 hover:bg-yellow-500/[0.22]"
+                    : "font-medium text-slate-500 hover:text-slate-300"
                 }`}
               >
                 {opt.label}
@@ -448,24 +448,24 @@ export function DiaryExploreBar(props: Props) {
 
       {/* Advanced filters — collapsible on all breakpoints (avoids overwhelming desktop) */}
       <details className="mt-3 border-t border-white/[0.06] pt-3 open:[&_summary_.chevron-btn]:rotate-180">
-        <summary className="flex cursor-pointer list-none items-center gap-3 rounded-2xl border border-white/[0.09] bg-gradient-to-br from-slate-900/90 via-slate-950/95 to-slate-950 px-3 py-3 text-left shadow-[0_8px_32px_-12px_rgba(0,0,0,0.65)] ring-1 ring-inset ring-white/[0.04] transition hover:border-yellow-400/15 hover:ring-yellow-400/10 [&::-webkit-details-marker]:hidden">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-yellow-400/20 via-amber-500/10 to-slate-900/80 shadow-[inset_0_1px_0_0_rgba(250,204,21,0.12)] ring-1 ring-yellow-400/25">
-            <SlidersHorizontal className="h-5 w-5 text-yellow-200" strokeWidth={2} aria-hidden />
+        <summary className="flex cursor-pointer list-none items-center gap-2 rounded-xl border border-white/[0.09] bg-gradient-to-br from-slate-900/90 via-slate-950/95 to-slate-950 px-2.5 py-2 text-left shadow-[0_6px_24px_-14px_rgba(0,0,0,0.55)] ring-1 ring-inset ring-white/[0.04] transition hover:border-yellow-400/25 hover:ring-yellow-400/15 [&::-webkit-details-marker]:hidden sm:gap-2.5 sm:px-3">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-yellow-400/25 bg-yellow-500/[0.14] text-yellow-200 shadow-[inset_0_1px_0_0_rgba(250,204,21,0.08)] sm:h-9 sm:w-9 sm:rounded-[10px]">
+            <SlidersHorizontal className="h-4 w-4 text-yellow-200/95" strokeWidth={2} aria-hidden />
           </span>
           <div className="min-w-0 flex-1">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[15px] font-semibold tracking-tight text-white">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="text-sm font-semibold leading-tight tracking-tight text-white">
                 {dict.filtersTitle}
               </span>
               {activeCount > 0 ? (
-                <span className="inline-flex min-w-[1.25rem] items-center justify-center rounded-full bg-yellow-400/20 px-2 py-0.5 text-[11px] font-bold tabular-nums text-yellow-100 ring-1 ring-yellow-400/35">
+                <span className="inline-flex min-w-[1.125rem] items-center justify-center rounded-full border border-yellow-400/30 bg-yellow-500/[0.18] px-1.5 py-px text-[10px] font-bold tabular-nums leading-none text-yellow-100 sm:text-[11px]">
                   {activeCount}
                 </span>
               ) : null}
             </div>
           </div>
-          <span className="chevron-btn flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-slate-400 transition-transform duration-300 ease-out hover:bg-white/[0.09] hover:text-slate-300">
-            <ChevronDown className="h-4 w-4" strokeWidth={2.5} aria-hidden />
+          <span className="chevron-btn flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-slate-400 transition-transform duration-300 ease-out hover:bg-white/[0.09] hover:text-slate-300 sm:h-8 sm:w-8">
+            <ChevronDown className="h-3.5 w-3.5" strokeWidth={2.5} aria-hidden />
           </span>
         </summary>
         {activeCount > 0 ? (

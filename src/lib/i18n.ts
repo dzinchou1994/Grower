@@ -131,7 +131,7 @@ const translations = {
       ctaEmail: "ელფოსტა",
       backHome: "მთავარზე დაბრუნება",
       footerTeaserTitle: "ᲒᲠᲝᲕᲔᲠᲘ ᲔᲫᲔᲑᲡ ᲡᲞᲝᲜᲡᲝᲠᲡ",
-      footerTeaserHint: "დააჭირე სრულად",
+      footerTeaserHint: "წაიკითხე სრულად",
     },
     diaries: {
       badge: "მოყვანის დღიურები",
@@ -411,7 +411,7 @@ const translations = {
       ctaEmail: "Email",
       backHome: "Back to home",
       footerTeaserTitle: "Grower seeks sponsors",
-      footerTeaserHint: "Tap for details",
+      footerTeaserHint: "Read in full",
     },
     diaries: {
       badge: "Grow Diaries",
@@ -691,7 +691,7 @@ const translations = {
       ctaEmail: "Email",
       backHome: "На главную",
       footerTeaserTitle: "Grower ищет спонсоров",
-      footerTeaserHint: "Подробнее",
+      footerTeaserHint: "Читать полностью",
     },
     diaries: {
       badge: "Гроу-дневники",

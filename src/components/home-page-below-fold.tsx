@@ -232,13 +232,13 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
             aria-hidden
           />
 
-          <div className="relative z-10 flex w-full flex-col gap-8 p-5 sm:gap-8 sm:p-7 lg:flex-row lg:items-center lg:justify-between lg:gap-12 lg:py-3">
-            <div className="min-w-0 flex-1">
+          <div className="relative z-10 flex w-full flex-col gap-8 overflow-visible p-5 pb-6 sm:gap-8 sm:p-7 sm:pb-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12 lg:py-6">
+            <div className="min-w-0 flex-1 overflow-visible">
               <div className="inline-flex items-center gap-2 rounded-full border border-yellow-400/35 bg-yellow-400/[0.08] px-3 py-1.5 text-[11px] font-semibold text-yellow-100 sm:px-3.5 sm:py-2 sm:text-xs">
                 <BookOpenIcon className="h-3.5 w-3.5 text-yellow-300 sm:h-4 sm:w-4" />
                 {dict.home.diaryPromo}
               </div>
-              <h2 className="mt-4 text-[1.5rem] font-bold leading-[1.15] tracking-tight text-white sm:mt-5 sm:text-[1.85rem] sm:leading-tight lg:text-3xl xl:text-[2.125rem]">
+              <h2 className="mt-4 bg-gradient-to-br from-yellow-50 via-amber-100 to-yellow-200 bg-clip-text text-[1.5rem] font-bold leading-[1.15] tracking-tight text-transparent sm:mt-5 sm:text-[1.85rem] sm:leading-tight lg:text-3xl xl:text-[2.125rem]">
                 {dict.home.diaryPromoTitle}
               </h2>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-300 sm:mt-4 sm:text-[15px] sm:leading-7 lg:text-base lg:leading-7">
@@ -246,9 +246,9 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
               </p>
               <Link
                 href={getLocalizedPath(typedLocale, "/diaries/new")}
-                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-yellow-400 px-5 py-3.5 text-sm font-semibold text-slate-950 shadow-[0_4px_0_0_rgba(161,98,7,0.48)] shadow-yellow-500/15 transition duration-200 hover:-translate-y-0.5 hover:bg-yellow-300 hover:shadow-[0_6px_0_0_rgba(146,64,14,0.38)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-200/90 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020617] active:translate-y-0 sm:w-auto sm:rounded-full sm:px-8 sm:py-3.5 lg:mt-7"
+                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-yellow-400 px-5 py-4 text-sm font-semibold leading-normal text-slate-950 normal-case shadow-[0_4px_0_0_rgba(161,98,7,0.48)] shadow-yellow-500/15 transition duration-200 hover:bg-yellow-300 hover:shadow-[0_6px_0_0_rgba(146,64,14,0.38)] hover:brightness-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-200/90 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020617] active:brightness-100 sm:w-auto sm:rounded-full sm:px-8 sm:py-3.5 lg:mt-7"
               >
-                {dict.home.startDiary}
+                <span className="text-center">{dict.home.startDiary}</span>
                 <svg
                   className="h-4 w-4 shrink-0 opacity-90"
                   viewBox="0 0 24 24"
@@ -307,8 +307,8 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
         <section className="defer-render rounded-2xl border border-white/10 bg-slate-950/55 p-5 sm:rounded-[2rem] sm:p-6">
           <div className="flex items-start justify-between gap-3 sm:items-center">
             <div>
-              <p className="text-xs text-slate-400 sm:text-sm">{dict.home.recentDiariesHighlight}</p>
-              <h2 className="mt-1 text-lg font-semibold text-white sm:text-2xl">
+              <p className="text-xs text-amber-200/70 sm:text-sm">{dict.home.recentDiariesHighlight}</p>
+              <h2 className="mt-1 bg-gradient-to-br from-yellow-100 via-amber-50 to-yellow-200 bg-clip-text text-lg font-semibold text-transparent sm:text-2xl">
                 {dict.home.recentDiariesTitle}
               </h2>
             </div>

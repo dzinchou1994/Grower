@@ -101,10 +101,10 @@ export default async function DiariesPage({ params, searchParams }: PageProps) {
         {sessionUser ? (
           <Link
             href={getLocalizedPath(typedLocale, "/diaries/new")}
-            className="btn-diary-sheen group mt-5 inline-flex items-center gap-2 rounded-full border border-yellow-300/45 bg-gradient-to-b from-yellow-400/[0.22] to-yellow-500/[0.08] px-4 py-2.5 text-sm font-semibold text-yellow-50 ring-1 ring-yellow-400/25 transition hover:border-yellow-200/55 hover:from-yellow-300/30 hover:to-yellow-400/15 hover:shadow-[0_0_28px_-6px_rgba(250,204,21,0.55)] hover:ring-yellow-300/35 sm:mt-6 sm:px-5 sm:py-3"
+            className="group mt-5 inline-flex items-center gap-2 rounded-full bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-slate-950 shadow-sm shadow-yellow-500/25 transition hover:bg-yellow-300 sm:mt-6 sm:px-5 sm:py-3"
           >
-            <span className="relative z-[1] inline-flex items-center gap-2">
-              <CannabisLeafOutline className="h-4 w-4 text-yellow-100/95 drop-shadow-[0_0_8px_rgba(250,204,21,0.35)] transition group-hover:text-white" />
+            <span className="inline-flex items-center gap-2">
+              <CannabisLeafOutline className="h-4 w-4 text-slate-900/90 transition group-hover:text-slate-950" />
               {dict.diaries.createDiary}
             </span>
           </Link>
