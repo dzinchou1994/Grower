@@ -295,7 +295,7 @@ export function SiteHeader({
             <Link
               href={getLocalizedPath(locale, "/account")}
               title={`@${initialUser.username}`}
-              className={`relative z-20 inline-flex min-w-0 max-w-[min(52vw,14rem)] items-center rounded-full border border-lime-400/50 bg-slate-900/95 py-1 pl-1 pr-2.5 shadow-[0_4px_16px_-4px_rgba(0,0,0,0.55),inset_0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-sm transition-all duration-200 hover:border-lime-300/65 hover:bg-slate-900 active:scale-[0.98] ${scrolled ? "p-0.5" : "gap-2"}`}
+              className={`group relative z-20 inline-flex min-w-0 items-center rounded-full border border-white/[0.1] bg-slate-950/80 py-1 shadow-[0_2px_14px_-3px_rgba(0,0,0,0.55),inset_0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-md transition-all duration-200 hover:border-white/[0.16] hover:bg-slate-900/85 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)] active:scale-[0.98] ${scrolled ? "max-w-[2.75rem] justify-center px-0.5" : "max-w-[min(56vw,16rem)] gap-2 pl-1 pr-2.5"}`}
             >
               <UserAvatar
                 username={initialUser.username}
@@ -303,7 +303,7 @@ export function SiteHeader({
                 size="sm"
               />
               {!scrolled && (
-                <span className="min-w-0 flex-1 truncate text-[12px] font-semibold leading-normal tracking-tight text-white">
+                <span className="min-w-0 flex-1 truncate text-left text-[12px] font-semibold leading-tight tracking-tight text-white">
                   @{initialUser.username}
                 </span>
               )}
@@ -426,21 +426,26 @@ export function SiteHeader({
                 <nav className="mt-4 flex flex-col gap-0.5">
                   {navigation.map((item) => {
                     const active = pathname === getLocalizedPath(locale, item.href);
+                    const isDiaries = item.href === "/diaries";
                     return (
                       <Link
                         key={item.href}
                         href={getLocalizedPath(locale, item.href)}
                         onClick={() => setMobileMenuOpen(false)}
-                        className={`group flex items-center gap-3 rounded-xl border-l-2 py-3 pl-3 pr-3 text-[15px] font-medium tracking-tight transition ${
+                        className={`group flex items-center gap-3 rounded-xl py-3 pl-3 pr-3 text-[15px] font-medium tracking-tight transition ${
                           active
-                            ? "border-lime-400 bg-white/[0.05] text-white"
-                            : "border-transparent text-slate-400 hover:bg-white/[0.035] hover:text-slate-100"
+                            ? isDiaries
+                              ? "bg-amber-400/15 text-amber-50 shadow-[inset_0_1px_0_0_rgba(251,191,36,0.12)]"
+                              : "bg-white/[0.07] text-white"
+                            : "text-slate-400 hover:bg-white/[0.035] hover:text-slate-100"
                         }`}
                       >
                         <span
                           className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition ${
                             active
-                              ? "bg-lime-400/12 text-lime-200"
+                              ? isDiaries
+                                ? "bg-amber-400/22 text-amber-200"
+                                : "bg-lime-400/12 text-lime-200"
                               : "bg-white/[0.04] text-slate-500 group-hover:text-slate-300"
                           }`}
                         >

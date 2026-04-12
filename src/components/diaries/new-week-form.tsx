@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
 
 type FieldDict = {
@@ -24,6 +24,8 @@ type ExploreDict = {
   submitWeek: string;
   posting: string;
   uploadHint: string;
+  chooseFiles: string;
+  noFileChosen: string;
   extraUrlsHint: string;
   imageRequired: string;
   uploadFailed: string;
@@ -50,6 +52,7 @@ export function NewWeekForm({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [files, setFiles] = useState<File[]>([]);
+  const weekPhotosInputId = useId();
   const [imageBlock, setImageBlock] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -200,13 +203,28 @@ export function NewWeekForm({
       <label className="sm:col-span-2">
         <span className="mb-2 block text-sm font-medium text-slate-300">{fieldDict.weekPhotos}</span>
         <p className="mb-2 text-xs text-slate-500">{exploreDict.uploadHint}</p>
-        <input
-          type="file"
-          accept="image/jpeg,image/png,image/webp,image/gif"
-          multiple
-          onChange={(e) => setFiles(Array.from(e.target.files ?? []))}
-          className="w-full text-sm text-slate-200 file:mr-4 file:rounded-full file:border-0 file:bg-yellow-400 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-slate-950 hover:file:bg-yellow-300"
-        />
+        <div className="flex min-w-0 flex-wrap items-center gap-2 text-[length:calc(0.875rem/1.5)] leading-snug sm:gap-3">
+          <input
+            id={weekPhotosInputId}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            multiple
+            onChange={(e) => setFiles(Array.from(e.target.files ?? []))}
+            className="sr-only"
+          />
+          <label
+            htmlFor={weekPhotosInputId}
+            className="inline-flex shrink-0 cursor-pointer items-center rounded-full border-0 bg-yellow-400 px-3 py-1.5 font-semibold text-slate-950 shadow-md shadow-yellow-500/20 transition hover:bg-yellow-300 sm:px-4 sm:py-2"
+          >
+            {exploreDict.chooseFiles}
+          </label>
+          <span
+            className="min-w-0 flex-1 truncate text-slate-400"
+            title={files.length > 0 ? files.map((f) => f.name).join(", ") : undefined}
+          >
+            {files.length === 0 ? exploreDict.noFileChosen : files.map((f) => f.name).join(", ")}
+          </span>
+        </div>
       </label>
 
       <label className="sm:col-span-2">

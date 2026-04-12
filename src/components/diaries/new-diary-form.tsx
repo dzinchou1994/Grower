@@ -9,7 +9,7 @@ import {
   DiaryWateringType,
 } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { diaryExploreMediumKeys } from "@/lib/diary-explore-params";
 import { getDiaryLabels } from "@/lib/diary-labels";
 import { DiarySetupFields, type DiarySetupDict } from "@/components/diaries/diary-setup-fields";
@@ -57,6 +57,8 @@ type ExploreDict = {
   uploadHint: string;
   uploadFailed: string;
   coverLastPhotoHint: string;
+  chooseFiles: string;
+  noFileChosen: string;
   strainRequired: string;
   couldNotCreateDiary: string;
   unexpectedResponse: string;
@@ -91,6 +93,7 @@ export function NewDiaryForm({
   const [description, setDescription] = useState("");
   const [coverFiles, setCoverFiles] = useState<File[]>([]);
   const coverFileInputRef = useRef<HTMLInputElement>(null);
+  const coverFileInputId = useId();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
@@ -350,14 +353,33 @@ export function NewDiaryForm({
         <span className={labelClassName}>{fieldDict.coverImage}</span>
         <p className="mb-2 text-xs text-slate-500">{exploreDict.coverLastPhotoHint}</p>
         <p className="mb-2 text-xs text-slate-500">{exploreDict.uploadHint}</p>
-        <input
-          ref={coverFileInputRef}
-          type="file"
-          accept="image/jpeg,image/png,image/webp,image/gif"
-          multiple
-          onChange={(e) => setCoverFiles(Array.from(e.target.files ?? []))}
-          className="w-full text-sm text-slate-300 file:mr-4 file:cursor-pointer file:rounded-full file:border-0 file:bg-yellow-400 file:px-5 file:py-2.5 file:text-sm file:font-semibold file:text-slate-950 file:shadow-md file:shadow-yellow-500/20 file:transition hover:file:bg-yellow-300"
-        />
+        <div className="flex min-w-0 flex-wrap items-center gap-2 text-[length:calc(0.875rem/1.5)] leading-snug sm:gap-3">
+          <input
+            id={coverFileInputId}
+            ref={coverFileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            multiple
+            onChange={(e) => setCoverFiles(Array.from(e.target.files ?? []))}
+            className="sr-only"
+          />
+          <label
+            htmlFor={coverFileInputId}
+            className="inline-flex shrink-0 cursor-pointer items-center rounded-full border-0 bg-yellow-400 px-3 py-1.5 font-semibold text-slate-950 shadow-md shadow-yellow-500/20 transition hover:bg-yellow-300 sm:px-4 sm:py-2"
+          >
+            {exploreDict.chooseFiles}
+          </label>
+          <span
+            className="min-w-0 flex-1 truncate text-slate-400"
+            title={
+              coverFiles.length > 0 ? coverFiles.map((f) => f.name).join(", ") : undefined
+            }
+          >
+            {coverFiles.length === 0
+              ? exploreDict.noFileChosen
+              : coverFiles.map((f) => f.name).join(", ")}
+          </span>
+        </div>
         {coverPreviewUrls.length > 0 ? (
           <ul className="mt-4 flex flex-wrap gap-3" aria-label="Cover preview">
             {coverPreviewUrls.map((url, i) => (

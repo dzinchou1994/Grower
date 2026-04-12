@@ -16,6 +16,7 @@ type PageProps = {
 function cannapediaCopy(locale: Locale) {
   if (locale === "ka") {
     return {
+      titleConnector: " ᲐᲜᲣ ",
       title:
         "ᲛᲐᲠᲘᲮᲣᲐᲜᲘᲡ ᲛᲝᲧᲕᲐᲜᲘᲡ ᲡᲐᲮᲔᲚᲛᲫᲦᲕᲐᲜᲔᲚᲝ",
       description:
@@ -36,7 +37,8 @@ function cannapediaCopy(locale: Locale) {
 
   if (locale === "ru") {
     return {
-      title: "Cannapedia - база знаний Grower",
+      titleConnector: " — ",
+      title: "база знаний Grower",
       description:
         "Практические статьи для новичков: семена, вегетация, цветение и харвест.",
       badge: "Cannapedia",
@@ -54,7 +56,8 @@ function cannapediaCopy(locale: Locale) {
   }
 
   return {
-    title: "Cannapedia - Grower Knowledge Base",
+    titleConnector: " — ",
+    title: "Grower Knowledge Base",
     description:
       "Practical beginner guides for seedling, vegetative growth, flowering, and harvest.",
     badge: "Cannapedia",
@@ -116,6 +119,7 @@ export default async function CannapediaPage({ params, searchParams }: PageProps
         activeCategorySlug={activeCategorySlug}
         hero={{
           badge: copy.badge,
+          titleConnector: copy.titleConnector,
           title: copy.title,
           description: copy.description,
         }}

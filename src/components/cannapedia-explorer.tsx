@@ -1,7 +1,7 @@
 "use client";
 
 import { Noto_Sans_Georgian } from "next/font/google";
-import { Search } from "lucide-react";
+import { BookOpen, Search } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getLocalizedPath, type Locale } from "@/lib/i18n-routing";
@@ -42,6 +42,8 @@ type Copy = {
 
 type HeroCopy = {
   badge: string;
+  /** Between badge and title, e.g. Georgian " ანუ " or " — " for EN/RU */
+  titleConnector: string;
   title: string;
   description: string;
 };
@@ -228,29 +230,33 @@ export function CannapediaExplorer({
     <>
       <section className="relative overflow-visible rounded-2xl border border-white/10 bg-slate-950/55 p-5 shadow-lg shadow-black/30 backdrop-blur-md sm:rounded-[2rem] sm:p-8">
         <div
-          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent"
+          className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-b from-white/[0.04] to-transparent sm:rounded-[2rem]"
           aria-hidden
         />
         <div className="relative z-[1] flex flex-col gap-3 sm:gap-4">
-          <div className="inline-flex min-w-0 items-center gap-2.5 text-sm font-semibold tracking-wide text-lime-300 sm:gap-3 sm:text-base">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/logo.svg"
-              alt="Grower Georgia flag logo"
-              width={16}
-              height={16}
-              className="h-5 w-5 shrink-0 sm:h-6 sm:w-6"
-            />
-            {hero.badge}
+          <div className="flex min-w-0 items-start gap-2.5 sm:gap-3">
+            <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-lime-400/25 bg-lime-400/10 sm:mt-1 sm:h-9 sm:w-9">
+              <BookOpen
+                className="h-4 w-4 text-lime-300 sm:h-[18px] sm:w-[18px]"
+                strokeWidth={2.25}
+                aria-hidden
+              />
+            </span>
+            <h1 className="min-w-0 text-xl font-semibold leading-snug tracking-wide sm:text-3xl sm:leading-tight lg:text-4xl">
+              <span className="text-lime-300 uppercase">{hero.badge}</span>
+              <span
+                className={`text-slate-500 ${locale === "ka" ? cannapediaHeroTitleKa.className : ""}`}
+              >
+                {hero.titleConnector}
+              </span>
+              <span
+                className={`text-white ${locale === "ka" ? cannapediaHeroTitleKa.className : ""}`}
+              >
+                {hero.title}
+              </span>
+            </h1>
           </div>
-          <h1
-            className={`text-xl font-semibold leading-tight tracking-wide text-white sm:text-3xl lg:text-4xl ${
-              locale === "ka" ? cannapediaHeroTitleKa.className : ""
-            }`}
-          >
-            {hero.title}
-          </h1>
-          <p className="max-w-3xl text-xs leading-relaxed text-slate-300 sm:text-sm sm:leading-6">
+          <p className="max-w-3xl text-[11px] leading-relaxed text-slate-400 sm:text-xs sm:leading-5">
             {hero.description}
           </p>
 
