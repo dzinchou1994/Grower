@@ -1,15 +1,23 @@
 /**
- * Prefer Next.js image optimization (WebP/AVIF + resizing via `/_next/image`) for remotes in
- * `images.remotePatterns`. Set `NEXT_PUBLIC_IMAGE_UNOPTIMIZED_WIKIMEDIA=1` if your host’s
- * server-side fetch to upload.wikimedia.org is blocked and you must load originals in the browser.
+ * `upload.wikimedia.org`: Next.js optimizer fetches images **server-side**; Commons often blocks
+ * or rate-limits those requests, and some URLs break when piped through `/_next/image` — so we
+ * **default to `unoptimized`** (browser loads the file directly; reliable).
+ *
+ * Set `NEXT_PUBLIC_IMAGE_OPTIMIZE_WIKIMEDIA=1` to try the optimizer (WebP/resize) when your
+ * deployment successfully fetches Commons from the server (verify in production).
+ *
+ * Other allowed remotes (e.g. Unsplash, Vercel Blob) still use optimization by default.
  */
 export function preferUnoptimizedRemoteImage(src: string): boolean {
-  if (process.env.NEXT_PUBLIC_IMAGE_UNOPTIMIZED_WIKIMEDIA === "1" && src.startsWith("http")) {
-    try {
-      return new URL(src).hostname === "upload.wikimedia.org";
-    } catch {
+  if (!src.startsWith("http")) {
+    return false;
+  }
+  try {
+    if (new URL(src).hostname !== "upload.wikimedia.org") {
       return false;
     }
+    return process.env.NEXT_PUBLIC_IMAGE_OPTIMIZE_WIKIMEDIA !== "1";
+  } catch {
+    return false;
   }
-  return false;
 }
