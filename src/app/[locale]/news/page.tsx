@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import { NewsSubmissionForm } from "@/components/news-submission-form";
 import { getServerSessionUser } from "@/lib/auth-session";
 import { listPublishedNews, type NewsScope } from "@/lib/news-data";
+import { preferUnoptimizedRemoteImage } from "@/lib/remote-image";
 import {
   getAlternates,
   getDictionary,
@@ -161,7 +162,6 @@ export default async function NewsPage({ params, searchParams }: PageProps) {
           <div className="mt-5 grid grid-cols-2 gap-2.5 sm:gap-4 md:gap-5 xl:grid-cols-3 xl:gap-6">
             {newsList.map((article) => {
               const imgSrc = article.imageUrl ?? newsFallbackImageSrc;
-              const isLocal = imgSrc.startsWith("/");
               return (
                 <Link
                   key={article.id}
@@ -169,26 +169,16 @@ export default async function NewsPage({ params, searchParams }: PageProps) {
                   className="group flex flex-col overflow-hidden rounded-xl border border-white/10 bg-gradient-to-b from-white/[0.05] to-slate-950/90 transition hover:border-lime-400/35 hover:shadow-lg hover:shadow-lime-950/15 sm:rounded-2xl lg:rounded-3xl"
                 >
                   <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-900/80">
-                    {isLocal ? (
-                      <Image
-                        src={imgSrc}
-                        alt={article.title[typedLocale]}
-                        fill
-                        quality={72}
-                        sizes="(max-width: 1279px) 50vw, 33vw"
-                        className="object-cover transition duration-300 group-hover:scale-[1.02]"
-                      />
-                    ) : (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={imgSrc}
-                        alt={article.title[typedLocale]}
-                        loading="lazy"
-                        decoding="async"
-                        fetchPriority="low"
-                        className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
-                      />
-                    )}
+                    <Image
+                      src={imgSrc}
+                      alt={article.title[typedLocale]}
+                      fill
+                      quality={75}
+                      sizes="(max-width: 1279px) 50vw, 33vw"
+                      className="object-cover transition duration-300 group-hover:scale-[1.02]"
+                      loading="lazy"
+                      unoptimized={preferUnoptimizedRemoteImage(imgSrc)}
+                    />
                   </div>
                   <div className="flex min-h-0 flex-1 flex-col p-2.5 sm:p-5">
                     <div className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2 sm:gap-y-1">

@@ -133,11 +133,15 @@ export default async function DiaryDetailPage({ params }: PageProps) {
         <div className="relative flex flex-col gap-6 pt-9 sm:pt-10 lg:flex-row lg:items-start lg:justify-between lg:gap-8 lg:pt-0">
           {diary.coverImageUrl ? (
             <div className="relative aspect-video w-full max-w-xl overflow-hidden rounded-2xl ring-1 ring-white/[0.06] lg:max-w-md">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={diary.coverImageUrl}
                 alt=""
-                className="h-full w-full object-cover"
+                fill
+                sizes="(max-width: 1024px) 92vw, 448px"
+                className="object-cover"
+                quality={75}
+                priority
+                unoptimized={preferUnoptimizedRemoteImage(diary.coverImageUrl)}
               />
             </div>
           ) : null}

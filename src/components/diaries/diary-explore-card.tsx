@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import type { Locale as DateFnsLocale } from "date-fns";
@@ -5,6 +6,7 @@ import { Clock, Heart, MessageCircle } from "lucide-react";
 import type { DiaryListItem } from "@/lib/diary-data";
 import { formatDistanceDisplayKa } from "@/lib/format-distance-ka";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import { preferUnoptimizedRemoteImage } from "@/lib/remote-image";
 
 export type DiaryExploreCardCopy = {
   relativeWeeks: string;
@@ -88,14 +90,16 @@ export function DiaryExploreCard({
       >
         {preview ? (
           <div className="relative aspect-[3/4] w-full min-h-[13rem] overflow-hidden sm:aspect-[4/5] sm:min-h-[15rem]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={preview}
               alt=""
-              className="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-[1.035]"
+              fill
+              sizes={imageSizes}
+              quality={65}
               loading="lazy"
               decoding="async"
-              sizes={imageSizes}
+              className="object-cover transition duration-500 ease-out group-hover:scale-[1.035]"
+              unoptimized={preferUnoptimizedRemoteImage(preview)}
             />
             <div
               className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[62%] min-h-[12rem] w-full bg-gradient-to-t from-black via-black/92 to-transparent sm:min-h-[13.5rem]"

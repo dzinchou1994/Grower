@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import nextDynamic from "next/dynamic";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CannabisLeaf } from "@/components/icons";
@@ -18,6 +19,7 @@ import {
 } from "@/lib/i18n";
 import { fillSeoTemplate } from "@/lib/seo-template";
 import { getServerSessionUser } from "@/lib/auth-session";
+import { preferUnoptimizedRemoteImage } from "@/lib/remote-image";
 
 const DiaryWeekCommentForm = nextDynamic(() =>
   import("@/components/diaries/diary-week-comment-form").then((m) => m.DiaryWeekCommentForm),
@@ -129,8 +131,17 @@ export default async function DiaryWeekPage({ params }: PageProps) {
                 key={im.id}
                 className="relative aspect-square overflow-hidden rounded-xl border border-white/10"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={im.imageUrl} alt="" className="h-full w-full object-cover" />
+                <Image
+                  src={im.imageUrl}
+                  alt=""
+                  fill
+                  sizes="(max-width: 640px) 45vw, 200px"
+                  className="object-cover"
+                  quality={65}
+                  loading="lazy"
+                  decoding="async"
+                  unoptimized={preferUnoptimizedRemoteImage(im.imageUrl)}
+                />
               </div>
             ))}
           </div>
