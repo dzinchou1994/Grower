@@ -1128,7 +1128,7 @@ function FeedbackPanel() {
               </span>
             </div>
             <p className="mt-1 text-xs text-slate-400">
-              Site {entry.siteRating}/5 · Content {entry.contentRating}/5 · Speed {entry.performanceRating}/5
+              Site {entry.siteRating}/5 · Speed {entry.performanceRating}/5
             </p>
             <p className="mt-3 text-sm text-slate-200">
               <span className="text-slate-400">Add:</span> {entry.whatToAdd}

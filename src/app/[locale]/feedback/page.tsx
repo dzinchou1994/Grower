@@ -9,7 +9,7 @@ import {
   type Locale,
 } from "@/lib/i18n";
 import { notoSansGeorgian } from "@/lib/fonts/noto-sans-georgian";
-import { hasGeorgianScript, toMtavruli } from "@/lib/georgian-mtavruli";
+import { toMtavruli } from "@/lib/georgian-mtavruli";
 import { FeedbackForm } from "@/components/feedback-form";
 
 type Props = {
@@ -38,28 +38,21 @@ export default async function FeedbackPage({ params }: Props) {
       ? {
           back: "მთავარზე დაბრუნება",
           badge: "ქომუნითი ფიდბექი",
-          title: "დაგვეხმარე Grower-ის განვითარებაში",
-          description:
-            "შენი აზრი პირდაპირ მიდის ადმინის პანელში. დაგვიწერე რას დაამატებდი, რა მოგწონს და რას გავაუმჯობესოთ.",
+          description: "შენი აზრი პირდაპირ მიდის საიტის შემქმნელებთან.",
         }
       : typedLocale === "ru"
         ? {
             back: "Назад на главную",
             badge: "Обратная связь сообщества",
-            title: "Помогите развивать Grower",
             description:
               "Ваш отзыв сразу попадает в админ-панель. Напишите, что добавить, что вам нравится и что улучшить.",
           }
         : {
             back: "Back to home",
             badge: "Community feedback",
-            title: "Help us improve Grower",
             description:
               "Your feedback goes directly to the admin panel. Tell us what to add, what you like, and what to improve.",
           };
-
-  const feedbackTitleMtavruli =
-    typedLocale === "ka" && hasGeorgianScript(copy.title);
 
   return (
     <div className="mx-auto w-full max-w-3xl">
@@ -70,16 +63,47 @@ export default async function FeedbackPage({ params }: Props) {
         >
           ← {copy.back}
         </Link>
-        <p className="flex w-fit rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-xs font-medium text-lime-300">
+        <p className="mx-auto flex w-fit rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-xs font-medium text-lime-300 sm:mx-0">
           {copy.badge}
         </p>
-        <h1
-          className={`mt-2 text-2xl font-semibold text-white sm:text-3xl ${
-            feedbackTitleMtavruli ? notoSansGeorgian.className : "uppercase"
-          }`}
-        >
-          {feedbackTitleMtavruli ? toMtavruli(copy.title) : copy.title}
-        </h1>
+        {typedLocale === "ka" ? (
+          <h1
+            className={`mt-2 text-[13px] font-semibold leading-[1.2] tracking-[-0.01em] text-white min-[400px]:text-sm sm:text-2xl sm:leading-snug sm:tracking-normal md:text-3xl ${notoSansGeorgian.className}`}
+          >
+            {toMtavruli("დაგვეხმარე ")}
+            <span
+              className="mx-px inline-block align-baseline font-sans text-[1.05em] font-bold uppercase tracking-[0.07em] text-lime-200 not-italic min-[400px]:tracking-[0.1em] sm:mx-0.5 sm:text-[1.12em] sm:tracking-[0.16em] md:tracking-[0.18em]"
+              translate="no"
+            >
+              GROWER.GE
+            </span>
+            {toMtavruli("-ის განვითარებაში")}
+          </h1>
+        ) : (
+          <h1 className="mt-2 text-[13px] font-semibold leading-[1.2] text-white min-[400px]:text-sm sm:text-2xl sm:leading-snug md:text-3xl">
+            {typedLocale === "ru" ? (
+              <>
+                <span className="uppercase">Помогите развивать </span>
+                <span
+                  className="font-sans text-[1.05em] font-bold uppercase tracking-[0.08em] text-lime-200 not-italic min-[400px]:tracking-[0.12em] sm:text-[1.08em] sm:tracking-[0.16em]"
+                  translate="no"
+                >
+                  GROWER.GE
+                </span>
+              </>
+            ) : (
+              <>
+                <span className="uppercase">Help us improve </span>
+                <span
+                  className="font-sans text-[1.05em] font-bold uppercase tracking-[0.08em] text-lime-200 not-italic min-[400px]:tracking-[0.12em] sm:text-[1.08em] sm:tracking-[0.16em]"
+                  translate="no"
+                >
+                  GROWER.GE
+                </span>
+              </>
+            )}
+          </h1>
+        )}
         <p className="mt-2 text-sm leading-relaxed text-slate-300 sm:text-base">
           {copy.description}
         </p>

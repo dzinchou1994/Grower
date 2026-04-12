@@ -7,7 +7,6 @@ import { createLocalFeedback } from "@/lib/feedback-store";
 const createFeedbackSchema = z.object({
   name: z.string().trim().max(80).optional(),
   siteRating: z.number().int().min(1).max(5),
-  contentRating: z.number().int().min(1).max(5),
   performanceRating: z.number().int().min(1).max(5),
   whatToAdd: z.string().trim().min(8).max(1200),
   whatToImprove: z.string().trim().max(1200).optional(),
@@ -25,13 +24,15 @@ export async function POST(request: Request) {
 
   const session = await getServerSessionUser();
   const useDatabase = Boolean(process.env.DATABASE_URL);
+  /** Legacy DB column; form no longer collects a separate content score. */
+  const contentRating = parsed.data.siteRating;
 
   if (!useDatabase) {
     const local = createLocalFeedback({
       userId: session?.userId ?? null,
       name: parsed.data.name || session?.username || null,
       siteRating: parsed.data.siteRating,
-      contentRating: parsed.data.contentRating,
+      contentRating,
       performanceRating: parsed.data.performanceRating,
       whatToAdd: parsed.data.whatToAdd,
       whatToImprove: parsed.data.whatToImprove || null,
@@ -45,7 +46,7 @@ export async function POST(request: Request) {
         userId: session?.userId ?? null,
         name: parsed.data.name || session?.username || null,
         siteRating: parsed.data.siteRating,
-        contentRating: parsed.data.contentRating,
+        contentRating,
         performanceRating: parsed.data.performanceRating,
         whatToAdd: parsed.data.whatToAdd,
         whatToImprove: parsed.data.whatToImprove || null,
@@ -58,7 +59,7 @@ export async function POST(request: Request) {
       userId: session?.userId ?? null,
       name: parsed.data.name || session?.username || null,
       siteRating: parsed.data.siteRating,
-      contentRating: parsed.data.contentRating,
+      contentRating,
       performanceRating: parsed.data.performanceRating,
       whatToAdd: parsed.data.whatToAdd,
       whatToImprove: parsed.data.whatToImprove || null,

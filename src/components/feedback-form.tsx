@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { BookOpen, Globe, Star, Zap, type LucideIcon } from "lucide-react";
+import { Globe, Star, Zap, type LucideIcon } from "lucide-react";
 import { useState } from "react";
 import type { Locale } from "@/lib/i18n";
 
@@ -10,7 +10,6 @@ function labels(locale: Locale) {
     return {
       name: "სახელი (არასავალდებულო)",
       siteRating: "საიტის შეფასება",
-      contentRating: "არსებული კონტენტის შეფასება",
       speedRating: "სიჩქარე/სტაბილურობა",
       whatToAdd: "რას დაამატებდი პლატფორმას?",
       whatToImprove: "რა გავაუმჯობესოთ პირველ რიგში?",
@@ -24,7 +23,6 @@ function labels(locale: Locale) {
     return {
       name: "Имя (необязательно)",
       siteRating: "Оценка сайта",
-      contentRating: "Оценка текущего контента",
       speedRating: "Скорость/стабильность",
       whatToAdd: "Что бы вы добавили на платформу?",
       whatToImprove: "Что улучшить в первую очередь?",
@@ -37,7 +35,6 @@ function labels(locale: Locale) {
   return {
     name: "Name (optional)",
     siteRating: "Site rating",
-    contentRating: "Current content rating",
     speedRating: "Speed/stability",
     whatToAdd: "What would you add to the platform?",
     whatToImprove: "What should we improve first?",
@@ -52,7 +49,6 @@ export function FeedbackForm({ locale }: { locale: Locale }) {
   const t = labels(locale);
   const [name, setName] = useState("");
   const [siteRating, setSiteRating] = useState(5);
-  const [contentRating, setContentRating] = useState(5);
   const [performanceRating, setPerformanceRating] = useState(5);
   const [whatToAdd, setWhatToAdd] = useState("");
   const [whatToImprove, setWhatToImprove] = useState("");
@@ -72,7 +68,6 @@ export function FeedbackForm({ locale }: { locale: Locale }) {
         body: JSON.stringify({
           name: name.trim() || undefined,
           siteRating,
-          contentRating,
           performanceRating,
           whatToAdd: whatToAdd.trim(),
           whatToImprove: whatToImprove.trim() || undefined,
@@ -106,12 +101,6 @@ export function FeedbackForm({ locale }: { locale: Locale }) {
           label={t.siteRating}
           value={siteRating}
           onChange={setSiteRating}
-        />
-        <RatingRow
-          icon={BookOpen}
-          label={t.contentRating}
-          value={contentRating}
-          onChange={setContentRating}
         />
         <RatingRow
           icon={Zap}
