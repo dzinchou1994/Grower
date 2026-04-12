@@ -50,7 +50,7 @@ export function HomePageBelowFoldSkeleton() {
       <div className="animate-pulse rounded-2xl border border-white/10 bg-slate-950/40 p-5 sm:rounded-[2rem] sm:p-6">
         <div className="h-4 w-44 rounded bg-white/10" />
         <div className="mt-3 h-7 w-64 rounded bg-white/10" />
-        <div className="mt-5 grid grid-cols-2 gap-3 sm:mt-6 sm:grid-cols-3">
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:mt-6 sm:grid-cols-3 lg:grid-cols-5">
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
@@ -329,7 +329,7 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
               {dict.home.viewAllDiaries}
             </Link>
           </div>
-          <div className="mt-5 grid grid-cols-2 gap-3 sm:mt-6 sm:grid-cols-3">
+          <div className="mt-5 grid grid-cols-2 gap-3 sm:mt-6 sm:grid-cols-3 lg:grid-cols-5">
             {recentDiaries.map((diary) => (
               <DiaryExploreCard
                 key={diary.id}
@@ -337,7 +337,7 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
                 typedLocale={typedLocale}
                 dateFnsLocale={dfLocale}
                 explore={diaryCardExplore}
-                imageSizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 16vw"
+                imageSizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 20vw"
               />
             ))}
           </div>
