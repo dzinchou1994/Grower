@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Sans_Georgian } from "next/font/google";
-import { MessageCircle } from "lucide-react";
+import { MessagesSquare } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getServerSessionUser } from "@/lib/auth-session";
@@ -100,29 +100,36 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
         />
         <div className="relative z-[1]">
           <div className="flex flex-col gap-3 sm:gap-4">
-            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
-              <div className="inline-flex min-w-0 items-center gap-2.5 text-lg font-semibold tracking-wide text-lime-300 sm:gap-3 sm:text-2xl">
-                <MessageCircle
-                  className="h-6 w-6 shrink-0 text-lime-300/95 sm:h-8 sm:w-8"
-                  strokeWidth={2.25}
-                  aria-hidden
-                />
+            <div className="flex flex-nowrap items-start justify-between gap-3 sm:gap-4">
+              <div className="inline-flex min-w-0 flex-1 items-center gap-3 text-lg font-semibold tracking-wide text-lime-300 sm:gap-3.5 sm:text-2xl">
                 <span
-                  className={
+                  className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-lime-400/[0.22] via-emerald-500/[0.08] to-slate-900/80 shadow-[0_0_0_1px_rgba(132,204,22,0.35),0_10px_28px_-12px_rgba(16,185,129,0.45),inset_0_1px_0_0_rgba(255,255,255,0.12)] sm:h-10 sm:w-10 sm:rounded-[1.1rem]"
+                  aria-hidden
+                >
+                  <MessagesSquare
+                    className="h-[18px] w-[18px] text-lime-200/95 sm:h-5 sm:w-5"
+                    strokeWidth={1.65}
+                    aria-hidden
+                  />
+                </span>
+                <span
+                  className={`min-w-0 flex-1 leading-snug sm:leading-tight ${
                     typedLocale === "ka" ? forumHeroBadgeKa.className : "uppercase"
-                  }
+                  }`}
                 >
                   {dict.forum.badge}
                 </span>
               </div>
-              <ForumThreadComposer
-                topics={forumTopicList.map((topic) => ({ slug: topic.slug, title: topic.title }))}
-                isAuthenticated={Boolean(sessionUser)}
-                loginHref={getLocalizedPath(typedLocale, "/auth/login")}
-                locale={typedLocale}
-                collapsible
-                heroCompact
-              />
+              <div className="shrink-0 pt-0.5">
+                <ForumThreadComposer
+                  topics={forumTopicList.map((topic) => ({ slug: topic.slug, title: topic.title }))}
+                  isAuthenticated={Boolean(sessionUser)}
+                  loginHref={getLocalizedPath(typedLocale, "/auth/login")}
+                  locale={typedLocale}
+                  collapsible
+                  heroCompact
+                />
+              </div>
             </div>
             <h1 className="sr-only">{dict.forum.title}</h1>
             <p className="max-w-3xl text-xs leading-relaxed text-slate-300 sm:text-sm sm:leading-6">

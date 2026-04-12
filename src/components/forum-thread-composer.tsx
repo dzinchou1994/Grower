@@ -259,14 +259,14 @@ export function ForumThreadComposer({
       <section
         className={
           heroCompact
-            ? "w-fit max-w-[min(100%,18rem)] shrink-0"
+            ? "shrink-0"
             : "rounded-2xl border border-white/10 bg-transparent p-5 sm:rounded-[2rem] sm:p-6"
         }
       >
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className={heroCompact ? `${heroCompactTriggerClass} w-full sm:w-auto` : `${primaryButtonClass} mx-auto`}
+          className={heroCompact ? heroCompactTriggerClass : `${primaryButtonClass} mx-auto`}
         >
           {t.startThread}
         </button>
