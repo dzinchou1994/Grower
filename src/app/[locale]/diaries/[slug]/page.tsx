@@ -14,6 +14,7 @@ import { notoSansGeorgian } from "@/lib/fonts/noto-sans-georgian";
 import { hasGeorgianScript, toMtavruli } from "@/lib/georgian-mtavruli";
 import { getPublicDiaryBySlug } from "@/lib/diary-data";
 import { preferUnoptimizedRemoteImage } from "@/lib/remote-image";
+import { wikimediaSizedSrc } from "@/lib/wikimedia-commons-thumb";
 import { formatDistanceDisplayKa } from "@/lib/format-distance-ka";
 import { getDiaryLabels } from "@/lib/diary-labels";
 import { DiarySharePanel } from "@/components/diary-share-panel";
@@ -134,7 +135,11 @@ export default async function DiaryDetailPage({ params }: PageProps) {
           {diary.coverImageUrl ? (
             <div className="relative aspect-video w-full max-w-xl overflow-hidden rounded-2xl ring-1 ring-white/[0.06] lg:max-w-md">
               <Image
-                src={diary.coverImageUrl}
+                src={wikimediaSizedSrc(
+                  diary.coverImageUrl,
+                  448,
+                  preferUnoptimizedRemoteImage(diary.coverImageUrl),
+                )}
                 alt=""
                 fill
                 sizes="(max-width: 1024px) 92vw, 448px"
@@ -376,14 +381,16 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                     : "mt-3 grid w-full grid-cols-3 gap-1.5 sm:mt-4 sm:gap-2"
               }
             >
-              {latest.images.map((im) => (
+              {latest.images.map((im) => {
+                const uo = preferUnoptimizedRemoteImage(im.imageUrl);
+                return (
                 <Link
                   key={im.id}
                   href={weekHref(latest.weekNumber)}
                   className="relative aspect-square overflow-hidden rounded-lg border border-white/[0.06] transition hover:border-yellow-400/25"
                 >
                   <Image
-                    src={im.imageUrl}
+                    src={wikimediaSizedSrc(im.imageUrl, 180, uo)}
                     alt=""
                     fill
                     sizes="(max-width: 640px) 28vw, 180px"
@@ -391,10 +398,11 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                     quality={65}
                     loading="lazy"
                     decoding="async"
-                    unoptimized={preferUnoptimizedRemoteImage(im.imageUrl)}
+                    unoptimized={uo}
                   />
                 </Link>
-              ))}
+              );
+              })}
             </div>
           ) : null}
           <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[11px] tabular-nums text-slate-500 sm:mt-3.5 sm:text-xs">
@@ -440,13 +448,15 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                   <div className="flex flex-col gap-4 sm:flex-row sm:gap-5">
                     {preview.length > 0 ? (
                       <div className="flex shrink-0 flex-wrap gap-2">
-                        {preview.map((im) => (
+                        {preview.map((im) => {
+                          const uo = preferUnoptimizedRemoteImage(im.imageUrl);
+                          return (
                           <div
                             key={im.id}
                             className="relative h-16 w-16 overflow-hidden rounded-xl ring-1 ring-white/[0.06] sm:h-[4.5rem] sm:w-[4.5rem]"
                           >
                             <Image
-                              src={im.imageUrl}
+                              src={wikimediaSizedSrc(im.imageUrl, 80, uo)}
                               alt=""
                               fill
                               sizes="80px"
@@ -454,10 +464,11 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                               quality={60}
                               loading="lazy"
                               decoding="async"
-                              unoptimized={preferUnoptimizedRemoteImage(im.imageUrl)}
+                              unoptimized={uo}
                             />
                           </div>
-                        ))}
+                        );
+                        })}
                         {extraImg > 0 ? (
                           <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-white/[0.04] text-xs font-medium text-slate-400 ring-1 ring-white/[0.06] sm:h-[4.5rem] sm:w-[4.5rem]">
                             +{extraImg}

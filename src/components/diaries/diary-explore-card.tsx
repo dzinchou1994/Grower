@@ -7,6 +7,7 @@ import type { DiaryListItem } from "@/lib/diary-data";
 import { formatDistanceDisplayKa } from "@/lib/format-distance-ka";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
 import { preferUnoptimizedRemoteImage } from "@/lib/remote-image";
+import { wikimediaSizedSrc } from "@/lib/wikimedia-commons-thumb";
 
 export type DiaryExploreCardCopy = {
   relativeWeeks: string;
@@ -41,6 +42,7 @@ export function DiaryExploreCard({
   );
   const diaryHref = getLocalizedPath(typedLocale, `/diaries/${diary.slug}`);
   const preview = diary.previewImageUrls[0];
+  const previewUnopt = Boolean(preview && preferUnoptimizedRemoteImage(preview));
   const metaRow = (
     <div
       className={`mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 border-t pt-2.5 text-[10px] sm:gap-x-4 sm:pt-3 sm:text-[11px] ${
@@ -91,7 +93,7 @@ export function DiaryExploreCard({
         {preview ? (
           <div className="relative aspect-[3/4] w-full min-h-[13rem] overflow-hidden sm:aspect-[4/5] sm:min-h-[15rem]">
             <Image
-              src={preview}
+              src={wikimediaSizedSrc(preview, 420, previewUnopt)}
               alt=""
               fill
               sizes={imageSizes}
@@ -99,7 +101,7 @@ export function DiaryExploreCard({
               loading="lazy"
               decoding="async"
               className="object-cover transition duration-500 ease-out group-hover:scale-[1.035]"
-              unoptimized={preferUnoptimizedRemoteImage(preview)}
+              unoptimized={previewUnopt}
             />
             <div
               className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[62%] min-h-[12rem] w-full bg-gradient-to-t from-black via-black/92 to-transparent sm:min-h-[13.5rem]"
