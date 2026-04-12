@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getServerSessionUser } from "@/lib/auth-session";
@@ -93,14 +94,11 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
         <div className="relative z-[1]">
           <div className="flex flex-col gap-3 sm:gap-4">
             <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
-              <div className="inline-flex min-w-0 items-center gap-2.5 text-sm font-semibold tracking-wide text-lime-300 sm:gap-3 sm:text-base">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/logo.svg"
-                  alt="Grower Georgia flag logo"
-                  width={16}
-                  height={16}
-                  className="h-5 w-5 shrink-0 sm:h-6 sm:w-6"
+              <div className="inline-flex min-w-0 items-center gap-2.5 text-lg font-semibold tracking-wide text-lime-300 sm:gap-3 sm:text-2xl">
+                <MessageCircle
+                  className="h-6 w-6 shrink-0 text-lime-300/95 sm:h-8 sm:w-8"
+                  strokeWidth={2.25}
+                  aria-hidden
                 />
                 {dict.forum.badge}
               </div>
@@ -155,7 +153,7 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
             </Link>
 
             <div className="relative z-[2] flex items-start gap-3 pointer-events-none sm:gap-4">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-lime-400/10 text-xl sm:h-14 sm:w-14 sm:rounded-2xl sm:text-2xl">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-lime-400/10 text-sm leading-none sm:h-9 sm:w-9 sm:rounded-xl sm:text-base">
                 {topic.icon}
               </span>
               <div className="min-w-0 flex-1">

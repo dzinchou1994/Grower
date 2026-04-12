@@ -1,8 +1,17 @@
 "use client";
 
+import { Noto_Sans_Georgian } from "next/font/google";
+import { Search } from "lucide-react";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { getLocalizedPath, type Locale } from "@/lib/i18n-routing";
+
+/** Mtavruli title line; Mkhedruli fonts often render caps wrong without Noto. */
+const cannapediaHeroTitleKa = Noto_Sans_Georgian({
+  subsets: ["georgian"],
+  weight: ["600"],
+  display: "swap",
+});
 
 type CategoryItem = {
   slug: string;
@@ -23,10 +32,18 @@ type Copy = {
   min: string;
   allCategories: string;
   searchPlaceholder: string;
+  searchActionLabel: string;
+  clearLabel: string;
   searchHint: string;
   noCategoryResults: string;
   noSearchResults: string;
   suggestionsTitle: string;
+};
+
+type HeroCopy = {
+  badge: string;
+  title: string;
+  description: string;
 };
 
 const keywordHintsByLocale: Record<Locale, Record<string, string[]>> = {
@@ -98,21 +115,82 @@ function scoreArticle(input: {
   return score;
 }
 
+function CategoryChipLink({
+  href,
+  active,
+  icon,
+  label,
+}: {
+  href: string;
+  active: boolean;
+  icon: string;
+  label: string;
+}) {
+  return (
+    <Link
+      href={href}
+      aria-current={active ? "page" : undefined}
+      className={`group flex min-h-[3.625rem] flex-col items-center justify-center gap-1 rounded-xl border px-1 py-1.5 text-center transition duration-200 [transition-property:color,background-color,border-color,transform,box-shadow] active:scale-[0.98] sm:min-h-[4.75rem] sm:gap-2 sm:rounded-2xl sm:px-2.5 sm:py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-400/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020617] ${
+        active
+          ? "border-lime-400/45 bg-gradient-to-b from-lime-400/[0.14] to-lime-500/[0.06] text-lime-100 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)]"
+          : "border-white/[0.09] bg-slate-950/55 text-slate-200 hover:border-white/18 hover:bg-white/[0.05]"
+      } `}
+    >
+      <span
+        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-base leading-none transition sm:h-10 sm:w-10 sm:rounded-xl sm:text-xl ${
+          active
+            ? "bg-lime-400/20 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]"
+            : "bg-white/[0.06] group-hover:bg-white/10"
+        }`}
+        aria-hidden
+      >
+        {icon}
+      </span>
+      <span className="line-clamp-2 w-full text-[10px] font-medium leading-tight tracking-tight sm:text-[11px] sm:leading-snug">
+        {label}
+      </span>
+    </Link>
+  );
+}
+
 export function CannapediaExplorer({
   locale,
   categories,
   articles,
   activeCategorySlug,
+  hero,
   copy,
 }: {
   locale: Locale;
   categories: CategoryItem[];
   articles: ArticleItem[];
   activeCategorySlug: string;
+  hero: HeroCopy;
   copy: Copy;
 }) {
   const [query, setQuery] = useState("");
+  const [panelOpen, setPanelOpen] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const onDoc = (e: MouseEvent) => {
+      const t = e.target as Node;
+      if (panelOpen && panelRef.current && !panelRef.current.contains(t)) {
+        setPanelOpen(false);
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, [panelOpen]);
+
+  useEffect(() => {
+    if (!panelOpen) return;
+    const id = requestAnimationFrame(() => inputRef.current?.focus());
+    return () => cancelAnimationFrame(id);
+  }, [panelOpen]);
 
   const categoryMap = useMemo(
     () => new Map(categories.map((entry) => [entry.slug, entry.name])),
@@ -148,84 +226,120 @@ export function CannapediaExplorer({
 
   return (
     <>
-      <section className="relative">
-        <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-3 sm:rounded-3xl sm:p-4">
-          <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-slate-900/70 px-3 py-2.5">
-            <span className="text-slate-400">🔎</span>
-            <input
-              value={query}
-              onFocus={() => setShowSuggestions(true)}
-              onBlur={() => setTimeout(() => setShowSuggestions(false), 120)}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder={copy.searchPlaceholder}
-              className="w-full bg-transparent text-sm text-white outline-none placeholder:text-slate-500 sm:text-base"
+      <section className="relative overflow-visible rounded-2xl border border-white/10 bg-slate-950/55 p-5 shadow-lg shadow-black/30 backdrop-blur-md sm:rounded-[2rem] sm:p-8">
+        <div
+          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent"
+          aria-hidden
+        />
+        <div className="relative z-[1] flex flex-col gap-3 sm:gap-4">
+          <div className="inline-flex min-w-0 items-center gap-2.5 text-sm font-semibold tracking-wide text-lime-300 sm:gap-3 sm:text-base">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo.svg"
+              alt="Grower Georgia flag logo"
+              width={16}
+              height={16}
+              className="h-5 w-5 shrink-0 sm:h-6 sm:w-6"
             />
-            {query ? (
-              <button
-                type="button"
-                onClick={() => setQuery("")}
-                className="rounded-full border border-white/10 px-2 py-1 text-[11px] text-slate-300 transition hover:bg-white/10"
-              >
-                Clear
-              </button>
-            ) : null}
+            {hero.badge}
           </div>
-          <p className="mt-2 px-1 text-[11px] text-slate-400 sm:text-xs">{copy.searchHint}</p>
-        </div>
-
-        {showSuggestions && query.trim() && suggestions.length > 0 ? (
-          <div className="absolute left-0 right-0 top-full z-20 mt-2 rounded-2xl border border-white/10 bg-slate-950/95 p-2 shadow-2xl shadow-black/40 backdrop-blur-sm">
-            <p className="px-2 pb-1 text-[11px] uppercase tracking-[0.12em] text-slate-400">
-              {copy.suggestionsTitle}
-            </p>
-            <div className="space-y-1">
-              {suggestions.map((article) => (
-                <Link
-                  key={`suggestion-${article.slug}`}
-                  href={getLocalizedPath(locale, `/cannapedia/${article.slug}`)}
-                  className="block rounded-xl px-2 py-2 text-sm text-slate-200 transition hover:bg-white/10 hover:text-white"
-                >
-                  {article.title[locale]}
-                </Link>
-              ))}
-            </div>
-          </div>
-        ) : null}
-      </section>
-
-      <section className="grid grid-cols-3 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-6">
-        <Link
-          href={getLocalizedPath(locale, "/cannapedia")}
-          className={`rounded-xl border px-2.5 py-2 text-slate-200 transition sm:rounded-2xl sm:px-3 sm:py-2.5 ${
-            !activeCategorySlug
-              ? "border-lime-400/40 bg-lime-400/10 text-lime-200"
-              : "border-white/10 bg-slate-950/60 hover:border-lime-400/30"
-          }`}
-        >
-          <div className="flex items-center gap-1.5">
-            <span className="text-sm sm:text-base">📚</span>
-            <p className="line-clamp-1 text-[11px] font-medium leading-tight sm:text-xs">
-              {copy.allCategories}
-            </p>
-          </div>
-        </Link>
-        {categories.map((category) => (
-          <Link
-            key={category.slug}
-            href={getLocalizedPath(locale, `/cannapedia?category=${category.slug}`)}
-            className={`rounded-xl border px-2.5 py-2 text-slate-200 transition sm:rounded-2xl sm:px-3 sm:py-2.5 ${
-              activeCategorySlug === category.slug
-                ? "border-lime-400/40 bg-lime-400/10 text-lime-200"
-                : "border-white/10 bg-slate-950/60 hover:border-lime-400/30"
+          <h1
+            className={`text-xl font-semibold leading-tight tracking-wide text-white sm:text-3xl lg:text-4xl ${
+              locale === "ka" ? cannapediaHeroTitleKa.className : ""
             }`}
           >
-            <div className="flex items-center gap-1.5">
-              <span className="text-sm sm:text-base">{category.icon}</span>
-              <p className="line-clamp-1 text-[11px] font-medium leading-tight sm:text-xs">
-                {category.name}
-              </p>
-            </div>
-          </Link>
+            {hero.title}
+          </h1>
+          <p className="max-w-3xl text-xs leading-relaxed text-slate-300 sm:text-sm sm:leading-6">
+            {hero.description}
+          </p>
+
+          <div ref={panelRef} className="relative z-[2] mt-1 sm:mt-0">
+            {!panelOpen ? (
+              <button
+                type="button"
+                className="inline-flex w-fit max-w-full items-center gap-2 rounded-full border border-white/15 bg-slate-900/60 px-3 py-2 text-xs font-medium text-white shadow-sm transition hover:border-white/25 hover:bg-white/[0.07] sm:px-4 sm:text-sm"
+                aria-expanded={false}
+                onClick={() => setPanelOpen(true)}
+              >
+                <Search className="h-3.5 w-3.5 shrink-0 opacity-90 sm:h-4 sm:w-4" strokeWidth={2.25} aria-hidden />
+                {copy.searchActionLabel}
+              </button>
+            ) : (
+              <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-3 sm:rounded-3xl sm:p-4">
+                <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-slate-900/70 px-3 py-2.5">
+                  <span className="text-slate-400">🔎</span>
+                  <input
+                    ref={inputRef}
+                    value={query}
+                    onFocus={() => setShowSuggestions(true)}
+                    onBlur={() => setTimeout(() => setShowSuggestions(false), 120)}
+                    onChange={(event) => setQuery(event.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key !== "Escape") return;
+                      e.preventDefault();
+                      const dropdownVisible =
+                        showSuggestions && query.trim().length > 0 && suggestions.length > 0;
+                      if (dropdownVisible) {
+                        setShowSuggestions(false);
+                      } else {
+                        setPanelOpen(false);
+                      }
+                    }}
+                    placeholder={copy.searchPlaceholder}
+                    className="w-full bg-transparent text-sm text-white outline-none placeholder:text-slate-500 sm:text-base"
+                  />
+                  {query ? (
+                    <button
+                      type="button"
+                      onClick={() => setQuery("")}
+                      className="rounded-full border border-white/10 px-2 py-1 text-[11px] text-slate-300 transition hover:bg-white/10"
+                    >
+                      {copy.clearLabel}
+                    </button>
+                  ) : null}
+                </div>
+                <p className="mt-2 px-1 text-[11px] text-slate-400 sm:text-xs">{copy.searchHint}</p>
+              </div>
+            )}
+
+            {panelOpen && showSuggestions && query.trim() && suggestions.length > 0 ? (
+              <div className="absolute left-0 right-0 top-full z-20 mt-2 rounded-2xl border border-white/10 bg-slate-950/95 p-2 shadow-2xl shadow-black/40 backdrop-blur-sm">
+                <p className="px-2 pb-1 text-[11px] uppercase tracking-[0.12em] text-slate-400">
+                  {copy.suggestionsTitle}
+                </p>
+                <div className="space-y-1">
+                  {suggestions.map((article) => (
+                    <Link
+                      key={`suggestion-${article.slug}`}
+                      href={getLocalizedPath(locale, `/cannapedia/${article.slug}`)}
+                      className="block rounded-xl px-2 py-2 text-sm text-slate-200 transition hover:bg-white/10 hover:text-white"
+                    >
+                      {article.title[locale]}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      </section>
+
+      <section className="grid grid-cols-4 gap-1.5 sm:grid-cols-3 sm:gap-3 lg:grid-cols-6">
+        <CategoryChipLink
+          href={getLocalizedPath(locale, "/cannapedia")}
+          active={!activeCategorySlug}
+          icon="📚"
+          label={copy.allCategories}
+        />
+        {categories.map((category) => (
+          <CategoryChipLink
+            key={category.slug}
+            href={getLocalizedPath(locale, `/cannapedia?category=${category.slug}`)}
+            active={activeCategorySlug === category.slug}
+            icon={category.icon}
+            label={category.name}
+          />
         ))}
       </section>
 

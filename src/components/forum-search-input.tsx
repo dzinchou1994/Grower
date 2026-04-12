@@ -1,5 +1,6 @@
 "use client";
 
+import { Search } from "lucide-react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -31,9 +32,11 @@ export function ForumSearchInput({
   const listId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [value, setValue] = useState(defaultValue);
+  const [panelOpen, setPanelOpen] = useState(() => Boolean(defaultValue.trim()));
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState<ForumSearchSuggestionItem[]>([]);
@@ -77,14 +80,26 @@ export function ForumSearchInput({
 
   useEffect(() => {
     const onDoc = (e: MouseEvent) => {
-      if (!wrapRef.current?.contains(e.target as Node)) {
+      const t = e.target as Node;
+      if (!wrapRef.current?.contains(t)) {
+        setOpen(false);
+        setActive(-1);
+      }
+      if (panelOpen && !panelRef.current?.contains(t)) {
+        setPanelOpen(false);
         setOpen(false);
         setActive(-1);
       }
     };
     document.addEventListener("mousedown", onDoc);
     return () => document.removeEventListener("mousedown", onDoc);
-  }, []);
+  }, [panelOpen]);
+
+  useEffect(() => {
+    if (!panelOpen) return;
+    const id = requestAnimationFrame(() => inputRef.current?.focus());
+    return () => cancelAnimationFrame(id);
+  }, [panelOpen]);
 
   const onChange = (next: string) => {
     setValue(next);
@@ -127,8 +142,16 @@ export function ForumSearchInput({
       e.preventDefault();
       setActive((i) => Math.max(i - 1, -1));
     } else if (e.key === "Escape") {
-      setOpen(false);
-      setActive(-1);
+      e.preventDefault();
+      const dropdownVisible = open && value.trim().length >= 2;
+      if (dropdownVisible) {
+        setOpen(false);
+        setActive(-1);
+      } else {
+        setPanelOpen(false);
+        setOpen(false);
+        setActive(-1);
+      }
     } else if (e.key === "Enter" && active >= 0 && flatNav[active]) {
       e.preventDefault();
       window.location.href = hrefFor(flatNav[active]);
@@ -136,124 +159,138 @@ export function ForumSearchInput({
   };
 
   return (
-    <form
-      className="relative mt-2 flex flex-col gap-2 border-t border-white/10 pt-4 sm:mt-3 sm:flex-row sm:items-center sm:gap-3"
-      method="GET"
-      action={pathname || undefined}
-    >
-      <div ref={wrapRef} className="relative min-w-0 flex-1">
-        <input
-          ref={inputRef}
-          type="text"
-          name="q"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          onFocus={() => {
-            setOpen(true);
-            if (value.trim().length >= 2) {
-              void fetchSuggestions(value);
-            }
-          }}
-          onKeyDown={onKeyDown}
-          placeholder={placeholder}
-          autoComplete="off"
-          role="combobox"
-          aria-expanded={open}
-          aria-controls={listId}
-          aria-autocomplete="list"
-          className="w-full rounded-xl border border-white/10 bg-slate-900/80 px-2.5 py-1.5 text-xs text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2 sm:px-3 sm:py-2"
-        />
+    <div ref={panelRef} className="relative mt-2">
+      {!panelOpen ? (
+        <button
+          type="button"
+          className="inline-flex w-fit max-w-full items-center gap-2 rounded-full border border-white/15 bg-slate-900/60 px-3 py-2 text-xs font-medium text-white shadow-sm transition hover:border-white/25 hover:bg-white/[0.07] sm:px-4 sm:text-sm"
+          aria-expanded={false}
+          onClick={() => setPanelOpen(true)}
+        >
+          <Search className="h-3.5 w-3.5 shrink-0 opacity-90 sm:h-4 sm:w-4" strokeWidth={2.25} aria-hidden />
+          {searchLabel}
+        </button>
+      ) : (
+        <form
+          className="flex flex-col gap-2 border-t border-white/10 pt-4 sm:flex-row sm:items-center sm:gap-3"
+          method="GET"
+          action={pathname || undefined}
+        >
+          <div ref={wrapRef} className="relative min-w-0 flex-1">
+            <input
+              ref={inputRef}
+              type="text"
+              name="q"
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+              onFocus={() => {
+                setOpen(true);
+                if (value.trim().length >= 2) {
+                  void fetchSuggestions(value);
+                }
+              }}
+              onKeyDown={onKeyDown}
+              placeholder={placeholder}
+              autoComplete="off"
+              role="combobox"
+              aria-expanded={open}
+              aria-controls={listId}
+              aria-autocomplete="list"
+              className="w-full rounded-xl border border-white/10 bg-slate-900/80 px-2.5 py-1.5 text-xs text-white placeholder:text-slate-500 outline-none ring-lime-400/40 focus:ring-2 sm:px-3 sm:py-2"
+            />
 
-        {open && value.trim().length >= 2 ? (
-          <div
-            id={listId}
-            role="listbox"
-            className="absolute left-0 right-0 top-full z-50 mt-1 max-h-72 overflow-y-auto rounded-xl border border-white/10 bg-slate-950/98 py-1 shadow-xl ring-1 ring-black/40 backdrop-blur-sm"
-          >
-            {loading ? (
-              <p className="px-3 py-2 text-xs text-slate-400">{loadingLabel}</p>
-            ) : items.length === 0 ? (
-              <p className="px-3 py-2 text-xs text-slate-400">{emptyLabel}</p>
-            ) : (
-              <>
-                {threadItems.length > 0 ? (
+            {open && value.trim().length >= 2 ? (
+              <div
+                id={listId}
+                role="listbox"
+                className="absolute left-0 right-0 top-full z-50 mt-1 max-h-72 overflow-y-auto rounded-xl border border-white/10 bg-slate-950/98 py-1 shadow-xl ring-1 ring-black/40 backdrop-blur-sm"
+              >
+                {loading ? (
+                  <p className="px-3 py-2 text-xs text-slate-400">{loadingLabel}</p>
+                ) : items.length === 0 ? (
+                  <p className="px-3 py-2 text-xs text-slate-400">{emptyLabel}</p>
+                ) : (
                   <>
-                    <p className="px-3 pb-1 pt-1.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                      {sectionThreads}
-                    </p>
-                    {threadItems.map((item) => {
-                      const globalIdx = flatNav.indexOf(item);
-                      const isActive = globalIdx === active;
-                      return (
-                        <Link
-                          key={`t-${item.threadSlug}`}
-                          href={hrefFor(item)}
-                          role="option"
-                          aria-selected={isActive}
-                          className={`block border-l-2 border-transparent px-3 py-2 text-left transition ${
-                            isActive
-                              ? "border-lime-400/80 bg-white/10"
-                              : "hover:bg-white/5"
-                          }`}
-                          onMouseEnter={() => setActive(globalIdx)}
-                          onClick={() => setOpen(false)}
-                        >
-                          <span className="line-clamp-1 text-sm font-medium text-white">
-                            {item.threadTitle}
-                          </span>
-                          <span className="line-clamp-1 text-xs text-slate-500">{item.topicTitle}</span>
-                          {item.snippet ? (
-                            <span className="mt-0.5 line-clamp-2 text-xs text-slate-400">{item.snippet}</span>
-                          ) : null}
-                        </Link>
-                      );
-                    })}
-                  </>
-                ) : null}
+                    {threadItems.length > 0 ? (
+                      <>
+                        <p className="px-3 pb-1 pt-1.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                          {sectionThreads}
+                        </p>
+                        {threadItems.map((item) => {
+                          const globalIdx = flatNav.indexOf(item);
+                          const isActive = globalIdx === active;
+                          return (
+                            <Link
+                              key={`t-${item.threadSlug}`}
+                              href={hrefFor(item)}
+                              role="option"
+                              aria-selected={isActive}
+                              className={`block border-l-2 border-transparent px-3 py-2 text-left transition ${
+                                isActive
+                                  ? "border-lime-400/80 bg-white/10"
+                                  : "hover:bg-white/5"
+                              }`}
+                              onMouseEnter={() => setActive(globalIdx)}
+                              onClick={() => setOpen(false)}
+                            >
+                              <span className="line-clamp-1 text-sm font-medium text-white">
+                                {item.threadTitle}
+                              </span>
+                              <span className="line-clamp-1 text-xs text-slate-500">{item.topicTitle}</span>
+                              {item.snippet ? (
+                                <span className="mt-0.5 line-clamp-2 text-xs text-slate-400">{item.snippet}</span>
+                              ) : null}
+                            </Link>
+                          );
+                        })}
+                      </>
+                    ) : null}
 
-                {commentItems.length > 0 ? (
-                  <>
-                    <p className="px-3 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                      {sectionComments}
-                    </p>
-                    {commentItems.map((item) => {
-                      const globalIdx = flatNav.indexOf(item);
-                      const isActive = globalIdx === active;
-                      return (
-                        <Link
-                          key={`c-${item.commentId}`}
-                          href={hrefFor(item)}
-                          role="option"
-                          aria-selected={isActive}
-                          className={`block border-l-2 border-transparent px-3 py-2 text-left transition ${
-                            isActive
-                              ? "border-lime-400/80 bg-white/10"
-                              : "hover:bg-white/5"
-                          }`}
-                          onMouseEnter={() => setActive(globalIdx)}
-                          onClick={() => setOpen(false)}
-                        >
-                          <span className="line-clamp-1 text-sm font-medium text-white">
-                            {item.threadTitle}
-                          </span>
-                          <span className="line-clamp-2 text-xs text-slate-400">{item.snippet}</span>
-                        </Link>
-                      );
-                    })}
+                    {commentItems.length > 0 ? (
+                      <>
+                        <p className="px-3 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                          {sectionComments}
+                        </p>
+                        {commentItems.map((item) => {
+                          const globalIdx = flatNav.indexOf(item);
+                          const isActive = globalIdx === active;
+                          return (
+                            <Link
+                              key={`c-${item.commentId}`}
+                              href={hrefFor(item)}
+                              role="option"
+                              aria-selected={isActive}
+                              className={`block border-l-2 border-transparent px-3 py-2 text-left transition ${
+                                isActive
+                                  ? "border-lime-400/80 bg-white/10"
+                                  : "hover:bg-white/5"
+                              }`}
+                              onMouseEnter={() => setActive(globalIdx)}
+                              onClick={() => setOpen(false)}
+                            >
+                              <span className="line-clamp-1 text-sm font-medium text-white">
+                                {item.threadTitle}
+                              </span>
+                              <span className="line-clamp-2 text-xs text-slate-400">{item.snippet}</span>
+                            </Link>
+                          );
+                        })}
+                      </>
+                    ) : null}
                   </>
-                ) : null}
-              </>
-            )}
+                )}
+              </div>
+            ) : null}
           </div>
-        ) : null}
-      </div>
 
-      <button
-        type="submit"
-        className="shrink-0 rounded-full border border-white/15 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-white/10 sm:px-4 sm:py-2 sm:text-sm"
-      >
-        {searchLabel}
-      </button>
-    </form>
+          <button
+            type="submit"
+            className="shrink-0 rounded-full border border-white/15 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-white/10 sm:px-4 sm:py-2 sm:text-sm"
+          >
+            {searchLabel}
+          </button>
+        </form>
+      )}
+    </div>
   );
 }

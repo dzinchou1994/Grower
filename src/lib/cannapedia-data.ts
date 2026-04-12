@@ -12,8 +12,7 @@ export type CannapediaArticle = {
     | "seedling"
     | "vegetative"
     | "flowering"
-    | "harvest"
-    | "post-harvest";
+    | "harvest";
   readMinutes: number;
   title: Record<Locale, string>;
   excerpt: Record<Locale, string>;
@@ -28,8 +27,7 @@ type CannapediaCategorySeed = {
     | "seedling"
     | "vegetative"
     | "flowering"
-    | "harvest"
-    | "post-harvest";
+    | "harvest";
   icon: string;
   name: Record<Locale, string>;
 };
@@ -98,15 +96,6 @@ export const cannapediaCategories: CannapediaCategorySeed[] = [
       ka: "ჰარვესტი",
       en: "Harvest",
       ru: "Харвест",
-    },
-  },
-  {
-    slug: "post-harvest",
-    icon: "🫙",
-    name: {
-      ka: "ჰარვესტის შემდეგ",
-      en: "Post-Harvest",
-      ru: "После харвеста",
     },
   },
 ];
@@ -370,17 +359,17 @@ export const cannapediaArticles: CannapediaArticle[] = [
   },
   {
     slug: "keep-buds-fresh-and-zero-waste",
-    category: "post-harvest",
+    category: "harvest",
     readMinutes: 8,
     title: {
-      ka: "ჰარვესტის შემდეგ: როგორ შევინახოთ ბადსი და არაფერი დავკარგოთ",
-      en: "Post-Harvest: Keep Buds Fresh and Waste Nothing",
-      ru: "После харвеста: сохранить шишки свежими и ничего не потерять",
+      ka: "ჰარვესტი: ბადსის შენახვა, trim და zero-waste",
+      en: "Harvest: Storing Buds, Trim, and Zero Waste",
+      ru: "Харвест: хранение шишек, трим и без отходов",
     },
     excerpt: {
-      ka: "შენახვა, ტენიანობის კონტროლი, trim-ის გამოყენება და zero-waste მიდგომა.",
-      en: "Storage, humidity control, trim usage, and practical zero-waste workflow.",
-      ru: "Хранение, контроль влажности, использование трима и практичный zero-waste подход.",
+      ka: "გაშრობისა და კიურინგის შემდეგ - ქილები, ტენიანობა, trim-ის გამოყენება და ნულ ნარჩენი მიდგომა.",
+      en: "After drying and curing: jars, humidity, using trim well, and a practical zero-waste flow.",
+      ru: "После сушки и кюринга: банки, влажность, использование трима и подход без отходов.",
     },
     content: {
       ka: [
@@ -528,6 +517,8 @@ async function ensureCannapediaSeedData() {
             },
           });
         }
+
+        await db.cannapediaCategory.deleteMany({ where: { slug: "post-harvest" } });
       } catch {
         global.__cannapediaDbUnavailable = true;
         throw new Error("Cannapedia DB tables unavailable");

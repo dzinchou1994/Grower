@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { UserAvatar } from "@/components/user-avatar";
 import type { Locale } from "@/lib/i18n";
@@ -86,10 +87,13 @@ export function AccountMessageInbox({
   locale,
   currentUserId,
   fullPage = false,
+  leadAction,
 }: {
   locale: Locale;
   currentUserId: string;
   fullPage?: boolean;
+  /** e.g. back link on full-page messages - rendered with no card wrapper */
+  leadAction?: ReactNode;
 }) {
   const t = copy(locale);
   const [messages, setMessages] = useState<MessageRecord[]>([]);
@@ -245,7 +249,7 @@ export function AccountMessageInbox({
     }
   }
 
-  return (
+  const inboxSection = (
     <section
       className={
         fullPage
@@ -392,4 +396,15 @@ export function AccountMessageInbox({
       </div>
     </section>
   );
+
+  if (leadAction) {
+    return (
+      <div className="flex flex-col gap-5 sm:gap-6">
+        {leadAction}
+        {inboxSection}
+      </div>
+    );
+  }
+
+  return inboxSection;
 }

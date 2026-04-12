@@ -44,7 +44,7 @@ const seededNews: NewsSeed[] = [
   {
     slug: "georgia-expands-hemp-dialogue-2026",
     scope: "GEORGIA",
-    imageUrl: "https://images.unsplash.com/photo-1536657464919-892534f60d6e?w=1200&h=630&fit=crop&crop=center",
+    imageUrl: "/news/georgia-industrial-cannabis-field.png",
     sourceName: "Grower Editorial",
     sourceUrl: "https://grower.ge",
     title: {
@@ -203,7 +203,7 @@ Experts predict that by 2028, 60% of European greenhouses will use some form of 
   {
     slug: "georgian-community-launches-harm-reduction-workshops",
     scope: "GEORGIA",
-    imageUrl: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=630&fit=crop&crop=center",
+    imageUrl: "/news/georgia-harm-reduction-banner.png",
     sourceName: "Grower Community",
     sourceUrl: "https://grower.ge",
     title: {
@@ -259,7 +259,6 @@ const memorySubmissions: NewsSubmissionRecord[] = [];
 
 declare global {
   var __newsTablesUnavailable: boolean | undefined;
-  var __newsSeedPromise: Promise<void> | undefined;
 }
 
 function normalizeSlug(value: string) {
@@ -294,55 +293,57 @@ async function ensureNewsTables() {
   return !global.__newsTablesUnavailable;
 }
 
-async function ensureNewsSeedData() {
+/** Runs once per request; re-syncs seed rows from code (e.g. imageUrl) so DB matches `seededNews` after edits. */
+const syncNewsSeedToDatabase = cache(async () => {
   const hasTables = await ensureNewsTables();
   if (!hasTables) return;
-  if (!global.__newsSeedPromise) {
-    global.__newsSeedPromise = (async () => {
-      for (const seed of seededNews) {
-        await (db as any).newsArticle.upsert({
-          where: { slug: seed.slug },
-          update: {
-            scope: seed.scope,
-            imageUrl: seed.imageUrl,
-            sourceName: seed.sourceName,
-            sourceUrl: seed.sourceUrl,
-            titleKa: seed.title.ka,
-            titleEn: seed.title.en,
-            titleRu: seed.title.ru,
-            excerptKa: seed.excerpt.ka,
-            excerptEn: seed.excerpt.en,
-            excerptRu: seed.excerpt.ru,
-            bodyKa: seed.body.ka,
-            bodyEn: seed.body.en,
-            bodyRu: seed.body.ru,
-            isPublished: true,
-          },
-          create: {
-            slug: seed.slug,
-            scope: seed.scope,
-            imageUrl: seed.imageUrl,
-            sourceName: seed.sourceName,
-            sourceUrl: seed.sourceUrl,
-            titleKa: seed.title.ka,
-            titleEn: seed.title.en,
-            titleRu: seed.title.ru,
-            excerptKa: seed.excerpt.ka,
-            excerptEn: seed.excerpt.en,
-            excerptRu: seed.excerpt.ru,
-            bodyKa: seed.body.ka,
-            bodyEn: seed.body.en,
-            bodyRu: seed.body.ru,
-            isPublished: true,
-            createdAt: new Date(seed.createdAt),
-          },
-        });
-      }
-    })().catch(() => {
-      global.__newsTablesUnavailable = true;
-    });
+  try {
+    for (const seed of seededNews) {
+      await (db as any).newsArticle.upsert({
+        where: { slug: seed.slug },
+        update: {
+          scope: seed.scope,
+          imageUrl: seed.imageUrl,
+          sourceName: seed.sourceName,
+          sourceUrl: seed.sourceUrl,
+          titleKa: seed.title.ka,
+          titleEn: seed.title.en,
+          titleRu: seed.title.ru,
+          excerptKa: seed.excerpt.ka,
+          excerptEn: seed.excerpt.en,
+          excerptRu: seed.excerpt.ru,
+          bodyKa: seed.body.ka,
+          bodyEn: seed.body.en,
+          bodyRu: seed.body.ru,
+          isPublished: true,
+        },
+        create: {
+          slug: seed.slug,
+          scope: seed.scope,
+          imageUrl: seed.imageUrl,
+          sourceName: seed.sourceName,
+          sourceUrl: seed.sourceUrl,
+          titleKa: seed.title.ka,
+          titleEn: seed.title.en,
+          titleRu: seed.title.ru,
+          excerptKa: seed.excerpt.ka,
+          excerptEn: seed.excerpt.en,
+          excerptRu: seed.excerpt.ru,
+          bodyKa: seed.body.ka,
+          bodyEn: seed.body.en,
+          bodyRu: seed.body.ru,
+          isPublished: true,
+          createdAt: new Date(seed.createdAt),
+        },
+      });
+    }
+  } catch {
+    global.__newsTablesUnavailable = true;
   }
-  await global.__newsSeedPromise;
+});
+
+async function ensureNewsSeedData() {
+  await syncNewsSeedToDatabase();
 }
 
 function mapNewsArticle(row: any): NewsArticleRecord {

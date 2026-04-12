@@ -60,17 +60,19 @@ export default async function MessagesPage({ params }: PageProps) {
         : "Back to account";
 
   return (
-    <div className="flex flex-col gap-5 sm:gap-6">
-      <section className="rounded-2xl border border-white/10 bg-white/6 p-4 sm:rounded-[2rem] sm:p-6">
+    <AccountMessageInbox
+      locale={typedLocale}
+      currentUserId={sessionUser.userId}
+      fullPage
+      leadAction={
         <Link
           href={getLocalizedPath(typedLocale, "/account")}
-          className="inline-flex items-center gap-1.5 text-xs text-slate-300 transition hover:text-lime-300 sm:text-sm"
+          className="inline-flex w-fit items-center gap-1.5 text-xs text-slate-300 transition hover:text-lime-300 sm:text-sm"
         >
           ← {backLabel}
         </Link>
-      </section>
-      <AccountMessageInbox locale={typedLocale} currentUserId={sessionUser.userId} fullPage />
-    </div>
+      }
+    />
   );
 }
 
