@@ -5,6 +5,7 @@ import { BookOpen, Search } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { georgianMtavruliToMkhedruli } from "@/lib/georgian-script";
+import { toMtavruli } from "@/lib/georgian-mtavruli";
 import { getLocalizedPath, type Locale } from "@/lib/i18n-routing";
 
 /** Display + search: Google/DB sometimes store Mtavruli; normalize for ka. */
@@ -16,6 +17,12 @@ function kaText(locale: Locale, text: string) {
 const cannapediaHeroTitleKa = Noto_Sans_Georgian({
   subsets: ["georgian"],
   weight: ["600"],
+  display: "swap",
+});
+
+const cannapediaCategoryChipKa = Noto_Sans_Georgian({
+  subsets: ["georgian"],
+  weight: ["500", "600"],
   display: "swap",
 });
 
@@ -128,11 +135,13 @@ function CategoryChipLink({
   active,
   icon,
   label,
+  locale,
 }: {
   href: string;
   active: boolean;
   icon: string;
   label: string;
+  locale: Locale;
 }) {
   return (
     <Link
@@ -154,8 +163,12 @@ function CategoryChipLink({
       >
         {icon}
       </span>
-      <span className="line-clamp-2 w-full text-[10px] font-medium leading-tight tracking-tight sm:text-[11px] sm:leading-snug">
-        {label}
+      <span
+        className={`line-clamp-2 w-full text-[10px] font-medium leading-tight tracking-tight sm:text-[11px] sm:leading-snug ${
+          locale === "ka" ? `${cannapediaCategoryChipKa.className} tracking-wide` : ""
+        }`}
+      >
+        {locale === "ka" ? toMtavruli(label) : label}
       </span>
     </Link>
   );
@@ -337,12 +350,13 @@ export function CannapediaExplorer({
         </div>
       </section>
 
-      <section className="grid grid-cols-4 gap-1.5 sm:grid-cols-3 sm:gap-3 lg:grid-cols-6">
+      <section className="grid grid-cols-4 gap-1.5 sm:gap-3">
         <CategoryChipLink
           href={getLocalizedPath(locale, "/cannapedia")}
           active={!activeCategorySlug}
           icon="📚"
           label={copy.allCategories}
+          locale={locale}
         />
         {categories.map((category) => (
           <CategoryChipLink
@@ -351,6 +365,7 @@ export function CannapediaExplorer({
             active={activeCategorySlug === category.slug}
             icon={category.icon}
             label={category.name}
+            locale={locale}
           />
         ))}
       </section>
