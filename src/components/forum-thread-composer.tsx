@@ -6,7 +6,7 @@ import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 export const OPEN_THREAD_COMPOSER_EVENT = "grower:open-thread-composer";
 
-/** Primary CTA in topic hero — opens hidden {@link ForumThreadComposer} and scrolls to #new-thread */
+/** Primary CTA in topic hero - opens hidden {@link ForumThreadComposer} and scrolls to #new-thread */
 export function ForumTopicComposeTrigger({ label, className }: { label: string; className: string }) {
   return (
     <button

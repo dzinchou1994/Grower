@@ -1,5 +1,5 @@
 /**
- * Shared demo diary image URLs (Wikimedia Commons — CC-licensed cannabis/hemp photos).
+ * Shared demo diary image URLs (Wikimedia Commons - CC-licensed cannabis/hemp photos).
  * Used by seed script and migrate-picsum-to-commons.ts.
  */
 export const DEMO_PHOTO_BY_SEED: Record<string, string> = {

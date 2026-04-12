@@ -17,7 +17,7 @@ If `prisma migrate deploy` fails with P1002 (advisory lock timeout):
 
   (Replace with your Direct string from Neon; same user/password as pooled, hostname without -pooler.)
 
-  prisma.config.ts preserves DATABASE_URL from the shell — it will NOT be overwritten by .env / .env.local anymore.
+  prisma.config.ts preserves DATABASE_URL from the shell - it will NOT be overwritten by .env / .env.local anymore.
 
   Or paste and run in Neon **SQL Editor** (no Prisma needed):
      prisma/migrations/20260413210000_diary_medium_coco_peat/migration.sql
@@ -26,7 +26,7 @@ If `prisma migrate deploy` fails with P1002 (advisory lock timeout):
 
 Otherwise do ONE of:
 
-  A) From your machine — Direct DATABASE_URL as above, then:
+  A) From your machine - Direct DATABASE_URL as above, then:
      npx prisma migrate deploy
 
   B) Neon Dashboard → SQL Editor
@@ -36,4 +36,4 @@ Otherwise do ONE of:
 After that, redeploy is not required; the next request should work.
 
 ---
-ka: P2023 / COCO_COIR — A ან B. P1002 lock timeout — migrate მხოლოდ **Direct** host-ით ან SQL Editor-ში იგივე migration.sql.
+ka: P2023 / COCO_COIR - A ან B. P1002 lock timeout - migrate მხოლოდ **Direct** host-ით ან SQL Editor-ში იგივე migration.sql.

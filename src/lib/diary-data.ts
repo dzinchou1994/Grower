@@ -64,7 +64,7 @@ function publicDiaryWhere(
   };
 }
 
-/** Only set enum filters when present — Prisma rejects `undefined` in where. */
+/** Only set enum filters when present - Prisma rejects `undefined` in where. */
 function filterWhereFromList(filters: ListDiariesFilters): Prisma.DiaryWhereInput {
   const w: Prisma.DiaryWhereInput = {};
   if (filters.germinationMethod) {
@@ -140,7 +140,7 @@ async function fetchPublicDiaryFilterCounts(): Promise<PublicDiaryFilterCounts> 
   };
 }
 
-/** Cached ~1 min — explore chips do not need live counts every navigation. */
+/** Cached ~1 min - explore chips do not need live counts every navigation. */
 export const getPublicDiaryFilterCounts = unstable_cache(fetchPublicDiaryFilterCounts, ["diary-filter-counts-v1"], {
   revalidate: 60,
   tags: [DIARY_EXPLORE_COUNTS_TAG],
@@ -215,7 +215,7 @@ function mapDiaryAggregateRows(
   return map;
 }
 
-/** Week/like/comment totals for explore cards — raw SQL so we don't rely on `_count` fields the client may omit. */
+/** Week/like/comment totals for explore cards - raw SQL so we don't rely on `_count` fields the client may omit. */
 async function fetchDiaryListAggregates(
   diaryIds: string[],
 ): Promise<
@@ -255,7 +255,7 @@ async function fetchDiaryListAggregates(
   `);
     return mapDiaryAggregateRows(rows);
   } catch (e) {
-    // DB without DiaryComment migration yet — week-level counts only.
+    // DB without DiaryComment migration yet - week-level counts only.
     if (process.env.NODE_ENV === "development") {
       console.warn(
         "[diaries] aggregate with DiaryComment failed; using week comments only. Run: npx prisma migrate deploy",

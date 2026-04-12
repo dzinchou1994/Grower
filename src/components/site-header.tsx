@@ -10,7 +10,7 @@ import { UserAvatar } from "@/components/user-avatar";
 import type { SessionUser } from "@/lib/auth-session";
 import { getLocalizedPath, locales, type Locale } from "@/lib/i18n-routing";
 
-/** Mtavruli in the logo; Trebuchet has no Georgian — without this, browsers show Mkhedruli. */
+/** Mtavruli in the logo; Trebuchet has no Georgian - without this, browsers show Mkhedruli. */
 const logoGeorgianCaps = Noto_Sans_Georgian({
   subsets: ["georgian"],
   weight: ["600"],
@@ -72,7 +72,7 @@ export function SiteHeader({
   const ui =
     locale === "ka"
       ? {
-          navigation: "ნავიგაცია",
+          navigation: "ᲜᲐᲕᲘᲒᲐᲪᲘᲐ",
           signedIn: "შესული ხარ",
           language: "ენა",
           login: "ავტორიზაცია",
@@ -202,7 +202,7 @@ export function SiteHeader({
           </div>
         </Link>
 
-        {/* Desktop nav — centered */}
+        {/* Desktop nav - centered */}
         <div className="hidden items-center gap-3 lg:flex">
           <nav className={`flex items-center gap-0.5 rounded-full border border-white/8 bg-white/[0.03] p-1 text-slate-400 transition-all duration-300 ${scrolled ? "text-[11px]" : "text-[13px]"}`}>
             {navigation.map((item) => {
@@ -227,7 +227,7 @@ export function SiteHeader({
           </nav>
         </div>
 
-        {/* Right side — lang + user */}
+        {/* Right side - lang + user */}
         <div className="hidden items-center gap-2.5 lg:flex">
           <div className="flex items-center gap-px rounded-full border border-white/8 bg-white/[0.03] p-0.5 text-[10px] font-medium text-slate-500">
             {languageSwitcherLocales.map((entry) => (
@@ -358,7 +358,7 @@ export function SiteHeader({
       </div>
 
       {/* Mobile menu: portal to body so sticky/backdrop ancestors cannot break fixed + scroll.
-          No "mounted" delay — Cursor/simple previews can lag useEffect; gate only on document. */}
+          No "mounted" delay - Cursor/simple previews can lag useEffect; gate only on document. */}
       {mobileMenuOpen &&
         typeof document !== "undefined" &&
         createPortal(
@@ -377,7 +377,11 @@ export function SiteHeader({
               <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-lime-400/35 to-transparent" />
 
               <div className="flex shrink-0 items-center justify-between border-b border-white/[0.06] px-5 pb-4 pt-6">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+                <p
+                  className={`text-[11px] font-semibold tracking-[0.2em] text-slate-500 ${
+                    locale === "ka" ? logoGeorgianCaps.className : "uppercase"
+                  }`}
+                >
                   {ui.navigation}
                 </p>
                 <button

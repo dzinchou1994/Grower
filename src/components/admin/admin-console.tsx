@@ -1283,18 +1283,18 @@ function SeoPanel() {
       <div className="mt-4 grid gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
         <div>
           <label className="mb-1.5 block text-xs font-medium text-slate-300">
-            Page Title <span className="text-slate-500">— browser tab &amp; Google title</span>
+            Page Title <span className="text-slate-500">- browser tab &amp; Google title</span>
           </label>
           <input
             value={metaTitle}
             onChange={(event) => setMetaTitle(event.target.value)}
-            placeholder="e.g. Grower — ქართული კანაფის საზოგადოება"
+            placeholder="e.g. Grower - ქართული კანაფის საზოგადოება"
             className="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white"
           />
         </div>
         <div>
           <label className="mb-1.5 block text-xs font-medium text-slate-300">
-            Page Description <span className="text-slate-500">— Google snippet description</span>
+            Page Description <span className="text-slate-500">- Google snippet description</span>
           </label>
           <textarea
             value={metaDescription}
@@ -1308,7 +1308,7 @@ function SeoPanel() {
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className="mb-1.5 block text-xs font-medium text-slate-300">
-              OG Title <span className="text-slate-500">— social share title</span>
+              OG Title <span className="text-slate-500">- social share title</span>
             </label>
             <input
               value={ogTitle}
@@ -1319,7 +1319,7 @@ function SeoPanel() {
           </div>
           <div>
             <label className="mb-1.5 block text-xs font-medium text-slate-300">
-              Keywords <span className="text-slate-500">— comma separated</span>
+              Keywords <span className="text-slate-500">- comma separated</span>
             </label>
             <input
               value={keywords}
@@ -1331,7 +1331,7 @@ function SeoPanel() {
         </div>
         <div>
           <label className="mb-1.5 block text-xs font-medium text-slate-300">
-            OG Description <span className="text-slate-500">— social share description</span>
+            OG Description <span className="text-slate-500">- social share description</span>
           </label>
           <textarea
             value={ogDescription}
@@ -1348,7 +1348,7 @@ function SeoPanel() {
             onChange={(event) => setNoIndex(event.target.checked)}
             className="rounded"
           />
-          <span>Noindex — hide this page from Google</span>
+          <span>Noindex - hide this page from Google</span>
         </label>
         <hr className="border-white/10" />
         <div>
@@ -1389,7 +1389,7 @@ function SeoPanel() {
                     <span className="rounded-full bg-red-400/15 px-2 py-0.5 text-[10px] text-red-300">noindex</span>
                   )}
                 </div>
-                <p className="mt-1 truncate text-xs text-lime-300/80">{item.metaTitle || "—"}</p>
+                <p className="mt-1 truncate text-xs text-lime-300/80">{item.metaTitle || "-"}</p>
                 <p className="mt-0.5 truncate text-[10px] text-slate-500">{item.metaDescription || "No description"}</p>
               </div>
             ))}

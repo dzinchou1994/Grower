@@ -49,6 +49,8 @@ const translations = {
       secondaryCta: "ᲓᲦᲘᲣᲠᲔᲑᲘ",
       topUsers: "Top 10 გროვერი",
       topUsersTitle: "ᲐᲥᲢᲘᲣᲠᲘ ᲬᲔᲕᲠᲔᲑᲘᲡ ᲠᲔᲘᲢᲘᲜᲒᲘ",
+      topUsersXpHeading: "XP",
+      topUsersXpSummary: "აქტიურობით აგროვებ ქულებს, შოპში გადაცვლა მალე!",
       xpLabel: "XP",
       levelLabel: "დონე",
       forumHighlight: "ᲐᲥᲢᲘᲣᲠᲘ ᲓᲘᲡᲙᲣᲡᲘᲔᲑᲘ",
@@ -136,7 +138,7 @@ const translations = {
     diaries: {
       badge: "მოყვანის დღიურები",
       title: "კანაფის დღიურები",
-      description: "კვირეული ჩანაწერები და ფოტოები — ერთ ჟურნალში.",
+      description: "კვირეული ჩანაწერები და ფოტოები - ერთ ჟურნალში.",
       createDiary: "ახალი დღიურის შექმნა",
       weeksLabel: "კვირა",
       backToDiaries: "დღიურებზე დაბრუნება",
@@ -168,11 +170,11 @@ const translations = {
       diaryDiscussionTitle: "დღიურის განხილვა",
       loadErrorTitle: "დღიურები ვერ ჩაიტვირთა",
       loadErrorHint:
-        "ხშირად დროებითი ქსელი ან ბაზაა — არა ყოველთვის `DATABASE_URL`. ზუსტი მიზეზი: Vercel → Deployment → Runtime Logs. Production-ში `DATABASE_URL` (Neon) უნდა იყოს ჩართული.",
+        "ხშირად დროებითი ქსელი ან ბაზაა - არა ყოველთვის `DATABASE_URL`. ზუსტი მიზეზი: Vercel → Deployment → Runtime Logs. Production-ში `DATABASE_URL` (Neon) უნდა იყოს ჩართული.",
       newDiary: {
         badge: "დღიურის შექმნა",
         title: "დაიწყე ახალი მცენარის ჟურნალის წარმოება",
-        description: "ახალი მცენარის დღიურის შექმნა — სათაური, ჯიში, გარემო და ფოტოები.",
+        description: "ახალი მცენარის დღიურის შექმნა - სათაური, ჯიში, გარემო და ფოტოები.",
         helpHintBefore: "კითხვების შემთხვევაში",
         helpHintLink: "მოგვწერეთ",
       },
@@ -180,7 +182,7 @@ const translations = {
         badge: "კვირის განახლება",
         titlePrefix: "დაამატე შემდეგი კვირა:",
         description:
-          "კვირის ნომერი, აღწერა და მინიმუმ ერთი ფოტო — ატვირთვა ან URL. დამატებითი სურათებისთვის შეგიძლია რამდენიმე ფაილი ან ბმულები.",
+          "კვირის ნომერი, აღწერა და მინიმუმ ერთი ფოტო - ატვირთვა ან URL. დამატებითი სურათებისთვის შეგიძლია რამდენიმე ფაილი ან ბმულები.",
       },
       fields: {
         diaryTitle: "დღიურის სათაური",
@@ -234,12 +236,12 @@ const translations = {
         addStrain: "ჯიშის დამატება",
         removeStrain: "წაშლა",
         breederOptional: "ბრიდერი (არასავალდებულო)",
-        uploadHint: "JPEG, PNG, WebP ან GIF — საჭიროა მინიმუმ ერთი (რამდენიმე ფაილიც შეიძლება).",
+        uploadHint: "JPEG, PNG, WebP ან GIF - საჭიროა მინიმუმ ერთი (რამდენიმე ფაილიც შეიძლება).",
         extraUrlsHint: "დამატებითი სურათებისთვის: ერთი URL თითო ხაზზე.",
         imageRequired: "აირჩიე მინიმუმ ერთი ფოტოს ფაილი ან დაამატე მინიმუმ ერთი სურათის URL.",
         uploadFailed: "ფოტოს ატვირთვა ვერ მოხერხდა.",
         coverLastPhotoHint:
-          "გარეკანის სურათად აირჩევა ბოლო ატვირთული ფაილი (რამდენიმეს თუ აირჩევ — ბოლო ფაილი).",
+          "გარეკანის სურათად აირჩევა ბოლო ატვირთული ფაილი (რამდენიმეს თუ აირჩევ - ბოლო ფაილი).",
         suggestedNextWeek: "შემდეგი კვირის შეთავაზება",
         latestWeekBadge: "ბოლო განახლება",
         earlierWeeks: "ადრეული კვირები",
@@ -329,6 +331,8 @@ const translations = {
       secondaryCta: "Diaries",
       topUsers: "Top 10 users",
       topUsersTitle: "Activity leaderboard",
+      topUsersXpHeading: "XP",
+      topUsersXpSummary: "Earn points from activity; growshop redemption coming soon.",
       xpLabel: "XP",
       levelLabel: "Level",
       forumHighlight: "Active Discussions",
@@ -448,11 +452,11 @@ const translations = {
       diaryDiscussionTitle: "Diary discussion",
       loadErrorTitle: "Could not load diaries",
       loadErrorHint:
-        "Often a temporary network/DB blip — not always a bad `DATABASE_URL`. See the exact error in Vercel → Deployment → Runtime Logs. Ensure Production has `DATABASE_URL` (Neon).",
+        "Often a temporary network/DB blip - not always a bad `DATABASE_URL`. See the exact error in Vercel → Deployment → Runtime Logs. Ensure Production has `DATABASE_URL` (Neon).",
       newDiary: {
         badge: "Create diary",
         title: "Start a new plant journal",
-        description: "Create a new grow diary — title, strain, environment, and photos.",
+        description: "Create a new grow diary - title, strain, environment, and photos.",
         helpHintBefore: "If you have questions,",
         helpHintLink: "contact us",
       },
@@ -460,7 +464,7 @@ const translations = {
         badge: "Weekly update",
         titlePrefix: "Add the next week to",
         description:
-          "Week number, notes, and at least one photo — upload files and/or paste image URLs. Multiple files or URLs are OK.",
+          "Week number, notes, and at least one photo - upload files and/or paste image URLs. Multiple files or URLs are OK.",
       },
       fields: {
         diaryTitle: "Diary title",
@@ -514,7 +518,7 @@ const translations = {
         addStrain: "Add strain",
         removeStrain: "Remove",
         breederOptional: "Breeder (optional)",
-        uploadHint: "JPEG, PNG, WebP, or GIF — at least one required (you can pick several files).",
+        uploadHint: "JPEG, PNG, WebP, or GIF - at least one required (you can pick several files).",
         extraUrlsHint: "Optional: more images as URLs, one per line.",
         imageRequired: "Add at least one photo (upload) or image URL.",
         uploadFailed: "Could not upload image.",
@@ -609,6 +613,8 @@ const translations = {
       secondaryCta: "Дневники",
       topUsers: "Топ 10 пользователей",
       topUsersTitle: "Рейтинг активности",
+      topUsersXpHeading: "XP",
+      topUsersXpSummary: "Очки за активность; обмен в гроушопах скоро.",
       xpLabel: "XP",
       levelLabel: "Уровень",
       forumHighlight: "Активные дискуссии",
@@ -728,11 +734,11 @@ const translations = {
       diaryDiscussionTitle: "Обсуждение дневника",
       loadErrorTitle: "Не удалось загрузить дневники",
       loadErrorHint:
-        "Часто временная сеть или БД — не обязательно неверный `DATABASE_URL`. Точная ошибка: Vercel → Deployment → Runtime Logs. В Production должен быть `DATABASE_URL` (Neon).",
+        "Часто временная сеть или БД - не обязательно неверный `DATABASE_URL`. Точная ошибка: Vercel → Deployment → Runtime Logs. В Production должен быть `DATABASE_URL` (Neon).",
       newDiary: {
         badge: "Создание diary",
         title: "Начните новый журнал растения",
-        description: "Создание нового дневника растения — название, сорт, среда и фото.",
+        description: "Создание нового дневника растения - название, сорт, среда и фото.",
         helpHintBefore: "По вопросам",
         helpHintLink: "напишите нам",
       },
@@ -740,7 +746,7 @@ const translations = {
         badge: "Недельное обновление",
         titlePrefix: "Добавить следующую неделю в",
         description:
-          "Номер недели, текст и минимум одно фото — загрузка файлов и/или URL. Можно несколько файлов или ссылок.",
+          "Номер недели, текст и минимум одно фото - загрузка файлов и/или URL. Можно несколько файлов или ссылок.",
       },
       fields: {
         diaryTitle: "Название дневника",
@@ -794,12 +800,12 @@ const translations = {
         addStrain: "Добавить сорт",
         removeStrain: "Удалить",
         breederOptional: "Сидбанк (необязательно)",
-        uploadHint: "JPEG, PNG, WebP или GIF — нужен минимум один файл (можно несколько).",
+        uploadHint: "JPEG, PNG, WebP или GIF - нужен минимум один файл (можно несколько).",
         extraUrlsHint: "Дополнительно: URL изображений, по одному в строке.",
         imageRequired: "Добавьте минимум одно фото (файл) или URL изображения.",
         uploadFailed: "Не удалось загрузить изображение.",
         coverLastPhotoHint:
-          "Обложкой будет последний загруженный файл (если выбрать несколько — используется последний).",
+          "Обложкой будет последний загруженный файл (если выбрать несколько - используется последний).",
         suggestedNextWeek: "Следующая неделя",
         latestWeekBadge: "Последнее обновление",
         earlierWeeks: "Прошлые недели",

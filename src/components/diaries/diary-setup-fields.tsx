@@ -99,7 +99,7 @@ function StringListBlock({
           ))}
         </div>
       ) : (
-        <p className="text-[11px] leading-relaxed text-slate-600">—</p>
+        <p className="text-[11px] leading-relaxed text-slate-600">-</p>
       )}
     </SetupCard>
   );
@@ -196,7 +196,7 @@ export function DiarySetupFields({
               ))}
             </div>
           ) : (
-            <p className="mt-3 text-[11px] text-slate-600">—</p>
+            <p className="mt-3 text-[11px] text-slate-600">-</p>
           )}
           <div className="mt-3 border-t border-white/[0.06] pt-3">
             <button

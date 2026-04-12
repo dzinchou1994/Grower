@@ -8,7 +8,7 @@
  * If you see errors about missing `Diary.setup`, run: npx prisma db push
  *
  * To refresh image URLs after changing this script, remove the demo rows (or delete
- * by slug) and run again — existing DBs skip when `demo-indoor-purple-punch-harvest` exists.
+ * by slug) and run again - existing DBs skip when `demo-indoor-purple-punch-harvest` exists.
  *
  * If rows already exist with old Lorem Picsum URLs, run:
  *   npx tsx scripts/migrate-picsum-to-commons.ts
@@ -59,7 +59,7 @@ const USERS = [
   {
     email: "demo.sofia@local.grower.ge",
     username: "sofia_greenhouse",
-    bio: "Coco / greenhouse runs. Demo account — say hi on the forum!",
+    bio: "Coco / greenhouse runs. Demo account - say hi on the forum!",
   },
 ] as const;
 
@@ -85,7 +85,7 @@ async function main() {
     return Boolean(rows[0]?.exists);
   };
   if (!(await hasSetupColumn())) {
-    console.warn('Adding column "Diary.setup" (JSONB) — matches prisma schema.');
+    console.warn('Adding column "Diary.setup" (JSONB) - matches prisma schema.');
     await prisma.$executeRawUnsafe(`ALTER TABLE "Diary" ADD COLUMN IF NOT EXISTS "setup" JSONB`);
   }
 
@@ -160,7 +160,7 @@ async function main() {
     {
       n: 2,
       title: "Seedling",
-      body: "First true leaves opened. RH 65%, temps 24–26°C. Watering with a light quarter-strength veg formula every 2–3 days — only when cups felt light.",
+      body: "First true leaves opened. RH 65%, temps 24–26°C. Watering with a light quarter-strength veg formula every 2–3 days - only when cups felt light.",
       img: weekImage("gdemo-a-w2"),
     },
     {
@@ -184,31 +184,31 @@ async function main() {
     {
       n: 6,
       title: "Week 1 flower",
-      body: "Stretch underway — raised lights. RH trimmed to ~55%. Introduced bloom nutes at quarter strength.",
+      body: "Stretch underway - raised lights. RH trimmed to ~55%. Introduced bloom nutes at quarter strength.",
       img: weekImage("gdemo-a-w6"),
     },
     {
       n: 7,
       title: "Mid flower",
-      body: "Stacking nicely. Removed a few fan leaves blocking lower sites. Watching for any calcium flags — calmag at low dose.",
+      body: "Stacking nicely. Removed a few fan leaves blocking lower sites. Watching for any calcium flags - calmag at low dose.",
       img: weekImage("gdemo-a-w7"),
     },
     {
       n: 8,
       title: "Late flower",
-      body: "Trichomes mostly cloudy with some clear on upper buds. Flushed over several days — runoff PPM dropping as intended.",
+      body: "Trichomes mostly cloudy with some clear on upper buds. Flushed over several days - runoff PPM dropping as intended.",
       img: weekImage("gdemo-a-w8"),
     },
     {
       n: 9,
       title: "Harvest prep",
-      body: "48h dark before chop. Tent cleaned, drying rack ready with gentle circulation — no direct wind on colas.",
+      body: "48h dark before chop. Tent cleaned, drying rack ready with gentle circulation - no direct wind on colas.",
       img: weekImage("gdemo-a-w9"),
     },
     {
       n: 10,
       title: "Harvest & cure",
-      body: "Wet trim, hung whole branches 60°F / 60% RH for ~12 days until stems snapped. Jars burped daily first week. Grape candy nose — happy with the run.",
+      body: "Wet trim, hung whole branches 60°F / 60% RH for ~12 days until stems snapped. Jars burped daily first week. Grape candy nose - happy with the run.",
       img: weekImage("gdemo-a-w10"),
     },
   ];
@@ -223,7 +223,7 @@ async function main() {
     {
       n: 2,
       title: "Veg canopy",
-      body: "Trellis installed early. Watering to 10–15% runoff, EC according to chart. Greenhouse temps swing more than indoor — watched VPD midday.",
+      body: "Trellis installed early. Watering to 10–15% runoff, EC according to chart. Greenhouse temps swing more than indoor - watched VPD midday.",
       img: weekImage("gdemo-b-w2"),
     },
     {
@@ -241,7 +241,7 @@ async function main() {
     {
       n: 5,
       title: "Ripening",
-      body: "Reduced nitrogen, pushed potassium. Lowered night temps slightly for color — subtle purple on leaf edges.",
+      body: "Reduced nitrogen, pushed potassium. Lowered night temps slightly for color - subtle purple on leaf edges.",
       img: weekImage("gdemo-b-w5"),
     },
     {
@@ -253,13 +253,13 @@ async function main() {
     {
       n: 7,
       title: "Trim & jar",
-      body: "Hand trim, stems snapped at 10 days dry. Cure in grove bags first two weeks. Mango/haze nose — uplifting.",
+      body: "Hand trim, stems snapped at 10 days dry. Cure in grove bags first two weeks. Mango/haze nose - uplifting.",
       img: weekImage("gdemo-b-w7"),
     },
     {
       n: 8,
       title: "Notes",
-      body: "Yield acceptable for the space; biggest lesson was midday heat spikes — shading cloth next run.",
+      body: "Yield acceptable for the space; biggest lesson was midday heat spikes - shading cloth next run.",
       img: weekImage("gdemo-b-w8"),
     },
   ];
@@ -268,7 +268,7 @@ async function main() {
     const diaryA = await tx.diary.create({
       data: {
         slug: slugA,
-        title: "Indoor Purple Punch — soil to harvest (demo)",
+        title: "Indoor Purple Punch - soil to harvest (demo)",
         strain: "Purple Punch",
         environment: "INDOOR" as DiaryEnvironment,
         growPhase: "HARVESTED",
@@ -277,7 +277,7 @@ async function main() {
         watering: "MANUAL" as DiaryWateringType,
         medium: "SOIL" as DiarySubstrateMedium,
         description:
-          "Fictional demo diary: single-tent soil run from seed to jars. Original text for GeoCannabis — not imported from other platforms.",
+          "Fictional demo diary: single-tent soil run from seed to jars. Original text for GeoCannabis - not imported from other platforms.",
         coverImageUrl: weekImage("gdemo-a-cover"),
         setup: setupA,
         status: "PUBLISHED",
@@ -304,7 +304,7 @@ async function main() {
     await tx.diary.create({
       data: {
         slug: slugB,
-        title: "Greenhouse Mango Haze — coco DTW (demo)",
+        title: "Greenhouse Mango Haze - coco DTW (demo)",
         strain: "Mango Haze",
         environment: "GREENHOUSE" as DiaryEnvironment,
         growPhase: "GROWING",
@@ -346,7 +346,7 @@ async function main() {
         data: {
           diaryWeekId: w3.id,
           authorId: u2.id,
-          body: "Clean canopy training — love the even spacing. How often were you watering in the 1 gal stage?",
+          body: "Clean canopy training - love the even spacing. How often were you watering in the 1 gal stage?",
         },
       });
     }

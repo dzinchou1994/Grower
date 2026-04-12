@@ -778,7 +778,7 @@ async function fetchCannapediaExplorerBundle(): Promise<{
 }
 
 /**
- * Cached explorer payload — avoids repeated DB reads on every Cannapedia index navigation.
+ * Cached explorer payload - avoids repeated DB reads on every Cannapedia index navigation.
  * Admin mutations should call `revalidateTag(CANNAPEDIA_EXPLORER_TAG)`.
  */
 export const getCannapediaExplorerBundleCached = unstable_cache(

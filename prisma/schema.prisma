@@ -18,7 +18,7 @@ enum DiaryEnvironment {
   GREENHOUSE
 }
 
-/** Active grow vs finished run — used for explore filters. */
+/** Active grow vs finished run - used for explore filters. */
 enum DiaryGrowPhase {
   GROWING
   HARVESTED

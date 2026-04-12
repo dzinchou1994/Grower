@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const { dict } = getLocalizedContent(locale as Locale);
   const weekHeading = dict.diaries.explore.weekHeading.replace("{n}", String(data.week.weekNumber));
-  const title = `Grower | ${data.diary.title} — ${weekHeading}`;
+  const title = `Grower | ${data.diary.title} - ${weekHeading}`;
   const description = data.week.description.slice(0, 160);
 
   return {
@@ -147,7 +147,7 @@ export default async function DiaryWeekPage({ params }: PageProps) {
         <div className="mt-3">
           <DiarySharePanel
             url={`${siteUrl}${getLocalizedPath(typedLocale, `/diaries/${diary.slug}/weeks/${weekNumber}`)}`}
-            title={`${diary.title} — ${explore.weekHeading.replace("{n}", String(diaryWeek.weekNumber))}${diaryWeek.title ? `: ${diaryWeek.title}` : ""}`}
+            title={`${diary.title} - ${explore.weekHeading.replace("{n}", String(diaryWeek.weekNumber))}${diaryWeek.title ? `: ${diaryWeek.title}` : ""}`}
             text={diaryWeek.description}
             labels={dict.diaries.share}
           />

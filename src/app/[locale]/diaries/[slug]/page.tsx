@@ -167,7 +167,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
           </div>
 
           <>
-            {/* Mobile: compact collapsible overview — saves vertical space */}
+            {/* Mobile: compact collapsible overview - saves vertical space */}
             <details className="group rounded-2xl border border-white/[0.07] bg-gradient-to-br from-white/[0.04] to-transparent shadow-[0_8px_32px_-20px_rgba(0,0,0,0.5)] backdrop-blur-sm lg:hidden open:border-yellow-400/20 open:shadow-[0_12px_40px_-16px_rgba(250,204,21,0.08)]">
               <summary className="flex cursor-pointer list-none items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-white/[0.03] [&::-webkit-details-marker]:hidden">
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400/25 via-amber-500/10 to-slate-900/50 shadow-[inset_0_1px_0_0_rgba(250,204,21,0.15)] ring-1 ring-yellow-400/25">

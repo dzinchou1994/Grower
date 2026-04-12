@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Activity, Gift } from "lucide-react";
 import { enUS, ka, ru } from "date-fns/locale";
 import { BookOpenIcon } from "@/components/icons";
 import { DiaryExploreCard } from "@/components/diaries/diary-explore-card";
@@ -114,7 +115,7 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
           <Link
             href={getLocalizedPath(typedLocale, "/forum")}
             className="absolute inset-0 z-0 rounded-2xl sm:rounded-[2rem]"
-            aria-label={`${dict.home.forumHighlightTitle} — ${dict.home.viewAllTopics}`}
+            aria-label={`${dict.home.forumHighlightTitle} - ${dict.home.viewAllTopics}`}
           />
           <div className="relative z-10 flex items-start justify-between gap-3 sm:items-center">
             <div className="min-w-0 pointer-events-none">
@@ -157,7 +158,7 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
           <Link
             href={getLocalizedPath(typedLocale, "/forum")}
             className="absolute inset-0 z-0 rounded-2xl sm:rounded-[2rem]"
-            aria-label={`${dict.forum.latestConversations} — ${dict.home.viewAllThreads}`}
+            aria-label={`${dict.forum.latestConversations} - ${dict.home.viewAllThreads}`}
           />
           <div className="relative z-10 flex items-start justify-between gap-3 sm:items-center">
             <div className="min-w-0 pointer-events-none">
@@ -374,6 +375,34 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
               </li>
             ))}
           </ol>
+        </div>
+
+        <div className="mt-5 border-t border-white/[0.07] pt-5">
+          <div className="relative overflow-hidden rounded-2xl border border-lime-400/20 bg-gradient-to-b from-lime-500/[0.07] via-slate-950/50 to-slate-950/85 p-3 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] ring-1 ring-inset ring-white/[0.04] sm:flex sm:items-center sm:gap-5 sm:p-4">
+            <div
+              className="pointer-events-none absolute -right-6 -top-6 h-20 w-20 rounded-full bg-lime-400/12 blur-2xl"
+              aria-hidden
+            />
+            <div
+              className="relative mx-auto flex max-w-[16rem] items-center justify-center gap-1.5 sm:mx-0 sm:shrink-0 sm:gap-2"
+              aria-hidden
+            >
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-lime-400/15 ring-1 ring-lime-400/30 sm:h-11 sm:w-11">
+                <Activity className="h-4 w-4 text-lime-200 sm:h-[18px] sm:w-[18px]" strokeWidth={2.2} />
+              </span>
+              <span className="h-px w-5 bg-gradient-to-r from-lime-400/15 via-lime-400/45 to-lime-400/15 sm:w-7" />
+              <span className="rounded-full border border-lime-400/35 bg-lime-500/10 px-2 py-1 text-[10px] font-bold tabular-nums tracking-wide text-lime-100 sm:px-2.5 sm:text-[11px]">
+                {dict.home.topUsersXpHeading}
+              </span>
+              <span className="h-px w-5 bg-gradient-to-r from-lime-400/15 via-lime-400/45 to-lime-400/15 sm:w-7" />
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-lime-400/15 ring-1 ring-lime-400/30 sm:h-11 sm:w-11">
+                <Gift className="h-4 w-4 text-lime-200 sm:h-[18px] sm:w-[18px]" strokeWidth={2.2} />
+              </span>
+            </div>
+            <p className="relative mt-3 text-center text-[11px] leading-snug text-slate-400 sm:mt-0 sm:min-w-0 sm:flex-1 sm:text-left sm:text-xs sm:leading-5">
+              {dict.home.topUsersXpSummary}
+            </p>
+          </div>
         </div>
       </section>
 

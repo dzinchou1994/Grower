@@ -8,7 +8,7 @@ import type {
 } from "@prisma/client";
 import type { DiarySortKey, ListDiariesFilters } from "@/lib/diary-data";
 
-/** Explicit lists — do not use `Object.values` on Prisma enum objects; they can be undefined at runtime (e.g. Turbopack). */
+/** Explicit lists - do not use `Object.values` on Prisma enum objects; they can be undefined at runtime (e.g. Turbopack). */
 const GERMINATION: readonly DiaryGerminationMethod[] = [
   "PAPER_TOWEL",
   "GLASS_OF_WATER",

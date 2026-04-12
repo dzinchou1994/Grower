@@ -1,5 +1,5 @@
 -- Prisma enum includes COCO_COIR again for reading legacy Neon rows.
--- Production may already have this label; dev DBs that ran coco→peat migration may not — add only if missing.
+-- Production may already have this label; dev DBs that ran coco→peat migration may not - add only if missing.
 
 DO $$
 BEGIN

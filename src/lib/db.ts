@@ -38,7 +38,7 @@ function createPrismaClient() {
 }
 
 // Production: singleton so serverless / long-running Node reuse one pool.
-// Development: do NOT stash on `global` — after `prisma generate`, a cached client can keep an old
+// Development: do NOT stash on `global` - after `prisma generate`, a cached client can keep an old
 // DMMF and throw (e.g. "Unknown field strains") until the dev server restarts. Not assigning here
 // avoids pinning a pre-generate client across HMR.
 const prismaInstance = connectionString

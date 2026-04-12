@@ -287,7 +287,7 @@ function QuickFilterStrip(props: Props) {
   );
 }
 
-/** Sort — minimal segmented control between filter bar and diary grid. */
+/** Sort - minimal segmented control between filter bar and diary grid. */
 export function DiarySortBar({
   basePath,
   sort,
@@ -446,7 +446,7 @@ export function DiaryExploreBar(props: Props) {
     <section className="rounded-2xl border border-white/10 bg-slate-950/50 p-3 sm:p-4 lg:rounded-[1.35rem] lg:p-5">
       <QuickFilterStrip {...props} />
 
-      {/* Advanced filters — collapsible on all breakpoints (avoids overwhelming desktop) */}
+      {/* Advanced filters - collapsible on all breakpoints (avoids overwhelming desktop) */}
       <details className="mt-3 border-t border-white/[0.06] pt-3 open:[&_summary_.chevron-btn]:rotate-180">
         <summary className="flex cursor-pointer list-none items-center gap-2 rounded-xl border border-white/[0.09] bg-gradient-to-br from-slate-900/90 via-slate-950/95 to-slate-950 px-2.5 py-2 text-left shadow-[0_6px_24px_-14px_rgba(0,0,0,0.55)] ring-1 ring-inset ring-white/[0.04] transition hover:border-yellow-400/25 hover:ring-yellow-400/15 [&::-webkit-details-marker]:hidden sm:gap-2.5 sm:px-3">
           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-yellow-400/25 bg-yellow-500/[0.14] text-yellow-200 shadow-[inset_0_1px_0_0_rgba(250,204,21,0.08)] sm:h-9 sm:w-9 sm:rounded-[10px]">

@@ -175,7 +175,7 @@ export default async function ForumTopicPage({ params }: PageProps) {
                   />
                 </div>
 
-                {/* Content — symmetric padding; extra pr only above comments so previews span full width */}
+                {/* Content - symmetric padding; extra pr only above comments so previews span full width */}
                 <div className="relative flex w-full min-w-0 flex-1 flex-col p-4 sm:p-5">
                   <div className="min-w-0 w-full">
                     <ForumThreadListItemHeader

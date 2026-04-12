@@ -70,7 +70,7 @@ export function DiarySharePanel({ url, title, text, labels }: Props) {
     whatsapp: `https://wa.me/?text=${encodeURIComponent(`${title}\n${url}`)}`,
   };
 
-  /** Compact icon control — full labels via title + aria-label only. */
+  /** Compact icon control - full labels via title + aria-label only. */
   const iconBtn =
     "inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/[0.08] bg-white/[0.03] text-slate-400 transition hover:border-white/[0.14] hover:bg-white/[0.06] hover:text-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-400/45 active:scale-[0.97]";
 

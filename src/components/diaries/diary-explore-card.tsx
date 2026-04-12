@@ -111,7 +111,7 @@ export function DiaryExploreCard({
                   ? ` · ${explore.strainsMore.replace("{count}", String(extraStrains))}`
                   : ""}
               </p>
-              <h2 className="mt-1 line-clamp-2 text-[13px] font-semibold leading-snug text-white [text-shadow:0_2px_4px_rgba(0,0,0,0.95)] sm:mt-1.5 sm:text-base sm:leading-tight">
+              <h2 className="mt-1 line-clamp-2 text-[13px] font-semibold uppercase leading-snug text-white [text-shadow:0_2px_4px_rgba(0,0,0,0.95)] sm:mt-1.5 sm:text-base sm:leading-tight">
                 {diary.title}
               </h2>
               <p className="mt-1 truncate text-[10px] text-white sm:text-[11px]">@{diary.author.username}</p>
@@ -128,7 +128,7 @@ export function DiaryExploreCard({
                     ? ` · ${explore.strainsMore.replace("{count}", String(extraStrains))}`
                     : ""}
                 </p>
-                <h2 className="mt-1 line-clamp-2 text-sm font-semibold leading-snug text-white sm:mt-1.5 sm:text-xl sm:leading-tight lg:line-clamp-2 lg:text-[13px] lg:leading-snug">
+                <h2 className="mt-1 line-clamp-2 text-sm font-semibold uppercase leading-snug text-white sm:mt-1.5 sm:text-xl sm:leading-tight lg:line-clamp-2 lg:text-[13px] lg:leading-snug">
                   {diary.title}
                 </h2>
                 <p className="mt-1.5 truncate text-[10px] text-slate-500 sm:mt-2 sm:text-[11px]">

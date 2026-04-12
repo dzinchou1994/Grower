@@ -48,7 +48,7 @@ export default async function ManifestoPage({ params }: Props) {
 
   return (
     <div className="flex flex-col gap-5 pb-8 sm:gap-6 sm:pb-10">
-      {/* Top bar — app shell */}
+      {/* Top bar - app shell */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Link
           href={getLocalizedPath(typedLocale, "")}
@@ -87,7 +87,7 @@ export default async function ManifestoPage({ params }: Props) {
         </nav>
       </div>
 
-      {/* Hero — matches home manifesto teaser energy */}
+      {/* Hero - matches home manifesto teaser energy */}
       <div className="relative rounded-2xl p-[1px] shadow-[0_28px_70px_-36px_rgba(0,0,0,0.9)] sm:rounded-[2rem] bg-gradient-to-br from-lime-400/45 via-emerald-900/35 to-slate-950">
         <div className="relative overflow-hidden rounded-[calc(1rem-1px)] bg-[#030712] sm:rounded-[calc(2rem-1px)]">
           <div

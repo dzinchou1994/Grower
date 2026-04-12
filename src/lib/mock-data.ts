@@ -330,7 +330,7 @@ export const forumTopics: ForumTopic[] = [
     threads: [
       {
         slug: "stoned-night-stories",
-        title: "Stoned night stories — გავაზიაროთ ისტორიები",
+        title: "Stoned night stories - გავაზიაროთ ისტორიები",
         author: "nightowl420",
         replies: 19,
         likes: 25,

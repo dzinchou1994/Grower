@@ -150,7 +150,7 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
               aria-labelledby={`forum-topic-title-${topic.slug}`}
             >
               <span className="sr-only">
-                {topic.title} — {topic.description}
+                {topic.title} - {topic.description}
               </span>
             </Link>
 
