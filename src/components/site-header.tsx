@@ -162,7 +162,7 @@ export function SiteHeader({
   return (
     <header
       suppressHydrationWarning
-      className={`z-30 border-b border-white/8 backdrop-blur-md transition-all duration-300 ${scrolled ? "bg-[#08111f]/55" : "bg-[#08111f]/75"}`}
+      className={`z-30 border-b border-white/8 bg-[#08111f]/96 [backface-visibility:hidden] [transform:translateZ(0)] transition-colors duration-300 ${scrolled ? "bg-[#08111f]/92" : ""}`}
     >
       <div className={`mx-auto flex max-w-7xl items-center justify-between px-4 transition-all duration-300 sm:px-6 lg:px-8 ${scrolled ? "py-1" : "py-2.5"}`}>
         {/* Logo */}
@@ -288,7 +288,7 @@ export function SiteHeader({
             <Link
               href={getLocalizedPath(locale, "/account")}
               title={`@${initialUser.username}`}
-              className={`group relative z-20 inline-flex min-w-0 items-center rounded-full border border-white/[0.1] bg-slate-950/80 py-1 shadow-[0_2px_14px_-3px_rgba(0,0,0,0.55),inset_0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-md transition-all duration-200 hover:border-white/[0.16] hover:bg-slate-900/85 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)] active:scale-[0.98] ${scrolled ? "max-w-[2.75rem] justify-center px-0.5" : "max-w-[min(56vw,16rem)] gap-2 pl-1 pr-2.5"}`}
+              className={`group relative z-20 inline-flex min-w-0 items-center rounded-full border border-white/[0.1] bg-slate-950/95 py-1 shadow-[0_2px_14px_-3px_rgba(0,0,0,0.55),inset_0_1px_0_0_rgba(255,255,255,0.06)] transition-all duration-200 hover:border-white/[0.16] hover:bg-slate-900/95 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)] active:scale-[0.98] ${scrolled ? "max-w-[2.75rem] justify-center px-0.5" : "max-w-[min(56vw,16rem)] gap-2 pl-1 pr-2.5"}`}
             >
               <UserAvatar
                 username={initialUser.username}
@@ -304,7 +304,7 @@ export function SiteHeader({
           ) : (
             <Link
               href={getLocalizedPath(locale, "/auth/login")}
-              className={`rounded-full border-2 border-lime-400/40 bg-slate-950/85 px-3.5 py-2 text-[11px] font-semibold text-lime-100 shadow-[0_4px_18px_-6px_rgba(0,0,0,0.55)] backdrop-blur-sm transition-all duration-200 hover:border-lime-300/60 hover:bg-lime-400/10 hover:text-white active:scale-[0.98] ${scrolled ? "px-2.5 py-1.5 text-[10px]" : ""}`}
+              className={`rounded-full border-2 border-lime-400/40 bg-slate-950/95 px-3.5 py-2 text-[11px] font-semibold text-lime-100 shadow-[0_4px_18px_-6px_rgba(0,0,0,0.55)] transition-all duration-200 hover:border-lime-300/60 hover:bg-lime-400/10 hover:text-white active:scale-[0.98] ${scrolled ? "px-2.5 py-1.5 text-[10px]" : ""}`}
             >
               {ui.login}
             </Link>

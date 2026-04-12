@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import Script from "next/script";
 import { notFound } from "next/navigation";
 import { HtmlLang } from "@/components/html-lang";
 import { AgeGate } from "@/components/age-gate";
 import { NavigationFeedback } from "@/components/navigation-feedback";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { TopGeBeacon } from "@/components/top-ge-beacon";
 import { getServerSessionUser } from "@/lib/auth-session";
 import {
   getAlternates,
@@ -109,10 +109,9 @@ export default async function LocaleLayout({
           }}
         />
       </div>
-      <Script
-        src="https://counter.top.ge/counter.js"
-        strategy="lazyOnload"
-      />
+      <Suspense fallback={null}>
+        <TopGeBeacon siteId="118645" />
+      </Suspense>
     </div>
   );
 }

@@ -119,9 +119,6 @@ export function SiteFooter({ sponsorTeaser }: { sponsorTeaser: SponsorTeaser }) 
           </div>
         </Link>
 
-        <div className="sr-only" aria-hidden="true" suppressHydrationWarning>
-          <div id="top-ge-counter-container" data-site-id="118645" />
-        </div>
       </div>
     </footer>
   );
