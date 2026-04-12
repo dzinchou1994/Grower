@@ -49,23 +49,6 @@ export default async function NewDiaryPage({ params }: PageProps) {
 
   return (
     <div className="relative mx-auto w-full max-w-3xl">
-      <Link
-        href={getLocalizedPath(typedLocale, "/diaries")}
-        className="group mb-6 inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-2.5 py-1.5 text-xs text-slate-400 transition hover:border-yellow-400/25 hover:bg-white/[0.05] hover:text-yellow-200"
-      >
-        <svg
-          className="h-3 w-3 shrink-0 transition group-hover:-translate-x-0.5 sm:h-3.5 sm:w-3.5"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          aria-hidden
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15 18l-6-6 6-6" />
-        </svg>
-        {dict.diaries.backToDiariesShort}
-      </Link>
-
       <article className="relative overflow-hidden rounded-[1.75rem] border border-white/[0.07] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] sm:rounded-[2rem]">
         <div className="pointer-events-none absolute inset-0 bg-[#050a0f]" aria-hidden />
         <div
@@ -104,7 +87,13 @@ export default async function NewDiaryPage({ params }: PageProps) {
             </linearGradient>
           </defs>
         </svg>
-        <DiaryNotebookTopAccent />
+        <DiaryNotebookTopAccent
+          back={{
+            href: getLocalizedPath(typedLocale, "/diaries"),
+            label: dict.diaries.notebookBack,
+            ariaLabel: dict.diaries.backToDiaries,
+          }}
+        />
 
         <div className="relative z-[1] px-5 py-8 sm:px-8 sm:py-10">
           <header className="mb-8 border-b border-yellow-400/30 pb-8 sm:mb-10 sm:pb-10">
@@ -138,12 +127,20 @@ export default async function NewDiaryPage({ params }: PageProps) {
                 )`,
               }}
             >
-              <h1
-                className="relative text-2xl font-semibold leading-[1.35] tracking-[0.015em] text-yellow-50 sm:text-[1.65rem] sm:leading-snug md:text-3xl"
-                style={{ fontFamily: "var(--font-diary-notebook), ui-serif, Georgia, serif" }}
-              >
-                {dict.diaries.newDiary.title}
-              </h1>
+              <div className="relative flex flex-wrap items-center gap-x-2.5 gap-y-2 sm:gap-x-3">
+                <h1
+                  className="relative text-2xl font-semibold leading-[1.35] tracking-[0.015em] text-yellow-50 sm:text-[1.65rem] sm:leading-snug md:text-3xl"
+                  style={{ fontFamily: "var(--font-diary-notebook), ui-serif, Georgia, serif" }}
+                >
+                  {dict.diaries.newDiary.title}
+                </h1>
+                <span
+                  className="inline-flex shrink-0 items-center rounded-lg border border-white/[0.16] bg-gradient-to-b from-white/[0.14] via-white/[0.06] to-white/[0.02] px-2 py-0.5 font-sans text-[10px] font-semibold uppercase tracking-[0.26em] text-yellow-50/95 shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_0_0_1px_rgba(250,204,21,0.14),0_8px_24px_-12px_rgba(0,0,0,0.55)] backdrop-blur-sm sm:px-2.5 sm:text-[11px] sm:tracking-[0.22em]"
+                  aria-label={dict.diaries.newDiary.betaBadgeAria}
+                >
+                  {dict.diaries.newDiary.betaBadge}
+                </span>
+              </div>
               <p
                 className="relative mt-3 max-w-xl text-[12px] leading-relaxed text-yellow-300 sm:text-[13px]"
                 style={{ fontFamily: "var(--font-diary-notebook), ui-serif, Georgia, serif" }}

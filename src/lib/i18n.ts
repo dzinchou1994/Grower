@@ -260,6 +260,8 @@ const translations = {
       weeksLabel: "კვირა",
       backToDiaries: "დღიურებზე დაბრუნება",
       backToDiariesShort: "უკან დაბრუნება",
+      /** Minimal label on the notebook spiral strip (new diary). */
+      notebookBack: "უკან",
       addWeeklyUpdate: "კვირის განახლების დამატება",
       diaryType: "დღიური",
       overview: "მიმოხილვა",
@@ -290,7 +292,9 @@ const translations = {
         "ხშირად დროებითი ქსელი ან ბაზაა - არა ყოველთვის `DATABASE_URL`. ზუსტი მიზეზი: Vercel → Deployment → Runtime Logs. Production-ში `DATABASE_URL` (Neon) უნდა იყოს ჩართული.",
       newDiary: {
         badge: "დღიურის შექმნა",
-        title: "ᲨᲔᲥᲛᲔᲜᲘ ᲐᲮᲐᲚᲘ ᲛᲪᲔᲜᲐᲠᲘᲡ ᲓᲦᲘᲣᲠᲘ",
+        title: "ᲐᲮᲐᲚᲘ ᲛᲪᲔᲜᲐᲠᲘᲡ ᲓᲦᲘᲣᲠᲘ",
+        betaBadge: "BETA",
+        betaBadgeAria: "ბეტა ვერსია — ფუნქცია მუშავდება",
         description: "ახალი მცენარის დღიურის შექმნა - სათაური, ჯიში, გარემო და ფოტოები.",
         helpHintBefore: "კითხვების შემთხვევაში",
         helpHintLink: "მოგვწერეთ",
@@ -651,6 +655,7 @@ const translations = {
       weeksLabel: "weeks",
       backToDiaries: "Back to diaries",
       backToDiariesShort: "Back",
+      notebookBack: "Back",
       addWeeklyUpdate: "Add weekly update",
       diaryType: "diary",
       overview: "Grow overview",
@@ -682,6 +687,8 @@ const translations = {
       newDiary: {
         badge: "Create diary",
         title: "Start a new plant journal",
+        betaBadge: "BETA",
+        betaBadgeAria: "Beta — this flow is still evolving",
         description: "Create a new grow diary - title, strain, environment, and photos.",
         helpHintBefore: "If you have questions,",
         helpHintLink: "contact us",
@@ -1041,6 +1048,7 @@ const translations = {
       weeksLabel: "недель",
       backToDiaries: "Назад к дневникам",
       backToDiariesShort: "Назад",
+      notebookBack: "Назад",
       addWeeklyUpdate: "Добавить weekly update",
       diaryType: "дневник",
       overview: "Обзор grow",
@@ -1072,6 +1080,8 @@ const translations = {
       newDiary: {
         badge: "Создание diary",
         title: "Начните новый журнал растения",
+        betaBadge: "BETA",
+        betaBadgeAria: "Бета-версия — функция в разработке",
         description: "Создание нового дневника растения - название, сорт, среда и фото.",
         helpHintBefore: "По вопросам",
         helpHintLink: "напишите нам",
