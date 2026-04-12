@@ -76,20 +76,20 @@ export default async function SponsorsPage({ params }: Props) {
 
             <div className="mt-6 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap">
               <a
-                href="https://t.me/growerge"
+                href="https://t.me/growergeorgia"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-2xl bg-lime-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-[0_12px_36px_-16px_rgba(132,204,22,0.65)] transition hover:bg-lime-300"
               >
                 {s.ctaTelegram}
-                <span className="ml-2 text-xs font-medium opacity-90">@growerge</span>
+                <span className="ml-2 text-xs font-medium opacity-90">@growergeorgia</span>
               </a>
               <a
-                href="mailto:contact@grower.ge"
+                href="mailto:growergeorgia@proton.me"
                 className="inline-flex items-center justify-center rounded-2xl border border-white/15 bg-white/[0.06] px-5 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:border-lime-400/35 hover:bg-white/[0.1]"
               >
                 {s.ctaEmail}
-                <span className="ml-2 text-xs font-medium text-slate-300">contact@grower.ge</span>
+                <span className="ml-2 text-xs font-medium text-slate-300">growergeorgia@proton.me</span>
               </a>
             </div>
           </header>

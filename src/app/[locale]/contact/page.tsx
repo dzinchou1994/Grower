@@ -83,20 +83,20 @@ export default async function ContactPage({ params }: Props) {
 
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           <a
-            href="https://t.me/growerge"
+            href="https://t.me/growergeorgia"
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-lime-400/30 hover:bg-white/10"
           >
             <p className="text-xs text-slate-400">{copy.telegram}</p>
-            <p className="mt-1 text-sm font-medium text-white">@growerge</p>
+            <p className="mt-1 text-sm font-medium text-white">@growergeorgia</p>
           </a>
           <a
-            href="mailto:contact@grower.ge"
+            href="mailto:growergeorgia@proton.me"
             className="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-lime-400/30 hover:bg-white/10"
           >
             <p className="text-xs text-slate-400">{copy.email}</p>
-            <p className="mt-1 text-sm font-medium text-white">contact@grower.ge</p>
+            <p className="mt-1 text-sm font-medium text-white">growergeorgia@proton.me</p>
           </a>
         </div>
       </section>
