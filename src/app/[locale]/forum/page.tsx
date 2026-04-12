@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Noto_Sans_Georgian } from "next/font/google";
 import { MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -13,6 +14,12 @@ import {
 } from "@/lib/i18n";
 import { listForumTopics } from "@/lib/forum-data";
 import { getPageMetadataWithSeo } from "@/lib/seo-settings";
+
+const forumHeroBadgeKa = Noto_Sans_Georgian({
+  subsets: ["georgian"],
+  weight: ["600"],
+  display: "swap",
+});
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -100,7 +107,13 @@ export default async function ForumPage({ params, searchParams }: PageProps) {
                   strokeWidth={2.25}
                   aria-hidden
                 />
-                {dict.forum.badge}
+                <span
+                  className={
+                    typedLocale === "ka" ? forumHeroBadgeKa.className : "uppercase"
+                  }
+                >
+                  {dict.forum.badge}
+                </span>
               </div>
               <ForumThreadComposer
                 topics={forumTopicList.map((topic) => ({ slug: topic.slug, title: topic.title }))}

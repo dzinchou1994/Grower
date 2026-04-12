@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Noto_Sans_Georgian } from "next/font/google";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getServerSessionUser } from "@/lib/auth-session";
@@ -17,6 +18,12 @@ import { VoteButtons } from "@/components/vote-buttons";
 import { UserQuickProfileTrigger } from "@/components/user-quick-profile-trigger";
 import { ForumItemActions } from "@/components/forum-item-actions";
 import { ForumThreadListItemHeader } from "@/components/forum-thread-list-item-header";
+
+const forumBadgeKa = Noto_Sans_Georgian({
+  subsets: ["georgian"],
+  weight: ["600"],
+  display: "swap",
+});
 
 type PageProps = {
   params: Promise<{ locale: string; slug: string }>;
@@ -102,7 +109,9 @@ export default async function ForumTopicPage({ params }: PageProps) {
           <svg className="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
-          {dict.forum.badge}
+          <span className={typedLocale === "ka" ? forumBadgeKa.className : "uppercase"}>
+            {dict.forum.badge}
+          </span>
         </Link>
         <ForumTopicComposeTrigger
           label={newThreadCta}

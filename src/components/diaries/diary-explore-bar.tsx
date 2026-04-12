@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Noto_Sans_Georgian } from "next/font/google";
 import { ChevronDown, SlidersHorizontal } from "lucide-react";
 import {
   DiaryEnvironment,
@@ -11,7 +12,22 @@ import {
 import type { DiarySortKey, ListDiariesFilters, PublicDiaryFilterCounts } from "@/lib/diary-data";
 import { diaryExploreMediumKeys } from "@/lib/diary-explore-params";
 import { getDiaryLabels } from "@/lib/diary-labels";
+import { toMtavruli } from "@/lib/georgian-mtavruli";
 import type { Locale } from "@/lib/i18n";
+
+const diaryExploreCapsKa = Noto_Sans_Georgian({
+  subsets: ["georgian"],
+  weight: ["600"],
+  display: "swap",
+});
+
+function capsClass(locale: Locale) {
+  return locale === "ka" ? diaryExploreCapsKa.className : "uppercase";
+}
+
+function capsText(locale: Locale, text: string) {
+  return locale === "ka" ? toMtavruli(text) : text;
+}
 
 type ExploreDict = {
   sortLabel: string;
@@ -172,15 +188,19 @@ function ChipLink({
 
 function FilterRow({
   label,
+  locale,
   children,
 }: {
   label: string;
+  locale: Locale;
   children: React.ReactNode;
 }) {
   return (
     <div className="min-w-0 w-full">
-      <p className="mb-1 text-[9px] font-medium uppercase tracking-[0.14em] text-slate-500 sm:mb-1.5 sm:text-[10px] sm:tracking-[0.15em]">
-        {label}
+      <p
+        className={`mb-1 text-[9px] font-medium tracking-[0.14em] text-slate-500 sm:mb-1.5 sm:text-[10px] sm:tracking-[0.15em] ${capsClass(locale)}`}
+      >
+        {capsText(locale, label)}
       </p>
       <div className="-mx-1 flex w-full min-w-0 flex-nowrap gap-1 overflow-x-auto overflow-y-visible px-1 py-0.5 [-webkit-overflow-scrolling:touch] pb-2 touch-pan-x [scrollbar-width:thin] [scrollbar-color:rgba(148,163,184,0.35)_transparent] sm:mx-0 sm:max-h-[7.5rem] sm:flex-wrap sm:overflow-x-visible sm:overflow-y-auto sm:pb-0 sm:pr-1">
         {children}
@@ -201,8 +221,10 @@ function QuickFilterStrip(props: Props) {
 
   return (
     <div className="w-full min-w-0">
-      <p className="mb-2 text-[9px] font-medium uppercase tracking-[0.16em] text-slate-500 sm:text-[10px]">
-        {dict.quickFiltersLabel}
+      <p
+        className={`mb-2 text-[9px] font-medium tracking-[0.16em] text-slate-500 sm:text-[10px] ${capsClass(locale)}`}
+      >
+        {capsText(locale, dict.quickFiltersLabel)}
       </p>
       <div className="-mx-1 flex w-full min-w-0 flex-nowrap gap-1.5 overflow-x-auto overflow-y-visible px-1 pb-1 [-webkit-overflow-scrolling:touch] touch-pan-x [scrollbar-width:thin] [scrollbar-color:rgba(148,163,184,0.4)_transparent]">
         <ChipLink
@@ -215,7 +237,7 @@ function QuickFilterStrip(props: Props) {
           active={quickAllActive}
         >
           <span className="inline-flex items-baseline gap-1">
-            {dict.all}
+            <span className={capsClass(locale)}>{capsText(locale, dict.all)}</span>
             {c(counts.total)}
           </span>
         </ChipLink>
@@ -224,7 +246,7 @@ function QuickFilterStrip(props: Props) {
           active={filters.growPhase === "GROWING"}
         >
           <span className="inline-flex items-baseline gap-1">
-            {L.growPhase.GROWING}
+            <span className={capsClass(locale)}>{capsText(locale, L.growPhase.GROWING)}</span>
             {c(counts.growing)}
           </span>
         </ChipLink>
@@ -233,7 +255,7 @@ function QuickFilterStrip(props: Props) {
           active={filters.growPhase === "HARVESTED"}
         >
           <span className="inline-flex items-baseline gap-1">
-            {L.growPhase.HARVESTED}
+            <span className={capsClass(locale)}>{capsText(locale, L.growPhase.HARVESTED)}</span>
             {c(counts.harvested)}
           </span>
         </ChipLink>
@@ -242,7 +264,7 @@ function QuickFilterStrip(props: Props) {
           active={filters.flowerType === "AUTOFLOWER"}
         >
           <span className="inline-flex items-baseline gap-1">
-            {L.flowerType.AUTOFLOWER}
+            <span className={capsClass(locale)}>{capsText(locale, L.flowerType.AUTOFLOWER)}</span>
             {c(counts.autoFlower)}
           </span>
         </ChipLink>
@@ -251,7 +273,7 @@ function QuickFilterStrip(props: Props) {
           active={filters.flowerType === "PHOTOPERIOD"}
         >
           <span className="inline-flex items-baseline gap-1">
-            {L.flowerType.PHOTOPERIOD}
+            <span className={capsClass(locale)}>{capsText(locale, L.flowerType.PHOTOPERIOD)}</span>
             {c(counts.photoPeriod)}
           </span>
         </ChipLink>
@@ -260,7 +282,7 @@ function QuickFilterStrip(props: Props) {
           active={filters.environment === "INDOOR"}
         >
           <span className="inline-flex items-baseline gap-1">
-            {L.environment.INDOOR}
+            <span className={capsClass(locale)}>{capsText(locale, L.environment.INDOOR)}</span>
             {c(counts.indoor)}
           </span>
         </ChipLink>
@@ -269,7 +291,7 @@ function QuickFilterStrip(props: Props) {
           active={filters.environment === "OUTDOOR"}
         >
           <span className="inline-flex items-baseline gap-1">
-            {L.environment.OUTDOOR}
+            <span className={capsClass(locale)}>{capsText(locale, L.environment.OUTDOOR)}</span>
             {c(counts.outdoor)}
           </span>
         </ChipLink>
@@ -278,7 +300,7 @@ function QuickFilterStrip(props: Props) {
           active={filters.environment === "GREENHOUSE"}
         >
           <span className="inline-flex items-baseline gap-1">
-            {L.environment.GREENHOUSE}
+            <span className={capsClass(locale)}>{capsText(locale, L.environment.GREENHOUSE)}</span>
             {c(counts.greenhouse)}
           </span>
         </ChipLink>
@@ -294,7 +316,8 @@ export function DiarySortBar({
   filters,
   page,
   dict,
-}: Pick<Props, "basePath" | "sort" | "filters" | "page"> & {
+  locale,
+}: Pick<Props, "basePath" | "sort" | "filters" | "page" | "locale"> & {
   dict: ExploreDict;
 }) {
   const sortOptions: { key: DiarySortKey; label: string }[] = [
@@ -309,8 +332,10 @@ export function DiarySortBar({
       aria-label={dict.sortLabel}
       className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
     >
-      <span className="shrink-0 text-[10px] font-medium uppercase tracking-[0.2em] text-slate-500">
-        {dict.sortLabel}
+      <span
+        className={`shrink-0 text-[10px] font-medium tracking-[0.2em] text-slate-500 ${capsClass(locale)}`}
+      >
+        {capsText(locale, dict.sortLabel)}
       </span>
       <div className="min-w-0 overflow-x-auto [-webkit-overflow-scrolling:touch] [scrollbar-width:none] sm:overflow-visible [&::-webkit-scrollbar]:hidden">
         <div className="inline-flex rounded-full p-0.5 ring-1 ring-white/[0.06] bg-slate-950/40 backdrop-blur-sm">
@@ -327,7 +352,7 @@ export function DiarySortBar({
                     : "font-medium text-slate-500 hover:text-slate-300"
                 }`}
               >
-                {opt.label}
+                <span className={capsClass(locale)}>{capsText(locale, opt.label)}</span>
               </Link>
             );
           })}
@@ -348,12 +373,12 @@ function FilterSections({
   const L = getDiaryLabels(locale);
   return (
     <div className="grid gap-4 sm:grid-cols-2 sm:gap-x-5 lg:grid-cols-4 lg:gap-4">
-      <FilterRow label={dict.filterGermination}>
+      <FilterRow label={dict.filterGermination} locale={locale}>
         <ChipLink
           href={buildQuery(basePath, sort, filters, page, { germinationMethod: null, page: 1 })}
           active={!filters.germinationMethod}
         >
-          {dict.all}
+          <span className={capsClass(locale)}>{capsText(locale, dict.all)}</span>
         </ChipLink>
         {(Object.keys(L.germination) as DiaryGerminationMethod[]).map((key) => (
           <ChipLink
@@ -361,16 +386,16 @@ function FilterSections({
             href={buildQuery(basePath, sort, filters, page, { germinationMethod: key, page: 1 })}
             active={filters.germinationMethod === key}
           >
-            {L.germination[key]}
+            <span className={capsClass(locale)}>{capsText(locale, L.germination[key])}</span>
           </ChipLink>
         ))}
       </FilterRow>
-      <FilterRow label={dict.filterWatering}>
+      <FilterRow label={dict.filterWatering} locale={locale}>
         <ChipLink
           href={buildQuery(basePath, sort, filters, page, { watering: null, page: 1 })}
           active={!filters.watering}
         >
-          {dict.all}
+          <span className={capsClass(locale)}>{capsText(locale, dict.all)}</span>
         </ChipLink>
         {(Object.keys(L.watering) as DiaryWateringType[]).map((key) => (
           <ChipLink
@@ -378,16 +403,16 @@ function FilterSections({
             href={buildQuery(basePath, sort, filters, page, { watering: key, page: 1 })}
             active={filters.watering === key}
           >
-            {L.watering[key]}
+            <span className={capsClass(locale)}>{capsText(locale, L.watering[key])}</span>
           </ChipLink>
         ))}
       </FilterRow>
-      <FilterRow label={dict.filterMedium}>
+      <FilterRow label={dict.filterMedium} locale={locale}>
         <ChipLink
           href={buildQuery(basePath, sort, filters, page, { medium: null, page: 1 })}
           active={!filters.medium}
         >
-          {dict.all}
+          <span className={capsClass(locale)}>{capsText(locale, dict.all)}</span>
         </ChipLink>
         {diaryExploreMediumKeys.map((key) => (
           <ChipLink
@@ -395,16 +420,16 @@ function FilterSections({
             href={buildQuery(basePath, sort, filters, page, { medium: key, page: 1 })}
             active={filters.medium === key}
           >
-            {L.medium[key]}
+            <span className={capsClass(locale)}>{capsText(locale, L.medium[key])}</span>
           </ChipLink>
         ))}
       </FilterRow>
-      <FilterRow label={dict.filterEnvironment}>
+      <FilterRow label={dict.filterEnvironment} locale={locale}>
         <ChipLink
           href={buildQuery(basePath, sort, filters, page, { environment: null, page: 1 })}
           active={!filters.environment}
         >
-          {dict.all}
+          <span className={capsClass(locale)}>{capsText(locale, dict.all)}</span>
         </ChipLink>
         {(Object.keys(L.environment) as DiaryEnvironment[]).map((key) => (
           <ChipLink
@@ -412,7 +437,7 @@ function FilterSections({
             href={buildQuery(basePath, sort, filters, page, { environment: key, page: 1 })}
             active={filters.environment === key}
           >
-            {L.environment[key]}
+            <span className={capsClass(locale)}>{capsText(locale, L.environment[key])}</span>
           </ChipLink>
         ))}
       </FilterRow>
@@ -454,8 +479,8 @@ export function DiaryExploreBar(props: Props) {
           </span>
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="text-sm font-semibold leading-tight tracking-tight text-white">
-                {dict.filtersTitle}
+              <span className={`text-sm font-semibold leading-tight tracking-tight text-white ${capsClass(props.locale)}`}>
+                {capsText(props.locale, dict.filtersTitle)}
               </span>
               {activeCount > 0 ? (
                 <span className="inline-flex min-w-[1.125rem] items-center justify-center rounded-full border border-yellow-400/30 bg-yellow-500/[0.18] px-1.5 py-px text-[10px] font-bold tabular-nums leading-none text-yellow-100 sm:text-[11px]">
@@ -472,9 +497,9 @@ export function DiaryExploreBar(props: Props) {
           <div className="mt-2 flex justify-end px-0.5">
             <Link
               href={clearAllHref}
-              className="rounded-full px-2 py-1 text-[11px] font-medium text-yellow-300/95 underline-offset-2 hover:text-yellow-200 hover:underline"
+              className={`rounded-full px-2 py-1 text-[11px] font-medium text-yellow-300/95 underline-offset-2 hover:text-yellow-200 hover:underline ${capsClass(props.locale)}`}
             >
-              {dict.clearFilters}
+              {capsText(props.locale, dict.clearFilters)}
             </Link>
           </div>
         ) : null}

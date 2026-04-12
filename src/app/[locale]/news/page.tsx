@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Noto_Sans_Georgian } from "next/font/google";
 import { Newspaper } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,6 +11,12 @@ import { getAlternates, getLocalizedPath, isValidLocale, type Locale } from "@/l
 
 const newsFallbackImageSrc = "/news/community-workshop.svg";
 
+const newsHeroTitleKa = Noto_Sans_Georgian({
+  subsets: ["georgian"],
+  weight: ["600"],
+  display: "swap",
+});
+
 type PageProps = {
   params: Promise<{ locale: string }>;
   searchParams: Promise<{ scope?: string }>;
@@ -18,7 +25,7 @@ type PageProps = {
 function getCopy(locale: Locale) {
   if (locale === "ka") {
     return {
-      title: "სიახლეები",
+      title: "ᲡᲘᲐᲮᲚᲔᲔᲑᲘ",
       description: "კანაფთან დაკავშირებული ახალი ამბები საქართველოდან და მსოფლიოდან.",
       georgia: "საქართველო",
       world: "მსოფლიო",
@@ -96,7 +103,11 @@ export default async function NewsPage({ params, searchParams }: PageProps) {
                 aria-hidden
               />
             </span>
-            <h1 className="text-2xl font-semibold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl">
+            <h1
+              className={`text-2xl font-semibold leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl ${
+                typedLocale === "ka" ? newsHeroTitleKa.className : "uppercase"
+              }`}
+            >
               {copy.title}
             </h1>
           </div>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Noto_Sans_Georgian } from "next/font/google";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -22,6 +23,12 @@ import {
 import { withTimeout } from "@/lib/async-timeout";
 import { getPageMetadataWithSeo } from "@/lib/seo-settings";
 import { getServerSessionUser } from "@/lib/auth-session";
+
+const diariesHeroKa = Noto_Sans_Georgian({
+  subsets: ["georgian"],
+  weight: ["600"],
+  display: "swap",
+});
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -92,9 +99,15 @@ export default async function DiariesPage({ params, searchParams }: PageProps) {
       <section className="rounded-2xl border border-white/10 bg-slate-950/50 p-5 sm:rounded-[2rem] sm:p-8">
         <div className="flex items-center gap-2 text-xs font-medium text-yellow-400 sm:text-sm">
           <CannabisLeaf className="h-4 w-4 shrink-0 text-yellow-300" />
-          {dict.diaries.badge}
+          <span className={typedLocale === "ka" ? diariesHeroKa.className : "uppercase"}>
+            {dict.diaries.badge}
+          </span>
         </div>
-        <h1 className="mt-2 text-lg font-semibold text-white sm:text-2xl lg:text-3xl">
+        <h1
+          className={`mt-2 text-lg font-semibold text-white sm:text-2xl lg:text-3xl ${
+            typedLocale === "ka" ? diariesHeroKa.className : "uppercase"
+          }`}
+        >
           {dict.diaries.title}
         </h1>
         <p className="mt-2 max-w-xl text-xs text-slate-400 sm:text-sm">{dict.diaries.description}</p>
@@ -105,7 +118,9 @@ export default async function DiariesPage({ params, searchParams }: PageProps) {
           >
             <span className="inline-flex items-center gap-2">
               <CannabisLeafOutline className="h-4 w-4 text-slate-900/90 transition group-hover:text-slate-950" />
-              {dict.diaries.createDiary}
+              <span className={typedLocale === "ka" ? diariesHeroKa.className : "uppercase"}>
+                {dict.diaries.createDiary}
+              </span>
             </span>
           </Link>
         ) : (
@@ -113,7 +128,9 @@ export default async function DiariesPage({ params, searchParams }: PageProps) {
             href={getLocalizedPath(typedLocale, "/auth/login")}
             className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10 sm:mt-6 sm:px-5 sm:py-3"
           >
-            {dict.diaries.createDiary}
+            <span className={typedLocale === "ka" ? diariesHeroKa.className : "uppercase"}>
+              {dict.diaries.createDiary}
+            </span>
           </Link>
         )}
       </section>
@@ -133,6 +150,7 @@ export default async function DiariesPage({ params, searchParams }: PageProps) {
         sort={parsed.sort}
         filters={parsed.filters}
         page={parsed.page}
+        locale={typedLocale}
         dict={explore}
       />
 

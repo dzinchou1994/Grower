@@ -74,7 +74,7 @@ export function SiteHeader({
       ? {
           navigation: "ᲜᲐᲕᲘᲒᲐᲪᲘᲐ",
           signedIn: "შესული ხარ",
-          language: "ენა",
+          language: "ᲔᲜᲐ",
           login: "ავტორიზაცია",
           register: "რეგისტრაცია",
           logout: "გამოსვლა",
@@ -220,7 +220,7 @@ export function SiteHeader({
                   <span className={`opacity-80 transition-all duration-300 ${scrolled ? "text-[9px]" : "text-[11px]"}`}>
                     <NavIcon icon={item.icon} />
                   </span>
-                  {item.label}
+                  <span className={locale === "ka" ? logoGeorgianCaps.className : "uppercase"}>{item.label}</span>
                 </Link>
               );
             })}
@@ -451,14 +451,18 @@ export function SiteHeader({
                         >
                           <NavIcon icon={item.icon} />
                         </span>
-                        <span>{item.label}</span>
+                        <span className={locale === "ka" ? logoGeorgianCaps.className : "uppercase"}>{item.label}</span>
                       </Link>
                     );
                   })}
                 </nav>
 
                 <div className="mx-2 mt-6 shrink-0">
-                  <p className="mb-2 px-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  <p
+                    className={`mb-2 px-1 text-[10px] font-semibold tracking-[0.18em] text-slate-500 ${
+                      locale === "ka" ? logoGeorgianCaps.className : "uppercase"
+                    }`}
+                  >
                     {ui.language}
                   </p>
                   <div className="inline-flex rounded-full border border-white/[0.06] bg-white/[0.02] p-0.5">
