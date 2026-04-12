@@ -7,7 +7,7 @@ import type { DiaryListItem } from "@/lib/diary-data";
 import { formatDistanceDisplayKa } from "@/lib/format-distance-ka";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
 import { preferUnoptimizedRemoteImage } from "@/lib/remote-image";
-import { wikimediaSizedSrc } from "@/lib/wikimedia-commons-thumb";
+import { wikimediaSrcForSlot } from "@/lib/wikimedia-thumb";
 
 export type DiaryExploreCardCopy = {
   relativeWeeks: string;
@@ -42,7 +42,7 @@ export function DiaryExploreCard({
   );
   const diaryHref = getLocalizedPath(typedLocale, `/diaries/${diary.slug}`);
   const preview = diary.previewImageUrls[0];
-  const previewUnopt = Boolean(preview && preferUnoptimizedRemoteImage(preview));
+  const previewUnopt = preview ? preferUnoptimizedRemoteImage(preview) : false;
   const metaRow = (
     <div
       className={`mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 border-t pt-2.5 text-[10px] sm:gap-x-4 sm:pt-3 sm:text-[11px] ${
@@ -92,8 +92,9 @@ export function DiaryExploreCard({
       >
         {preview ? (
           <div className="relative aspect-[3/4] w-full min-h-[13rem] overflow-hidden sm:aspect-[4/5] sm:min-h-[15rem]">
+            {/* 960px Commons thumb: same as diary cover; 640px is missing for some files */}
             <Image
-              src={wikimediaSizedSrc(preview, 420, previewUnopt)}
+              src={wikimediaSrcForSlot(preview, previewUnopt, 960)}
               alt=""
               fill
               sizes={imageSizes}

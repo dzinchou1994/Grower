@@ -20,7 +20,7 @@ import {
 import { fillSeoTemplate } from "@/lib/seo-template";
 import { getServerSessionUser } from "@/lib/auth-session";
 import { preferUnoptimizedRemoteImage } from "@/lib/remote-image";
-import { wikimediaSizedSrc } from "@/lib/wikimedia-commons-thumb";
+import { wikimediaSrcForSlot } from "@/lib/wikimedia-thumb";
 
 const DiaryWeekCommentForm = nextDynamic(() =>
   import("@/components/diaries/diary-week-comment-form").then((m) => m.DiaryWeekCommentForm),
@@ -128,25 +128,25 @@ export default async function DiaryWeekPage({ params }: PageProps) {
         {diaryWeek.images.length > 0 ? (
           <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
             {diaryWeek.images.map((im) => {
-              const uo = preferUnoptimizedRemoteImage(im.imageUrl);
+              const unopt = preferUnoptimizedRemoteImage(im.imageUrl);
               return (
-              <div
-                key={im.id}
-                className="relative aspect-square overflow-hidden rounded-xl border border-white/10"
-              >
-                <Image
-                  src={wikimediaSizedSrc(im.imageUrl, 280, uo)}
-                  alt=""
-                  fill
-                  sizes="(max-width: 640px) 45vw, 200px"
-                  className="object-cover"
-                  quality={65}
-                  loading="lazy"
-                  decoding="async"
-                  unoptimized={uo}
-                />
-              </div>
-            );
+                <div
+                  key={im.id}
+                  className="relative aspect-square overflow-hidden rounded-xl border border-white/10"
+                >
+                  <Image
+                    src={wikimediaSrcForSlot(im.imageUrl, unopt, 720)}
+                    alt=""
+                    fill
+                    sizes="(max-width: 640px) 45vw, 200px"
+                    className="object-cover"
+                    quality={65}
+                    loading="lazy"
+                    decoding="async"
+                    unoptimized={unopt}
+                  />
+                </div>
+              );
             })}
           </div>
         ) : null}

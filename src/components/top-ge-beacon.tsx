@@ -19,7 +19,7 @@ function buildCountUrl(siteId: string, referer: string, isTopFrame: boolean) {
     ["REFERER", referer.slice(0, 1000)],
     ["RESOLUTION", `${screen.width}x${screen.height}`],
     ["JL", window.location.href.slice(0, 1000)],
-    ["DEPT", screen.colorDepth || screen.pixelDepth || 24],
+    ["DEPT", screen.colorDepth || screen.pixelDepth],
   ];
   const qs = pairs.map(([k, v]) => `${k}:${encodeURIComponent(String(v))}`).join("+");
   return `https://counter.top.ge/cgi-bin/count222?${qs}`;
@@ -31,7 +31,7 @@ export function TopGeBeacon({ siteId }: { siteId: string }) {
   useEffect(() => {
     let cancelled = false;
 
-    function fire() {
+    function ping() {
       if (cancelled) return;
       let ref = "";
       try {
@@ -47,31 +47,22 @@ export function TopGeBeacon({ siteId }: { siteId: string }) {
       img.src = src;
     }
 
-    const ric = (
-      window as Window & {
-        requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
-        cancelIdleCallback?: (id: number) => void;
-      }
-    ).requestIdleCallback;
-    let idleId: number | undefined;
-    let timeoutId: ReturnType<typeof setTimeout> | undefined;
-
-    if (typeof ric === "function") {
-      idleId = ric(fire, { timeout: 6000 });
+    // Defer until idle so LCP images / hydration are not competing (helps mobile / Vercel).
+    let idleHandle: number | undefined;
+    let timeoutHandle: number | undefined;
+    if (typeof requestIdleCallback !== "undefined") {
+      idleHandle = requestIdleCallback(ping, { timeout: 5000 });
     } else {
-      timeoutId = setTimeout(fire, 3500);
+      timeoutHandle = window.setTimeout(ping, 2000);
     }
 
     return () => {
       cancelled = true;
-      const cancel = (
-        window as Window & { cancelIdleCallback?: (id: number) => void }
-      ).cancelIdleCallback;
-      if (idleId !== undefined && typeof cancel === "function") {
-        cancel(idleId);
+      if (idleHandle !== undefined && typeof cancelIdleCallback !== "undefined") {
+        cancelIdleCallback(idleHandle);
       }
-      if (timeoutId !== undefined) {
-        clearTimeout(timeoutId);
+      if (timeoutHandle !== undefined) {
+        window.clearTimeout(timeoutHandle);
       }
     };
   }, [siteId, pathname]);

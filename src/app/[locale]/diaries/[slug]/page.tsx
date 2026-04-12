@@ -14,7 +14,7 @@ import { notoSansGeorgian } from "@/lib/fonts/noto-sans-georgian";
 import { hasGeorgianScript, toMtavruli } from "@/lib/georgian-mtavruli";
 import { getPublicDiaryBySlug } from "@/lib/diary-data";
 import { preferUnoptimizedRemoteImage } from "@/lib/remote-image";
-import { wikimediaSizedSrc } from "@/lib/wikimedia-commons-thumb";
+import { wikimediaSrcForSlot } from "@/lib/wikimedia-thumb";
 import { formatDistanceDisplayKa } from "@/lib/format-distance-ka";
 import { getDiaryLabels } from "@/lib/diary-labels";
 import { DiarySharePanel } from "@/components/diary-share-panel";
@@ -135,10 +135,10 @@ export default async function DiaryDetailPage({ params }: PageProps) {
           {diary.coverImageUrl ? (
             <div className="relative aspect-video w-full max-w-xl overflow-hidden rounded-2xl ring-1 ring-white/[0.06] lg:max-w-md">
               <Image
-                src={wikimediaSizedSrc(
+                src={wikimediaSrcForSlot(
                   diary.coverImageUrl,
-                  448,
                   preferUnoptimizedRemoteImage(diary.coverImageUrl),
+                  960,
                 )}
                 alt=""
                 fill
@@ -382,26 +382,26 @@ export default async function DiaryDetailPage({ params }: PageProps) {
               }
             >
               {latest.images.map((im) => {
-                const uo = preferUnoptimizedRemoteImage(im.imageUrl);
+                const unopt = preferUnoptimizedRemoteImage(im.imageUrl);
                 return (
-                <Link
-                  key={im.id}
-                  href={weekHref(latest.weekNumber)}
-                  className="relative aspect-square overflow-hidden rounded-lg border border-white/[0.06] transition hover:border-yellow-400/25"
-                >
-                  <Image
-                    src={wikimediaSizedSrc(im.imageUrl, 180, uo)}
-                    alt=""
-                    fill
-                    sizes="(max-width: 640px) 28vw, 180px"
-                    className="object-cover"
-                    quality={65}
-                    loading="lazy"
-                    decoding="async"
-                    unoptimized={uo}
-                  />
-                </Link>
-              );
+                  <Link
+                    key={im.id}
+                    href={weekHref(latest.weekNumber)}
+                    className="relative aspect-square overflow-hidden rounded-lg border border-white/[0.06] transition hover:border-yellow-400/25"
+                  >
+                    <Image
+                      src={wikimediaSrcForSlot(im.imageUrl, unopt, 960)}
+                      alt=""
+                      fill
+                      sizes="(max-width: 640px) 28vw, 180px"
+                      className="object-cover"
+                      quality={65}
+                      loading="lazy"
+                      decoding="async"
+                      unoptimized={unopt}
+                    />
+                  </Link>
+                );
               })}
             </div>
           ) : null}
@@ -449,25 +449,25 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                     {preview.length > 0 ? (
                       <div className="flex shrink-0 flex-wrap gap-2">
                         {preview.map((im) => {
-                          const uo = preferUnoptimizedRemoteImage(im.imageUrl);
+                          const unopt = preferUnoptimizedRemoteImage(im.imageUrl);
                           return (
-                          <div
-                            key={im.id}
-                            className="relative h-16 w-16 overflow-hidden rounded-xl ring-1 ring-white/[0.06] sm:h-[4.5rem] sm:w-[4.5rem]"
-                          >
-                            <Image
-                              src={wikimediaSizedSrc(im.imageUrl, 80, uo)}
-                              alt=""
-                              fill
-                              sizes="80px"
-                              className="object-cover transition duration-300 group-hover:scale-[1.03]"
-                              quality={60}
-                              loading="lazy"
-                              decoding="async"
-                              unoptimized={uo}
-                            />
-                          </div>
-                        );
+                            <div
+                              key={im.id}
+                              className="relative h-16 w-16 overflow-hidden rounded-xl ring-1 ring-white/[0.06] sm:h-[4.5rem] sm:w-[4.5rem]"
+                            >
+                              <Image
+                                src={wikimediaSrcForSlot(im.imageUrl, unopt, 200)}
+                                alt=""
+                                fill
+                                sizes="80px"
+                                className="object-cover transition duration-300 group-hover:scale-[1.03]"
+                                quality={60}
+                                loading="lazy"
+                                decoding="async"
+                                unoptimized={unopt}
+                              />
+                            </div>
+                          );
                         })}
                         {extraImg > 0 ? (
                           <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-white/[0.04] text-xs font-medium text-slate-400 ring-1 ring-white/[0.06] sm:h-[4.5rem] sm:w-[4.5rem]">
