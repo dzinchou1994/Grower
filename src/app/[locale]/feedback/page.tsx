@@ -8,6 +8,8 @@ import {
   isValidLocale,
   type Locale,
 } from "@/lib/i18n";
+import { notoSansGeorgian } from "@/lib/fonts/noto-sans-georgian";
+import { hasGeorgianScript, toMtavruli } from "@/lib/georgian-mtavruli";
 import { FeedbackForm } from "@/components/feedback-form";
 
 type Props = {
@@ -56,6 +58,9 @@ export default async function FeedbackPage({ params }: Props) {
               "Your feedback goes directly to the admin panel. Tell us what to add, what you like, and what to improve.",
           };
 
+  const feedbackTitleMtavruli =
+    typedLocale === "ka" && hasGeorgianScript(copy.title);
+
   return (
     <div className="mx-auto w-full max-w-3xl">
       <section className="rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-8">
@@ -68,7 +73,13 @@ export default async function FeedbackPage({ params }: Props) {
         <p className="flex w-fit rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-xs font-medium text-lime-300">
           {copy.badge}
         </p>
-        <h1 className="mt-2 text-2xl font-semibold text-white sm:text-3xl">{copy.title}</h1>
+        <h1
+          className={`mt-2 text-2xl font-semibold text-white sm:text-3xl ${
+            feedbackTitleMtavruli ? notoSansGeorgian.className : "uppercase"
+          }`}
+        >
+          {feedbackTitleMtavruli ? toMtavruli(copy.title) : copy.title}
+        </h1>
         <p className="mt-2 text-sm leading-relaxed text-slate-300 sm:text-base">
           {copy.description}
         </p>

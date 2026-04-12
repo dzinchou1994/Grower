@@ -1,5 +1,7 @@
 "use client";
 
+import clsx from "clsx";
+import { BookOpen, Globe, Star, Zap, type LucideIcon } from "lucide-react";
 import { useState } from "react";
 import type { Locale } from "@/lib/i18n";
 
@@ -98,18 +100,21 @@ export function FeedbackForm({ locale }: { locale: Locale }) {
         className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white placeholder:text-slate-500"
       />
 
-      <div className="grid gap-2 sm:grid-cols-3">
-        <RatingField
+      <div className="grid gap-2 sm:gap-2.5">
+        <RatingRow
+          icon={Globe}
           label={t.siteRating}
           value={siteRating}
           onChange={setSiteRating}
         />
-        <RatingField
+        <RatingRow
+          icon={BookOpen}
           label={t.contentRating}
           value={contentRating}
           onChange={setContentRating}
         />
-        <RatingField
+        <RatingRow
+          icon={Zap}
           label={t.speedRating}
           value={performanceRating}
           onChange={setPerformanceRating}
@@ -148,29 +153,56 @@ export function FeedbackForm({ locale }: { locale: Locale }) {
   );
 }
 
-function RatingField({
+function RatingRow({
+  icon: Icon,
   label,
   value,
   onChange,
 }: {
+  icon: LucideIcon;
   label: string;
   value: number;
   onChange: (value: number) => void;
 }) {
   return (
-    <label className="rounded-xl border border-white/10 bg-white/5 px-3 py-2">
-      <span className="mb-1 block text-xs text-slate-400">{label}</span>
-      <select
-        value={value}
-        onChange={(event) => onChange(Number(event.target.value))}
-        className="w-full rounded-lg border border-white/10 bg-slate-900 px-2 py-1.5 text-sm text-white"
+    <div className="flex flex-col gap-2.5 rounded-2xl border border-white/[0.08] bg-gradient-to-r from-white/[0.04] to-transparent px-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:py-2.5 sm:pl-3.5 sm:pr-3">
+      <span className="flex items-start gap-2.5 text-left sm:min-w-0 sm:flex-1 sm:items-center">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-lime-400/10 ring-1 ring-lime-400/20">
+          <Icon className="h-4 w-4 text-lime-300/95" strokeWidth={1.75} aria-hidden />
+        </span>
+        <span className="pt-0.5 text-[13px] font-medium leading-snug text-slate-200 sm:pt-0 sm:text-sm">
+          {label}
+        </span>
+      </span>
+      <div
+        className="flex items-center justify-center gap-0.5 sm:justify-end"
+        role="group"
+        aria-label={label}
       >
-        <option value={5}>5/5</option>
-        <option value={4}>4/5</option>
-        <option value={3}>3/5</option>
-        <option value={2}>2/5</option>
-        <option value={1}>1/5</option>
-      </select>
-    </label>
+        {[1, 2, 3, 4, 5].map((n) => (
+          <button
+            key={n}
+            type="button"
+            onClick={() => onChange(n)}
+            className={clsx(
+              "flex h-10 w-10 items-center justify-center rounded-xl transition sm:h-9 sm:w-9",
+              "hover:bg-white/[0.06] focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-400/35",
+              n === value && "bg-white/[0.06] ring-1 ring-lime-400/25",
+            )}
+            aria-label={`${n} of 5`}
+          >
+            <Star
+              className={clsx(
+                "h-[1.125rem] w-[1.125rem] sm:h-5 sm:w-5",
+                n <= value
+                  ? "fill-lime-400/95 text-lime-400"
+                  : "fill-transparent text-slate-600",
+              )}
+              strokeWidth={n <= value ? 0 : 1.4}
+            />
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }

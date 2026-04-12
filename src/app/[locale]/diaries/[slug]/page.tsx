@@ -13,6 +13,7 @@ import { getAvatarOptionByImage } from "@/lib/avatar-options";
 import { notoSansGeorgian } from "@/lib/fonts/noto-sans-georgian";
 import { hasGeorgianScript, toMtavruli } from "@/lib/georgian-mtavruli";
 import { getPublicDiaryBySlug } from "@/lib/diary-data";
+import { preferUnoptimizedRemoteImage } from "@/lib/remote-image";
 import { formatDistanceDisplayKa } from "@/lib/format-distance-ka";
 import { getDiaryLabels } from "@/lib/diary-labels";
 import { DiarySharePanel } from "@/components/diary-share-panel";
@@ -378,6 +379,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                     quality={65}
                     loading="lazy"
                     decoding="async"
+                    unoptimized={preferUnoptimizedRemoteImage(im.imageUrl)}
                   />
                 </Link>
               ))}
@@ -440,6 +442,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
                               quality={60}
                               loading="lazy"
                               decoding="async"
+                              unoptimized={preferUnoptimizedRemoteImage(im.imageUrl)}
                             />
                           </div>
                         ))}
