@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Noto_Sans_Georgian } from "next/font/google";
 import {
   getLocalizedPath,
   getDictionary,
@@ -30,6 +31,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 const LAW_URL =
   "https://www.matsne.gov.ge/ka/document/view/6330345?publication=0";
+
+const manifestoFutureCalloutKa = Noto_Sans_Georgian({
+  subsets: ["georgian"],
+  weight: ["700"],
+  display: "swap",
+});
 
 export default async function ManifestoPage({ params }: Props) {
   const { locale } = await params;
@@ -68,20 +75,20 @@ export default async function ManifestoPage({ params }: Props) {
         </Link>
 
         <nav
-          className="flex max-w-full gap-1.5 overflow-x-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] sm:justify-end [&::-webkit-scrollbar]:hidden"
+          className="grid w-full grid-cols-2 gap-2 sm:flex sm:max-w-full sm:flex-nowrap sm:justify-end sm:gap-1.5 sm:overflow-x-auto sm:pb-0.5 sm:[-ms-overflow-style:none] sm:[scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           aria-label={m.subtitle}
         >
           {sectionAnchors.map(({ id, title, kind }) => (
             <a
               key={id}
               href={`#${id}`}
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/[0.08] bg-slate-950/60 px-2.5 py-1.5 text-[10px] font-medium text-slate-400 transition hover:border-lime-400/25 hover:bg-lime-400/10 hover:text-lime-200 sm:gap-2 sm:px-3 sm:py-2 sm:text-xs"
+              className="inline-flex min-h-[2.75rem] min-w-0 items-center gap-1.5 rounded-full border border-white/[0.08] bg-slate-950/60 px-2 py-1.5 text-[9px] font-medium leading-snug text-slate-400 transition hover:border-lime-400/25 hover:bg-lime-400/10 hover:text-lime-200 sm:min-h-0 sm:shrink-0 sm:gap-2 sm:px-3 sm:py-2 sm:text-xs"
               title={title}
             >
-              <span className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-lime-400/20 bg-lime-400/10 text-lime-300">
+              <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-lime-400/20 bg-lime-400/10 text-lime-300 sm:h-6 sm:w-6 sm:rounded-lg">
                 <SectionIcon kind={kind} />
               </span>
-              <span className="max-w-[8.5rem] truncate sm:max-w-[11rem]">{title}</span>
+              <span className="min-w-0 flex-1 line-clamp-2 sm:max-w-[11rem] sm:line-clamp-none sm:truncate">{title}</span>
             </a>
           ))}
         </nav>
@@ -186,7 +193,11 @@ export default async function ManifestoPage({ params }: Props) {
         <ManifestoSectionCard id="manifesto-future" icon={<SectionIcon kind="future" />} title={m.futureSection.title}>
           <p>{m.futureSection.p1}</p>
           <p>{m.futureSection.p2}</p>
-          <p className="rounded-2xl border border-lime-400/20 bg-gradient-to-r from-lime-400/10 via-emerald-950/40 to-slate-950/80 px-4 py-5 text-center text-lg font-bold text-lime-200 sm:text-xl">
+          <p
+            className={`rounded-2xl border border-lime-400/20 bg-gradient-to-r from-lime-400/10 via-emerald-950/40 to-slate-950/80 px-4 py-5 text-center text-lg font-bold text-lime-200 sm:text-xl ${
+              typedLocale === "ka" ? manifestoFutureCalloutKa.className : "uppercase"
+            }`}
+          >
             {m.futureSection.p3}
           </p>
         </ManifestoSectionCard>

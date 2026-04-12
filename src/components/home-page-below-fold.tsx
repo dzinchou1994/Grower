@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Noto_Sans_Georgian } from "next/font/google";
 import { Activity, Gift } from "lucide-react";
 import { enUS, ka, ru } from "date-fns/locale";
 import { BookOpenIcon } from "@/components/icons";
@@ -9,6 +10,12 @@ import { listPublicDiaries } from "@/lib/diary-data";
 import { getTopUsers, listForumTopics } from "@/lib/forum-data";
 import { getLocalizedContent, getLocalizedPath, type Locale } from "@/lib/i18n";
 import { getUsernameAccentClassByXp } from "@/lib/leveling";
+
+const homeStartDiaryCapsKa = Noto_Sans_Georgian({
+  subsets: ["georgian"],
+  weight: ["600"],
+  display: "swap",
+});
 
 const dateLocales = { en: enUS, ka, ru } as const;
 
@@ -247,11 +254,13 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
               </p>
               <Link
                 href={getLocalizedPath(typedLocale, "/diaries/new")}
-                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-yellow-400 px-5 py-4 text-sm font-semibold leading-normal text-slate-950 normal-case shadow-[0_4px_0_0_rgba(161,98,7,0.48)] shadow-yellow-500/15 transition duration-200 hover:bg-yellow-300 hover:shadow-[0_6px_0_0_rgba(146,64,14,0.38)] hover:brightness-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-200/90 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020617] active:brightness-100 sm:w-auto sm:rounded-full sm:px-8 sm:py-3.5 lg:mt-7"
+                className={`group mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full border border-yellow-200/40 bg-gradient-to-b from-yellow-300 to-amber-400 px-6 py-3.5 text-sm font-semibold text-slate-950 shadow-[0_4px_20px_-6px_rgba(217,119,6,0.55),inset_0_1px_0_rgba(255,255,255,0.45)] transition duration-200 hover:from-yellow-200 hover:to-yellow-400 hover:shadow-[0_8px_28px_-8px_rgba(250,204,21,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-200/90 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020617] active:scale-[0.98] sm:w-auto sm:min-w-[13rem] sm:px-8 sm:py-3 lg:mt-7 ${
+                  typedLocale === "ka" ? homeStartDiaryCapsKa.className : "uppercase tracking-wide"
+                }`}
               >
                 <span className="text-center">{dict.home.startDiary}</span>
                 <svg
-                  className="h-4 w-4 shrink-0 opacity-90"
+                  className="h-4 w-4 shrink-0 opacity-90 transition-transform duration-200 group-hover:translate-x-0.5"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -337,8 +346,20 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
 
       <section className="defer-render rounded-2xl border border-white/10 bg-slate-950/60 p-5 sm:rounded-[2rem] sm:p-6">
         <div>
-          <p className="text-xs text-slate-400 sm:text-sm">{dict.home.topUsers}</p>
-          <h2 className="mt-1 text-lg font-semibold text-white sm:text-2xl">{dict.home.topUsersTitle}</h2>
+          <p
+            className={`text-xs text-slate-400 sm:text-sm ${
+              typedLocale === "ka" ? homeStartDiaryCapsKa.className : "uppercase"
+            }`}
+          >
+            {dict.home.topUsers}
+          </p>
+          <h2
+            className={`mt-1 text-lg font-semibold text-white sm:text-2xl ${
+              typedLocale === "ka" ? homeStartDiaryCapsKa.className : "uppercase"
+            }`}
+          >
+            {dict.home.topUsersTitle}
+          </h2>
         </div>
 
         <div className="mt-4 sm:mt-5">
@@ -391,7 +412,11 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
                 <Activity className="h-4 w-4 text-lime-200 sm:h-[18px] sm:w-[18px]" strokeWidth={2.2} />
               </span>
               <span className="h-px w-5 bg-gradient-to-r from-lime-400/15 via-lime-400/45 to-lime-400/15 sm:w-7" />
-              <span className="rounded-full border border-lime-400/35 bg-lime-500/10 px-2 py-1 text-[10px] font-bold tabular-nums tracking-wide text-lime-100 sm:px-2.5 sm:text-[11px]">
+              <span
+                className={`rounded-full border border-lime-400/35 bg-lime-500/10 px-2 py-1 text-[10px] font-bold tabular-nums tracking-wide text-lime-100 sm:px-2.5 sm:text-[11px] ${
+                  typedLocale === "ka" ? homeStartDiaryCapsKa.className : "uppercase"
+                }`}
+              >
                 {dict.home.topUsersXpHeading}
               </span>
               <span className="h-px w-5 bg-gradient-to-r from-lime-400/15 via-lime-400/45 to-lime-400/15 sm:w-7" />
@@ -399,7 +424,11 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
                 <Gift className="h-4 w-4 text-lime-200 sm:h-[18px] sm:w-[18px]" strokeWidth={2.2} />
               </span>
             </div>
-            <p className="relative mt-3 text-center text-[11px] leading-snug text-slate-400 sm:mt-0 sm:min-w-0 sm:flex-1 sm:text-left sm:text-xs sm:leading-5">
+            <p
+              className={`relative mt-3 text-center text-[11px] leading-snug text-slate-400 sm:mt-0 sm:min-w-0 sm:flex-1 sm:text-left sm:text-xs sm:leading-5 ${
+                typedLocale === "ka" ? homeStartDiaryCapsKa.className : "uppercase"
+              }`}
+            >
               {dict.home.topUsersXpSummary}
             </p>
           </div>
