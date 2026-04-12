@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAlternates, isValidLocale, type Locale } from "@/lib/i18n";
+import { getAlternates, getDictionary, isValidLocale, type Locale } from "@/lib/i18n";
 import { LegalPageShell } from "@/components/legal-page-shell";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -8,15 +8,12 @@ type Props = { params: Promise<{ locale: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   if (!isValidLocale(locale)) return {};
-  const title =
-    locale === "ka" ? "Grower | კონფიდენციალურობა" : locale === "ru" ? "Grower | Конфиденциальность" : "Grower | Privacy";
-  const description =
-    locale === "ka"
-      ? "კონფიდენციალურობის პოლიტიკა და მონაცემების დამუშავება."
-      : locale === "ru"
-        ? "Политика конфиденциальности и обработка данных."
-        : "Privacy policy and data handling.";
-  return { title, description, alternates: getAlternates("/privacy", locale) };
+  const dict = getDictionary(locale);
+  return {
+    title: dict.routeMeta.privacy.title,
+    description: dict.routeMeta.privacy.description,
+    alternates: getAlternates("/privacy", locale),
+  };
 }
 
 export default async function PrivacyPage({ params }: Props) {

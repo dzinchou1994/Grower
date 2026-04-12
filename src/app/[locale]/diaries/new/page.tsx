@@ -6,6 +6,7 @@ import { NewDiaryForm } from "@/components/diaries/new-diary-form";
 import { getServerSessionUser } from "@/lib/auth-session";
 import {
   getAlternates,
+  getDictionary,
   getLocalizedContent,
   getLocalizedPath,
   isValidLocale,
@@ -23,11 +24,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
   }
 
-  const { dict } = getLocalizedContent(locale);
+  const dict = getDictionary(locale);
 
   return {
-    title: `Grower | ${dict.diaries.newDiary.title}`,
-    description: dict.diaries.newDiary.description,
+    title: dict.routeMeta.newDiary.title,
+    description: dict.routeMeta.newDiary.description,
     alternates: getAlternates("/diaries/new", locale),
   };
 }

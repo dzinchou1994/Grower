@@ -468,10 +468,7 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
           >
             <div className="flex w-full flex-col gap-4 p-5 sm:gap-5 sm:p-7 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:p-8">
               <div className="min-w-0 flex-1">
-                <div className="inline-flex max-w-full items-center rounded-full border border-lime-400/35 bg-lime-400/[0.09] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-lime-100 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] sm:px-3.5 sm:py-2 sm:text-[11px] sm:tracking-[0.18em]">
-                  {dict.home.manifesto.badge}
-                </div>
-                <h2 className="mt-4 text-lg font-bold leading-[1.2] tracking-tight text-white sm:mt-5 sm:text-[1.35rem] sm:leading-tight lg:text-2xl xl:text-[1.65rem]">
+                <h2 className="text-lg font-bold leading-[1.2] tracking-tight text-white sm:text-[1.35rem] sm:leading-tight lg:text-2xl xl:text-[1.65rem]">
                   {dict.home.manifesto.headline}
                 </h2>
                 <p className="mt-3 line-clamp-2 text-[12px] leading-relaxed text-slate-300/95 sm:text-[13px] sm:leading-6 lg:mt-4 lg:line-clamp-none lg:text-[14px] lg:leading-7">

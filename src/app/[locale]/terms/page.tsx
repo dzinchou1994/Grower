@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAlternates, isValidLocale, type Locale } from "@/lib/i18n";
+import { getAlternates, getDictionary, isValidLocale, type Locale } from "@/lib/i18n";
 import { LegalPageShell } from "@/components/legal-page-shell";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -8,15 +8,12 @@ type Props = { params: Promise<{ locale: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   if (!isValidLocale(locale)) return {};
-  const title =
-    locale === "ka" ? "Grower | წესები და პირობები" : locale === "ru" ? "Grower | Условия" : "Grower | Terms";
-  const description =
-    locale === "ka"
-      ? "საიტის გამოყენების წესები და პირობები."
-      : locale === "ru"
-        ? "Условия использования сайта."
-        : "Website terms of use.";
-  return { title, description, alternates: getAlternates("/terms", locale) };
+  const dict = getDictionary(locale);
+  return {
+    title: dict.routeMeta.terms.title,
+    description: dict.routeMeta.terms.description,
+    alternates: getAlternates("/terms", locale),
+  };
 }
 
 export default async function TermsPage({ params }: Props) {

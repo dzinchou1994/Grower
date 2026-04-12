@@ -5,7 +5,8 @@ import { UserAvatar } from "@/components/user-avatar";
 import { PublicUserMessage } from "@/components/public-user-message";
 import { getServerSessionUser } from "@/lib/auth-session";
 import { getPublicUserProfileByUsername } from "@/lib/forum-data";
-import { getLocalizedPath, isValidLocale, type Locale } from "@/lib/i18n";
+import { getDictionary, getLocalizedPath, isValidLocale, type Locale } from "@/lib/i18n";
+import { fillSeoTemplate } from "@/lib/seo-template";
 import { computeBadges, getLevelProgress, getUsernameAccentClassByXp } from "@/lib/leveling";
 
 type Props = {
@@ -15,9 +16,10 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, username } = await params;
   if (!isValidLocale(locale)) return {};
+  const dict = getDictionary(locale);
   return {
-    title: `Grower.ge | @${username}`,
-    description: `Grower.ge profile for @${username}`,
+    title: fillSeoTemplate(dict.routeMeta.templates.profileTitle, { username }),
+    description: fillSeoTemplate(dict.routeMeta.templates.profileDescription, { username }),
   };
 }
 

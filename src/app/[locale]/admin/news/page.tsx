@@ -3,7 +3,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { NewsManager } from "@/components/admin/news-manager";
 import { getServerSessionUser } from "@/lib/auth-session";
-import { getAlternates, getLocalizedPath, isValidLocale, type Locale } from "@/lib/i18n";
+import {
+  getAlternates,
+  getDictionary,
+  getLocalizedPath,
+  isValidLocale,
+  type Locale,
+} from "@/lib/i18n";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -14,10 +20,12 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
   if (!isValidLocale(locale)) return {};
+  const dict = getDictionary(locale);
   return {
-    title: locale === "ka" ? "Grower | სიახლეების მართვა" : locale === "ru" ? "Grower | Управление новостями" : "Grower | News Management",
-    description: locale === "ka" ? "ადმინის პანელი სიახლეების დასამატებლად და დასამტკიცებლად." : locale === "ru" ? "Панель админа для публикации и модерации новостей." : "Admin panel to publish and moderate news.",
+    title: dict.routeMeta.adminNews.title,
+    description: dict.routeMeta.adminNews.description,
     alternates: getAlternates("/admin/news", locale),
+    robots: { index: false, follow: false },
   };
 }
 

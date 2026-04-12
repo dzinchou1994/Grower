@@ -15,12 +15,14 @@ import { DiarySharePanel } from "@/components/diary-share-panel";
 import { diaryOpenGraphMetadata } from "@/lib/diary-open-graph";
 import {
   getAlternates,
+  getDictionary,
   getLocalizedContent,
   getLocalizedPath,
   isValidLocale,
   siteUrl,
   type Locale,
 } from "@/lib/i18n";
+import { fillSeoTemplate } from "@/lib/seo-template";
 import { getServerSessionUser } from "@/lib/auth-session";
 
 const DiaryCommentForm = nextDynamic(() =>
@@ -48,8 +50,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
   }
 
-  const title = `Grower | ${diary.title}`;
-  const description = diary.description?.slice(0, 160) ?? diary.title;
+  const dict = getDictionary(locale as Locale);
+  const title = fillSeoTemplate(dict.routeMeta.templates.growDiary, {
+    title: diary.title,
+  });
+  const description =
+    diary.description?.trim().slice(0, 160) ||
+    dict.routeMeta.diaries.description.slice(0, 160);
 
   return {
     title,

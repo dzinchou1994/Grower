@@ -1,7 +1,13 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAlternates, getLocalizedPath, isValidLocale, type Locale } from "@/lib/i18n";
+import {
+  getAlternates,
+  getDictionary,
+  getLocalizedPath,
+  isValidLocale,
+  type Locale,
+} from "@/lib/i18n";
 import { FeedbackForm } from "@/components/feedback-form";
 
 type Props = {
@@ -12,24 +18,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   if (!isValidLocale(locale)) return {};
 
-  const meta =
-    locale === "ka"
-      ? {
-          title: "Grower | ფიდბექი",
-          description: "გვითხარი რა დავამატოთ და როგორ გავხადოთ პლატფორმა უკეთესი.",
-        }
-      : locale === "ru"
-        ? {
-            title: "Grower | Обратная связь",
-            description: "Расскажите, что добавить и как сделать платформу лучше.",
-          }
-        : {
-            title: "Grower | Feedback",
-            description: "Tell us what to add and how to improve the platform.",
-          };
-
+  const dict = getDictionary(locale);
   return {
-    ...meta,
+    title: dict.routeMeta.feedback.title,
+    description: dict.routeMeta.feedback.description,
     alternates: getAlternates("/feedback", locale),
   };
 }

@@ -7,10 +7,12 @@ import {
 } from "@/lib/cannapedia-data";
 import {
   getAlternates,
+  getDictionary,
   getLocalizedPath,
   isValidLocale,
   type Locale,
 } from "@/lib/i18n";
+import { fillSeoTemplate } from "@/lib/seo-template";
 
 type PageProps = {
   params: Promise<{ locale: string; slug: string }>;
@@ -54,9 +56,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
   }
 
+  const dict = getDictionary(locale);
+  const typedLocale = locale as Locale;
   return {
-    title: `Grower | ${article.title[locale]}`,
-    description: article.excerpt[locale],
+    title: fillSeoTemplate(dict.routeMeta.templates.cannapediaArticle, {
+      title: article.title[typedLocale],
+    }),
+    description: article.excerpt[typedLocale],
     alternates: getAlternates(`/cannapedia/${slug}`, locale),
   };
 }

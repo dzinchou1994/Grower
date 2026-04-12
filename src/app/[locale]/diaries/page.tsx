@@ -50,8 +50,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     page: "DIARIES",
     locale,
     path: "/diaries",
-    title: `Grower | ${dict.nav.diaries}`,
-    description: dict.diaries.description,
+    title: dict.routeMeta.diaries.title,
+    description: dict.routeMeta.diaries.description,
   });
 }
 

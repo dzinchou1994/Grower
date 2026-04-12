@@ -25,10 +25,108 @@ const localeNames: Record<Locale, string> = {
 
 const translations = {
   ka: {
-    metadataTitle: "Grower.ge",
+    metadataTitle: "GEOCANNABIS · Grower.ge",
     metadataDescription:
-      "ქართული კანაფის საზოგადოება - ფორუმი, ინფორმაცია, დისკუსიები და მოყვანის დღიურები.",
+      "ქართული კანაბის ფორუმი და გროვერების კომუნიტი — გროვერების დღიურები, დისკუსიები, Grower.ge (GEOCANNABIS).",
     brandTagline: "ფორუმი · ინფორმაცია · დღიურები",
+    routeMeta: {
+      forum: {
+        title: "კანაბისის ფორუმი · დისკუსიები და რჩევები | GEOCANNABIS",
+        description:
+          "კითხვები მოყვანაზე, ჯიშებზე, განათებაზე და კანონზე — ქართული გროვერების ფორუმი Grower.ge-ზე (GEOCANNABIS).",
+      },
+      diaries: {
+        title: "გროვერების დღიურები · ქართული Grow Diaries | GEOCANNABIS",
+        description:
+          "გროუ დღიურები კვირეული ფოტოებით — გროვერების ჟურნალი და გამოცდილების გაზიარება Grower.ge-ზე (GEOCANNABIS).",
+      },
+      news: {
+        title: "კანაფის სიახლეები · საქართველო და მსოფლიო | GEOCANNABIS",
+        description:
+          "ლეგალიზაცია, რეფორმები და ინდუსტრიის ამბები — კანაბის სიახლეები საქართველოდან და მსოფლიოდან Grower.ge-ზე.",
+      },
+      cannapedia: {
+        title: "Cannapedia · მოყვანის გზამკვლევი Indoor/Outdoor | Grower.ge",
+        description:
+          "თესლი, ვეგეტაცია, ყვავილობა, მორწყვა და მკვეთი — სტატიები დამწყებთვის და გროვერებისთვის GEOCANNABIS Cannapedia-ში.",
+      },
+      messages: {
+        title: "შეტყობინებები · Grower.ge",
+        description: "პირადი მესიჯები ქართული კანაბის კომუნიტის წევრებთან — Grower.ge.",
+      },
+      about: {
+        title: "ჩვენს შესახებ · GEOCANNABIS · Grower.ge",
+        description:
+          "ვინ ვართ, რატომ არსებობს პლატფორმა და რას ვცდილობთ — ქართული გროვერების უსაფრთხო სივრცე.",
+      },
+      contact: {
+        title: "კონტაქტი · Grower.ge · GEOCANNABIS",
+        description: "დაგვიკავშირდი Telegram-ით ან ელფოსტით — Grower.ge გუნდი.",
+      },
+      feedback: {
+        title: "ფიდბექი და წინადადებები · Grower.ge",
+        description: "გვითხარი რა გვაკლია და როგორ გავაუმჯობესოთ ფორუმი და დღიურები.",
+      },
+      resources: {
+        title: "რესურსები და ბმულები · Grower.ge",
+        description: "გარე რესურსები, ლექსიკონი და სასარგებლო მასალები გროვერებისთვის.",
+      },
+      rules: {
+        title: "ქომუნიტის წესები · ფორუმი Grower.ge",
+        description: "დისკუსიის წესები — პატივისცემა, უსაფრთხოება და მოდერაცია GEOCANNABIS ქომუნიტში.",
+      },
+      terms: {
+        title: "წესები და პირობები · Grower.ge",
+        description: "საიტის გამოყენების პირობები და შეთანხმება — Grower.ge / GEOCANNABIS.",
+      },
+      privacy: {
+        title: "კონფიდენციალურობა · Grower.ge",
+        description: "როგორ ვიცავთ ანონიმურობას და მინიმალურ მონაცემებს — პოლიტიკა.",
+      },
+      account: {
+        title: "ანგარიში · პროფილი და პარამეტრები · Grower.ge",
+        description: "შენი GEOCANNABIS / Grower.ge ანგარიში — დონე, აქტივობა და პარამეტრები.",
+      },
+      admin: {
+        title: "ადმინ პანელი · Grower.ge",
+        description: "მოდერაცია და სერვისის მართვა — შიდა პანელი.",
+      },
+      adminNews: {
+        title: "სიახლეების მართვა · ადმინი · Grower.ge",
+        description: "სიახლეების დამატება და მოდერაცია — ადმინისტრატორის პანელი.",
+      },
+      authLogin: {
+        title: "შესვლა · კანაბისის ფორუმი · Grower.ge",
+        description:
+          "შედი ანგარიშში — დაწერე თემები და კომენტარები ქართულ გროვერების ფორუმზე GEOCANNABIS.",
+      },
+      authRegister: {
+        title: "რეგისტრაცია · Grower.ge · GEOCANNABIS",
+        description:
+          "შექმენი უფასო ანგარიში — ფორუმი, დღიურები და კომუნიტი ერთ პლატფორმაზე.",
+      },
+      newDiary: {
+        title: "ახალი გროვერის დღიური · Grow Diaries · Grower.ge",
+        description:
+          "დაიწყე მოყვანის ჟურნალი — სათაური, ჯიში, გარემო და ფოტოები. ქართული Grow Diaries.",
+      },
+      newWeek: {
+        title: "კვირის განახლება · გროვერის დღიური · Grower.ge",
+        description:
+          "დაამატე კვირის ჩანაწერი და ფოტოები — განაახლე შენი Grow Diaries ჟურნალი.",
+      },
+      templates: {
+        forumThread: "{title} · კანაბისის ფორუმი · Grower.ge",
+        forumTopic: "{title} · ფორუმის კატეგორია · Grower.ge",
+        growDiary: "{title} · გროვერის დღიური · Grower.ge",
+        diaryWeek: "{diaryTitle} · კვირა {week} · Grower.ge",
+        cannapediaArticle: "{title} · Cannapedia · Grower.ge",
+        newsArticle: "{title} · კანაფის სიახლეები · Grower.ge",
+        profileTitle: "@{username} · გროვერის პროფილი · Grower.ge",
+        profileDescription:
+          "საჯარო პროფილი @{username} — ფორუმი, დღიურები და აქტივობა GEOCANNABIS / Grower.ge-ზე.",
+      },
+    },
     nav: {
       home: "ᲛᲗᲐᲕᲐᲠᲘ",
       forum: "ᲤᲝᲠᲣᲛᲘ",
@@ -40,6 +138,26 @@ const translations = {
     },
     home: {
       badge: "ქართული კანაფის საზოგადოება",
+      seoTitle:
+        "GEOCANNABIS | კანაბისის ფორუმი · გროვერების დღიურები · Grower.ge",
+      seoDescription:
+        "GEOCANNABIS (Grower.ge) — ქართული კანაბის ფორუმი და გროვერების კომუნიტი: გროვერების დღიურები (ქართული Grow Diaries), მწეველების სივრცე, 420, კანაბისის კლუბი და ქართული პლანის გაერთიანება. დისკუსიები, რჩევები და ანონიმურობა.",
+      seoKeywords: [
+        "კანაბისის ფორუმი",
+        "GEOCANNABIS",
+        "გროვერების დღიურები",
+        "ქართული grow diaries",
+        "გროვერების კომუნიტი",
+        "მწეველები",
+        "420",
+        "კანაბისის კლუბი",
+        "ქართული პლანის გაერთიანება",
+        "პლანი",
+        "პლანის გაზრდა",
+        "მოსაწევის გაზრდა",
+        "მოსაწევი",
+        "Grower.ge",
+      ],
       title: "ᲥᲐᲠᲗᲣᲚᲘ ᲙᲐᲜᲐᲤᲘᲡ ᲡᲐᲖᲝᲒᲐᲓᲝᲔᲑᲐ",
       privacyHeadline: "ანონიმურობა გარანტირებულია",
       description:
@@ -67,7 +185,6 @@ const translations = {
       recentDiariesTitle: "ᲣᲐᲮᲚᲔᲡᲘ ᲓᲦᲘᲣᲠᲔᲑᲘ",
       viewAllDiaries: "ყველა დღიური",
       manifesto: {
-        badge: "🟢 რატომ ვართ აქ",
         headline: "ᲐᲮᲐᲚᲘ ᲙᲐᲜᲝᲜᲘ, ᲫᲕᲔᲚᲘ ᲑᲠᲫᲝᲚᲐ - ᲔᲠᲗᲐᲓ ᲒᲐᲕᲘᲛᲐᲠᲯᲕᲔᲑᲗ!",
         text: "2025 წლის 1 თებერვლიდან საქართველოში ამოქმედდა სისხლის სამართლის კოდექსის ცვლილება, რომელიც კიდევ უფრო ამკაცრებს სანქციებს კანაფთან დაკავშირებულ ქმედებებზე. ჩვენი პლატფორმა არის უსაფრთხო, ანონიმური სივრცე, სადაც გროვერები ერთმანეთს ეხმარებიან ცოდნით, გამოცდილებით და სოლიდარობით.",
         cta: "წაიკითხე მანიფესტო",
@@ -80,8 +197,9 @@ const translations = {
       },
     },
     manifesto: {
-      metaTitle: "მანიფესტო - GROWER.GE",
-      metaDescription: "ჩვენი მისია, ხედვა და პოზიცია ახალი კანონმდებლობის მიმართ.",
+      metaTitle: "მანიფესტო · კანაფის კანონი საქართველოში | GEOCANNABIS",
+      metaDescription:
+        "სისხლის სამართლის ცვლილებები, პოზიცია და ანონიმურობა — რატომ არსებობს Grower.ge (GEOCANNABIS) ქართული გროვერებისთვის.",
       title: "მანიფესტო",
       subtitle:
         "ᲠᲐᲢᲝᲛ ᲐᲠᲡᲔᲑᲝᲑᲡ GROWER.GE ᲓᲐ ᲠᲘᲡᲗᲕᲘᲡ ᲕᲘᲑᲠᲫᲕᲘᲗ",
@@ -115,8 +233,9 @@ const translations = {
       },
     },
     sponsors: {
-      metaTitle: "სპონსორობა - GROWER.GE",
-      metaDescription: "სპონსორობა Grower.ge-ს - ქართული გროვერების პლატფორმა.",
+      metaTitle: "სპონსორობა · ქართული გროვერების პლატფორმა · GEOCANNABIS",
+      metaDescription:
+        "დაუკავშირდი Grower.ge-ს — ფორუმი, დღიურები და კანაბის კომუნიტი; პარტნიორობა ქართული გროვერების აუდიტორიასთან.",
       badge: "SPONSORSHIP",
       headline: "ᲒᲠᲝᲕᲔᲠᲘ ᲔᲫᲔᲑᲡ ᲡᲞᲝᲜᲡᲝᲠᲡ",
       subhead: "ᲔᲠᲗᲐᲓ ᲣᲤᲠᲝ ᲫᲚᲘᲔᲠᲔᲑᲘᲕᲐᲠᲗ",
@@ -310,10 +429,103 @@ const translations = {
     },
   },
   en: {
-    metadataTitle: "Grower.ge",
+    metadataTitle: "GEOCANNABIS · Grower.ge",
     metadataDescription:
-      "Georgian cannabis community - forum, information, discussions and grow diaries.",
+      "Georgian cannabis forum and grower community — grow diaries, discussions. Grower.ge (GEOCANNABIS).",
     brandTagline: "Forum · Info · Diaries",
+    routeMeta: {
+      forum: {
+        title: "Georgia Cannabis Forum · Discussions & Grow Tips | GEOCANNABIS",
+        description:
+          "Ask about growing, strains, lights, and law — Georgian cannabis community forum on Grower.ge (GEOCANNABIS).",
+      },
+      diaries: {
+        title: "Cannabis Grow Diaries Georgia · Weekly Logs | GEOCANNABIS",
+        description:
+          "Public grow journals with weekly photos and notes — Georgian Grow Diaries and grower stories on Grower.ge.",
+      },
+      news: {
+        title: "Cannabis News · Georgia & World | GEOCANNABIS",
+        description:
+          "Legal updates, industry news, and reform coverage from Georgia and worldwide — Grower.ge cannabis news.",
+      },
+      cannapedia: {
+        title: "Cannapedia · Indoor & Outdoor Growing Guides | Grower.ge",
+        description:
+          "Seeds, veg, flower, watering, harvest — beginner-friendly articles for home growers on GEOCANNABIS Cannapedia.",
+      },
+      messages: {
+        title: "Messages · Grower.ge",
+        description: "Private inbox with members of the Georgian cannabis community on Grower.ge.",
+      },
+      about: {
+        title: "About Us · GEOCANNABIS · Grower.ge",
+        description: "Mission, values, and why this Georgian grower platform exists — safe, anonymous space.",
+      },
+      contact: {
+        title: "Contact · Grower.ge · GEOCANNABIS",
+        description: "Reach the team via Telegram or email — Grower.ge support.",
+      },
+      feedback: {
+        title: "Feedback · Grower.ge",
+        description: "Suggest features and improvements for the forum, diaries, and community tools.",
+      },
+      resources: {
+        title: "Resources & Links · Grower.ge",
+        description: "External links, glossary, and useful references for cannabis growers in Georgia.",
+      },
+      rules: {
+        title: "Community Rules · Grower.ge Forum",
+        description: "Discussion rules — respect, safety, and moderation on the GEOCANNABIS community.",
+      },
+      terms: {
+        title: "Terms of Use · Grower.ge",
+        description: "Terms and conditions for using the Grower.ge / GEOCANNABIS platform.",
+      },
+      privacy: {
+        title: "Privacy Policy · Grower.ge",
+        description: "How we protect anonymity and handle minimal data — privacy policy.",
+      },
+      account: {
+        title: "Account · Profile & Settings · Grower.ge",
+        description: "Your GEOCANNABIS / Grower.ge dashboard — level, activity, and preferences.",
+      },
+      admin: {
+        title: "Admin Panel · Grower.ge",
+        description: "Moderation and service management — staff only.",
+      },
+      adminNews: {
+        title: "News Management · Admin · Grower.ge",
+        description: "Publish and moderate news posts — administrator tools.",
+      },
+      authLogin: {
+        title: "Login · Cannabis Forum · Grower.ge",
+        description: "Sign in to post threads and comments on the Georgian cannabis forum GEOCANNABIS.",
+      },
+      authRegister: {
+        title: "Register · Grower.ge · GEOCANNABIS",
+        description: "Create a free account — forum, grow diaries, and community in one place.",
+      },
+      newDiary: {
+        title: "Start a Grow Diary · Grower.ge",
+        description: "Create a new grow journal — title, strain, environment, and photos. Georgian Grow Diaries.",
+      },
+      newWeek: {
+        title: "Add Week Update · Grow Diary · Grower.ge",
+        description: "Log another week with notes and photos — update your public grow diary.",
+      },
+      templates: {
+        forumThread: "{title} · Cannabis Forum · Grower.ge",
+        forumTopic: "{title} · Forum Category · Grower.ge",
+        growDiary: "{title} · Grow Diary · Grower.ge",
+        diaryWeek: "{diaryTitle} · Week {week} · Grower.ge",
+        cannapediaArticle: "{title} · Cannapedia · Grower.ge",
+        newsArticle: "{title} · Cannabis News · Grower.ge",
+        profileTitle: "@{username} · Grower Profile · Grower.ge",
+        profileDescription:
+          "Public profile for @{username} — forum activity, diaries, and stats on GEOCANNABIS / Grower.ge.",
+      },
+    },
     nav: {
       home: "Home",
       forum: "Forum",
@@ -325,6 +537,24 @@ const translations = {
     },
     home: {
       badge: "Georgian Cannabis Community",
+      seoTitle:
+        "GEOCANNABIS | Georgian Cannabis Forum · Grow Diaries · Grower.ge",
+      seoDescription:
+        "GEOCANNABIS (Grower.ge) — Georgian cannabis forum and grower community: grow diaries (Georgian Grow Diaries), smokers' space, 420, cannabis club, and the Georgian plant community. Discussions, growing tips, and anonymity.",
+      seoKeywords: [
+        "Georgian cannabis forum",
+        "GEOCANNABIS",
+        "grow diaries Georgia",
+        "Georgian Grow Diaries",
+        "grower community",
+        "cannabis club Georgia",
+        "420",
+        "cannabis plant",
+        "growing cannabis plants",
+        "home grow",
+        "buds",
+        "Grower.ge",
+      ],
       title: "Join the forum, learn more, share your experience.",
       privacyHeadline: "100% anonymity guaranteed",
       description:
@@ -351,7 +581,6 @@ const translations = {
       recentDiariesTitle: "Latest diaries",
       viewAllDiaries: "All diaries",
       manifesto: {
-        badge: "🟢 Why we are here",
         headline: "New law, old struggle - together we endure.",
         text: "Starting February 1, 2025, amendments to Georgia's Criminal Code have further tightened penalties for cannabis-related activities. Our platform is a safe, anonymous space where growers support each other with knowledge, experience, and solidarity.",
         cta: "Read the manifesto",
@@ -364,8 +593,9 @@ const translations = {
       },
     },
     manifesto: {
-      metaTitle: "Manifesto - Grower.ge",
-      metaDescription: "Our mission, vision, and stance on the new legislation.",
+      metaTitle: "Manifesto · Georgia Cannabis Law 2025 | GEOCANNABIS",
+      metaDescription:
+        "Criminal Code changes, our stance, and anonymity — why Grower.ge exists for Georgian growers (GEOCANNABIS).",
       title: "Manifesto",
       subtitle: "Why Grower.ge exists and what we stand for",
       lawSection: {
@@ -396,9 +626,9 @@ const translations = {
       },
     },
     sponsors: {
-      metaTitle: "Sponsorship - GROWER.GE",
+      metaTitle: "Sponsor GEOCANNABIS · Georgian Grower Community · Grower.ge",
       metaDescription:
-        "Grower.ge is the Georgian cannabis grower community. We are looking for sponsors to grow the platform and serve the community better.",
+        "Partner with Grower.ge — forum, grow diaries, and cannabis community reach in Georgia. Transparent sponsorship, real growers.",
       badge: "SPONSORSHIP",
       headline: "Grower is seeking sponsors",
       subhead: "Together we grow stronger",
@@ -594,10 +824,103 @@ const translations = {
     },
   },
   ru: {
-    metadataTitle: "Grower.ge",
+    metadataTitle: "GEOCANNABIS · Grower.ge",
     metadataDescription:
-      "Грузинское каннабис-сообщество - форум, информация, дискуссии и дневники выращивания.",
+      "Грузинский форум каннабиса и комьюнити гроверов — дневники, дискуссии. Grower.ge (GEOCANNABIS).",
     brandTagline: "Форум · Инфо · Дневники",
+    routeMeta: {
+      forum: {
+        title: "Форум каннабиса Грузии · обсуждения и советы | GEOCANNABIS",
+        description:
+          "Вопросы о выращивании, штаммах, свете и законе — форум грузинского каннабис-сообщества Grower.ge (GEOCANNABIS).",
+      },
+      diaries: {
+        title: "Дневники гроверов · Grow Diaries Грузия | GEOCANNABIS",
+        description:
+          "Публичные дневники с еженедельными фото — опыт гроверов и журналы выращивания на Grower.ge.",
+      },
+      news: {
+        title: "Новости каннабиса · Грузия и мир | GEOCANNABIS",
+        description:
+          "Легализация, реформы и новости индустрии из Грузии и со всего мира — Grower.ge.",
+      },
+      cannapedia: {
+        title: "Cannapedia · гайды indoor/outdoor | Grower.ge",
+        description:
+          "Семена, вега, цветение, полив, харвест — статьи для новичков и гроверов в GEOCANNABIS Cannapedia.",
+      },
+      messages: {
+        title: "Сообщения · Grower.ge",
+        description: "Личные сообщения с участниками грузинского каннабис-сообщества на Grower.ge.",
+      },
+      about: {
+        title: "О нас · GEOCANNABIS · Grower.ge",
+        description: "Миссия и ценности платформы — безопасное пространство для грузинских гроверов.",
+      },
+      contact: {
+        title: "Контакты · Grower.ge · GEOCANNABIS",
+        description: "Связь через Telegram или email — команда Grower.ge.",
+      },
+      feedback: {
+        title: "Обратная связь · Grower.ge",
+        description: "Предложения по улучшению форума, дневников и функций платформы.",
+      },
+      resources: {
+        title: "Ресурсы и ссылки · Grower.ge",
+        description: "Внешние материалы и полезные ссылки для гроверов.",
+      },
+      rules: {
+        title: "Правила сообщества · форум Grower.ge",
+        description: "Правила дискуссий — уважение, безопасность и модерация в GEOCANNABIS.",
+      },
+      terms: {
+        title: "Условия использования · Grower.ge",
+        description: "Пользовательское соглашение сайта Grower.ge / GEOCANNABIS.",
+      },
+      privacy: {
+        title: "Конфиденциальность · Grower.ge",
+        description: "Политика конфиденциальности и минимизация данных.",
+      },
+      account: {
+        title: "Аккаунт · профиль и настройки · Grower.ge",
+        description: "Панель GEOCANNABIS / Grower.ge — уровень, активность и параметры.",
+      },
+      admin: {
+        title: "Админ-панель · Grower.ge",
+        description: "Модерация и управление — только для персонала.",
+      },
+      adminNews: {
+        title: "Управление новостями · админ · Grower.ge",
+        description: "Публикация и модерация новостей — инструменты администратора.",
+      },
+      authLogin: {
+        title: "Вход · форум каннабиса · Grower.ge",
+        description: "Войдите, чтобы писать темы и комментарии в грузинском каннабис-форуме GEOCANNABIS.",
+      },
+      authRegister: {
+        title: "Регистрация · Grower.ge · GEOCANNABIS",
+        description: "Создайте бесплатный аккаунт — форум, дневники и сообщество в одном месте.",
+      },
+      newDiary: {
+        title: "Новый дневник гровера · Grower.ge",
+        description: "Создайте журнал выращивания — название, сорт, среда и фото. Grow Diaries.",
+      },
+      newWeek: {
+        title: "Недельное обновление · дневник гровера · Grower.ge",
+        description: "Добавьте неделю с заметками и фото — обновите публичный дневник.",
+      },
+      templates: {
+        forumThread: "{title} · форум каннабиса · Grower.ge",
+        forumTopic: "{title} · категория форума · Grower.ge",
+        growDiary: "{title} · дневник гровера · Grower.ge",
+        diaryWeek: "{diaryTitle} · неделя {week} · Grower.ge",
+        cannapediaArticle: "{title} · Cannapedia · Grower.ge",
+        newsArticle: "{title} · новости каннабиса · Grower.ge",
+        profileTitle: "@{username} · профиль гровера · Grower.ge",
+        profileDescription:
+          "Публичный профиль @{username} — форум, дневники и активность на GEOCANNABIS / Grower.ge.",
+      },
+    },
     nav: {
       home: "Главная",
       forum: "Форум",
@@ -609,6 +932,23 @@ const translations = {
     },
     home: {
       badge: "Грузинское каннабис-сообщество",
+      seoTitle:
+        "GEOCANNABIS | Форум каннабиса Грузии · Дневники гроверов · Grower.ge",
+      seoDescription:
+        "GEOCANNABIS (Grower.ge) — грузинский форум каннабиса и комьюнити гроверов: дневники выращивания, Grow Diaries, 420, клуб, объединение любителей. Обсуждения, советы и анонимность.",
+      seoKeywords: [
+        "форум каннабиса Грузия",
+        "GEOCANNABIS",
+        "дневники гроверов",
+        "Grow Diaries",
+        "комьюнити гроверов",
+        "420",
+        "растение каннабиса",
+        "выращивание растения",
+        "домашний гроу",
+        "урожай",
+        "Grower.ge",
+      ],
       title: "Присоединяйся к форуму, узнай больше, поделись опытом.",
       privacyHeadline: "100% анонимность гарантирована",
       description:
@@ -635,7 +975,6 @@ const translations = {
       recentDiariesTitle: "Последние дневники",
       viewAllDiaries: "Все дневники",
       manifesto: {
-        badge: "🟢 Почему мы здесь",
         headline: "Новый закон, старая борьба - вместе выстоим.",
         text: "С 1 февраля 2025 года в Грузии вступили в силу поправки в Уголовный кодекс, ужесточающие наказания за действия, связанные с каннабисом. Наша платформа - безопасное, анонимное пространство, где гроверы поддерживают друг друга знаниями, опытом и солидарностью.",
         cta: "Прочитать манифест",
@@ -648,8 +987,9 @@ const translations = {
       },
     },
     manifesto: {
-      metaTitle: "Манифест - Grower.ge",
-      metaDescription: "Наша миссия, видение и позиция по новому законодательству.",
+      metaTitle: "Манифест · закон о каннабисе в Грузии | GEOCANNABIS",
+      metaDescription:
+        "Изменения УК, наша позиция и анонимность — зачем существует Grower.ge для грузинских гроверов (GEOCANNABIS).",
       title: "Манифест",
       subtitle: "Почему существует Grower.ge и за что мы боремся",
       lawSection: {
@@ -680,9 +1020,9 @@ const translations = {
       },
     },
     sponsors: {
-      metaTitle: "Спонсорство - GROWER.GE",
+      metaTitle: "Спонсорство GEOCANNABIS · сообщество гроверов Грузии · Grower.ge",
       metaDescription:
-        "Grower.ge - сообщество гроверов в Грузии. Ищем спонсоров, чтобы развивать платформу и лучше служить сообществу.",
+        "Партнёрство с Grower.ge — форум, дневники гроверов и охват каннабис-сообщества в Грузии; прозрачное сотрудничество.",
       badge: "СПОНСОРСТВО",
       headline: "Grower ищет спонсоров",
       subhead: "Вместе мы сильнее",

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AdminConsole } from "@/components/admin/admin-console";
 import { getServerSessionUser } from "@/lib/auth-session";
-import { getAlternates, getLocalizedContent, isValidLocale } from "@/lib/i18n";
+import { getAlternates, getDictionary, isValidLocale } from "@/lib/i18n";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -15,12 +15,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
   }
 
-  const { dict } = getLocalizedContent(locale);
+  const dict = getDictionary(locale);
 
   return {
-    title: `Grower | ${dict.nav.admin}`,
-    description: dict.admin.description,
+    title: dict.routeMeta.admin.title,
+    description: dict.routeMeta.admin.description,
     alternates: getAlternates("/admin", locale),
+    robots: { index: false, follow: false },
   };
 }
 

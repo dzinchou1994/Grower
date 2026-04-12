@@ -5,7 +5,14 @@ import { UserQuickProfileTrigger } from "@/components/user-quick-profile-trigger
 import { VoteButtons } from "@/components/vote-buttons";
 import { getServerSessionUser } from "@/lib/auth-session";
 import { getForumCommentById } from "@/lib/forum-data";
-import { getAlternates, getLocalizedPath, isValidLocale, type Locale } from "@/lib/i18n";
+import {
+  getAlternates,
+  getDictionary,
+  getLocalizedPath,
+  isValidLocale,
+  type Locale,
+} from "@/lib/i18n";
+import { fillSeoTemplate } from "@/lib/seo-template";
 
 type PageProps = {
   params: Promise<{ locale: string; slug: string; threadSlug: string; commentId: string }>;
@@ -26,8 +33,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
   }
 
+  const dict = getDictionary(typedLocale);
   return {
-    title: `Grower | ${data.thread.title}`,
+    title: fillSeoTemplate(dict.routeMeta.templates.forumThread, { title: data.thread.title }),
     description: data.comment.body.slice(0, 160),
     alternates: getAlternates(`/forum/${slug}/${threadSlug}/comments/${commentId}`, locale),
   };

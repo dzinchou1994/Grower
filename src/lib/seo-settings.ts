@@ -81,14 +81,22 @@ export async function getPageMetadataWithSeo(input: {
   path: string;
   title: string;
   description: string;
+  /** Used when the CMS has no keywords override for this page. */
+  keywords?: string[];
 }): Promise<Metadata> {
   const override = await getSeoOverride(input.page, input.locale);
   const title = override?.metaTitle?.trim() || input.title;
   const description = override?.metaDescription?.trim() || input.description;
-  const keywords = override?.keywords
+  const fromOverride = override?.keywords
     ?.split(",")
     .map((entry) => entry.trim())
     .filter(Boolean);
+  const keywords =
+    fromOverride && fromOverride.length > 0
+      ? fromOverride
+      : input.keywords && input.keywords.length > 0
+        ? input.keywords
+        : undefined;
 
   return {
     title,
@@ -97,7 +105,7 @@ export async function getPageMetadataWithSeo(input: {
     robots: override?.noIndex
       ? { index: false, follow: false }
       : { index: true, follow: true },
-    keywords: keywords && keywords.length > 0 ? keywords : undefined,
+    keywords,
     openGraph: {
       title: override?.ogTitle?.trim() || title,
       description: override?.ogDescription?.trim() || description,

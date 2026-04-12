@@ -9,12 +9,14 @@ import { DiarySharePanel } from "@/components/diary-share-panel";
 import { diaryOpenGraphMetadata } from "@/lib/diary-open-graph";
 import {
   getAlternates,
+  getDictionary,
   getLocalizedContent,
   getLocalizedPath,
   isValidLocale,
   siteUrl,
   type Locale,
 } from "@/lib/i18n";
+import { fillSeoTemplate } from "@/lib/seo-template";
 import { getServerSessionUser } from "@/lib/auth-session";
 
 const DiaryWeekCommentForm = nextDynamic(() =>
@@ -51,10 +53,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
   }
 
-  const { dict } = getLocalizedContent(locale as Locale);
-  const weekHeading = dict.diaries.explore.weekHeading.replace("{n}", String(data.week.weekNumber));
-  const title = `Grower | ${data.diary.title} - ${weekHeading}`;
-  const description = data.week.description.slice(0, 160);
+  const dict = getDictionary(locale as Locale);
+  const title = fillSeoTemplate(dict.routeMeta.templates.diaryWeek, {
+    diaryTitle: data.diary.title,
+    week: data.week.weekNumber,
+  });
+  const description = data.week.description.trim().slice(0, 160);
 
   return {
     title,

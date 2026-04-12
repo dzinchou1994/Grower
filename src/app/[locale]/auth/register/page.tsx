@@ -3,7 +3,13 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { AuthRegisterForm } from "@/components/auth-register-form";
 import { getServerSessionUser } from "@/lib/auth-session";
-import { getAlternates, getLocalizedPath, isValidLocale, type Locale } from "@/lib/i18n";
+import {
+  getAlternates,
+  getDictionary,
+  getLocalizedPath,
+  isValidLocale,
+  type Locale,
+} from "@/lib/i18n";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -12,8 +18,6 @@ type PageProps = {
 function getCopy(locale: Locale) {
   if (locale === "ka") {
     return {
-      metadataTitle: "Grower | რეგისტრაცია",
-      metadataDescription: "შექმენი ანგარიში Grower ფორუმზე.",
       title: "ანგარიშის შექმნა",
       subtitle: "დარეგისტრირდი, რომ ჩაერთო დისკუსიებში და გამოაქვეყნო თემები.",
       alreadyRegistered: "უკვე დარეგისტრირებული ხარ?",
@@ -32,8 +36,6 @@ function getCopy(locale: Locale) {
   }
   if (locale === "ru") {
     return {
-      metadataTitle: "Grower | Регистрация",
-      metadataDescription: "Создайте аккаунт на форуме Grower.",
       title: "Создать аккаунт",
       subtitle: "Зарегистрируйтесь, чтобы участвовать в обсуждениях и публиковать темы.",
       alreadyRegistered: "Уже зарегистрированы?",
@@ -51,8 +53,6 @@ function getCopy(locale: Locale) {
     };
   }
   return {
-    metadataTitle: "Grower | Register",
-    metadataDescription: "Create an account on Grower forum.",
     title: "Create account",
     subtitle: "Register to join discussions and publish threads.",
     alreadyRegistered: "Already registered?",
@@ -75,10 +75,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!isValidLocale(locale)) {
     return {};
   }
-  const copy = getCopy(locale);
+  const dict = getDictionary(locale);
   return {
-    title: copy.metadataTitle,
-    description: copy.metadataDescription,
+    title: dict.routeMeta.authRegister.title,
+    description: dict.routeMeta.authRegister.description,
     alternates: getAlternates("/auth/register", locale),
   };
 }

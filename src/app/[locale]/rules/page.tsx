@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAlternates, isValidLocale, type Locale } from "@/lib/i18n";
+import { getAlternates, getDictionary, isValidLocale, type Locale } from "@/lib/i18n";
 import { LegalPageShell } from "@/components/legal-page-shell";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -8,19 +8,12 @@ type Props = { params: Promise<{ locale: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   if (!isValidLocale(locale)) return {};
-  const title =
-    locale === "ka"
-      ? "Grower | ქომუნითი წესები"
-      : locale === "ru"
-        ? "Grower | Правила сообщества"
-        : "Grower | Community Rules";
-  const description =
-    locale === "ka"
-      ? "ქომუნითი წესები უსაფრთხო და პატივისცემით სავსე დისკუსიებისთვის."
-      : locale === "ru"
-        ? "Правила сообщества для безопасных и уважительных обсуждений."
-        : "Community rules for safe and respectful discussions.";
-  return { title, description, alternates: getAlternates("/rules", locale) };
+  const dict = getDictionary(locale);
+  return {
+    title: dict.routeMeta.rules.title,
+    description: dict.routeMeta.rules.description,
+    alternates: getAlternates("/rules", locale),
+  };
 }
 
 export default async function RulesPage({ params }: Props) {

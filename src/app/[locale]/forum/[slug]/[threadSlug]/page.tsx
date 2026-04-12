@@ -9,11 +9,13 @@ import { getServerSessionUser } from "@/lib/auth-session";
 import { getForumThreadBySlug } from "@/lib/forum-data";
 import {
   getAlternates,
+  getDictionary,
   getLocalizedContent,
   getLocalizedPath,
   isValidLocale,
   type Locale,
 } from "@/lib/i18n";
+import { fillSeoTemplate } from "@/lib/seo-template";
 
 type PageProps = {
   params: Promise<{ locale: string; slug: string; threadSlug: string }>;
@@ -34,9 +36,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
   }
 
+  const dict = getDictionary(typedLocale);
   const description = (threadData.thread.body ?? threadData.topic.description).slice(0, 160);
   return {
-    title: `Grower | ${threadData.thread.title}`,
+    title: fillSeoTemplate(dict.routeMeta.templates.forumThread, {
+      title: threadData.thread.title,
+    }),
     description,
     alternates: getAlternates(`/forum/${slug}/${threadSlug}`, locale),
   };

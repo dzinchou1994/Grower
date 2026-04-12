@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
   getAlternates,
+  getDictionary,
   getLocalizedPath,
   isValidLocale,
   type Locale,
@@ -16,24 +17,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   if (!isValidLocale(locale)) return {};
 
-  const meta =
-    locale === "ka"
-      ? {
-          title: "Grower | რესურსები",
-          description: "გარე რესურსები და სასარგებლო ბმულები.",
-        }
-      : locale === "ru"
-        ? {
-            title: "Grower | Ресурсы",
-            description: "Внешние ресурсы и полезные ссылки.",
-          }
-        : {
-            title: "Grower | Resources",
-            description: "External resources and useful links.",
-          };
-
+  const dict = getDictionary(locale);
   return {
-    ...meta,
+    title: dict.routeMeta.resources.title,
+    description: dict.routeMeta.resources.description,
     alternates: getAlternates("/resources", locale),
   };
 }

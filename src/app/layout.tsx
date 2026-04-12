@@ -9,9 +9,9 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Grower",
+  title: "GEOCANNABIS · Grower.ge",
   description:
-    "Grower.ge - mobile-first cannabis community with Georgian, English, and Russian indexable pages.",
+    "GEOCANNABIS (Grower.ge) — ქართული კანაბის ფორუმი, გროვერების დღიურები და კომუნიტი. ინგლისური და რუსული გვერდებიც.",
   icons: {
     icon: "/logo.svg",
     shortcut: "/logo.svg",

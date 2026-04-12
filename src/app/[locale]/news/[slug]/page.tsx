@@ -2,7 +2,14 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getAlternates, getLocalizedPath, isValidLocale, type Locale } from "@/lib/i18n";
+import {
+  getAlternates,
+  getDictionary,
+  getLocalizedPath,
+  isValidLocale,
+  type Locale,
+} from "@/lib/i18n";
+import { fillSeoTemplate } from "@/lib/seo-template";
 import { getNewsBySlug, listNewsSlugs } from "@/lib/news-data";
 
 const newsFallbackImageSrc = "/news/community-workshop.svg";
@@ -22,9 +29,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const article = await getNewsBySlug(slug);
   if (!article) return {};
 
+  const dict = getDictionary(locale);
+  const typedLocale = locale as Locale;
   return {
-    title: `Grower | ${article.title[locale]}`,
-    description: article.excerpt[locale],
+    title: fillSeoTemplate(dict.routeMeta.templates.newsArticle, {
+      title: article.title[typedLocale],
+    }),
+    description: article.excerpt[typedLocale],
     alternates: getAlternates(`/news/${slug}`, locale),
   };
 }

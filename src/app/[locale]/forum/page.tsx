@@ -41,8 +41,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     page: "FORUM",
     locale,
     path: "/forum",
-    title: `Grower | ${dict.nav.forum}`,
-    description: dict.forum.description,
+    title: dict.routeMeta.forum.title,
+    description: dict.routeMeta.forum.description,
   });
 }
 

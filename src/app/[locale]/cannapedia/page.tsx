@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { CannapediaExplorer } from "@/components/cannapedia-explorer";
 import { getCannapediaExplorerBundleCached } from "@/lib/cannapedia-data";
 import {
+  getLocalizedContent,
   isValidLocale,
   type Locale,
 } from "@/lib/i18n";
@@ -81,13 +82,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
   }
 
-  const copy = cannapediaCopy(locale);
+  const dict = getLocalizedContent(locale).dict;
   return getPageMetadataWithSeo({
     page: "CANNAPEDIA",
     locale,
     path: "/cannapedia",
-    title: `Grower | Cannapedia`,
-    description: copy.description,
+    title: dict.routeMeta.cannapedia.title,
+    description: dict.routeMeta.cannapedia.description,
   });
 }
 

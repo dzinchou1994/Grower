@@ -2,7 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AuthLoginForm } from "@/components/auth-login-form";
-import { getAlternates, getLocalizedPath, isValidLocale, type Locale } from "@/lib/i18n";
+import {
+  getAlternates,
+  getDictionary,
+  getLocalizedPath,
+  isValidLocale,
+  type Locale,
+} from "@/lib/i18n";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -11,8 +17,6 @@ type PageProps = {
 function getCopy(locale: Locale) {
   if (locale === "ka") {
     return {
-      metadataTitle: "Grower | შესვლა",
-      metadataDescription: "შედი ანგარიშში, რომ ფორუმზე თემები და კომენტარები დაწერო.",
       title: "შესვლა",
       subtitle: "შედით, რომ შექმნათ თემები და კომენტარები.",
       noAccount: "არ გაქვს ანგარიში?",
@@ -29,8 +33,6 @@ function getCopy(locale: Locale) {
   }
   if (locale === "ru") {
     return {
-      metadataTitle: "Grower | Вход",
-      metadataDescription: "Войдите, чтобы публиковать темы и комментарии на форуме Grower.",
       title: "Вход",
       subtitle: "Войдите, чтобы создавать темы и комментарии.",
       noAccount: "Нет аккаунта?",
@@ -46,8 +48,6 @@ function getCopy(locale: Locale) {
     };
   }
   return {
-    metadataTitle: "Grower | Login",
-    metadataDescription: "Login to post threads and comments on Grower forum.",
     title: "Login",
     subtitle: "Sign in to create threads and comments.",
     noAccount: "No account?",
@@ -68,10 +68,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!isValidLocale(locale)) {
     return {};
   }
-  const copy = getCopy(locale);
+  const dict = getDictionary(locale);
   return {
-    title: copy.metadataTitle,
-    description: copy.metadataDescription,
+    title: dict.routeMeta.authLogin.title,
+    description: dict.routeMeta.authLogin.description,
     alternates: getAlternates("/auth/login", locale),
   };
 }

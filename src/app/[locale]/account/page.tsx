@@ -8,6 +8,7 @@ import type { UserActivityStats } from "@/lib/leveling";
 import { extractSocialsFromBio } from "@/lib/user-socials";
 import {
   getAlternates,
+  getDictionary,
   getLocalizedPath,
   isValidLocale,
   type Locale,
@@ -24,15 +25,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!isValidLocale(locale)) {
     return {};
   }
-  const meta =
-    locale === "ka"
-      ? { title: "Grower.ge | ანგარიში", description: "შენი Grower.ge ანგარიშის პანელი." }
-      : locale === "ru"
-        ? { title: "Grower.ge | Аккаунт", description: "Панель вашего аккаунта Grower.ge." }
-        : { title: "Grower.ge | Account", description: "Your Grower.ge account dashboard." };
+  const dict = getDictionary(locale);
   return {
-    title: meta.title,
-    description: meta.description,
+    title: dict.routeMeta.account.title,
+    description: dict.routeMeta.account.description,
     alternates: getAlternates("/account", locale),
   };
 }

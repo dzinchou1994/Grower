@@ -37,8 +37,9 @@ export async function generateMetadata({
     page: "HOME",
     locale,
     path: "",
-    title: `Grower | ${dict.nav.home}`,
-    description: dict.metadataDescription,
+    title: dict.home.seoTitle,
+    description: dict.home.seoDescription,
+    keywords: [...dict.home.seoKeywords],
   });
 }
 

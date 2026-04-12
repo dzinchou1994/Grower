@@ -7,12 +7,14 @@ import { ForumCommentForm } from "@/components/forum-comment-form";
 import { ForumThreadComposer, ForumTopicComposeTrigger } from "@/components/forum-thread-composer";
 import {
   getAlternates,
+  getDictionary,
   getLocalizedContent,
   getLocalizedPath,
   isValidLocale,
   locales,
   type Locale,
 } from "@/lib/i18n";
+import { fillSeoTemplate } from "@/lib/seo-template";
 import { getForumTopicBySlug } from "@/lib/forum-data";
 import { VoteButtons } from "@/components/vote-buttons";
 import { UserQuickProfileTrigger } from "@/components/user-quick-profile-trigger";
@@ -66,8 +68,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
   }
 
+  const dict = getDictionary(typedLocale);
   return {
-    title: `Grower | ${topic.title}`,
+    title: fillSeoTemplate(dict.routeMeta.templates.forumTopic, { title: topic.title }),
     description: topic.description,
     alternates: getAlternates(`/forum/${slug}`, locale),
   };

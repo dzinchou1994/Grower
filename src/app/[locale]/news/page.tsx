@@ -7,7 +7,13 @@ import { notFound } from "next/navigation";
 import { NewsSubmissionForm } from "@/components/news-submission-form";
 import { getServerSessionUser } from "@/lib/auth-session";
 import { listPublishedNews, type NewsScope } from "@/lib/news-data";
-import { getAlternates, getLocalizedPath, isValidLocale, type Locale } from "@/lib/i18n";
+import {
+  getAlternates,
+  getDictionary,
+  getLocalizedPath,
+  isValidLocale,
+  type Locale,
+} from "@/lib/i18n";
 
 const newsFallbackImageSrc = "/news/community-workshop.svg";
 
@@ -59,10 +65,10 @@ function getCopy(locale: Locale) {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
   if (!isValidLocale(locale)) return {};
-  const copy = getCopy(locale);
+  const dict = getDictionary(locale);
   return {
-    title: `Grower | ${copy.title}`,
-    description: copy.description,
+    title: dict.routeMeta.news.title,
+    description: dict.routeMeta.news.description,
     alternates: getAlternates("/news", locale),
   };
 }

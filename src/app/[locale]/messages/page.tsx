@@ -3,7 +3,13 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { AccountMessageInbox } from "@/components/account-message-inbox";
 import { getServerSessionUser } from "@/lib/auth-session";
-import { getAlternates, getLocalizedPath, isValidLocale, type Locale } from "@/lib/i18n";
+import {
+  getAlternates,
+  getDictionary,
+  getLocalizedPath,
+  isValidLocale,
+  type Locale,
+} from "@/lib/i18n";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -16,18 +22,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!isValidLocale(locale)) {
     return {};
   }
-  const title =
-    locale === "ka"
-      ? "Grower | შეტყობინებები"
-      : locale === "ru"
-        ? "Grower | Сообщения"
-        : "Grower | Messages";
-  const description =
-    locale === "ka"
-      ? "პირადი მესიჯები და ჩატები ქომუნითის წევრებთან."
-      : locale === "ru"
-        ? "Личные сообщения и чаты с участниками сообщества."
-        : "Private messages and chats with community members.";
+  const dict = getDictionary(locale);
+  const title = dict.routeMeta.messages.title;
+  const description = dict.routeMeta.messages.description;
 
   return {
     title,

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { NewWeekForm } from "@/components/diaries/new-week-form";
 import {
   getAlternates,
+  getDictionary,
   getLocalizedContent,
   getLocalizedPath,
   isValidLocale,
@@ -23,11 +24,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
   }
 
-  const { dict } = getLocalizedContent(locale);
+  const dict = getDictionary(locale);
 
   return {
-    title: `Grower | ${dict.diaries.newWeek.titlePrefix} ${slug}`,
-    description: dict.diaries.newWeek.description,
+    title: dict.routeMeta.newWeek.title,
+    description: dict.routeMeta.newWeek.description,
     alternates: getAlternates(`/diaries/${slug}/weeks/new`, locale),
   };
 }
