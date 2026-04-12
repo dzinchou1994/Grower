@@ -125,7 +125,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
         <CannabisLeaf className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rotate-12 text-yellow-400/[0.035] sm:h-40 sm:w-40" />
         <Link
           href={getLocalizedPath(typedLocale, "/diaries")}
-          className="absolute left-5 top-5 z-20 inline-flex max-w-[calc(100%-1rem)] items-center justify-center gap-1.5 rounded-full border border-white/[0.12] bg-slate-950/85 px-3 py-1.5 text-[11px] font-medium text-yellow-200/95 shadow-sm backdrop-blur-sm transition hover:border-yellow-400/30 hover:bg-yellow-400/10 hover:text-white sm:left-8 sm:top-8 sm:text-xs lg:hidden"
+          className="absolute left-5 top-5 z-20 inline-flex max-w-[calc(100%-1rem)] items-center justify-center gap-1.5 rounded-full border border-white/[0.12] bg-slate-950/95 px-3 py-1.5 text-[11px] font-medium text-yellow-200/95 shadow-sm transition hover:border-yellow-400/30 hover:bg-yellow-400/10 hover:text-white sm:left-8 sm:top-8 sm:text-xs lg:hidden"
         >
           <ArrowLeft className="h-3.5 w-3.5 shrink-0 opacity-90" strokeWidth={2.25} aria-hidden />
           {dict.diaries.backToDiariesShort}
@@ -191,7 +191,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
 
           <>
             {/* Mobile: compact collapsible overview - saves vertical space */}
-            <details className="group rounded-2xl border border-white/[0.07] bg-gradient-to-br from-white/[0.04] to-transparent shadow-[0_8px_32px_-20px_rgba(0,0,0,0.5)] backdrop-blur-sm lg:hidden open:border-yellow-400/20 open:shadow-[0_12px_40px_-16px_rgba(250,204,21,0.08)]">
+            <details className="group rounded-2xl border border-white/[0.07] bg-gradient-to-br from-slate-950/90 via-white/[0.05] to-transparent shadow-[0_8px_32px_-20px_rgba(0,0,0,0.5)] lg:hidden open:border-yellow-400/20 open:shadow-[0_12px_40px_-16px_rgba(250,204,21,0.08)]">
               <summary className="flex cursor-pointer list-none items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-white/[0.03] [&::-webkit-details-marker]:hidden">
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400/25 via-amber-500/10 to-slate-900/50 shadow-[inset_0_1px_0_0_rgba(250,204,21,0.15)] ring-1 ring-yellow-400/25">
                   <Layers className="h-5 w-5 text-yellow-200/90" strokeWidth={1.75} aria-hidden />
@@ -343,38 +343,46 @@ export default async function DiaryDetailPage({ params }: PageProps) {
       <DiarySetupDisplay setup={diary.setup} labels={dict.diaries.setup} locale={typedLocale} />
 
       {latest ? (
-        <section className="rounded-2xl border border-yellow-400/15 bg-yellow-400/[0.03] p-5 sm:rounded-3xl sm:p-7">
-          <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-yellow-400/70">
+        <section className="rounded-xl border border-white/[0.07] bg-slate-950/35 p-4 sm:rounded-2xl sm:p-5">
+          <p className="text-[9px] font-medium uppercase tracking-[0.18em] text-slate-500 sm:text-[10px] sm:tracking-[0.2em]">
             {explore.latestWeekBadge}
           </p>
-          <h2 className="mt-2 text-lg font-semibold tracking-tight text-white sm:text-2xl">
+          <h2 className="mt-1.5 text-base font-semibold leading-snug tracking-tight text-white sm:mt-2 sm:text-lg">
             <Link
               href={getLocalizedPath(
                 typedLocale,
                 `/diaries/${diary.slug}/weeks/${latest.weekNumber}`,
               )}
-              className="transition hover:text-yellow-300/95"
+              className="transition hover:text-yellow-300/90"
             >
               {explore.weekHeading.replace("{n}", String(latest.weekNumber))}
               {latest.title ? `: ${latest.title}` : ""}
             </Link>
           </h2>
-          <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-slate-200 sm:text-base">
+          <p className="mt-2 max-sm:line-clamp-4 whitespace-pre-wrap text-xs leading-relaxed text-slate-400 sm:line-clamp-none sm:mt-2.5 sm:text-sm sm:leading-relaxed sm:text-slate-300">
             {latest.description}
           </p>
           {latest.images.length > 0 ? (
-            <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
+            <div
+              className={
+                latest.images.length <= 1
+                  ? "mt-3 grid w-full max-w-[200px] grid-cols-1 gap-1.5 sm:mt-4"
+                  : latest.images.length === 2
+                    ? "mt-3 grid w-full grid-cols-2 gap-1.5 sm:mt-4 sm:gap-2"
+                    : "mt-3 grid w-full grid-cols-3 gap-1.5 sm:mt-4 sm:gap-2"
+              }
+            >
               {latest.images.map((im) => (
                 <Link
                   key={im.id}
                   href={weekHref(latest.weekNumber)}
-                  className="relative aspect-square overflow-hidden rounded-xl border border-white/10 transition hover:border-yellow-400/30"
+                  className="relative aspect-square overflow-hidden rounded-lg border border-white/[0.06] transition hover:border-yellow-400/25"
                 >
                   <Image
                     src={im.imageUrl}
                     alt=""
                     fill
-                    sizes="(max-width: 640px) 45vw, 200px"
+                    sizes="(max-width: 640px) 28vw, 180px"
                     className="object-cover"
                     quality={65}
                     loading="lazy"
@@ -385,7 +393,7 @@ export default async function DiaryDetailPage({ params }: PageProps) {
               ))}
             </div>
           ) : null}
-          <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-400">
+          <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[11px] tabular-nums text-slate-500 sm:mt-3.5 sm:text-xs">
             <span>
               {latest.likeCount} {dict.diaries.likes}
             </span>

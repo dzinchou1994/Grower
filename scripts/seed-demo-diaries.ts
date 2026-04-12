@@ -12,6 +12,9 @@
  *
  * If rows already exist with old Lorem Picsum URLs, run:
  *   npx tsx scripts/migrate-picsum-to-commons.ts
+ *
+ * Already seeded with one photo per week? Add multi-image galleries without wiping DB:
+ *   npx tsx scripts/patch-demo-week-gallery.ts
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -147,7 +150,8 @@ async function main() {
     n: number;
     title: string;
     body: string;
-    img: string;
+    /** One or more week photos (Commons URLs). */
+    images: string[];
   };
 
   const weeksA: WeekSeed[] = [
@@ -155,61 +159,61 @@ async function main() {
       n: 1,
       title: "Germination",
       body: "Soaked in water 12h, then paper towel until taproot ~1 cm. Planted into solo cups with light soil mix, domed for humidity. Lights 24/0 at low power.",
-      img: weekImage("gdemo-a-w1"),
+      images: [weekImage("gdemo-a-w1")],
     },
     {
       n: 2,
       title: "Seedling",
       body: "First true leaves opened. RH 65%, temps 24–26°C. Watering with a light quarter-strength veg formula every 2–3 days - only when cups felt light.",
-      img: weekImage("gdemo-a-w2"),
+      images: [weekImage("gdemo-a-w2")],
     },
     {
       n: 3,
       title: "Early veg",
       body: "Transplanted to 1 gal fabric pots. LST started with soft wire. Canopy evened out before stretch.",
-      img: weekImage("gdemo-a-w3"),
+      images: [weekImage("gdemo-a-w3")],
     },
     {
       n: 4,
       title: "Mid veg",
       body: "Topped once above node 5. Defoliated lightly for airflow. EC slowly climbing toward target for veg.",
-      img: weekImage("gdemo-a-w4"),
+      images: [weekImage("gdemo-a-w4")],
     },
     {
       n: 5,
       title: "Late veg / pre-flip",
       body: "Final defoliation before flip. Beds watered to runoff to reset salts. Flip scheduled after one dark night to mimic outdoor rhythm (habit).",
-      img: weekImage("gdemo-a-w5"),
+      images: [weekImage("gdemo-a-w5")],
     },
     {
       n: 6,
       title: "Week 1 flower",
       body: "Stretch underway - raised lights. RH trimmed to ~55%. Introduced bloom nutes at quarter strength.",
-      img: weekImage("gdemo-a-w6"),
+      images: [weekImage("gdemo-a-w6")],
     },
     {
       n: 7,
       title: "Mid flower",
       body: "Stacking nicely. Removed a few fan leaves blocking lower sites. Watching for any calcium flags - calmag at low dose.",
-      img: weekImage("gdemo-a-w7"),
+      images: [weekImage("gdemo-a-w7")],
     },
     {
       n: 8,
       title: "Late flower",
       body: "Trichomes mostly cloudy with some clear on upper buds. Flushed over several days - runoff PPM dropping as intended.",
-      img: weekImage("gdemo-a-w8"),
+      images: [weekImage("gdemo-a-w8"), weekImage("gdemo-a-w7"), weekImage("gdemo-a-w9")],
     },
     {
       n: 9,
       title: "Harvest prep",
       body: "48h dark before chop. Tent cleaned, drying rack ready with gentle circulation - no direct wind on colas.",
-      img: weekImage("gdemo-a-w9"),
+      images: [weekImage("gdemo-a-w9"), weekImage("gdemo-a-w10")],
     },
     {
       n: 10,
       title: "Harvest & cure",
       body: "Wet trim, hung whole branches 60°F / 60% RH for ~12 days until stems snapped. Jars burped daily first week. Grape candy nose - happy with the run.",
-      img: weekImage("gdemo-a-w10"),
+      images: [weekImage("gdemo-a-w10"), weekImage("gdemo-a-w9"), weekImage("gdemo-a-w8")],
     },
   ];
 
@@ -218,49 +222,49 @@ async function main() {
       n: 1,
       title: "Clones rooted",
       body: "Two rooted cuts from a trusted friend. Placed under CMH at veg distance, light feed in coco.",
-      img: weekImage("gdemo-b-w1"),
+      images: [weekImage("gdemo-b-w1")],
     },
     {
       n: 2,
       title: "Veg canopy",
       body: "Trellis installed early. Watering to 10–15% runoff, EC according to chart. Greenhouse temps swing more than indoor - watched VPD midday.",
-      img: weekImage("gdemo-b-w2"),
+      images: [weekImage("gdemo-b-w2")],
     },
     {
       n: 3,
       title: "Stretch",
       body: "Moved to HPS for flower. Some leaf tucking, minimal stripping to keep solar collectors.",
-      img: weekImage("gdemo-b-w3"),
+      images: [weekImage("gdemo-b-w3")],
     },
     {
       n: 4,
       title: "Flower bulk",
       body: "Resin stacking, lime-forward terps. IPM pass with clean water shower + airflow check.",
-      img: weekImage("gdemo-b-w4"),
+      images: [weekImage("gdemo-b-w4")],
     },
     {
       n: 5,
       title: "Ripening",
       body: "Reduced nitrogen, pushed potassium. Lowered night temps slightly for color - subtle purple on leaf edges.",
-      img: weekImage("gdemo-b-w5"),
+      images: [weekImage("gdemo-b-w5")],
     },
     {
       n: 6,
       title: "Flush & chop",
       body: "Pure water last 10 days. Harvest on a dry morning, dried slowly in the greenhouse corner with burlap screens.",
-      img: weekImage("gdemo-b-w6"),
+      images: [weekImage("gdemo-b-w6")],
     },
     {
       n: 7,
       title: "Trim & jar",
       body: "Hand trim, stems snapped at 10 days dry. Cure in grove bags first two weeks. Mango/haze nose - uplifting.",
-      img: weekImage("gdemo-b-w7"),
+      images: [weekImage("gdemo-b-w7"), weekImage("gdemo-b-w6")],
     },
     {
       n: 8,
       title: "Notes",
       body: "Yield acceptable for the space; biggest lesson was midday heat spikes - shading cloth next run.",
-      img: weekImage("gdemo-b-w8"),
+      images: [weekImage("gdemo-b-w8"), weekImage("gdemo-b-w5"), weekImage("gdemo-b-w4")],
     },
   ];
 
@@ -293,7 +297,7 @@ async function main() {
             title: w.title,
             description: w.body,
             images: {
-              create: [{ imageUrl: w.img, sortOrder: 0 }],
+              create: w.images.map((imageUrl, sortOrder) => ({ imageUrl, sortOrder })),
             },
           })),
         },
@@ -332,7 +336,7 @@ async function main() {
             title: w.title,
             description: w.body,
             images: {
-              create: [{ imageUrl: w.img, sortOrder: 0 }],
+              create: w.images.map((imageUrl, sortOrder) => ({ imageUrl, sortOrder })),
             },
           })),
         },
