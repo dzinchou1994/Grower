@@ -183,6 +183,14 @@ export function KamaSponsorBanner({ locale }: { locale: Locale }) {
             >
               kama.bz
             </span>
+            <a
+              href="https://geoeskort.com"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              className={`mt-1 text-center text-[11px] font-medium text-fuchsia-300/80 transition hover:text-fuchsia-200 lg:text-right ${notoSansGeorgian.className}`}
+            >
+              GEOESKORT.COM — საუკეთესო ესკორტი საქართველოში
+            </a>
           </div>
         </div>
       </div>
