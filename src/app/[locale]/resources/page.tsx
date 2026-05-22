@@ -40,7 +40,7 @@ export default async function ResourcesPage({ params }: Props) {
           sourceTitle: "პარტნიორი წყარო",
           sourceText:
             "დამატებითი ინფორმაციისთვის შეგიძლიათ ეწვიოთ პარტნიორ პლატფორმას.",
-          sourceCta: "გადასვლა kama.bz-ზე",
+          sourceCta: "გადასვლა kama.biz-ზე",
           sourceCta2: "გადასვლა geoeskort.com-ზე",
           sourceCta3: "Sweet Seeds",
           sourceCta4: "Advanced Nutrients",
@@ -56,7 +56,7 @@ export default async function ResourcesPage({ params }: Props) {
             sourceTitle: "Партнерский источник",
             sourceText:
               "Для дополнительной информации вы можете посетить партнерскую платформу.",
-            sourceCta: "Перейти на kama.bz",
+            sourceCta: "Перейти на kama.biz",
             sourceCta2: "Перейти на geoeskort.com",
             sourceCta3: "Sweet Seeds",
             sourceCta4: "Advanced Nutrients",
@@ -71,7 +71,7 @@ export default async function ResourcesPage({ params }: Props) {
             sourceTitle: "Partner source",
             sourceText:
               "For additional information you can visit the partner platform.",
-            sourceCta: "Open kama.bz",
+            sourceCta: "Open kama.biz",
             sourceCta2: "Open geoeskort.com",
             sourceCta3: "Sweet Seeds",
             sourceCta4: "Advanced Nutrients",
@@ -119,7 +119,7 @@ export default async function ResourcesPage({ params }: Props) {
               {copy.sourceCta4}
             </a>
             <a
-              href="https://kama.bz"
+              href="https://kama.biz"
               target="_blank"
               rel="sponsored noopener noreferrer"
               className="inline-flex rounded-full border border-lime-400/30 px-3 py-1.5 text-xs font-medium text-lime-300 transition hover:bg-lime-400/10"

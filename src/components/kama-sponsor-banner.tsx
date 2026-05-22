@@ -15,38 +15,38 @@ const COPY: Record<Locale, Copy> = {
   ka: {
     adLabel: "რეკლამა",
     partnerLabel: "პარტნიორი ბრენდი",
-    headline: "Kama.bz — თბილისის ესკორტ გიდი ერთ პლატფორმაზე",
+    headline: "Kama.biz — თბილისის ესკორტ გიდი ერთ პლატფორმაზე",
     description:
-      "Kama.bz საქართველოს №1 ესკორტ კატალოგია — ვერიფიცირებული ანკეტები, რეალური ფოტოები და დისკრეტული კავშირი. იპოვე ესკორტი თბილისში მარტივად და უსაფრთხოდ.",
+      "Kama.biz საქართველოს №1 ესკორტ კატალოგია — ვერიფიცირებული ანკეტები, რეალური ფოტოები და დისკრეტული კავშირი. იპოვე ესკორტი თბილისში მარტივად და უსაფრთხოდ.",
     keywordLinksIntro: "ძიების ბმულები:",
-    cta: "გადასვლა Kama.bz-ზე",
+    cta: "გადასვლა Kama.biz-ზე",
     disclosure: "სპონსირებული ბმული · 18+",
   },
   en: {
     adLabel: "AD",
     partnerLabel: "Partner brand",
-    headline: "Kama.bz — Tbilisi escort directory in one place",
+    headline: "Kama.biz — Tbilisi escort directory in one place",
     description:
-      "Kama.bz is Georgia's leading escort catalogue — verified profiles, real photos and discreet contact. Find an escort in Tbilisi quickly and safely.",
+      "Kama.biz is Georgia's leading escort catalogue — verified profiles, real photos and discreet contact. Find an escort in Tbilisi quickly and safely.",
     keywordLinksIntro: "Search shortcuts:",
-    cta: "Visit Kama.bz",
+    cta: "Visit Kama.biz",
     disclosure: "Sponsored link · 18+",
   },
   ru: {
     adLabel: "РЕКЛАМА",
     partnerLabel: "Партнёрский бренд",
-    headline: "Kama.bz — каталог эскорта Тбилиси на одной платформе",
+    headline: "Kama.biz — каталог эскорта Тбилиси на одной платформе",
     description:
-      "Kama.bz — крупнейший эскорт-каталог в Грузии: проверенные анкеты, реальные фото и конфиденциальная связь. Найдите эскорт в Тбилиси быстро и безопасно.",
+      "Kama.biz — крупнейший эскорт-каталог в Грузии: проверенные анкеты, реальные фото и конфиденциальная связь. Найдите эскорт в Тбилиси быстро и безопасно.",
     keywordLinksIntro: "Быстрые ссылки:",
-    cta: "Перейти на Kama.bz",
+    cta: "Перейти на Kama.biz",
     disclosure: "Спонсорская ссылка · 18+",
   },
 };
 
-const BASE = "https://kama.bz";
+const BASE = "https://kama.biz";
 
-/** Each entry: visible keyword label → path on kama.bz (“-” means home `/`). */
+/** Each entry: visible keyword label → path on kama.biz (“-” means home `/`). */
 const KEYWORD_LINKS: readonly { label: string; path: string }[] = [
   { label: "xgeorgia", path: "/xgeorgia" },
   { label: "escort", path: "/" },
@@ -181,7 +181,7 @@ export function KamaSponsorBanner({ locale }: { locale: Locale }) {
             <span
               className={`text-center text-[10px] text-slate-500 lg:text-right ${georgianClass}`}
             >
-              kama.bz
+              kama.biz
             </span>
             <a
               href="https://geoeskort.com"
