@@ -44,26 +44,32 @@ const COPY: Record<Locale, Copy> = {
   },
 };
 
-const BASE = "https://kama.biz";
+const BASE_BIZ = "https://kama.biz";
+const BASE_BZ = "https://kama.bz";
 
-/** Each entry: visible keyword label → path on kama.biz (“-” means home `/`). */
-const KEYWORD_LINKS: readonly { label: string; path: string }[] = [
-  { label: "xgeorgia", path: "/xgeorgia" },
-  { label: "escort", path: "/" },
-  { label: "ესკორტი", path: "/" },
-  { label: "eskorti", path: "/" },
-  { label: "eskort", path: "/" },
-  { label: "eskortebi", path: "/escorts" },
-  { label: "tbilisi escort", path: "/tbilisi" },
-  { label: "ესკორტები", path: "/" },
-  { label: "escort tbilisi", path: "/tbilisi" },
-  { label: "ესკორტ გოგოები", path: "/girls" },
+/** Each entry: visible keyword label → path (“/” = home), alternating biz/bz domains. */
+const KEYWORD_LINKS: readonly {
+  label: string;
+  path: string;
+  domain: "biz" | "bz";
+}[] = [
+  { label: "xgeorgia", path: "/xgeorgia", domain: "biz" },
+  { label: "escort", path: "/", domain: "bz" },
+  { label: "ესკორტი", path: "/", domain: "biz" },
+  { label: "eskorti", path: "/", domain: "bz" },
+  { label: "eskort", path: "/", domain: "biz" },
+  { label: "eskortebi", path: "/escorts", domain: "bz" },
+  { label: "tbilisi escort", path: "/tbilisi", domain: "biz" },
+  { label: "ესკორტები", path: "/", domain: "bz" },
+  { label: "escort tbilisi", path: "/tbilisi", domain: "biz" },
+  { label: "ესკორტ გოგოები", path: "/girls", domain: "bz" },
 ] as const;
 
-function toAbsoluteUrl(path: string): string {
-  if (path === "" || path === "/") return `${BASE}/`;
+function toAbsoluteUrl(path: string, domain: "biz" | "bz"): string {
+  const base = domain === "biz" ? BASE_BIZ : BASE_BZ;
+  if (path === "" || path === "/") return `${base}/`;
   const normalized = path.startsWith("/") ? path : `/${path}`;
-  return `${BASE}${normalized}`;
+  return `${base}${normalized}`;
 }
 
 export function KamaSponsorBanner({ locale }: { locale: Locale }) {
@@ -136,10 +142,10 @@ export function KamaSponsorBanner({ locale }: { locale: Locale }) {
               <div
                 className={`flex flex-wrap gap-2 ${notoSansGeorgian.className}`}
               >
-                {KEYWORD_LINKS.map(({ label, path }) => (
+                {KEYWORD_LINKS.map(({ label, path, domain }) => (
                   <a
-                    key={`${label}-${path}`}
-                    href={toAbsoluteUrl(path)}
+                    key={`${label}-${path}-${domain}`}
+                    href={toAbsoluteUrl(path, domain)}
                     target="_blank"
                     rel="sponsored noopener noreferrer"
                     className="inline-flex max-w-full items-center rounded-full border border-fuchsia-400/30 bg-fuchsia-950/40 px-3 py-1.5 text-[11px] font-medium text-fuchsia-100/95 shadow-sm shadow-black/20 transition hover:border-fuchsia-300/55 hover:bg-fuchsia-900/50 hover:text-white sm:text-xs"
@@ -159,7 +165,7 @@ export function KamaSponsorBanner({ locale }: { locale: Locale }) {
 
           <div className="flex w-full shrink-0 flex-col items-stretch gap-2 lg:w-auto lg:items-end lg:pt-1">
             <a
-              href={`${BASE}/`}
+              href={`${BASE_BIZ}/`}
               target="_blank"
               rel="sponsored noopener noreferrer"
               className={`group inline-flex items-center justify-center gap-2 rounded-full border border-fuchsia-200/40 bg-gradient-to-b from-fuchsia-400 to-rose-500 px-6 py-3 text-sm font-semibold text-white shadow-[0_4px_20px_-6px_rgba(232,121,249,0.55),inset_0_1px_0_rgba(255,255,255,0.4)] transition duration-200 hover:from-fuchsia-300 hover:to-rose-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-200/90 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0413] active:scale-[0.98] sm:px-7 ${georgianClass}`}
@@ -178,11 +184,33 @@ export function KamaSponsorBanner({ locale }: { locale: Locale }) {
                 <path d="M5 12h14M13 6l6 6-6 6" />
               </svg>
             </a>
-            <span
-              className={`text-center text-[10px] text-slate-500 lg:text-right ${georgianClass}`}
+            <a
+              href={`${BASE_BZ}/`}
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              className={`inline-flex items-center justify-center rounded-full border border-fuchsia-400/25 bg-fuchsia-950/30 px-5 py-2 text-xs font-medium text-fuchsia-200/90 transition hover:border-fuchsia-300/45 hover:bg-fuchsia-900/40 hover:text-white lg:self-end ${georgianClass}`}
             >
-              kama.biz
-            </span>
+              kama.bz
+            </a>
+            <div className={`flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[10px] text-slate-500 lg:justify-end ${georgianClass}`}>
+              <a
+                href={`${BASE_BIZ}/`}
+                target="_blank"
+                rel="sponsored noopener noreferrer"
+                className="transition hover:text-fuchsia-300/80"
+              >
+                kama.biz
+              </a>
+              <span aria-hidden>·</span>
+              <a
+                href={`${BASE_BZ}/`}
+                target="_blank"
+                rel="sponsored noopener noreferrer"
+                className="transition hover:text-fuchsia-300/80"
+              >
+                kama.bz
+              </a>
+            </div>
             <a
               href="https://geoeskort.com"
               target="_blank"
