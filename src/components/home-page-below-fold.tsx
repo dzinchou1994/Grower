@@ -5,7 +5,6 @@ import { enUS, ka, ru } from "date-fns/locale";
 import { ForumTopicCategoryIcon } from "@/components/forum-topic-category-icon";
 import { BookOpenIcon } from "@/components/icons";
 import { DiaryExploreCard } from "@/components/diaries/diary-explore-card";
-import { KamaSponsorBanner } from "@/components/kama-sponsor-banner";
 import { UserAvatar } from "@/components/user-avatar";
 import type { DiaryListItem } from "@/lib/diary-data";
 import { listPublicDiaries } from "@/lib/diary-data";
@@ -493,8 +492,6 @@ export async function HomePageBelowFold({ locale }: { locale: Locale }) {
           </Link>
         </div>
       </section>
-
-      <KamaSponsorBanner locale={typedLocale} />
     </div>
   );
 }
