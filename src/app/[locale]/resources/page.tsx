@@ -22,6 +22,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: dict.routeMeta.resources.title,
     description: dict.routeMeta.resources.description,
     alternates: getAlternates("/resources", locale),
+    robots: {
+      index: false,
+      follow: false,
+    },
   };
 }
 
@@ -40,9 +44,6 @@ export default async function ResourcesPage({ params }: Props) {
           sourceTitle: "პარტნიორი წყარო",
           sourceText:
             "დამატებითი ინფორმაციისთვის შეგიძლიათ ეწვიოთ პარტნიორ პლატფორმას.",
-          sourceCta: "გადასვლა kama.biz-ზე",
-          sourceCtaBz: "გადასვლა kama.bz-ზე",
-          sourceCta2: "გადასვლა geoeskort.com-ზე",
           sourceCta3: "Sweet Seeds",
           sourceCta4: "Advanced Nutrients",
           partnerCta: "გახდი ჩვენი პარტნიორი",
@@ -57,9 +58,6 @@ export default async function ResourcesPage({ params }: Props) {
             sourceTitle: "Партнерский источник",
             sourceText:
               "Для дополнительной информации вы можете посетить партнерскую платформу.",
-            sourceCta: "Перейти на kama.biz",
-            sourceCtaBz: "Перейти на kama.bz",
-            sourceCta2: "Перейти на geoeskort.com",
             sourceCta3: "Sweet Seeds",
             sourceCta4: "Advanced Nutrients",
             partnerCta: "Стать нашим партнером",
@@ -73,9 +71,6 @@ export default async function ResourcesPage({ params }: Props) {
             sourceTitle: "Partner source",
             sourceText:
               "For additional information you can visit the partner platform.",
-            sourceCta: "Open kama.biz",
-            sourceCtaBz: "Open kama.bz",
-            sourceCta2: "Open geoeskort.com",
             sourceCta3: "Sweet Seeds",
             sourceCta4: "Advanced Nutrients",
             partnerCta: "Become our partner",
@@ -120,30 +115,6 @@ export default async function ResourcesPage({ params }: Props) {
               className="inline-flex rounded-full border border-lime-400/30 px-3 py-1.5 text-xs font-medium text-lime-300 transition hover:bg-lime-400/10"
             >
               {copy.sourceCta4}
-            </a>
-            <a
-              href="https://kama.biz"
-              target="_blank"
-              rel="sponsored noopener noreferrer"
-              className="inline-flex rounded-full border border-lime-400/30 px-3 py-1.5 text-xs font-medium text-lime-300 transition hover:bg-lime-400/10"
-            >
-              {copy.sourceCta}
-            </a>
-            <a
-              href="https://kama.bz"
-              target="_blank"
-              rel="sponsored noopener noreferrer"
-              className="inline-flex rounded-full border border-lime-400/30 px-3 py-1.5 text-xs font-medium text-lime-300 transition hover:bg-lime-400/10"
-            >
-              {copy.sourceCtaBz}
-            </a>
-            <a
-              href="https://geoeskort.com"
-              target="_blank"
-              rel="sponsored noopener noreferrer"
-              className="inline-flex rounded-full border border-lime-400/30 px-3 py-1.5 text-xs font-medium text-lime-300 transition hover:bg-lime-400/10"
-            >
-              {copy.sourceCta2}
             </a>
             <Link
               href={getLocalizedPath(typedLocale, "/contact")}

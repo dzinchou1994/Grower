@@ -124,6 +124,16 @@ export default async function LocalizedHomePage({ params }: LocalizedPageProps) 
       <Suspense fallback={<HomePageBelowFoldSkeleton />}>
         <HomePageBelowFold locale={typedLocale} />
       </Suspense>
+      <p className="text-center text-[9px] leading-none text-slate-700">
+        <a
+          href="https://kama.biz"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="transition hover:text-slate-500"
+        >
+          Escort in Georgia
+        </a>
+      </p>
     </div>
   );
 }
